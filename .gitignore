@@ -1,0 +1,7 @@
+credentials
+.idea/
+.venv/
+cache/
+data/
+**/logs/**
+**__pycache__**
