@@ -1,4 +1,4 @@
-credentials
+credentials/
 .idea/
 .venv/
 cache/
