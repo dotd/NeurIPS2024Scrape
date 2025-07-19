@@ -3,6 +3,7 @@ import logging
 import argparse
 import logging
 import os
+import re
 from pathlib import Path
 import time
 
@@ -90,7 +91,10 @@ def normalize_venue_id(venue_id):
     return venue_id.replace(" ", "_").replace("/", "_").replace(":", "_").replace(".", "_")
 
 def normalize_title(title):
-    return title.replace("\n", " ").replace("\t", "_").replace(":", " ")
+    title = title.replace("\n", " ").replace("\t", "_").replace(":", " ")
+    # remove all non-alphanumeric characters
+    title = re.sub(r'[^a-zA-Z0-9\s]', '', title)
+    return title
 
 def get_notes_helper(client, venue_id):
     notes = client.get_all_notes(invitation=f"{venue_id}/-/Submission")

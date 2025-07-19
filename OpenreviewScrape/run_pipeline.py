@@ -2,6 +2,7 @@ import os
 import logging
 from OpenreviewScrape import openreview_utils
 from OpenreviewScrape.definitions import PROJECT_ROOT_DIR
+from OpenreviewScrape.pdf_downloader import PDFDownloader
 
 
 venues = [
@@ -11,11 +12,25 @@ venues = [
     "ICML.cc/2025/Conference",
 ]
 
-def scrape_conferences():
+fields = ['title',
+          'authors',
+          'keywords',
+          'primary_area',
+          'venue',
+          'pdf',
+          'supplementary_material',
+          'TLDR',
+          'abstract'
+          ]
+
+def scrape_conferences(limit_names_and_urls=None):
     openreview_utils.prepare_parameters_and_logging()
     credentials_file = f"{PROJECT_ROOT_DIR}/credentials/openreview_api.txt"
     cache_folder = f"{PROJECT_ROOT_DIR}/data/"
+
     for venue_id in venues:
+        safe_venue_id = openreview_utils.normalize_venue_id(venue_id)
+        pdf_folder = f"{PROJECT_ROOT_DIR}/data/{safe_venue_id}/"
         logging.info(f"Scraping {venue_id}")
         notes, table = scrape_conference(venue_id, credentials_file, cache_folder)
 
@@ -24,8 +39,21 @@ def scrape_conferences():
         with open(f"{PROJECT_ROOT_DIR}/data/{safe_venue_id}.csv", "w") as f:
             f.write(table)
         names_and_urls = openreview_utils.get_pdfs_names_and_urls(notes)
-        print(names_and_urls)
+        if limit_names_and_urls is not None:
+            names_and_urls = names_and_urls[:limit_names_and_urls]
+        urls = [url for _, url in names_and_urls]
+        titles = [title for title, _ in names_and_urls]
+        download_pdfs(urls, pdf_folder, titles)
 
+def download_pdfs(pdf_urls, cache_folder, titles=None):
+
+    # Advanced usage with custom settings
+    downloader = PDFDownloader(
+        download_folder=cache_folder,
+        timeout=60,
+        retry_attempts=5
+    )
+    downloaded_files = downloader.download_pdfs(pdf_urls, titles)
 
 def scrape_conference(venue_id, credentials_file, cache_folder):
     notes = openreview_utils.get_conference(
@@ -36,19 +64,11 @@ def scrape_conference(venue_id, credentials_file, cache_folder):
     # Open link to google drive and make a new sheet
 
     table = list()
-    fields = ['title',
-              'authors',
-              'keywords',
-              'primary_area',
-              'venue',
-              'pdf',
-              'supplementary_material',
-              'TLDR',
-              'abstract'
-              ]
     values_venue = set()
     counter = 0
     notes_filtered = list()
+    # get first note and print its content fields
+    print(notes[0].content.keys())
     for note in notes:
         # print(note.content['title'])
         # print(note.content["venue"]["value"])
