@@ -7,7 +7,6 @@ from pathlib import Path
 import time
 
 import openreview
-from OpenreviewScrape.definitions import PROJECT_ROOT_DIR
 
 
 def prepare_parameters_and_logging(log_level="INFO",
@@ -90,6 +89,8 @@ def show_all_venues(client):
 def normalize_venue_id(venue_id):
     return venue_id.replace(" ", "_").replace("/", "_").replace(":", "_").replace(".", "_")
 
+def normalize_title(title):
+    return title.replace("\n", " ").replace("\t", "_").replace(":", " ")
 
 def get_notes_helper(client, venue_id):
     notes = client.get_all_notes(invitation=f"{venue_id}/-/Submission")
@@ -111,10 +112,22 @@ def get_conference(
         with open(full_path, 'rb') as f:
             notes = pickle.load(f)
     else:
-        logging.info(f"Downloading from Polygon API")
+        logging.info(f"Downloading from OpenReview API")
         client = get_client(credentials_file)
         notes = get_notes_helper(client, venue_id)
         with open(full_path, 'wb') as f:
             pickle.dump(notes, f)
 
     return notes
+
+def get_pdfs_names_and_urls(notes):
+    names_and_urls = list()
+    for note in notes:
+        if "pdf" in note.content:
+            title = note.content["title"]["value"]
+            title = normalize_title(title)
+            filename = f"{title}.pdf"
+            pdf_url = note.content["pdf"]["value"]
+            pdf_url = f'https://openreview.net{pdf_url}'
+            names_and_urls.append((filename, pdf_url))
+    return names_and_urls
