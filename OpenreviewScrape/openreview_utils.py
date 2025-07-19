@@ -10,11 +10,12 @@ import time
 import openreview
 
 
-def prepare_parameters_and_logging(log_level="INFO",
-                                   log_folder="./logs/",
-                                   arguments=None,
-                                   skip_main_to_screen=True,
-                                   ):
+def prepare_parameters_and_logging(
+    log_level="INFO",
+    log_folder="./logs/",
+    arguments=None,
+    skip_main_to_screen=True,
+):
     """
 
     :param log_level:
@@ -71,9 +72,7 @@ def get_client(credentials_file):
         username = lines[0].strip()
         password = lines[1].strip()
     client = openreview.api.OpenReviewClient(
-        baseurl='https://api2.openreview.net',
-        username=username,
-        password=password
+        baseurl="https://api2.openreview.net", username=username, password=password
     )
     return client
 
@@ -81,31 +80,31 @@ def get_client(credentials_file):
 def show_all_venues(client):
     # API V2
 
-    venues = client.get_group(id='venues').members
+    venues = client.get_group(id="venues").members
     for i, venue in enumerate(venues):
-        if venue.startswith('NeurIPS'):
+        if venue.startswith("NeurIPS"):
             print(f"{i} => {venue}")
 
 
 def normalize_venue_id(venue_id):
-    return venue_id.replace(" ", "_").replace("/", "_").replace(":", "_").replace(".", "_")
+    return (
+        venue_id.replace(" ", "_").replace("/", "_").replace(":", "_").replace(".", "_")
+    )
+
 
 def normalize_title(title):
     title = title.replace("\n", " ").replace("\t", "_").replace(":", " ")
     # remove all non-alphanumeric characters
-    title = re.sub(r'[^a-zA-Z0-9\s]', '', title)
+    title = re.sub(r"[^a-zA-Z0-9\s]", " ", title)
     return title
+
 
 def get_notes_helper(client, venue_id):
     notes = client.get_all_notes(invitation=f"{venue_id}/-/Submission")
     return notes
 
 
-def get_conference(
-        credentials_file,
-        venue_id,
-        cache_folder
-):
+def get_conference(credentials_file, venue_id, cache_folder):
     # if cache folder does not exist, create it
     if not os.path.exists(cache_folder):
         os.makedirs(cache_folder)
@@ -113,25 +112,37 @@ def get_conference(
     full_path = f"{cache_folder}/{filename}"
     if os.path.exists(full_path):
         logging.info(f"Loading from cache: {full_path}")
-        with open(full_path, 'rb') as f:
+        with open(full_path, "rb") as f:
             notes = pickle.load(f)
     else:
         logging.info(f"Downloading from OpenReview API")
         client = get_client(credentials_file)
         notes = get_notes_helper(client, venue_id)
-        with open(full_path, 'wb') as f:
+        with open(full_path, "wb") as f:
             pickle.dump(notes, f)
 
     return notes
+
 
 def get_pdfs_names_and_urls(notes):
     names_and_urls = list()
     for note in notes:
         if "pdf" in note.content:
-            title = note.content["title"]["value"]
-            title = normalize_title(title)
-            filename = f"{title}.pdf"
-            pdf_url = note.content["pdf"]["value"]
-            pdf_url = f'https://openreview.net{pdf_url}'
-            names_and_urls.append((filename, pdf_url))
+            filename, pdf_url_full = get_pdf_url_from_note(note)
+            if filename is not None and pdf_url_full is not None:
+                names_and_urls.append((filename, pdf_url_full))
     return names_and_urls
+
+
+def get_pdf_url_from_note(note):
+    try:
+        pdf_url_subpath = note.content["pdf"]["value"]
+        unique_id = pdf_url_subpath.split("/")[-1].replace(".pdf", "")
+        title = note.content["title"]["value"]
+        title = normalize_title(title)
+        filename = f"{unique_id} {title}.pdf"
+        pdf_url_full = f"https://openreview.net{pdf_url_subpath}"
+        return filename, pdf_url_full
+    except Exception as e:
+        logging.error(f"Error getting PDF URL from note: {e}")
+    return None, None
