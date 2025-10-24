@@ -35,7 +35,9 @@ class PDFDownloader:
         # Create download folder if it doesn't exist
         self.download_folder.mkdir(parents=True, exist_ok=True)
 
-    def download_pdf(self, url: str, filename: Optional[str] = None) -> Optional[str]:
+    def download_pdf(
+        self, url: str, filename: Optional[str] = None, additional_info=""
+    ):
         """
         Download a single PDF from a URL.
 
@@ -53,19 +55,21 @@ class PDFDownloader:
 
         # Skip if file already exists
         if file_path.exists():
-            print(f"File already exists: {file_path}")
+            logging.info(f"{additional_info} File already exists: {file_path}")
             return str(file_path)
 
         for attempt in range(self.retry_attempts):
             try:
-                print(f"Downloading: {url}")
+                logging.info(f"Downloading: {url}")
                 response = requests.get(url, timeout=self.timeout, stream=True)
                 response.raise_for_status()
 
                 # Check if content is actually a PDF
                 content_type = response.headers.get("content-type", "").lower()
                 if "pdf" not in content_type and not url.lower().endswith(".pdf"):
-                    print(f"Warning: Content type is {content_type}, may not be a PDF")
+                    logging.warning(
+                        f"Warning: Content type is {content_type}, may not be a PDF"
+                    )
 
                 # Download with progress bar
                 total_size = int(response.headers.get("content-length", 0))
@@ -79,17 +83,17 @@ class PDFDownloader:
                                 f.write(chunk)
                                 pbar.update(len(chunk))
 
-                print(f"Successfully downloaded: {file_path}")
+                logging.info(f"{additional_info} Successfully downloaded: {file_path}")
                 # Small delay between downloads to be respectful
                 time.sleep(self.delay_between_downloads)
                 return str(file_path)
 
             except requests.exceptions.RequestException as e:
-                print(f"Attempt {attempt + 1} failed for {url}: {e}")
+                logging.error(f"Attempt {attempt + 1} failed for {url}: {e}")
                 if attempt < self.retry_attempts - 1:
                     time.sleep(2**attempt)  # Exponential backoff
                 else:
-                    print(
+                    logging.error(
                         f"Failed to download {url} after {self.retry_attempts} attempts"
                     )
                     return None
@@ -98,6 +102,7 @@ class PDFDownloader:
         self,
         pdf_urls: List[str],
         filenames: Optional[List[str]] = None,
+        additional_info="",
     ):
         """
         Download multiple PDFs from a list of URLs.
@@ -120,13 +125,13 @@ class PDFDownloader:
 
         for i, url in enumerate(pdf_urls):
             filename = filenames[i] if filenames else None
-            file_path = self.download_pdf(url, filename)
+            file_path = self.download_pdf(url, filename, additional_info)
 
             if file_path:
                 downloaded_files.append(file_path)
 
             logging.info(
-                f"{i+1}/{len(pdf_urls)}: Downloaded {len(downloaded_files)} out of {len(pdf_urls)} PDFs"
+                f"{additional_info} {i+1}/{len(pdf_urls)}: Downloaded {len(downloaded_files)} out of {len(pdf_urls)} PDFs"
             )
         return downloaded_files
 

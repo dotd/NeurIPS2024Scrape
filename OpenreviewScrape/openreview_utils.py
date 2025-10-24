@@ -100,8 +100,42 @@ def normalize_title(title):
 
 
 def get_notes_helper(client, venue_id):
-    notes = client.get_all_notes(invitation=f"{venue_id}/-/Submission")
-    return notes
+    try:
+        # Try the standard invitation format first
+        notes = client.get_all_notes(invitation=f"{venue_id}/-/Submission")
+        return notes
+    except KeyError as e:
+        if "count" in str(e):
+            logging.warning(
+                f"API response missing 'count' field for {venue_id}. Trying alternative approach..."
+            )
+            try:
+                # Try getting notes without the count field dependency
+                notes = client.get_notes(invitation=f"{venue_id}/-/Submission")
+                return notes
+            except Exception as e2:
+                logging.error(f"Alternative approach also failed: {e2}")
+                # Try different invitation formats
+                alternative_invitations = [
+                    f"{venue_id}/-/Paper",
+                    f"{venue_id}/-/Final_Decision",
+                    f"{venue_id}/-/Final_Submission",
+                ]
+                for alt_inv in alternative_invitations:
+                    try:
+                        logging.info(f"Trying invitation: {alt_inv}")
+                        notes = client.get_notes(invitation=alt_inv)
+                        if notes:
+                            logging.info(
+                                f"Successfully retrieved {len(notes)} notes using {alt_inv}"
+                            )
+                            return notes
+                    except Exception as e3:
+                        logging.warning(f"Failed with {alt_inv}: {e3}")
+                        continue
+                raise Exception(f"All attempts failed for venue {venue_id}")
+        else:
+            raise e
 
 
 def get_conference(credentials_file, venue_id, cache_folder):
