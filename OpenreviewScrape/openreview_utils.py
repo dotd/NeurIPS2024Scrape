@@ -162,9 +162,9 @@ def get_pdfs_names_and_urls(notes):
     names_and_urls = list()
     for note in notes:
         if "pdf" in note.content:
-            filename, pdf_url_full = get_pdf_url_from_note(note)
-            if filename is not None and pdf_url_full is not None:
-                names_and_urls.append((filename, pdf_url_full))
+            return_values = get_pdf_url_from_note(note)
+            if return_values is not None:
+                names_and_urls.append(return_values)
     return names_and_urls
 
 
@@ -172,11 +172,13 @@ def get_pdf_url_from_note(note):
     try:
         pdf_url_subpath = note.content["pdf"]["value"]
         unique_id = pdf_url_subpath.split("/")[-1].replace(".pdf", "")
+        note_id = note.id.split("/")[-1]
         title = note.content["title"]["value"]
         title = normalize_title(title)
         filename = f"{unique_id} {title}.pdf"
         pdf_url_full = f"https://openreview.net{pdf_url_subpath}"
-        return filename, pdf_url_full
+        pdf_url_by_id = f"https://openreview.net/pdf?id={note_id}"
+        return filename, pdf_url_full, pdf_url_by_id
     except Exception as e:
         logging.error(f"Error getting PDF URL from note: {e}")
-    return None, None
+    return None

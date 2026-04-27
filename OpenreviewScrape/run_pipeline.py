@@ -3,9 +3,11 @@ import logging
 from OpenreviewScrape import openreview_utils
 from OpenreviewScrape.definitions import PROJECT_ROOT_DIR
 from OpenreviewScrape.pdf_downloader import PDFDownloader
+from OpenreviewScrape.video_utils import (
+    download_openreview_video,
+    download_spotlight_videos_pipeline,
+)
 import multiprocessing as mp
-import requests
-from tqdm import tqdm
 
 
 venues = [
@@ -17,10 +19,12 @@ venues = [
     # "NeurIPS.cc/2023/Conference",
     # "robot-learning.org/CoRL/2024/Conference",
     # "robot-learning.org/CoRL/2025/Conference",
-    "NeurIPS.cc/2025/Conference",
+    # "NeurIPS.cc/2025/Conference",
+    "ICLR.cc/2026/Conference",
 ]
 
 fields = [
+    "id",
     "title",
     "authors",
     "keywords",
@@ -36,91 +40,23 @@ fields = [
 conferences_name = "ConferencesData"
 
 
-def download_spotlight_videos_pipeline(
-    notes, cache_folder, limit_names_and_urls=None, credentials_file=None
-):
-    for venue_id in venues:
-        safe_venue_id = openreview_utils.normalize_venue_id(venue_id)
-        video_folder = (
-            f"{PROJECT_ROOT_DIR}/{conferences_name}/{safe_venue_id}_spotlight_videos/"
-        )
-        # if folder does not exist, create it
-        if not os.path.exists(video_folder):
-            os.makedirs(video_folder)
-        logging.info(f"Downloading PDFs {venue_id}")
-        notes, _ = scrape_conference(venue_id, credentials_file, cache_folder)
-
-        for i, note in enumerate(notes):
-            if limit_names_and_urls is not None and i >= limit_names_and_urls:
-                break
-            if "spotlight" in note.content.keys():
-                print(f"{note.content['spotlight']}")
-                extension = note.content["spotlight"]["value"].split(".")[-1]
-                title = openreview_utils.normalize_title(note.content["title"]["value"])
-                print(f"Downloading spotlight video no. {i}\n\t{note.id}\n\t{title}")
-                # path = f"{video_folder}" + f"/{note.id}_{i}_{title}.mp4"
-                path = f"{video_folder}" + f"/{note.id}.{extension}"
-                if os.path.exists(path):
-                    continue
-                download_openreview_video(
-                    note.id,
-                    # f"spotlight_{note.id}_{i}_{title}.{extension}",
-                    f"{note.id}.{extension}",
-                    output_path=path,
-                )
-        create_script_for_concatenation(
-            video_folder, limit_names_and_urls=limit_names_and_urls
-        )
-
-
-def create_script_for_concatenation(video_folder, limit_names_and_urls=10000000):
-    """
-    ffmpeg -i 0ViTEgiFiQ.mp4 -i Bw9NHYjDqR.mp4 \
-    -filter_complex "\
-  [0:v]scale=1920:1080:force_original_aspect_ratio=decrease,pad=1920:1080:(ow-iw)/2:(oh-ih)/2,setsar=1,fps=30[v0]; \
-  [1:v]scale=1920:1080:force_original_aspect_ratio=decrease,pad=1920:1080:(ow-iw)/2:(oh-ih)/2,setsar=1,fps=30[v1]; \
-  [v0][0:a][v1][1:a]concat=n=2:v=1:a=1[outv][outa]" \
-  -map "[outv]" -map "[outa]" -c:v libx264 -c:a aac output.mp4
-    """
-    s = list()
-    s.append(f"ffmpeg ")
-    # get all videos in video_folder
-    videos = [f for f in os.listdir(video_folder) if f.endswith(".mp4")]
-    for video in videos[:limit_names_and_urls]:
-        s.append(f"-i {video} ")
-    s.append(f"\\\n")
-    s.append(f'-filter_complex "\\\n')
-    for i, video in enumerate(videos[:limit_names_and_urls]):
-        s.append(
-            f"[{i}:v]scale=1920:1080:force_original_aspect_ratio=decrease,pad=1920:1080:(ow-iw)/2:(oh-ih)/2,setsar=1,fps=30[v{i}]; \\\n"
-        )
-    for i, video in enumerate(videos[:limit_names_and_urls]):
-        s.append(f"[v{i}][{i}:a]")
-
-    s.append(f'concat=n={len(videos[:limit_names_and_urls])}:v=1:a=1[outv][outa]" \\')
-    s.append(
-        f'-map "[outv]" -map "[outa]" -c:v libx264 -c:a aac {video_folder}/output.mp4 \n'
-    )
-    # save s into a file
-    with open(f"{video_folder}/command.sh", "w") as f:
-        f.write("".join(s))
-
-
 def download_pdfs_pipeline(
     notes, cache_folder, limit_names_and_urls=None, credentials_file=None
 ):
     processes = []
     for venue_id in venues:
         safe_venue_id = openreview_utils.normalize_venue_id(venue_id)
+        logging.info(f"Safe venue ID: {safe_venue_id}")
         pdf_folder = f"{PROJECT_ROOT_DIR}/{conferences_name}/{safe_venue_id}/"
+        logging.info(f"PDF folder: {pdf_folder}")
         logging.info(f"Downloading PDFs {venue_id}")
         notes, table = scrape_conference(venue_id, credentials_file, cache_folder)
 
         names_and_urls = openreview_utils.get_pdfs_names_and_urls(notes)
         if limit_names_and_urls is not None:
             names_and_urls = names_and_urls[:limit_names_and_urls]
-        urls = [url for _, url in names_and_urls]
-        titles = [title for title, _ in names_and_urls]
+        urls = [url for _, _, url in names_and_urls]
+        titles = [title for title, _, _ in names_and_urls]
 
         # Create and start a new process for each venue
         p = mp.Process(target=download_pdfs, args=(urls, pdf_folder, titles, venue_id))
@@ -152,6 +88,7 @@ def scrape_conferences_pipeline(
             f.write(table)
 
     if download_pdfs:
+        logging.info(f"Downloading PDFs {venues}")
         download_pdfs_pipeline(
             notes,
             cache_folder,
@@ -160,8 +97,10 @@ def scrape_conferences_pipeline(
         )
 
     if download_spotlight_videos:
+        logging.info(f"Downloading Spotlight Videos {venues}")
         download_spotlight_videos_pipeline(
-            notes,
+            venues,
+            conferences_name,
             cache_folder,
             limit_names_and_urls=limit_names_and_urls,
             credentials_file=credentials_file,
@@ -182,39 +121,6 @@ def download_pdfs(pdf_urls, cache_folder, titles=None, additional_info=""):
     )
 
 
-def download_openreview_video(paper_id, filename, output_path=None):
-    """
-    Download a video from OpenReview
-
-    Args:
-        paper_id: OpenReview paper ID
-        filename: Name of the attachment
-        output_path: Optional custom output filename
-    """
-    url = f"https://openreview.net/attachment?id={paper_id}&name=spotlight"
-
-    if output_path is None:
-        output_path = filename
-
-    # Get file size for progress bar
-    response = requests.get(url, stream=True)
-    total_size = int(response.headers.get("content-length", 0))
-
-    # Download with progress bar
-    with open(output_path, "wb") as f, tqdm(
-        desc=output_path,
-        total=total_size,
-        unit="B",
-        unit_scale=True,
-        unit_divisor=1024,
-    ) as bar:
-        for chunk in response.iter_content(chunk_size=8192):
-            size = f.write(chunk)
-            bar.update(size)
-
-    print(f"✓ Downloaded: {output_path}")
-
-
 def scrape_conference(venue_id, credentials_file, cache_folder):
     table = list()
     values_venue = set()
@@ -230,9 +136,9 @@ def scrape_conference(venue_id, credentials_file, cache_folder):
     logging.info("\n" + str(notes[0].content.keys()))
     for i, note in enumerate(notes):
         if "Bw9NHYjDqR" in note.id:
-            print(note.content)
+            logging.info(note.content)
         values_venue.add(note.content["venue"]["value"])
-        print(f"venue: {note.content['venue']['value']} {i}")
+        logging.info(f"venue {i}: {note.content['venue']['value']}")
         line = list()
         if (
             "poster" not in note.content["venue"]["value"].lower()
@@ -245,6 +151,10 @@ def scrape_conference(venue_id, credentials_file, cache_folder):
         notes_filtered.append(note)
         counter += 1
         for field in fields:
+            if field == "id":
+                forum = f"https://openreview.net/forum?id={note.id}"
+                line.append(forum)
+                continue
             if field in note.content:
                 value = (
                     note.content[field]["value"]
@@ -272,12 +182,9 @@ def scrape_conference(venue_id, credentials_file, cache_folder):
     return notes_filtered, table
 
 
-def tst_download_video(
-    id="Bw9NHYjDqR",
-):
-    download_openreview_video(id, "spotlight_video.mp4")
+def main():
+    scrape_conferences_pipeline(download_pdfs=True, limit_names_and_urls=10000)
 
 
 if __name__ == "__main__":
-    # tst_download_video()
-    scrape_conferences_pipeline(download_pdfs=True)
+    main()
