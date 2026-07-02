@@ -1,0 +1,128 @@
+:root {
+  --bg: #0f1115;
+  --panel: #171a21;
+  --border: #262b36;
+  --text: #e6e8ee;
+  --muted: #99a0ad;
+  --accent: #6ea8ff;
+  --accent-soft: #1e2a44;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.5;
+}
+
+header {
+  padding: 24px 32px 16px;
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  background: rgba(15, 17, 21, 0.95);
+  backdrop-filter: blur(8px);
+  z-index: 5;
+}
+
+header h1 { margin: 0 0 4px; font-size: 22px; }
+.meta { margin: 0 0 12px; color: var(--muted); font-size: 13px; }
+
+.controls {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.controls input,
+.controls select {
+  background: var(--panel);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 8px 10px;
+  font-size: 14px;
+}
+
+.controls input { flex: 1; min-width: 240px; }
+
+main {
+  padding: 24px 32px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(420px, 1fr));
+  gap: 16px;
+}
+
+.paper {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 16px 18px;
+}
+
+.paper .title {
+  margin: 0 0 6px;
+  font-size: 16px;
+  line-height: 1.35;
+}
+
+.paper .venue {
+  display: inline-block;
+  margin: 0 0 8px;
+  padding: 2px 8px;
+  background: var(--accent-soft);
+  color: var(--accent);
+  font-size: 12px;
+  border-radius: 12px;
+}
+
+.paper .authors,
+.paper .primary-area,
+.paper .tldr {
+  margin: 4px 0;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.paper .tldr { color: var(--text); font-style: italic; }
+
+.paper .abstract-wrap {
+  margin: 8px 0;
+  font-size: 13px;
+}
+.paper .abstract-wrap summary {
+  cursor: pointer;
+  color: var(--accent);
+}
+.paper .abstract { margin: 6px 0 0; color: var(--text); }
+
+.paper .keywords {
+  list-style: none;
+  padding: 0;
+  margin: 8px 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+.paper .keywords li {
+  font-size: 11px;
+  background: #1f2330;
+  border: 1px solid var(--border);
+  color: var(--muted);
+  padding: 2px 6px;
+  border-radius: 10px;
+}
+
+.paper .links { margin: 8px 0 0; font-size: 13px; }
+.paper .links a { color: var(--accent); text-decoration: none; margin-right: 12px; }
+.paper .links a:hover { text-decoration: underline; }
+
+.empty {
+  grid-column: 1 / -1;
+  text-align: center;
+  color: var(--muted);
+  padding: 40px 0;
+}

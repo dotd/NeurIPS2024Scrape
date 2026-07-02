@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ICLR 2026 - World Model Papers</title>
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <header>
+    <h1>ICLR 2026 &middot; World Model Papers</h1>
+    <p id="meta" class="meta">Loading&hellip;</p>
+    <div class="controls">
+      <input id="search" type="search" placeholder="Search title, author, keyword, abstract&hellip;" />
+      <select id="venue-filter">
+        <option value="">All venues</option>
+      </select>
+      <select id="sort">
+        <option value="title">Sort: Title (A-Z)</option>
+        <option value="title-desc">Sort: Title (Z-A)</option>
+        <option value="authors">Sort: First author</option>
+      </select>
+    </div>
+  </header>
+  <main id="papers"></main>
+  <template id="paper-tpl">
+    <article class="paper">
+      <h2 class="title"></h2>
+      <p class="venue"></p>
+      <p class="authors"></p>
+      <p class="primary-area"></p>
+      <p class="tldr"></p>
+      <details class="abstract-wrap">
+        <summary>Abstract</summary>
+        <p class="abstract"></p>
+      </details>
+      <ul class="keywords"></ul>
+      <p class="links"></p>
+    </article>
+  </template>
+  <script src="/app.js"></script>
+</body>
+</html>

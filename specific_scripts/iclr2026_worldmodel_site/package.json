@@ -1,0 +1,13 @@
+{
+  "name": "iclr2026-worldmodel-site",
+  "version": "1.0.0",
+  "private": true,
+  "description": "ICLR 2026 world-model papers browser",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2"
+  }
+}
