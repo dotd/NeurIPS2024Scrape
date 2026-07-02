@@ -63,6 +63,28 @@ API responses are cached in `ConferencesData/<venue>.pkl`. Delete the
 rm ConferencesData/ICML_cc_2026_Conference.pkl
 ```
 
+## Scraped data (`ConferenceTables/`)
+
+Paper counts per CSV, as of July 2026:
+
+| Conference | Total | Poster | Spotlight | Oral | Other |
+|---|---:|---:|---:|---:|---|
+| ICLR 2024 | 2,260 | 1,807 | 367 | 86 | — |
+| ICLR 2025 | 3,704 | 3,111 | 380 | 213 | — |
+| ICLR 2026 | 5,357 | 5,119 | — | 223 | 14 conditional poster, 1 conditional oral |
+| ICML 2024 | 2,614 | 2,275 | 191 | 144 | 4 malformed rows (venue field missing) |
+| ICML 2025 | 3,258 | 2,938 | 212 ("spotlightposter") | 108 | — |
+| ICML 2026 | 6,559 | 5,805 ("regular") | 536 | — | 218 "Submitted to ICML 2026" |
+| NeurIPS 2023 | 3,218 | 2,773 | 378 | 67 | — |
+| NeurIPS 2024 | 4,035 | 3,648 | 326 | 61 | — |
+| NeurIPS 2025 | 5,543 | 4,522 | 687 | 77 | 254 submitted/rejected, 2 withdrawn, 1 desk-rejected |
+
+Notes: 2023–2025 files have 9 columns (venue at index 4); newer files
+(ICLR/ICML 2026, NeurIPS 2025) have 11 columns (venue at index 5).
+ICML 2026 oral decisions were not yet released. NeurIPS 2025 and
+ICML 2026 include non-accepted papers since the pipeline doesn't
+filter by decision.
+
 ## Output
 
 - `ConferencesData/` — pickle caches, CSVs, PDFs, videos
