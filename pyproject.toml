@@ -1,0 +1,22 @@
+[project]
+name = "openreviewscrape"
+version = "0.0.1"
+description = "OpenReview conference paper scraper (NeurIPS, ICML, ICLR, CoRL)"
+requires-python = ">=3.11"
+dependencies = [
+    "openreview-py>=1.45",
+    "pandas>=2.3",
+    "requests>=2.32",
+    "tqdm>=4.67",
+    "pydrive2>=1.21",
+    "google-api-python-client>=2.176",
+    "google-auth>=2.40",
+]
+
+[build-system]
+requires = ["uv_build>=0.10,<0.11"]
+build-backend = "uv_build"
+
+[tool.uv.build-backend]
+module-name = "OpenreviewScrape"
+module-root = ""

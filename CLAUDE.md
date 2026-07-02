@@ -9,7 +9,7 @@ OpenReview conference paper scraper focused on NeurIPS, ICML, ICLR, and CoRL (20
 ## Setup
 
 ```bash
-pip install -r requirements.txt
+uv sync
 ```
 
 Requires OpenReview credentials at `credentials/openreview_api.txt` (line 1: email, line 2: password). Google Drive features additionally need `credentials/mycreds.txt` and `credentials/client_secret2.json`.
@@ -18,13 +18,13 @@ Requires OpenReview credentials at `credentials/openreview_api.txt` (line 1: ema
 
 ```bash
 # Main pipeline (scrape, download PDFs, download videos)
-python OpenreviewScrape/run_pipeline.py
+uv run python OpenreviewScrape/run_pipeline.py
 
 # Post-process already-scraped CSVs into HTML report with keyword filter
-python tst/tst_robotic_papers.py
+uv run python tst/tst_robotic_papers.py
 
 # Build HTML report directly from pickled CoRL notes
-python tst/tst_corl_2024_html.py
+uv run python tst/tst_corl_2024_html.py
 ```
 
 ## Architecture
