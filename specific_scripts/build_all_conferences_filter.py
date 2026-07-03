@@ -39,7 +39,8 @@ def load_papers():
     papers = []
     conferences = []
     for path in sorted(glob.glob(os.path.join(ROOT, "ConferenceTables", "*.csv"))):
-        conf = os.path.basename(path).replace("_Conference.csv", "").replace("_cc_", " ").replace("_", " ")
+        m = re.search(r"(CoRL|ICLR|ICML|NeurIPS)\D*(\d{4})", os.path.basename(path))
+        conf = f"{m.group(1)} {m.group(2)}"
         conferences.append(conf)
         with open(path) as f:
             for line in f:
@@ -51,7 +52,7 @@ def load_papers():
                 papers.append([conf, p["title"], p["authors"], p["keywords"], p["venue"],
                                p["pdf"], p["forum"], p["tldr"], p["abstract"], topics])
     # newest first: by year, then by when the conference happens within a year
-    conf_month = {"ICLR": 4, "ICML": 7, "NeurIPS": 12}
+    conf_month = {"ICLR": 4, "ICML": 7, "CoRL": 11, "NeurIPS": 12}
     def recency(conf):
         name, year = conf.split()
         return int(year), conf_month.get(name, 0)
@@ -154,8 +155,7 @@ render();
 """
 
 
-def main():
-    conferences, papers = load_papers()
+def write_html(papers, conferences, out_name):
     topic_buttons = "".join(
         f'<button class="flt" data-topic="{key}">{icon} {label}</button>'
         for key, label, icon, _ in TOPICS)
@@ -168,12 +168,19 @@ def main():
             .replace("__CONF_BUTTONS__", conf_buttons)
             .replace("__ICONS__", icons)
             .replace("__DATA__", data))
-    out = os.path.join(ROOT, "htmls", "all_conferences_filter.html")
+    out = os.path.join(ROOT, "htmls", out_name)
     os.makedirs(os.path.dirname(out), exist_ok=True)
     with open(out, "w") as f:
         f.write(html)
     print(f"Wrote {out}: {len(papers)} papers, {len(conferences)} conferences, "
           f"{os.path.getsize(out) / 1e6:.1f} MB")
+
+
+def main():
+    conferences, papers = load_papers()
+    write_html(papers, conferences, "all_conferences_filter.html")
+    # short version: only papers tagged with at least one topic
+    write_html([p for p in papers if p[9]], conferences, "all_conferences_filter_short.html")
 
 
 if __name__ == "__main__":
