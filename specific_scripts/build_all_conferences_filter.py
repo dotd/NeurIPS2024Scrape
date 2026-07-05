@@ -9,6 +9,10 @@ import glob
 import json
 import os
 import re
+import sys
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from normalize_keywords import normalize, load_keyword_counts, build_groups
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -35,7 +39,24 @@ def parse_row(cols):
     return None
 
 
+def canonical_keywords():
+    """normalized form -> canonical display (most common original spelling)."""
+    groups = build_groups(load_keyword_counts())
+    return {norm: variants[0][0] for norm, variants in groups.items()}
+
+
+def load_citations():
+    """normalized title -> citation count, from fetch_citations.py's cache."""
+    path = os.path.join(ROOT, "ConferencesData", "citations_openalex.json")
+    if not os.path.exists(path):
+        return {}
+    with open(path) as f:
+        return {k: v["cites"] for k, v in json.load(f).items() if v.get("cites") is not None}
+
+
 def load_papers():
+    canon = canonical_keywords()
+    citations = load_citations()
     papers = []
     conferences = []
     for path in sorted(glob.glob(os.path.join(ROOT, "ConferenceTables", "*.csv"))):
@@ -47,10 +68,15 @@ def load_papers():
                 p = parse_row(line.rstrip("\n").split("\t"))
                 if p is None or not p["title"]:
                     continue
+                normed = list(dict.fromkeys(  # dedup, keep order
+                    canon[normalize(k.strip())]
+                    for k in p["keywords"].split(";") if normalize(k.strip())))
+                p["keywords"] = ";".join(normed)
                 tag_text = f"{p['title']} {p['keywords']} {p['tldr']}"
                 topics = [key for key, rx in TOPIC_RES if rx.search(tag_text)]
+                cites = citations.get(re.sub(r"[^a-z0-9]", "", p["title"].lower()))
                 papers.append([conf, p["title"], p["authors"], p["keywords"], p["venue"],
-                               p["pdf"], p["forum"], p["tldr"], p["abstract"], topics])
+                               p["pdf"], p["forum"], p["tldr"], p["abstract"], topics, cites])
     # newest first: by year, then by when the conference happens within a year
     conf_month = {"ICLR": 4, "ICML": 7, "CoRL": 11, "NeurIPS": 12}
     def recency(conf):
@@ -80,10 +106,17 @@ HTML_TEMPLATE = """<!DOCTYPE html>
   summary { cursor: pointer; padding: 8px 12px; font-size: 14px; list-style-position: outside; }
   summary .icons { margin-right: 6px; }
   summary .conf { color: #888; font-size: 12px; margin-left: 8px; white-space: nowrap; }
+  summary .cites { color: #b45309; font-size: 12px; margin-left: 8px; white-space: nowrap; }
   .body { padding: 0 14px 12px; font-size: 13px; color: #333; }
   .body .meta { color: #666; margin: 4px 0; }
   .body a { color: #2563eb; margin-right: 12px; }
   .more { text-align: center; padding: 14px; }
+  #kwpanel { background: #fff; border: 1px solid #e3e5e8; border-radius: 6px; margin-bottom: 12px; padding: 8px 12px; }
+  #kwpanel summary { cursor: pointer; font-size: 14px; }
+  #kwfilter { width: 260px; padding: 4px 8px; margin: 8px 0; border: 1px solid #ccc; border-radius: 6px; font-size: 13px; }
+  #kwlist { display: flex; flex-wrap: wrap; gap: 4px; max-height: 300px; overflow-y: auto; }
+  #kwlist button { font-size: 12px; padding: 2px 8px; }
+  #kwmore { margin-top: 8px; }
 </style>
 </head>
 <body>
@@ -93,10 +126,20 @@ HTML_TEMPLATE = """<!DOCTYPE html>
   <div class="btnrow"><span class="grp">Conferences</span>__CONF_BUTTONS__</div>
   <div class="btnrow"><span class="grp">Search</span>
     <input id="search" type="search" placeholder="free words, all must match...">
+    <span class="grp" style="width:auto;margin-left:14px">Sort</span>
+    <button class="flt srt on" data-sort="new">Newest</button>
+    <button class="flt srt" data-sort="cites">Most cited</button>
     <span id="count"></span>
   </div>
 </header>
-<main><div id="list"></div><div class="more" id="more"></div></main>
+<main>
+<details id="kwpanel"><summary>Keywords (author-defined, by number of papers)</summary>
+  <input id="kwfilter" type="search" placeholder="filter keywords...">
+  <button id="kwmode" class="flt on" title="how selected keywords combine">Intersection</button>
+  <div id="kwlist"></div>
+  <button id="kwmore" class="flt">Show more</button>
+</details>
+<div id="list"></div><div class="more" id="more"></div></main>
 <script id="data" type="application/json">__DATA__</script>
 <script>
 const PAPERS = JSON.parse(document.getElementById('data').textContent);
@@ -105,26 +148,65 @@ const PAGE = 300;
 let shown = PAGE;
 const activeTopics = new Set(), activeConfs = new Set();
 
-// precompute lowercase search blob per paper
-for (const p of PAPERS) p.blob = (p[1] + ' ' + p[2] + ' ' + p[3] + ' ' + p[8]).toLowerCase();
+// precompute lowercase search blob + keyword set per paper; global keyword counts
+const KW = new Map(); // lowercase -> [display form, paper count]
+for (const p of PAPERS) {
+  p.blob = (p[1] + ' ' + p[2] + ' ' + p[3] + ' ' + p[8]).toLowerCase();
+  p.kws = new Set();
+  for (let k of p[3].split(';')) {
+    k = k.trim();
+    if (!k) continue;
+    const lc = k.toLowerCase();
+    if (p.kws.has(lc)) continue;
+    p.kws.add(lc);
+    const e = KW.get(lc);
+    e ? e[1]++ : KW.set(lc, [k, 1]);
+  }
+}
+const KW_SORTED = [...KW.entries()].sort((a, b) => b[1][1] - a[1][1]);
+const activeKws = new Set();
+const KWPAGE = 300;
+let kwShown = KWPAGE;
 
-function esc(s) { return s.replace(/&/g,'&amp;').replace(/</g,'&lt;'); }
+function esc(s) { return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;'); }
 
+// conferences: union; topics: intersection; keywords: toggleable via kwUnion
+let kwUnion = false;
 function matches(p, words) {
   if (activeConfs.size && !activeConfs.has(p[0])) return false;
-  if (activeTopics.size && !p[9].some(t => activeTopics.has(t))) return false;
+  for (const t of activeTopics) if (!p[9].includes(t)) return false;
+  if (activeKws.size) {
+    if (kwUnion) {
+      let any = false;
+      for (const k of activeKws) if (p.kws.has(k)) { any = true; break; }
+      if (!any) return false;
+    } else {
+      for (const k of activeKws) if (!p.kws.has(k)) return false;
+    }
+  }
   return words.every(w => p.blob.includes(w));
 }
 
+function renderKws() {
+  const q = document.getElementById('kwfilter').value.toLowerCase().trim();
+  const pool = q ? KW_SORTED.filter(([lc]) => lc.includes(q)) : KW_SORTED;
+  document.getElementById('kwlist').innerHTML = pool.slice(0, kwShown).map(([lc, [disp, n]]) =>
+    `<button class="flt${activeKws.has(lc) ? ' on' : ''}" data-kw="${esc(lc)}">${esc(disp)} (${n})</button>`).join('');
+  document.getElementById('kwmore').style.display = pool.length > kwShown ? '' : 'none';
+}
+
+let sortBy = 'new';
 function render() {
   const words = document.getElementById('search').value.toLowerCase().split(/\\s+/).filter(Boolean);
-  const hits = PAPERS.filter(p => matches(p, words));
+  let hits = PAPERS.filter(p => matches(p, words));
+  if (sortBy === 'cites') hits = hits.slice().sort((a, b) => (b[10] ?? -1) - (a[10] ?? -1));
   const html = hits.slice(0, shown).map(p => {
     const icons = p[9].map(t => ICONS[t]).join('');
+    const cites = p[10] != null ? `<span class="cites">&#128200; ${p[10]}</span>` : '';
     const links = [p[6] && `<a href="${p[6]}" target="_blank">OpenReview</a>`,
                    p[5] && `<a href="${p[5]}" target="_blank">PDF</a>`].filter(Boolean).join('');
     return `<details><summary><span class="icons">${icons}</span>${esc(p[1])}` +
-      `<span class="conf">${esc(p[0])} — ${esc(p[4])}</span></summary><div class="body">` +
+      `<span class="conf">${esc(p[0])} — ${esc(p[4])}</span>${cites}</summary><div class="body">` +
       `<div class="meta"><b>Authors:</b> ${esc(p[2])}</div>` +
       (p[3] ? `<div class="meta"><b>Keywords:</b> ${esc(p[3])}</div>` : '') +
       (p[7] ? `<div class="meta"><b>TLDR:</b> ${esc(p[7])}</div>` : '') +
@@ -144,10 +226,33 @@ document.querySelectorAll('[data-topic]').forEach(b =>
   b.onclick = () => toggle(b, activeTopics, b.dataset.topic));
 document.querySelectorAll('[data-conf]').forEach(b =>
   b.onclick = () => toggle(b, activeConfs, b.dataset.conf));
-let deb;
+document.querySelectorAll('.srt').forEach(b => b.onclick = () => {
+  document.querySelectorAll('.srt').forEach(x => x.classList.remove('on'));
+  b.classList.add('on');
+  sortBy = b.dataset.sort;
+  shown = PAGE; render();
+});
+document.getElementById('kwlist').onclick = e => {
+  const b = e.target.closest('button[data-kw]');
+  if (!b) return;
+  const k = b.dataset.kw;
+  b.classList.toggle('on') ? activeKws.add(k) : activeKws.delete(k);
+  shown = PAGE; render();
+};
+document.getElementById('kwmore').onclick = () => { kwShown += KWPAGE; renderKws(); };
+document.getElementById('kwmode').onclick = e => {
+  kwUnion = !kwUnion;
+  e.target.textContent = kwUnion ? 'Union' : 'Intersection';
+  shown = PAGE; render();
+};
+let deb, kwdeb;
 document.getElementById('search').oninput = () => {
   clearTimeout(deb); deb = setTimeout(() => { shown = PAGE; render(); }, 250);
 };
+document.getElementById('kwfilter').oninput = () => {
+  clearTimeout(kwdeb); kwdeb = setTimeout(() => { kwShown = KWPAGE; renderKws(); }, 250);
+};
+renderKws();
 render();
 </script>
 </body>
