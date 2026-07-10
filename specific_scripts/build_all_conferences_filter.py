@@ -16,6 +16,9 @@ from normalize_keywords import normalize, load_keyword_counts, build_groups
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
+DEFAULT_CONF = "ICML 2026"   # pre-selected conference filter
+DEFAULT_SORT = "infl"        # new | cites | infl
+
 TOPICS = [
     # (key, label, icon, regex over title+keywords+tldr)
     ("robotics", "Robotics", "\U0001F916", r"robot|manipulat|embodied|locomotion|grasp"),
@@ -46,12 +49,13 @@ def canonical_keywords():
 
 
 def load_citations():
-    """normalized title -> citation count, from fetch_citations.py's cache."""
-    path = os.path.join(ROOT, "ConferencesData", "citations_openalex.json")
+    """normalized title -> (citations, influential), from fetch_citations.py's cache."""
+    path = os.path.join(ROOT, "ConferencesData", "citations_s2.json")
     if not os.path.exists(path):
         return {}
     with open(path) as f:
-        return {k: v["cites"] for k, v in json.load(f).items() if v.get("cites") is not None}
+        return {k: (v["cites"], v.get("influential"))
+                for k, v in json.load(f).items() if v.get("cites") is not None}
 
 
 def load_papers():
@@ -74,9 +78,9 @@ def load_papers():
                 p["keywords"] = ";".join(normed)
                 tag_text = f"{p['title']} {p['keywords']} {p['tldr']}"
                 topics = [key for key, rx in TOPIC_RES if rx.search(tag_text)]
-                cites = citations.get(re.sub(r"[^a-z0-9]", "", p["title"].lower()))
+                cites, infl = citations.get(re.sub(r"[^a-z0-9]", "", p["title"].lower()), (None, None))
                 papers.append([conf, p["title"], p["authors"], p["keywords"], p["venue"],
-                               p["pdf"], p["forum"], p["tldr"], p["abstract"], topics, cites])
+                               p["pdf"], p["forum"], p["tldr"], p["abstract"], topics, cites, infl])
     # newest first: by year, then by when the conference happens within a year
     conf_month = {"ICLR": 4, "ICML": 7, "CoRL": 11, "NeurIPS": 12}
     def recency(conf):
@@ -107,6 +111,8 @@ HTML_TEMPLATE = """<!DOCTYPE html>
   summary .icons { margin-right: 6px; }
   summary .conf { color: #888; font-size: 12px; margin-left: 8px; white-space: nowrap; }
   summary .cites { color: #b45309; font-size: 12px; margin-left: 8px; white-space: nowrap; }
+  summary a.dl { text-decoration: none; margin-left: 8px; font-size: 13px; }
+  summary a.dl:hover { color: #2563eb; }
   .body { padding: 0 14px 12px; font-size: 13px; color: #333; }
   .body .meta { color: #666; margin: 4px 0; }
   .body a { color: #2563eb; margin-right: 12px; }
@@ -127,8 +133,9 @@ HTML_TEMPLATE = """<!DOCTYPE html>
   <div class="btnrow"><span class="grp">Search</span>
     <input id="search" type="search" placeholder="free words, all must match...">
     <span class="grp" style="width:auto;margin-left:14px">Sort</span>
-    <button class="flt srt on" data-sort="new">Newest</button>
+    <button class="flt srt" data-sort="new">Newest</button>
     <button class="flt srt" data-sort="cites">Most cited</button>
+    <button class="flt srt" data-sort="infl">Most influential</button>
     <span id="count"></span>
   </div>
 </header>
@@ -146,7 +153,7 @@ const PAPERS = JSON.parse(document.getElementById('data').textContent);
 const ICONS = __ICONS__;
 const PAGE = 300;
 let shown = PAGE;
-const activeTopics = new Set(), activeConfs = new Set();
+const activeTopics = new Set(), activeConfs = new Set(__DEFAULT_CONFS__);
 
 // precompute lowercase search blob + keyword set per paper; global keyword counts
 const KW = new Map(); // lowercase -> [display form, paper count]
@@ -195,18 +202,31 @@ function renderKws() {
   document.getElementById('kwmore').style.display = pool.length > kwShown ? '' : 'none';
 }
 
-let sortBy = 'new';
+let sortBy = '__DEFAULT_SORT__';
+document.querySelector(`.srt[data-sort="${sortBy}"]`).classList.add('on');
 function render() {
   const words = document.getElementById('search').value.toLowerCase().split(/\\s+/).filter(Boolean);
   let hits = PAPERS.filter(p => matches(p, words));
   if (sortBy === 'cites') hits = hits.slice().sort((a, b) => (b[10] ?? -1) - (a[10] ?? -1));
+  else if (sortBy === 'infl') hits = hits.slice().sort((a, b) => (b[11] ?? -1) - (a[11] ?? -1));
   const html = hits.slice(0, shown).map(p => {
     const icons = p[9].map(t => ICONS[t]).join('');
-    const cites = p[10] != null ? `<span class="cites">&#128200; ${p[10]}</span>` : '';
+    const cites = p[10] != null
+      ? `<span class="cites">&#128200; ${p[10]}${p[11] ? ` (${p[11]} infl)` : ''}</span>` : '';
+    const dl = (() => {
+      const idm = (p[6] || '').match(/id=([^&]+)/);
+      const name = encodeURIComponent(p[1].slice(0, 90).replace(/[\\\\/:*?"<>|]/g, ' ')) + '.pdf';
+      // served over http + note id known -> proxy force-downloads; else fall back to direct pdf link (opens)
+      if (location.protocol === 'http:' && idm)
+        return `<a class="dl" href="/dl?id=${idm[1]}&n=${name}" download title="Download PDF" onclick="event.stopPropagation()">&#11015;&#65039;</a>`;
+      if (p[5])
+        return `<a class="dl" href="${p[5]}" download title="Open PDF" onclick="event.stopPropagation()">&#11015;&#65039;</a>`;
+      return '';
+    })();
     const links = [p[6] && `<a href="${p[6]}" target="_blank">OpenReview</a>`,
                    p[5] && `<a href="${p[5]}" target="_blank">PDF</a>`].filter(Boolean).join('');
     return `<details><summary><span class="icons">${icons}</span>${esc(p[1])}` +
-      `<span class="conf">${esc(p[0])} — ${esc(p[4])}</span>${cites}</summary><div class="body">` +
+      `<span class="conf">${esc(p[0])} — ${esc(p[4])}</span>${cites}${dl}</summary><div class="body">` +
       `<div class="meta"><b>Authors:</b> ${esc(p[2])}</div>` +
       (p[3] ? `<div class="meta"><b>Keywords:</b> ${esc(p[3])}</div>` : '') +
       (p[7] ? `<div class="meta"><b>TLDR:</b> ${esc(p[7])}</div>` : '') +
@@ -265,13 +285,17 @@ def write_html(papers, conferences, out_name):
         f'<button class="flt" data-topic="{key}">{icon} {label}</button>'
         for key, label, icon, _ in TOPICS)
     conf_buttons = "".join(
-        f'<button class="flt" data-conf="{c}">{c}</button>' for c in conferences)
+        f'<button class="flt{" on" if c == DEFAULT_CONF else ""}" data-conf="{c}">{c}</button>'
+        for c in conferences)
     data = json.dumps(papers, ensure_ascii=False).replace("</", "<\\/")
     icons = json.dumps({key: icon for key, _, icon, _ in TOPICS}, ensure_ascii=False)
+    default_confs = json.dumps([DEFAULT_CONF] if DEFAULT_CONF in conferences else [])
     html = (HTML_TEMPLATE
             .replace("__TOPIC_BUTTONS__", topic_buttons)
             .replace("__CONF_BUTTONS__", conf_buttons)
             .replace("__ICONS__", icons)
+            .replace("__DEFAULT_CONFS__", default_confs)
+            .replace("__DEFAULT_SORT__", DEFAULT_SORT)
             .replace("__DATA__", data))
     out = os.path.join(ROOT, "htmls", out_name)
     os.makedirs(os.path.dirname(out), exist_ok=True)
