@@ -26,6 +26,16 @@ PORT = 8000
 client = openreview_utils.get_client(CREDS)
 
 
+def get_pdf_reauth(note_id):
+    """get_pdf, re-logging in once if the cached token has expired."""
+    global client
+    try:
+        return client.get_pdf(note_id)
+    except Exception:
+        client = openreview_utils.get_client(CREDS)  # token expires periodically; refresh
+        return client.get_pdf(note_id)
+
+
 class Handler(http.server.SimpleHTTPRequestHandler):
     def __init__(self, *a, **k):
         super().__init__(*a, directory=HTMLS, **k)
@@ -43,7 +53,7 @@ class Handler(http.server.SimpleHTTPRequestHandler):
             self.send_error(400, "missing note id")
             return
         try:
-            data = client.get_pdf(note_id)
+            data = get_pdf_reauth(note_id)
         except Exception as e:
             self.send_error(502, f"fetch failed: {e}")
             return
