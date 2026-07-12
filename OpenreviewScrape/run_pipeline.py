@@ -22,9 +22,12 @@ venues = [
     # "NeurIPS.cc/2025/Conference",
     # "ICLR.cc/2026/Conference",
     # "ICML.cc/2026/Conference",
-    "robot-learning.org/CoRL/2024/Conference",
-    "robot-learning.org/CoRL/2025/Conference",
-    "robot-learning.org/CoRL/2026/Conference",
+    "ICLR.cc/2024/Conference",
+    "ICLR.cc/2025/Conference",
+    "ICML.cc/2024/Conference",
+    "ICML.cc/2025/Conference",
+    "NeurIPS.cc/2023/Conference",
+    "NeurIPS.cc/2024/Conference",
 ]
 
 fields = [

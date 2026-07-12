@@ -12,4 +12,4 @@ venv/
 ConferencesData/
 specific_scripts/iclr2026_worldmodel_site/node_modules/
 specific_scripts/iclr2026_worldmodel_site/package-lock.json
-specific_scripts/iclr2026_worldmodel_site/data/papers.json
+specific_scripts/iclr2026_worldmodel_site/data/papers.jsonpdfs/
