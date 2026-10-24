@@ -11,6 +11,8 @@ dependencies = [
     "pydrive2>=1.21",
     "google-api-python-client>=2.176",
     "google-auth>=2.40",
+    "anthropic>=0.116.0",
+    "pymupdf>=2.0",
 ]
 
 [build-system]
