@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><base href="https://scaling-h2r-corl.github.io/">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Scaling H2R — Scaling Laws and Diversity in Human-to-Robot · CoRL 2026 Workshop</title>
+<meta name="description" content="Scaling H2R: a CoRL 2026 workshop on scaling laws and diversity in learning robot skills from human data. Austin, TX · November 12, 2026." />
+<meta property="og:title" content="Scaling H2R — CoRL 2026 Workshop" />
+<meta property="og:description" content="Scaling Laws and Diversity in Human-to-Robot. CoRL 2026, Austin, TX · November 12, 2026." />
+<meta property="og:type" content="website" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --ink:#0b1020;
+    --ink-soft:#1e293b;
+    --muted:#5b6478;
+    --line:#e6e8ef;
+    --bg:#ffffff;
+    --surface:#f7f8fc;
+    --surface-2:#eef1f8;
+    --brand:#4f46e5;
+    --brand-2:#7c3aed;
+    --brand-ink:#312e81;
+    --human:#f97316;
+    --robot:#06b6d4;
+    --green:#16a34a;
+    --amber:#d97706;
+    --blue:#2563eb;
+    --teal:#0d9488;
+    --gray:#64748b;
+    --shadow:0 1px 2px rgba(15,23,42,.06), 0 8px 24px rgba(15,23,42,.06);
+    --shadow-lg:0 12px 40px rgba(15,23,42,.12);
+    --radius:16px;
+    --maxw:1100px;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;scroll-padding-top:78px;}
+  body{
+    margin:0;
+    font-family:"Inter",system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    color:var(--ink);
+    background:var(--bg);
+    line-height:1.65;
+    -webkit-font-smoothing:antialiased;
+    text-rendering:optimizeLegibility;
+  }
+  a{color:var(--brand);text-decoration:none;}
+  a:hover{text-decoration:underline;}
+  h1,h2,h3,h4{font-family:"Space Grotesk","Inter",sans-serif;line-height:1.15;letter-spacing:-.01em;}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 24px;}
+  section{padding:84px 0;}
+  .eyebrow{
+    font-family:"Space Grotesk",sans-serif;
+    text-transform:uppercase;
+    letter-spacing:.16em;
+    font-size:.78rem;
+    font-weight:600;
+    color:var(--brand);
+    margin:0 0 12px;
+  }
+  h2.section-title{font-size:2.05rem;margin:0 0 14px;color:var(--ink);}
+  .section-lead{font-size:1.08rem;color:var(--muted);max-width:760px;margin:0 0 8px;}
+
+  /* ---------- NAV ---------- */
+  header.nav{
+    position:sticky;top:0;z-index:50;
+    background:rgba(255,255,255,.82);
+    backdrop-filter:saturate(160%) blur(12px);
+    border-bottom:1px solid var(--line);
+  }
+  .nav-inner{display:flex;align-items:center;justify-content:space-between;height:64px;}
+  .brand{display:flex;align-items:baseline;gap:7px;font-family:"Space Grotesk";font-weight:700;color:var(--ink);font-size:1.05rem;}
+  .brand:hover{text-decoration:none;}
+  .brand-at{color:var(--brand);font-weight:600;}
+  .brand .dot{
+    width:30px;height:30px;border-radius:9px;
+    background:linear-gradient(135deg,var(--human),var(--brand) 55%,var(--robot));
+    display:inline-flex;align-items:center;justify-content:center;color:#fff;font-size:.8rem;font-weight:700;
+    box-shadow:0 4px 14px rgba(79,70,229,.35);
+  }
+  .nav-links{display:flex;gap:6px;align-items:center;}
+  .nav-links a{
+    color:var(--ink-soft);font-weight:500;font-size:.93rem;padding:8px 12px;border-radius:9px;
+  }
+  .nav-links a:hover{background:var(--surface-2);text-decoration:none;color:var(--ink);}
+  .nav-cta{
+    background:var(--ink);color:#fff !important;padding:9px 16px;border-radius:10px;font-weight:600;
+  }
+  .nav-cta:hover{background:var(--brand);}
+  .menu-btn{display:none;background:none;border:1px solid var(--line);border-radius:10px;padding:8px 10px;font-size:1.1rem;cursor:pointer;}
+
+  /* ---------- HERO ---------- */
+  .hero{
+    position:relative;overflow:hidden;
+    /* Swap the wallpaper by replacing images/wallpaper1.png (or changing the filename below). */
+    background-color:#0b1020;
+    background-image:
+      radial-gradient(1200px 520px at 80% -10%, rgba(249,115,22,.20), transparent 60%),
+      radial-gradient(900px 520px at 10% 10%, rgba(6,182,212,.18), transparent 55%),
+      linear-gradient(160deg, rgba(11,16,32,.82) 0%, rgba(22,26,58,.70) 50%, rgba(36,26,77,.80) 100%),
+      url("images/wallpaper2.png");
+    background-size:auto, auto, auto, cover;
+    background-position:center, center, center, center;
+    background-repeat:no-repeat;
+    color:#eef2ff;
+    padding:0;
+  }
+  .hero-grid{
+    position:absolute;inset:0;
+    background-image:linear-gradient(rgba(255,255,255,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.05) 1px,transparent 1px);
+    background-size:46px 46px;
+    mask-image:radial-gradient(900px 500px at 50% 0%,#000,transparent 80%);
+    pointer-events:none;
+  }
+  .hero-inner{position:relative;padding:96px 0 104px;}
+  .hero .badge-row{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:26px;}
+  .pill{
+    display:inline-flex;align-items:center;gap:8px;
+    background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.16);
+    color:#dfe5ff;padding:7px 14px;border-radius:999px;font-size:.85rem;font-weight:500;
+    backdrop-filter:blur(4px);
+  }
+  .pill .ic{font-size:.95rem;}
+  .hero h1{
+    font-size:clamp(2.3rem,5.2vw,3.9rem);
+    margin:0 0 6px;
+    color:#fff;
+    letter-spacing:-.02em;
+  }
+  .hero h1 .grad{
+    background:linear-gradient(100deg,#fdba74,#f9a8d4 35%,#a5b4fc 70%,#67e8f9);
+    -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
+  }
+  .hero .tagline{font-size:clamp(1.05rem,2.2vw,1.4rem);color:#c7cdf0;font-weight:500;font-family:"Space Grotesk";margin:8px 0 0;}
+  .hero .blurb{max-width:680px;color:#b9c0e6;font-size:1.06rem;margin:22px 0 0;}
+  .hero-cta{display:flex;flex-wrap:wrap;gap:14px;margin-top:34px;}
+  .btn{
+    display:inline-flex;align-items:center;gap:9px;font-weight:600;font-size:.98rem;
+    padding:13px 22px;border-radius:12px;cursor:pointer;border:1px solid transparent;transition:transform .12s ease,box-shadow .12s ease;
+  }
+  .btn:hover{text-decoration:none;transform:translateY(-1px);}
+  .btn-primary{background:linear-gradient(135deg,#f97316,#ec4899 60%,#6366f1);color:#fff;box-shadow:0 10px 30px rgba(99,102,241,.4);}
+  .btn-ghost{background:rgba(255,255,255,.06);color:#e9edff;border-color:rgba(255,255,255,.22);}
+  .btn-ghost:hover{background:rgba(255,255,255,.12);}
+
+  /* ---------- FACTS STRIP ---------- */
+  .facts{
+    display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);
+    border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;margin-top:-44px;position:relative;z-index:5;box-shadow:var(--shadow-lg);
+  }
+  .fact{background:#fff;padding:22px 22px;}
+  .fact .k{font-size:.74rem;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);font-weight:600;margin-bottom:6px;}
+  .fact .v{font-family:"Space Grotesk";font-weight:700;font-size:1.18rem;color:var(--ink);}
+  .fact .v small{display:block;font-weight:500;font-size:.86rem;color:var(--muted);font-family:"Inter";margin-top:2px;}
+  .fact-hot{background:#fef2f2;box-shadow:inset 3px 0 0 #dc2626;}
+  .fact-hot .k,.fact-hot .v{color:#dc2626;}
+  .fact-hot .v small{color:#ef4444;}
+
+  /* ---------- ABOUT ---------- */
+  .about p{font-size:1.08rem;color:var(--ink-soft);max-width:850px;}
+  .about p + p{margin-top:18px;}
+  .audience{
+    display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:40px;
+  }
+  .aud{
+    background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:20px;
+  }
+  .aud .n{font-family:"Space Grotesk";font-weight:700;color:var(--brand);font-size:1.4rem;}
+  .aud .t{font-weight:600;margin:6px 0 2px;color:var(--ink);}
+  .aud .d{font-size:.9rem;color:var(--muted);}
+
+  /* ---------- FIGURE (Fig 1 scaling-law plot) ---------- */
+  .figbox{margin:40px auto 8px;max-width:600px;background:#fff;border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:24px 24px 18px;}
+  .figbox svg{display:block;width:100%;height:auto;}
+  .figbox figcaption{font-size:.9rem;color:var(--muted);margin-top:14px;padding-top:14px;border-top:1px solid var(--line);line-height:1.55;}
+  .figbox figcaption b{color:var(--ink);font-weight:700;font-family:"Space Grotesk";}
+  .pl-axis{stroke:var(--ink);stroke-width:1.4;}
+  .pl-grid{stroke:var(--line);stroke-width:1;stroke-dasharray:2 4;}
+  .pl-curve{fill:none;stroke-width:3.4;stroke-linecap:round;}
+  .pl-a{stroke:var(--robot);}
+  .pl-b{stroke:var(--human);}
+  .pl-proj{fill:none;stroke:var(--robot);stroke-width:2.4;stroke-dasharray:3 6;opacity:.85;}
+  .pl-dot-a{fill:var(--robot);}
+  .pl-dot-b{fill:var(--human);}
+  .pl-area{fill:url(#plArea);opacity:.14;}
+  .pl-tick{font-family:"Inter",sans-serif;font-size:11px;fill:var(--muted);}
+  .pl-axlabel{font-family:"Space Grotesk",sans-serif;font-size:11px;font-weight:600;letter-spacing:.08em;fill:var(--ink-soft);text-transform:uppercase;}
+  .pl-anno{font-family:"Space Grotesk",sans-serif;font-size:11.5px;font-weight:600;}
+  .pl-anno.a{fill:var(--teal);}
+  .pl-anno.b{fill:var(--amber);}
+  .pl-q{font-family:"Space Grotesk",sans-serif;font-size:16px;font-weight:700;fill:var(--teal);}
+
+  /* ---------- CHALLENGES ---------- */
+  .challenges{background:var(--surface);}
+  .ch-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:18px;margin-top:36px;}
+  .card{
+    background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:26px;box-shadow:var(--shadow);
+    transition:transform .15s ease, box-shadow .15s ease;
+  }
+  .card:hover{transform:translateY(-3px);box-shadow:var(--shadow-lg);}
+  .ch-num{
+    font-family:"Space Grotesk";font-weight:700;font-size:.95rem;color:#fff;
+    width:34px;height:34px;border-radius:10px;display:inline-flex;align-items:center;justify-content:center;
+    background:linear-gradient(135deg,var(--brand),var(--brand-2));margin-bottom:14px;
+  }
+  .card h3{font-size:1.14rem;margin:0 0 8px;color:var(--ink);}
+  .card p{margin:0;color:var(--muted);font-size:.98rem;}
+
+  /* ---------- SPEAKERS ---------- */
+  .spk-title{font-size:clamp(2.2rem,4.6vw,2.95rem);}
+  .spk-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;margin-top:36px;}
+  .spk{
+    background:#fff;border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;text-align:center;
+    box-shadow:var(--shadow);transition:transform .15s ease,box-shadow .15s ease;
+  }
+  .spk:hover{transform:translateY(-4px);box-shadow:var(--shadow-lg);}
+  .spk .ph{aspect-ratio:1/1;width:100%;overflow:hidden;background:var(--surface-2);}
+  .spk .ph img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .4s ease;}
+  .spk:hover .ph img{transform:scale(1.05);}
+  .spk .body{padding:16px 14px 18px;}
+  .spk .nm{font-family:"Space Grotesk";font-weight:700;font-size:1.12rem;}
+  .spk .nm a{color:var(--ink);transition:color .12s ease;}
+  .spk .nm a:hover{color:var(--brand);text-decoration:none;}
+  .spk .af{color:var(--muted);font-size:.92rem;margin-top:4px;}
+
+  /* ---------- SCHEDULE ---------- */
+  .schedule{background:var(--surface);}
+  .sched-note{font-size:.95rem;color:var(--muted);font-style:italic;background:#fff;border:1px dashed var(--line);border-radius:12px;padding:14px 18px;margin:0 0 28px;}
+  .timeline{border-left:2px solid var(--line);margin-left:8px;}
+  .ev{position:relative;padding:14px 0 14px 28px;display:flex;gap:18px;align-items:baseline;flex-wrap:wrap;}
+  .ev::before{content:"";position:absolute;left:-7px;top:20px;width:12px;height:12px;border-radius:50%;background:#fff;border:3px solid var(--brand);}
+  .ev.major::before{background:var(--brand);border-color:var(--brand-2);}
+  .ev .time{font-family:"Space Grotesk";font-weight:600;color:var(--brand-ink);font-size:.92rem;min-width:132px;flex:0 0 132px;}
+  .ev .what{color:var(--ink-soft);font-size:1rem;}
+  .ev.major .what{font-weight:600;color:var(--ink);}
+  .ev .sub{display:block;color:var(--muted);font-size:.86rem;font-weight:400;}
+
+  /* ---------- CFP ---------- */
+  .cfp-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:32px;margin-top:36px;align-items:start;}
+  .cfp-card{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:28px;box-shadow:var(--shadow);}
+  .cfp-card h3{margin-top:0;font-size:1.2rem;}
+  .cfp-card p{color:var(--muted);font-size:.97rem;}
+  .tracklist{list-style:none;padding:0;margin:16px 0 0;}
+  .tracklist li{display:flex;gap:10px;padding:8px 0;border-top:1px solid var(--line);color:var(--ink-soft);font-size:.96rem;}
+  .tracklist li:first-child{border-top:none;}
+  .tracklist .ck{color:var(--green);font-weight:700;}
+  .dates{list-style:none;padding:0;margin:0;}
+  .dates li{display:flex;justify-content:space-between;gap:14px;align-items:baseline;padding:13px 0;border-bottom:1px dashed var(--line);}
+  .dates li:last-child{border-bottom:none;}
+  .dates .lbl{color:var(--ink-soft);font-size:.96rem;}
+  .dates .dt{font-family:"Space Grotesk";font-weight:600;color:var(--brand-ink);font-size:.92rem;white-space:nowrap;}
+  .dates li.hot .lbl{font-weight:600;color:var(--ink);}
+  .dates li.hot .dt{color:#fff;background:var(--human);padding:3px 10px;border-radius:8px;}
+  .notes-row{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:24px;}
+  .note{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:18px;}
+  .note h4{margin:0 0 6px;font-size:.98rem;color:var(--ink);}
+  .note p{margin:0;font-size:.88rem;color:var(--muted);}
+
+  /* ---------- ORGANIZERS ---------- */
+  .organizers{background:var(--surface);}
+  .org-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;margin-top:36px;}
+  .org{
+    background:#fff;border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;text-align:center;
+    box-shadow:var(--shadow);transition:transform .15s ease,box-shadow .15s ease;
+  }
+  .org:hover{transform:translateY(-4px);box-shadow:var(--shadow-lg);}
+  .org .ph{aspect-ratio:1/1;width:100%;overflow:hidden;background:var(--surface-2);}
+  .org .ph img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .4s ease;}
+  .org:hover .ph img{transform:scale(1.05);}
+  .org .body{padding:16px 14px 18px;}
+  .org .nm{font-family:"Space Grotesk";font-weight:700;font-size:1.06rem;}
+  .org .nm a{color:var(--ink);transition:color .12s ease;}
+  .org .nm a:hover{color:var(--brand);text-decoration:none;}
+  .org .af{font-size:.86rem;color:var(--muted);margin:4px 0 0;}
+
+  /* ---------- DIVERSITY ---------- */
+  .div-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:34px;}
+  .div{background:#fff;border:1px solid var(--line);border-radius:14px;padding:20px;box-shadow:var(--shadow);}
+  .div .ic{font-size:1.5rem;}
+  .div h4{margin:10px 0 6px;font-size:1.02rem;color:var(--ink);}
+  .div p{margin:0;font-size:.88rem;color:var(--muted);}
+
+  /* ---------- FOOTER ---------- */
+  footer{background:var(--ink);color:#aab1d6;padding:56px 0 40px;}
+  .foot-top{display:flex;justify-content:space-between;gap:30px;flex-wrap:wrap;align-items:flex-start;}
+  footer .brand-f{font-family:"Space Grotesk";font-weight:700;color:#fff;font-size:1.25rem;margin-bottom:6px;}
+  footer .sub-f{max-width:420px;font-size:.94rem;color:#9aa2cc;}
+  footer .cols{display:flex;gap:54px;flex-wrap:wrap;}
+  footer .col h5{color:#e4e8ff;font-size:.8rem;text-transform:uppercase;letter-spacing:.12em;margin:0 0 12px;}
+  footer .col a{display:block;color:#aab1d6;font-size:.92rem;padding:3px 0;}
+  footer .col a:hover{color:#fff;}
+  .foot-bottom{margin-top:40px;padding-top:20px;border-top:1px solid rgba(255,255,255,.1);font-size:.84rem;color:#7e86b0;display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;}
+
+  /* ---------- FIGURE motion ---------- */
+  @media (prefers-reduced-motion:no-preference){
+    .figbox .draw{stroke-dasharray:1;stroke-dashoffset:1;transition:stroke-dashoffset 1.6s cubic-bezier(.4,0,.2,1);}
+    .figbox.drawn .draw{stroke-dashoffset:0;}
+    .figbox .pl-b.draw{transition-delay:.2s;}
+    .figbox .fade{opacity:0;transition:opacity .6s ease;}
+    .figbox.drawn .fade{opacity:1;transition-delay:1s;}
+  }
+
+  /* ---------- RESPONSIVE ---------- */
+  @media (max-width:920px){
+    .facts{grid-template-columns:repeat(2,1fr);}
+    .audience{grid-template-columns:repeat(2,1fr);}
+    .ch-grid{grid-template-columns:1fr;}
+    .spk-grid{grid-template-columns:repeat(2,1fr);}
+    .cfp-grid{grid-template-columns:1fr;}
+    .org-grid{grid-template-columns:repeat(2,1fr);}
+    .div-grid{grid-template-columns:repeat(2,1fr);}
+    .notes-row{grid-template-columns:1fr;}
+  }
+  @media (max-width:680px){
+    section{padding:60px 0;}
+    .facts{grid-template-columns:1fr;}
+    .nav-links{
+      display:none;position:absolute;top:64px;left:0;right:0;background:#fff;border-bottom:1px solid var(--line);
+      flex-direction:column;padding:12px;gap:2px;box-shadow:var(--shadow-lg);
+    }
+    .nav-links.open{display:flex;}
+    .nav-links a{padding:11px 14px;}
+    .menu-btn{display:inline-block;}
+    .ev .time{flex-basis:100%;min-width:0;}
+    .div-grid{grid-template-columns:1fr;}
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<header class="nav">
+  <div class="wrap nav-inner">
+    <a class="brand" href="#top">Scaling&nbsp;H2R <span class="brand-at">@ CoRL&nbsp;2026</span></a>
+    <button class="menu-btn" id="menuBtn" aria-label="Toggle menu">☰</button>
+    <nav class="nav-links" id="navLinks">
+      <a href="#about">About</a>
+      <a href="#challenges">Research Questions</a>
+      <a href="#speakers">Speakers</a>
+      <a href="#schedule">Schedule</a>
+      <a href="#cfp">Call for Papers</a>
+      <a href="#organizers">Organizers</a>
+      <a class="nav-cta" href="https://openreview.net/group?id=robot-learning.org/CoRL/2026/Workshop/Scaling_H2R" target="_blank" rel="noopener">Submit&nbsp;→</a>
+    </nav>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero" id="top" style="padding:0;">
+  <div class="hero-grid"></div>
+  <div class="wrap hero-inner">
+    <h1>Scaling <span class="grad">H2R</span> @ CoRL2026</h1>
+    <p class="tagline">Scaling Laws and Diversity in Human-to-Robot</p>
+    <div class="hero-cta">
+      <a class="btn btn-primary" href="#cfp">📄 Call for Papers</a>
+      <a class="btn btn-ghost" href="#speakers">🎤 Invited Speakers</a>
+      <a class="btn btn-ghost" href="https://openreview.net/group?id=robot-learning.org/CoRL/2026/Workshop/Scaling_H2R" target="_blank" rel="noopener">📝 Submit Paper</a>
+    </div>
+  </div>
+</section>
+
+<!-- FACTS -->
+<div class="wrap">
+  <div class="facts">
+    <div class="fact"><div class="k">Venue</div><div class="v">CoRL 2026<small>Austin, Texas</small></div></div>
+    <div class="fact"><div class="k">Date</div><div class="v">Nov 12, 2026<small>Half-day session</small></div></div>
+    <div class="fact"><div class="k">Submissions</div><div class="v">8 or 4 pages<small>Long &amp; short papers</small></div></div>
+    <div class="fact fact-hot"><div class="k">Submission deadline</div><div class="v">Oct 7, 2026<small>AoE · No CoRL 2026 main-track papers</small></div></div>
+  </div>
+</div>
+
+<!-- ABOUT -->
+<section id="about" class="about">
+  <div class="wrap">
+    <p class="eyebrow">About the Workshop</p>
+    <h2 class="section-title">From <em>whether</em> to <em>how much</em></h2>
+    <p>
+      This workshop continues the Human-to-Robot (H2R) line of inquiry on learning robot skills
+      from human data, but deliberately narrows the question. Where prior efforts established
+      <em>whether</em> robots can be taught from sensorized, modeled human behavior, the central
+      premise here is that the binding constraint has now shifted from feasibility to
+      <strong>scale and diversity</strong>: human data is a source of embodied experience that is
+      abundant and cheap to collect, yet we still lack an empirical understanding of how robot
+      capability grows as a function of how much human data we gather, how diverse it is, and how
+      far the human embodiment sits from the target robot.
+    </p>
+    <p>
+      We bring together researchers in imitation learning, egocentric perception, dexterous
+      manipulation, hardware co-design, and world modeling to ask what it actually takes to turn
+      large, heterogeneous human data into reliable robot policies.
+    </p>
+
+    <figure class="figbox" id="plot">
+      <svg viewBox="0 0 560 430" role="img" aria-labelledby="plot-title plot-desc">
+        <title id="plot-title">Scaling-law sketch: robot capability versus human data</title>
+        <desc id="plot-desc">Two curves. Diverse human data keeps climbing; narrow human data saturates. A dashed projection marks the open question.</desc>
+        <defs>
+          <linearGradient id="plArea" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#06b6d4" stop-opacity="0.9"/>
+            <stop offset="100%" stop-color="#06b6d4" stop-opacity="0"/>
+          </linearGradient>
+        </defs>
+
+        <!-- grid -->
+        <line class="pl-grid" x1="78" y1="278" x2="524" y2="278"/>
+        <line class="pl-grid" x1="78" y1="208" x2="524" y2="208"/>
+        <line class="pl-grid" x1="78" y1="138" x2="524" y2="138"/>
+        <line class="pl-grid" x1="170" y1="48" x2="170" y2="346"/>
+        <line class="pl-grid" x1="262" y1="48" x2="262" y2="346"/>
+        <line class="pl-grid" x1="354" y1="48" x2="354" y2="346"/>
+        <line class="pl-grid" x1="446" y1="48" x2="446" y2="346"/>
+
+        <!-- axes -->
+        <line class="pl-axis" x1="78" y1="48" x2="78" y2="346"/>
+        <line class="pl-axis" x1="78" y1="346" x2="528" y2="346"/>
+        <path d="M78,48 l-5,9 h10 z" fill="#0b1020"/>
+        <path d="M528,346 l-9,-5 v10 z" fill="#0b1020"/>
+
+        <!-- area under diverse curve -->
+        <path class="pl-area fade" d="M78,326 C170,300 220,250 286,212 C372,162 452,108 520,72 L520,346 L78,346 Z"/>
+
+        <!-- narrow data: saturates -->
+        <path class="pl-curve pl-b draw" pathLength="1" d="M78,326 C150,300 206,278 274,266 C360,250 446,246 520,245"/>
+        <!-- diverse data: keeps climbing -->
+        <path class="pl-curve pl-a draw" pathLength="1" d="M78,326 C170,300 220,250 286,212 C372,162 452,108 512,76"/>
+        <!-- open-question projection -->
+        <path class="pl-proj fade" d="M512,76 C528,66 538,60 548,52"/>
+        <text class="pl-q fade" x="540" y="44" text-anchor="middle">?</text>
+
+        <!-- data points -->
+        <g class="fade">
+          <circle class="pl-dot-a" cx="170" cy="290" r="4"/>
+          <circle class="pl-dot-a" cx="262" cy="232" r="4"/>
+          <circle class="pl-dot-a" cx="354" cy="170" r="4"/>
+          <circle class="pl-dot-a" cx="446" cy="112" r="4"/>
+          <circle class="pl-dot-b" cx="170" cy="288" r="4"/>
+          <circle class="pl-dot-b" cx="262" cy="262" r="4"/>
+          <circle class="pl-dot-b" cx="354" cy="250" r="4"/>
+          <circle class="pl-dot-b" cx="446" cy="246" r="4"/>
+        </g>
+
+        <!-- annotations -->
+        <text class="pl-anno a fade" x="360" y="126" text-anchor="end">diverse data lifts the curve</text>
+        <text class="pl-anno b fade" x="300" y="300" text-anchor="start">narrow data saturates</text>
+
+        <!-- axis labels -->
+        <text class="pl-axlabel" x="303" y="376" text-anchor="middle">Human data  (log scale)  →</text>
+        <text class="pl-axlabel" x="40" y="197" text-anchor="middle" transform="rotate(-90 40 197)">Robot capability  →</text>
+
+        <!-- x ticks -->
+        <text class="pl-tick" x="170" y="362" text-anchor="middle">10²</text>
+        <text class="pl-tick" x="262" y="362" text-anchor="middle">10³</text>
+        <text class="pl-tick" x="354" y="362" text-anchor="middle">10⁴</text>
+        <text class="pl-tick" x="446" y="362" text-anchor="middle">10⁵</text>
+      </svg>
+      <figcaption>
+        <b>Fig 1.</b> The workshop's central question — do returns keep accumulating along hours,
+        demonstrators, scenes &amp; embodiments, or saturate? And where does the dashed projection
+        actually go?
+      </figcaption>
+    </figure>
+
+    <div class="audience">
+      <div class="aud"><div class="n">01</div><div class="t">Data engines</div><div class="d">Researchers building human data engines and retargeting pipelines.</div></div>
+      <div class="aud"><div class="n">02</div><div class="t">Scaling laws</div><div class="d">Those studying scaling laws and dataset composition.</div></div>
+      <div class="aud"><div class="n">03</div><div class="t">World models</div><div class="d">Those developing egocentric world models from human video.</div></div>
+      <div class="aud"><div class="n">04</div><div class="t">Hardware co-design</div><div class="d">Those co-designing hardware that closes the human–robot gap.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- CHALLENGES -->
+<section id="challenges" class="challenges">
+  <div class="wrap">
+    <p class="eyebrow">Core Challenges</p>
+    <h2 class="section-title">Research Questions</h2>
+    <div class="ch-grid">
+      <div class="card">
+        <span class="ch-num">1</span>
+        <h3>Scaling laws for human data</h3>
+        <p>Does robot policy performance improve predictably with the volume of human data, and along which axes — hours, tasks, demonstrators, scenes, embodiments — do returns actually accumulate versus saturate?</p>
+      </div>
+      <div class="card">
+        <span class="ch-num">2</span>
+        <h3>Diversity over quantity</h3>
+        <p>Which forms of diversity (task, scene, object, viewpoint, demonstrator morphology) drive downstream generalization, and how do we measure and compose for diversity rather than merely inflate dataset size?</p>
+      </div>
+      <div class="card">
+        <span class="ch-num">3</span>
+        <h3>The embodiment gap at scale</h3>
+        <p>How do morphological, kinematic, and contact/force mismatches degrade transfer as data scales, and can hardware co-design converge the two embodiments to make scaling effective?</p>
+      </div>
+      <div class="card">
+        <span class="ch-num">4</span>
+        <h3>Egocentric world models</h3>
+        <p>Can action-conditioned, predictive world models learned from large-scale egocentric human video yield representations or simulators that transfer to robot control?</p>
+      </div>
+      <div class="card" style="grid-column:1 / -1;">
+        <span class="ch-num">5</span>
+        <h3>Data engines and evaluation</h3>
+        <p>What pipelines for collection, retargeting, automatic labeling, and quality filtering scale to in-the-wild human data — and how do we benchmark whether added human data genuinely improves robot policies?</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SPEAKERS -->
+<section id="speakers">
+  <div class="wrap">
+    <h2 class="section-title spk-title">Invited Speakers</h2>
+    <div class="spk-grid">
+      <div class="spk">
+        <div class="ph"><img src="images/simar-kareer.png" alt="Simar Kareer" loading="lazy" /></div>
+        <div class="body">
+          <div class="nm"><a href="https://www.simarkareer.com/" target="_blank" rel="noopener">Simar Kareer</a></div>
+          <div class="af">Georgia Tech</div>
+        </div>
+      </div>
+      <div class="spk">
+        <div class="ph"><img src="images/shuran-song.jpg" alt="Shuran Song" loading="lazy" /></div>
+        <div class="body">
+          <div class="nm"><a href="https://shurans.github.io/" target="_blank" rel="noopener">Shuran Song</a></div>
+          <div class="af">Stanford University</div>
+        </div>
+      </div>
+      <div class="spk">
+        <div class="ph"><img src="images/homanga-bharadhwaj.png" alt="Homanga Bharadhwaj" loading="lazy" /></div>
+        <div class="body">
+          <div class="nm"><a href="https://homangab.github.io/" target="_blank" rel="noopener">Homanga Bharadhwaj</a></div>
+          <div class="af">Johns Hopkins University</div>
+        </div>
+      </div>
+      <div class="spk">
+        <div class="ph"><img src="images/jim-fan.jpg" alt="Jim Fan" loading="lazy" /></div>
+        <div class="body">
+          <div class="nm"><a href="https://jimfan.me/" target="_blank" rel="noopener">Jim Fan</a></div>
+          <div class="af">NVIDIA</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SCHEDULE -->
+<section id="schedule" class="schedule">
+  <div class="wrap">
+    <p class="eyebrow">Program</p>
+    <h2 class="section-title">Tentative Schedule</h2>
+    <div class="timeline">
+      <div class="ev"><span class="time">08:30 – 08:35</span><span class="what">Opening Remarks</span></div>
+      <div class="ev major"><span class="time">08:35 – 09:05</span><span class="what">Oral Session 1<span class="sub">Spotlights 1–4 · 5 min each + 2 min Q&amp;A</span></span></div>
+      <div class="ev major"><span class="time">09:05 – 09:30</span><span class="what">Invited Talk 1</span></div>
+      <div class="ev"><span class="time">09:30 – 09:35</span><span class="what">5 min break</span></div>
+      <div class="ev major"><span class="time">09:35 – 10:05</span><span class="what">Oral Session 2<span class="sub">Spotlights 5–8 · 5 min each + 2 min Q&amp;A</span></span></div>
+      <div class="ev major"><span class="time">10:05 – 10:30</span><span class="what">Invited Talk 2</span></div>
+      <div class="ev"><span class="time">10:30 – 11:00</span><span class="what">Coffee Break &amp; Poster Session</span></div>
+      <div class="ev major"><span class="time">11:00 – 11:25</span><span class="what">Invited Talk 3</span></div>
+      <div class="ev major"><span class="time">11:25 – 11:50</span><span class="what">Invited Talk 4</span></div>
+      <div class="ev"><span class="time">11:50 – 12:00</span><span class="what">Open Forum<span class="sub">Crowdsourced audience questions via QR code</span></span></div>
+      <div class="ev major"><span class="time">12:00 – 12:25</span><span class="what">Panel Discussion</span></div>
+      <div class="ev"><span class="time">12:25 – 12:30</span><span class="what">Awards &amp; Closing Remarks</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- CFP -->
+<section id="cfp">
+  <div class="wrap">
+    <p class="eyebrow">Call for Papers</p>
+    <h2 class="section-title">Contribute your work</h2>
+    <p class="section-lead">
+      We solicit contributed papers through a single Regular Papers Track. We invite new,
+      preliminary, and in-progress research as well as position papers on scaling and diversifying
+      human data for robot learning.
+    </p>
+
+    <div class="cfp-grid">
+      <div class="cfp-card">
+        <h3>Submission details</h3>
+        <p>All submissions must be a single PDF using the CoRL 2026 template, submitted through OpenReview.</p>
+        <ul class="tracklist">
+          <li><span class="ck">✓</span> <span><strong>Long papers:</strong> up to 8 pages</span></li>
+          <li><span class="ck">✓</span> <span><strong>Short papers:</strong> up to 4 pages</span></li>
+          <li><span class="ck">✓</span> <span>References &amp; supplementary material do not count toward limits</span></li>
+          <li><span class="ck">✓</span> <span><strong>Non-archival:</strong> concurrent submissions welcome</span></li>
+          <li><span class="ck">✗</span> <span><strong>Papers already accepted at the CoRL 2026 main conference are not eligible for submission.</strong></span></li>
+        </ul>
+        <a class="btn btn-primary" href="https://openreview.net/group?id=robot-learning.org/CoRL/2026/Workshop/Scaling_H2R" target="_blank" rel="noopener">Submit on OpenReview&nbsp;→</a>
+      </div>
+      <div class="cfp-card">
+        <h3>Important dates</h3>
+        <ul class="dates">
+          <li><span class="lbl">Submission portal opens</span><span class="dt">Aug 3, 2026</span></li>
+          <li class="hot"><span class="lbl">Submission deadline</span><span class="dt">Oct 7, 2026 (AoE)</span></li>
+          <li><span class="lbl">Author notification</span><span class="dt">Oct 19, 2026</span></li>
+          <li><span class="lbl">Camera-ready deadline</span><span class="dt">Oct 30, 2026</span></li>
+          <li><span class="lbl">Workshop date</span><span class="dt">Nov 12, 2026</span></li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ORGANIZERS -->
+<section id="organizers" class="organizers">
+  <div class="wrap">
+    <p class="eyebrow">Organizers</p>
+    <h2 class="section-title">Organizing Committee</h2>
+    <div class="org-grid">
+
+      <div class="org">
+        <div class="ph"><img src="images/ruoshi-liu.jpg" alt="Ruoshi Liu" loading="lazy" /></div>
+        <div class="body">
+          <div class="nm"><a href="https://ruoshiliu.github.io/" target="_blank" rel="noopener">Ruoshi Liu</a></div>
+          <div class="af">University of Maryland, College Park</div>
+        </div>
+      </div>
+
+      <div class="org">
+        <div class="ph"><img src="images/hanjung-kim.jpg" alt="Hanjung Kim" loading="lazy" /></div>
+        <div class="body">
+          <div class="nm"><a href="https://kimhanjung.github.io/" target="_blank" rel="noopener">Hanjung Kim</a></div>
+          <div class="af">Yonsei University</div>
+        </div>
+      </div>
+
+      <div class="org">
+        <div class="ph"><img src="images/ryan-punamiya.png" alt="Ryan Punamiya" loading="lazy" /></div>
+        <div class="body">
+          <div class="nm"><a href="https://www.rpunamiya.dev/" target="_blank" rel="noopener">Ryan Punamiya</a></div>
+          <div class="af">NVIDIA</div>
+        </div>
+      </div>
+
+      <div class="org">
+        <div class="ph"><img src="images/seungjae-lee.png" alt="Seungjae Lee" loading="lazy" /></div>
+        <div class="body">
+          <div class="nm"><a href="https://sjlee.cc/" target="_blank" rel="noopener">Seungjae Lee</a></div>
+          <div class="af">University of Maryland, College Park</div>
+        </div>
+      </div>
+
+      <div class="org">
+        <div class="ph"><img src="images/seonghyeon-ye.jpg" alt="Seonghyeon Ye" loading="lazy" /></div>
+        <div class="body">
+          <div class="nm"><a href="https://seonghyeonye.github.io/" target="_blank" rel="noopener">Seonghyeon Ye</a></div>
+          <div class="af">KAIST</div>
+        </div>
+      </div>
+
+      <div class="org">
+        <div class="ph"><img src="images/jeremy-collins.jpg" alt="Jeremy Collins" loading="lazy" /></div>
+        <div class="body">
+          <div class="nm"><a href="https://jeremy-collins.github.io/" target="_blank" rel="noopener">Jeremy Collins</a></div>
+          <div class="af">Georgia Institute of Technology</div>
+        </div>
+      </div>
+
+      <div class="org">
+        <div class="ph"><img src="images/irmak-guzey.jpg" alt="Irmak Guzey" loading="lazy" /></div>
+        <div class="body">
+          <div class="nm"><a href="https://irmakguzey.github.io/" target="_blank" rel="noopener">Irmak Guzey</a></div>
+          <div class="af">New York University</div>
+        </div>
+      </div>
+
+      <div class="org">
+        <div class="ph"><img src="images/akash-sharma.jpg" alt="Akash Sharma" loading="lazy" /></div>
+        <div class="body">
+          <div class="nm"><a href="https://akashsharma02.github.io/" target="_blank" rel="noopener">Akash Sharma</a></div>
+          <div class="af">Amazon Frontier AI &amp; Robotics</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<script>
+  // Mobile menu toggle
+  const btn = document.getElementById('menuBtn');
+  const links = document.getElementById('navLinks');
+  btn.addEventListener('click', () => links.classList.toggle('open'));
+  links.querySelectorAll('a').forEach(a => a.addEventListener('click', () => links.classList.remove('open')));
+
+  // Fig 1: draw the curves when scrolled into view
+  const plot = document.getElementById('plot');
+  if (plot) {
+    if ('IntersectionObserver' in window) {
+      const po = new IntersectionObserver((entries) => {
+        entries.forEach((e) => { if (e.isIntersecting) { e.target.classList.add('drawn'); po.unobserve(e.target); } });
+      }, { threshold: 0.35 });
+      po.observe(plot);
+    } else {
+      plot.classList.add('drawn');
+    }
+  }
+</script>
+
+</body>
+</html>

@@ -11,6 +11,7 @@ import multiprocessing as mp
 
 
 venues = [
+    # "robot-learning.org/CoRL/2026/Conference",
     # "ICML.cc/2025/Conference",
     # "ICLR.cc/2025/Conference",
     # "NeurIPS.cc/2024/Conference",
@@ -42,6 +43,10 @@ fields = [
     "TLDR",
     "spotlight",
     "abstract",
+    "primary_keyword",
+    "secondary_keyword",
+    "free_keyword_1",
+    "free_keyword_2",
 ]
 
 conferences_name = "ConferencesData"
@@ -90,7 +95,7 @@ def download_pdfs(pdf_urls, cache_folder, titles=None, additional_info=""):
 
 
 def scrape_conference(venue_id, credentials_file, cache_folder):
-    table = list()
+    table = ["\t".join(fields)]  # header row
     values_venue = set()
     counter = 0
     notes_filtered = list()
@@ -115,11 +120,15 @@ def scrape_conference(venue_id, credentials_file, cache_folder):
                 forum = f"https://openreview.net/forum?id={note.id}"
                 line.append(forum)
                 continue
-            if field in note.content:
+            # CoRL 2026 names it "supplementary_materials"
+            key = field
+            if field == "supplementary_material" and field not in note.content:
+                key = "supplementary_materials"
+            if key in note.content:
                 value = (
-                    note.content[field]["value"]
-                    if type(note.content[field]["value"]) == str
-                    else ";".join(note.content[field]["value"])
+                    note.content[key]["value"]
+                    if type(note.content[key]["value"]) == str
+                    else ";".join(note.content[key]["value"])
                 )
                 if (
                     field == "pdf"

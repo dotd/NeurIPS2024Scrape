@@ -20,7 +20,7 @@ OPENALEX = os.path.join(HERE, "openalex.json")  # from specific_scripts/fetch_co
 GITHUB = os.path.join(HERE, "github.json")  # from specific_scripts/corl2026_github.py
 AFFILIATIONS = os.path.join(HERE, "affiliations.json")  # from specific_scripts/corl2026_affiliations.py
 ROBOTS = os.path.join(HERE, "robots.json")  # from specific_scripts/corl2026_robots.py
-TOP_COMPANIES, TOP_UNIVERSITIES, TOP_RESEARCHERS, TOP_ROBOTS = 20, 50, 50, 50
+TOP_COMPANIES, TOP_UNIVERSITIES, TOP_RESEARCHERS, TOP_ROBOTS, TOP_KEYWORDS = 20, 50, 50, 50, 50
 
 csv.field_size_limit(sys.maxsize)
 sys.path.insert(0, os.path.join(ROOT, "specific_scripts"))
@@ -103,6 +103,8 @@ HTML = r"""<!doctype html>
 </nav>
 <div id="filters">
   <input type="search" id="q" placeholder="🔍 search titles, authors, abstracts, keywords…">
+  <details class="facet" data-key="p"><summary>🏷️ Primary keyword</summary><div class="panel"></div></details>
+  <details class="facet" data-key="s"><summary>🔖 Secondary keyword</summary><div class="panel"></div></details>
   <details class="facet" data-key="b"><summary>🤖 Robots</summary><div class="panel"></div></details>
   <details class="facet" data-key="c"><summary>🏢 Companies</summary><div class="panel"></div></details>
   <details class="facet" data-key="u"><summary>🎓 Universities</summary><div class="panel"></div></details>
@@ -275,7 +277,7 @@ dets = rows.map((r, ri) => {
 });
 
 // ---- filters ----
-const picked = {b: new Set(), c: new Set(), u: new Set(), r: new Set()};
+const picked = {p: new Set(), s: new Set(), b: new Set(), c: new Set(), u: new Set(), r: new Set()};
 document.querySelectorAll('.facet').forEach(fd => {
   const key = fd.dataset.key, panel = fd.querySelector('.panel'), label = fd.querySelector('summary');
   const base = label.textContent;
@@ -320,7 +322,7 @@ function applyFilters() {
   const ghSel = document.getElementById('ghF').value, gh = i => !ghSel || (ghSel === 'y') === !!rows[i][ghIdx];
   let idx = rows.map((_, i) => i).filter(i => gh(i) &&
     terms.every(t => haystack[i].includes(t)) &&
-    hit('b', i) && hit('c', i) && hit('u', i) && hit('r', i) && (meta[i].h || 0) >= minH && (meta[i].cites || 0) >= minC);
+    hit('p', i) && hit('s', i) && hit('b', i) && hit('c', i) && hit('u', i) && hit('r', i) && (meta[i].h || 0) >= minH && (meta[i].cites || 0) >= minC);
   if (sort === 'az') idx.sort((a, b) => rows[a][titleIdx].localeCompare(rows[b][titleIdx], undefined, {sensitivity: 'base'}));
   else if (sort) idx.sort((a, b) => (meta[b][sort] || 0) - (meta[a][sort] || 0));
   table.querySelector('tbody').replaceChildren(...idx.map(i => trs[i]));
@@ -350,6 +352,7 @@ def openalex_meta(rows, columns):
     pdf_aff = json.load(open(AFFILIATIONS))["papers"] if os.path.exists(AFFILIATIONS) else {}
     authors = oa["authors"]
     id_col = columns.index("id")
+    kw_cols = {k: columns.index(c) for k, c in [("p", "primary_keyword"), ("s", "secondary_keyword")] if c in columns}
     meta = []
     for r in rows:
         pid = r[id_col].split("id=")[-1]
@@ -364,6 +367,7 @@ def openalex_meta(rows, columns):
             "u": sorted({re.sub(r"^The ", "", n) for n in  # "The University of Tokyo" == "University of Tokyo"
                          set(aff["universities"]) | {n for n, t in insts if t == "education"}}),
             "b": robots.get(pid, []),
+            **{k: [r[i]] if r[i] else [] for k, i in kw_cols.items()},
             "r": sorted({a["id"] for a in w["authors"] if a["id"] in authors}),
             "cites": w["cites"],
             "h": max(hs) if hs else None,
@@ -382,7 +386,8 @@ def openalex_meta(rows, columns):
     top_ids = {a["id"] for a in researchers}
     for m in meta:
         m["r"] = [a for a in m["r"] if a in top_ids]
-    return meta, {"c": top("c", TOP_COMPANIES), "u": top("u", TOP_UNIVERSITIES), "r": researchers, "b": top("b", TOP_ROBOTS)}
+    return meta, {"c": top("c", TOP_COMPANIES), "u": top("u", TOP_UNIVERSITIES), "r": researchers, "b": top("b", TOP_ROBOTS),
+                  **{k: top(k, TOP_KEYWORDS) for k in kw_cols}}
 
 
 def main():

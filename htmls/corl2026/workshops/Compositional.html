@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="">
+
+<head><base href="https://compogen-robotics.github.io/corl2026/">
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="utf-8">
+  <title>Compositional Generalization for Real-World Robot Learning @ CoRL 2026</title>
+  <meta name="description" content="A half-day workshop on compositional generalization for real-world robot learning at CoRL 2026 in Austin, TX, USA.">
+  <meta property="og:title" content="Compositional Generalization for Real-World Robot Learning @ CoRL 2026">
+  <meta property="og:description" content="A half-day workshop on compositional generalization for real-world robot learning at CoRL 2026 in Austin, TX, USA.">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="images/background_v2.png">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+<div class="nav">
+  <div class="nav-container">
+    <a href="#intro">Introduction</a>
+    <a href="#challenges">Topics</a>
+    <a href="#speakers">Speakers</a>
+    <a href="#cfp">Call for Papers</a>
+    <a href="#dates">Important Dates</a>
+    <a href="#schedule">Schedule</a>
+    <a href="#organizers">Organizers</a>
+    <a href="#contact">Contact</a>
+  </div>
+</div>
+
+<div class="title-container">
+  <div class="title-card">
+    <h1>Compositional Generalization for Real-World Robot Learning</h1>
+    <div class="subtitle" style="color: #33475e; margin: 20px">
+      A half-day workshop at CoRL 2026
+    </div>
+    <div class="subtitle" style="color: #33475e; margin: 20px">
+      <!-- FILL IN: confirm date and add room once CoRL publishes assignments -->
+      Austin, TX, USA &middot; November 12, 2026 &middot; Room TBA
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="announce">
+    🎉 <b>Our workshop has been accepted to CoRL 2026!</b> Submissions open on September 9, 2026, with a tentative deadline of October 2, 2026 &mdash; full submission details will be posted soon.
+  </div>
+
+  <div class="section" id="intro">
+    <h2>Introduction</h2>
+    <p>
+      Compositional, or modular, learning enables systems to exploit the structure of a problem by building abstractions between functionally distinct components. By <i>compositionality</i> we mean the principle that a small set of reusable modules &mdash; skills, representations, sub-goals, or controllers &mdash; can be recombined according to rules to cover a combinatorially large space of behaviors. These structural assumptions reduce the sample complexity of the learning system, which has driven increasing adoption of compositional approaches in robotics, primarily because the diversity and lack of standardization across robot embodiments, observational modalities, and task goals make collecting data that supports all combinations infeasible.
+    </p>
+    <p>
+      As the community scales data and builds large foundation models, one could argue that these models approximate compositional behavior across the scaled modality, embodiment, and goal combinations. However, this approximation is incomplete in ways that matter for robotics. Certain modalities, such as force and tactile sensing, are intrinsically difficult to scale and standardize across setups; high-dimensional modalities such as vision restrict data collection and confine deployment to controlled environments; and foundation models are trained on corpora covering only a small selection of today's embodiments, while new embodiments are continuously built and adopted across labs, rendering many such models inapplicable.
+    </p>
+    <p>
+      This half-day workshop solicits novel work that uses the principle of compositionality or modularity to tackle learning problems in robotics. In particular, we encourage approaches that leverage the representational power of scaled systems while retaining the structure of modular ones &mdash; getting the best of both worlds. As scaling reshapes robot learning, the open question is not whether to scale or to compose, but <i>where</i> scaling suffices and <i>where</i> explicit composition remains necessary.
+    </p>
+
+    <h3>Intended Audience</h3>
+    <p>
+      The workshop targets a diverse, interdisciplinary audience spanning robotics, machine learning, and embodied AI:
+    </p>
+    <ul>
+      <li>Researchers in reinforcement and imitation learning building hierarchical and skill-based policies;</li>
+      <li>Foundation-model and VLA practitioners interested in where scaled representations fall short;</li>
+      <li>Researchers in neuro-symbolic AI, task and motion planning, multimodal sensing, and control interested in modular, reusable, and transferable robot behavior.</li>
+    </ul>
+  </div>
+
+  <div class="section" id="challenges">
+    <h2>Core Challenges &amp; Topics</h2>
+    <ul>
+      <li><b>Modality composition.</b> Can we develop modular systems that compose scaled modality representations (e.g., vision and language) with modules learned for data-scarce modalities such as force and tactile sensing? What interfaces let abundant, internet-scale representations cover the gaps left by modalities that are intrinsically hard to scale and standardize?</li>
+      <li><b>Interfacing modules.</b> How can we develop better abstractions for effective modularization in robotics &mdash; for example, for long-horizon manipulation, or for embodiment transfer of policies across robots that differ in morphology and action space? What representation spaces (language, latent embeddings, spatial goal states, controllers) allow modules to be sequenced and recombined reliably?</li>
+      <li><b>The role of agents in robotics.</b> How can we leverage modular, agentic systems &mdash; high-level reasoners that invoke specialized skills, tools, and controllers &mdash; to perform manipulation in the real world? When is an agentic, modular decomposition stronger than an end-to-end monolithic policy, and when does scaling subsume it?</li>
+      <li><b>Evaluation and benchmarking for compositionality.</b> Current benchmarks largely measure end-to-end task success but fail to assess the modularity, reusability, or transfer of learned components. How should the community design physical and simulated benchmarks that explicitly evaluate compositional generalization, including across novel modality, embodiment, and goal combinations?</li>
+    </ul>
+  </div>
+
+  <div class="section" id="speakers">
+    <h2>Invited Speakers</h2>
+    <div class="people">
+      <a href="https://jiayuanm.com/">
+        <img src="images/jiayuan_mao.jpg">
+        <div>Jiayuan Mao</div>
+        <div class="aff">University of Pennsylvania</div>
+      </a>
+
+      <a href="https://www.user.tu-berlin.de/mtoussai/">
+        <img src="images/marc_toussaint.jpg">
+        <div>Marc Toussaint</div>
+        <div class="aff">TU Berlin</div>
+      </a>
+
+      <a href="https://people.csail.mit.edu/lpk/">
+        <img src="images/leslie_kaelbling.jpg">
+        <div>Leslie Pack Kaelbling</div>
+        <div class="aff">MIT</div>
+      </a>
+
+      <a href="https://faculty.cc.gatech.edu/~danfei/">
+        <img src="images/danfei_xu.jpg">
+        <div>Danfei Xu</div>
+        <div class="aff">Georgia Tech / NVIDIA</div>
+      </a>
+    </div>
+  </div>
+  <br>
+
+  <div class="section" id="cfp">
+    <h2>Call for Papers</h2>
+    <p>
+      We will run a selective contributed track (short papers and posters) reviewed for technical correctness, reproducibility, and actionable artifacts (e.g., skill libraries, benchmarks, datasets, metrics, or well-documented system case studies). We explicitly welcome works-in-progress and negative/ablation results, and encourage authors to share code and evaluation details.
+    </p>
+    <p>
+      Submissions are <b>non-archival</b>. Per CoRL policy, we will not accept work already published or accepted to the CoRL 2026 main conference. Accepted poster abstracts (and optional PDFs, with author permission) will be hosted here to help attendees identify relevant work.
+    </p>
+    <h3>Submission Instructions</h3>
+    <!-- FILL IN: page limit, template, review policy -->
+    <ul>
+      <li><b>Submission portal:</b> <a href="https://openreview.net/group?id=robot-learning.org/CoRL/2026/Workshop/Compositional#tab-recent-activity" target="_blank" rel="noopener">OpenReview</a></li>
+      <li><b>Format:</b> <span class="tbd">[TBD]</span></li>
+      <li><b>Review process:</b> <span class="tbd">[TBD]</span></li>
+    </ul>
+    <p>
+      We encourage in-person presentation of accepted papers.
+    </p>
+  </div>
+
+  <div class="section" id="dates">
+    <h2>Important Dates</h2>
+    <!-- FILL IN: notification and camera-ready deadlines; remove "(tentative)" once the submission deadline is final -->
+    <table style="width: 100%;">
+      <colgroup>
+        <col style="width: 50%;">
+        <col style="width: 50%;">
+      </colgroup>
+      <tr>
+        <th>Event</th>
+        <th>Date</th>
+      </tr>
+      <tr>
+        <td>Submissions open</td>
+        <td>September 9, 2026</td>
+      </tr>
+      <tr>
+        <td>Submission deadline</td>
+        <td>October 2, 2026 (tentative)</td>
+      </tr>
+      <tr>
+        <td>Notification of acceptance</td>
+        <td><span class="tbd">TBD</span></td>
+      </tr>
+      <tr>
+        <td>Camera-ready deadline</td>
+        <td><span class="tbd">TBD</span></td>
+      </tr>
+      <tr>
+        <td>Workshop</td>
+        <td>November 12, 2026</td>
+      </tr>
+    </table>
+    <p>All deadlines are 11:59 PM <a href="https://en.wikipedia.org/wiki/Anywhere_on_Earth">Anywhere on Earth (AoE)</a>.</p>
+  </div>
+
+  <div class="section" id="schedule">
+    <h2>Schedule</h2>
+    <p>This is a half-day, in-person workshop. All times are tentative.</p>
+    <!-- FILL IN: replace "Invited Speaker 1-4" with confirmed speaker names and talk titles; confirm morning vs. afternoon slot -->
+
+    <table style="width: 100%;">
+      <colgroup>
+        <col style="width: 20%;">
+        <col style="width: 80%;">
+      </colgroup>
+      <tr>
+        <th>Time</th>
+        <th>Event</th>
+      </tr>
+      <tr>
+        <td>8:30 AM</td>
+        <td>Welcome &amp; Framing</td>
+      </tr>
+      <tr>
+        <td>8:45 AM</td>
+        <td>Invited Speaker 1</td>
+      </tr>
+      <tr>
+        <td>9:10 AM</td>
+        <td>Invited Speaker 2</td>
+      </tr>
+      <tr>
+        <td>9:35 AM</td>
+        <td>Poster Session, Lightning Pitches &amp; Coffee Break</td>
+      </tr>
+      <tr>
+        <td>10:20 AM</td>
+        <td>Invited Speaker 3</td>
+      </tr>
+      <tr>
+        <td>10:45 AM</td>
+        <td>Invited Speaker 4</td>
+      </tr>
+      <tr>
+        <td>11:10 AM</td>
+        <td>Panel Debate</td>
+      </tr>
+      <tr>
+        <td>11:50 AM</td>
+        <td>Facilitated Breakout Groups</td>
+      </tr>
+      <tr>
+        <td>12:20 PM</td>
+        <td>Breakout Report-Back &amp; Conclusion</td>
+      </tr>
+      <tr>
+        <td>12:30 PM</td>
+        <td>Workshop Ends</td>
+      </tr>
+    </table>
+  </div>
+
+  <div class="section" id="organizers">
+    <h2>Organizers</h2>
+    <div class="people">
+      <a href="https://haonan16.github.io/">
+        <img src="images/haonan_chen.jpg">
+        <div>Haonan Chen</div>
+        <div class="aff">Harvard / Stanford</div>
+      </a>
+
+      <a href="https://shaoxiongyao.github.io/">
+        <img src="images/shaoxiong_yao.jpg">
+        <div>Shaoxiong Yao</div>
+        <div class="aff">UIUC</div>
+      </a>
+
+      <a href="https://wensi-ai.github.io/">
+        <img src="images/wensi_ai.jpg">
+        <div>Wensi Ai</div>
+        <div class="aff">Stanford University</div>
+      </a>
+
+      <a href="https://www.linkedin.com/in/shiping-ma-800a51228/">
+        <img src="images/shiping_ma.jpeg">
+        <div>Shiping Ma</div>
+        <div class="aff">TU Berlin</div>
+      </a>
+
+      <a href="https://yewr.github.io/">
+        <img src="images/weirui_ye.jpg">
+        <div>Weirui Ye</div>
+        <div class="aff">MIT</div>
+      </a>
+
+      <a href="https://benzandonati.co.uk/">
+        <img src="images/ben_zandonati.jpg">
+        <div>Ben Zandonati</div>
+        <div class="aff">MIT</div>
+      </a>
+
+      <a href="https://hdacnw.github.io/">
+        <img src="images/haowen_liu.jpg">
+        <div>Haowen Liu</div>
+        <div class="aff">University of Maryland</div>
+      </a>
+
+      <a href="https://yilundu.github.io/">
+        <img src="images/yilun_du.png">
+        <div>Yilun Du</div>
+        <div class="aff">Harvard University</div>
+      </a>
+
+      <a href="https://jiajunwu.com/">
+        <img src="images/jiajun_wu.jpg">
+        <div>Jiajun Wu</div>
+        <div class="aff">Stanford University</div>
+      </a>
+    </div>
+  </div>
+
+  <div class="section" id="contact">
+    <h2>Contact</h2>
+    <div>For questions and comments, please contact <a href="mailto:haonan_chen@seas.harvard.edu">haonan_chen@seas.harvard.edu</a>.</div>
+  </div>
+
+  <div class="foot">
+    &copy; Compositional Generalization Workshop @ CoRL 2026
+  </div>
+</div>
+
+
+</body>
+
+</html>

@@ -32,8 +32,8 @@ TOPIC_RES = [(key, re.compile(rx, re.I)) for key, _, _, rx in TOPICS]
 
 
 def parse_row(cols):
-    """Return dict from a CSV row; two layouts exist (9 and 11 columns)."""
-    if len(cols) == 11:  # id,title,authors,keywords,area,venue,pdf,supp,tldr,spotlight,abstract
+    """Return dict from a CSV row; layouts: 9, 11, or 15 columns (11 + CoRL 2026 keyword fields)."""
+    if len(cols) >= 11:  # id,title,authors,keywords,area,venue,pdf,supp,tldr,spotlight,abstract[,primary_kw,secondary_kw,free_kw1,free_kw2]
         return dict(forum=cols[0], title=cols[1], authors=cols[2], keywords=cols[3],
                     venue=cols[5], pdf=cols[6], tldr=cols[8], abstract=cols[10])
     if len(cols) == 9:  # title,authors,keywords,area,venue,pdf,supp,tldr,abstract
@@ -69,6 +69,8 @@ def load_papers():
         conferences.append(conf)
         with open(path) as f:
             for line in f:
+                if line.startswith("id\t"):  # header row
+                    continue
                 p = parse_row(line.rstrip("\n").split("\t"))
                 if p is None or not p["title"]:
                     continue

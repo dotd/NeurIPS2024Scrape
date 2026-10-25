@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><base href="https://spais-ws.org">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Science of Physical AI Safety — CoRL 2026</title>
+<meta name="description" content="Convening the AI-safety and robot-learning communities to establish a shared science — and a shared research agenda — for the interpretability, alignment, and control of robot foundation models.">
+<link rel="canonical" href="https://spais-ws.org/">
+
+<!-- Favicon (robot mark) -->
+<link rel="icon" href="/favicon.ico" sizes="48x48">
+<link rel="icon" href="/assets/favicon.svg" sizes="any" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+
+<!-- Open Graph / social preview -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="SPAIS — The Science of Physical AI Safety">
+<meta property="og:title" content="The Science of Physical AI Safety — CoRL 2026">
+<meta property="og:description" content="Convening the AI-safety and robot-learning communities to establish a shared science — and a shared research agenda — for the interpretability, alignment, and control of robot foundation models.">
+<meta property="og:url" content="https://spais-ws.org/">
+<meta property="og:image" content="https://spais-ws.org/assets/og-image.png?v=2">
+<meta property="og:image:width" content="2400">
+<meta property="og:image:height" content="1260">
+<meta property="og:image:alt" content="A humanoid robot rendered as a kinematic wireframe blueprint overlaid with a transformer attention graph, on a deep navy background.">
+
+<!-- Twitter / X card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="The Science of Physical AI Safety — CoRL 2026">
+<meta name="twitter:description" content="Convening the AI-safety and robot-learning communities to establish a shared science — and a shared research agenda — for the interpretability, alignment, and control of robot foundation models.">
+<meta name="twitter:image" content="https://spais-ws.org/assets/og-image.png?v=2">
+
+<!-- Structured data: Event -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Event",
+  "name": "The Science of Physical AI Safety (SPAIS 2026)",
+  "description": "A CoRL 2026 workshop convening the AI-safety and robot-learning communities to establish a shared science — and a shared research agenda — for the interpretability, alignment, and control of robot foundation models.",
+  "url": "https://spais-ws.org/",
+  "image": "https://spais-ws.org/assets/og-image.png?v=2",
+  "startDate": "2026-11-12",
+  "endDate": "2026-11-12",
+  "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
+  "eventStatus": "https://schema.org/EventScheduled",
+  "location": {
+    "@type": "Place",
+    "name": "CoRL 2026",
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": "Austin",
+      "addressRegion": "TX",
+      "addressCountry": "US"
+    }
+  },
+  "superEvent": {
+    "@type": "Event",
+    "name": "Conference on Robot Learning (CoRL) 2026"
+  },
+  "organizer": [
+    { "@type": "Person", "name": "Kaylene Stocking" },
+    { "@type": "Person", "name": "Bear Häon" },
+    { "@type": "Person", "name": "Hugo Buurmeijer" },
+    { "@type": "Person", "name": "Carmen Amo Alonso" },
+    { "@type": "Person", "name": "Isaac Sheidlower" },
+    { "@type": "Person", "name": "Zac Ravichandran" }
+  ]
+}
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/site.css">
+</head>
+<body>
+
+<!-- ============ TOP BAR ============ -->
+<header class="topbar">
+  <div class="wrap">
+    <div class="brand-lockup">
+      <div class="brand">
+        <img class="mark" src="/assets/paisi-logo.svg" alt="Physical AI Safety Institute" width="120" height="120">
+        <div class="bt">
+          <span class="n">SPAIS&nbsp;2026</span>
+          <span class="s">C<span class="lc">o</span>RL Workshop</span>
+        </div>
+      </div>
+      <span class="lockup-rule"></span>
+      <span class="inst">Supported by the<a href="https://paisi.ai" target="_blank" rel="noopener">Physical AI Safety Institute</a></span>
+    </div>
+    <nav class="navlinks">
+      <a href="#thesis">Thesis</a>
+      <a href="#questions">Research Questions</a>
+      <a href="#programme">Programme</a>
+      <a href="#calls" class="btn">Open Calls</a>
+    </nav>
+  </div>
+</header>
+
+<!-- ============ HERO ============ -->
+<section class="hero" style="padding:0">
+  <div class="wrap hero-grid">
+    <div class="hero-copy">
+      <div class="kicker reveal in">
+        <span class="eyebrow on-dark">C<span class="lc">o</span>RL 2026 · November 12 · Austin, Texas</span>
+      </div>
+      <h1 class="reveal d1 in">The Science of<br><em>Physical AI Safety</em></h1>
+      <p class="lede reveal d2 in">Convening the AI safety and robot learning communities to establish a shared science — and a shared research agenda — for the interpretability, alignment, and control of robot foundation models.</p>
+      <div class="hero-actions reveal d3 in">
+        <a href="#calls" class="cta">View Open Calls</a>
+        <a href="#thesis" class="cta ghost on-dark">Read the Thesis</a>
+      </div>
+      <a class="grant reveal d4 in" href="#grants">
+        <div class="grant-copy">
+          <div class="g1"><b>$20,000</b> in travel, registration &amp; accommodation grants</div>
+          <div class="g2">Backing early-career researchers in physical AI safety. <span class="g-go">Apply now →</span></div>
+        </div>
+        <div class="grant-by">
+          <span class="by">Sponsored by</span>
+          <img src="/assets/robocurve-lockup-teal.svg" alt="Robocurve" width="809" height="119">
+        </div>
+      </a>
+    </div>
+
+    <div class="hero-art reveal d2 in">
+      <div class="plate">
+      <!-- HERO SVG: humanoid wireframe x transformer attention — platinum plate on navy -->
+      <svg viewBox="0 0 440 520" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A humanoid robot rendered as a kinematic wireframe overlaid with a transformer attention graph">
+        <defs>
+          <pattern id="grid" width="22" height="22" patternUnits="userSpaceOnUse">
+            <path d="M22 0H0V22" fill="none" stroke="#AEB7C0" stroke-width="0.4" opacity="0.14"/>
+          </pattern>
+          <radialGradient id="halo" cx="50%" cy="38%" r="55%">
+            <stop offset="0%" stop-color="#2E6FB8" stop-opacity="0.18"/>
+            <stop offset="100%" stop-color="#2E6FB8" stop-opacity="0"/>
+          </radialGradient>
+        </defs>
+
+        <rect x="0" y="0" width="440" height="520" fill="url(#grid)"/>
+        <rect x="0" y="0" width="440" height="520" fill="url(#halo)"/>
+
+        <g stroke="#AEB7C0" stroke-width="1" fill="none" opacity="0.5">
+          <path d="M14 14 H40 M14 14 V40"/>
+          <path d="M426 14 H400 M426 14 V40"/>
+          <path d="M14 506 H40 M14 506 V480"/>
+          <path d="M426 506 H400 M426 506 V480"/>
+        </g>
+
+        <g font-family="Inter, monospace" font-size="9" fill="#9DC4EC">
+          <g fill="none" stroke="#9DC4EC" stroke-width="1">
+            <rect x="58" y="44" width="20" height="20" rx="2"/>
+            <rect x="84" y="44" width="20" height="20" rx="2"/>
+            <rect x="110" y="44" width="20" height="20" rx="2"/>
+            <rect x="136" y="44" width="20" height="20" rx="2"/>
+          </g>
+          <text x="62" y="58">o₁</text><text x="88" y="58">o₂</text>
+          <text x="114" y="58">o₃</text><text x="140" y="58">aₜ</text>
+        </g>
+        <text x="58" y="34" font-family="Inter, monospace" font-size="8" letter-spacing="1.8" fill="#7E8FA1">OBSERVATION → ACTION TOKENS</text>
+
+        <g stroke="#5E83AB" stroke-width="0.8" stroke-dasharray="2 3" opacity="0.6" fill="none">
+          <path d="M68 64 C 100 120, 180 90, 220 130"/>
+          <path d="M94 64 C 120 120, 190 110, 220 130"/>
+          <path d="M120 64 C 150 110, 200 110, 220 130"/>
+          <path d="M146 64 C 180 100, 210 110, 220 130"/>
+          <path d="M220 130 C 240 150, 250 200, 305 215"/>
+          <path d="M220 130 C 200 150, 150 200, 135 215"/>
+        </g>
+
+        <!-- HUMANOID ROBOT — platinum line-art on navy -->
+        <g stroke="#E2E8EE" stroke-width="1.5" fill="none" stroke-linejoin="miter" stroke-linecap="round">
+          <path d="M188 294 L216 294 L208 386 L186 386 Z"/>
+          <path d="M224 294 L252 294 L254 386 L232 386 Z"/>
+          <path d="M180 380 L208 382 L206 400 L178 398 Z"/>
+          <path d="M232 382 L260 380 L262 398 L234 400 Z"/>
+          <path d="M184 400 L206 400 L201 464 L183 464 Z"/>
+          <path d="M234 400 L256 400 L257 464 L239 464 Z"/>
+          <path d="M168 460 L208 460 L213 480 L210 489 L165 489 L162 480 Z"/>
+          <path d="M232 460 L272 460 L278 480 L275 489 L230 489 L227 480 Z"/>
+          <path d="M158 180 L180 184 L162 250 L146 248 Z"/>
+          <path d="M260 184 L282 180 L294 248 L278 250 Z"/>
+          <path d="M138 244 L162 246 L160 260 L136 258 Z"/>
+          <path d="M278 246 L302 244 L304 258 L280 260 Z"/>
+          <path d="M146 252 L162 252 L130 318 L114 314 Z"/>
+          <path d="M278 252 L294 252 L326 314 L310 318 Z"/>
+          <path d="M192 262 L248 262 L257 280 L248 298 L192 298 L183 280 Z"/>
+          <path d="M176 166 L214 156 L226 156 L264 166 L271 198 L260 250 L248 266 L192 266 L180 250 L169 198 Z"/>
+          <path d="M182 176 L217 169 L218 212 L195 216 L183 200 Z"/>
+          <path d="M258 176 L223 169 L222 212 L245 216 L257 200 Z"/>
+          <path d="M216 168 L224 168 L224 214 L216 214 Z"/>
+          <path d="M196 216 L244 216 L242 228 L198 228 Z"/>
+          <path d="M198 230 L242 230 L240 244 L200 244 Z"/>
+          <path d="M200 246 L240 246 L237 260 L203 260 Z"/>
+          <path d="M148 164 L180 160 L186 180 L178 198 L150 194 Z"/>
+          <path d="M292 164 L260 160 L254 180 L262 198 L290 194 Z"/>
+          <path d="M104 314 L134 314 L132 334 L106 336 Z"/>
+          <path d="M107 336 L114 337 L114 350 L108 350 Z"/>
+          <path d="M116 337 L123 337 L123 351 L117 351 Z"/>
+          <path d="M125 337 L131 336 L131 349 L125 349 Z"/>
+          <path d="M100 318 L106 318 L107 330 L99 328 Z"/>
+          <path d="M306 314 L336 314 L334 336 L308 334 Z"/>
+          <path d="M309 337 L316 336 L316 349 L310 349 Z"/>
+          <path d="M318 337 L325 337 L325 351 L319 351 Z"/>
+          <path d="M327 337 L334 336 L333 350 L327 350 Z"/>
+          <path d="M334 318 L340 318 L341 328 L333 330 Z"/>
+          <path d="M212 144 L228 144 L226 158 L214 158 Z"/>
+          <path d="M203 100 L237 100 L243 116 L237 136 L220 144 L203 136 L197 116 Z"/>
+          <path d="M194 116 L198 116 L198 130 L192 130 L191 119 Z"/>
+          <path d="M246 116 L242 116 L242 130 L248 130 L249 119 Z"/>
+        </g>
+
+        <g stroke="#828D98" stroke-width="1" fill="none" opacity="0.7">
+          <line x1="180" y1="160" x2="184" y2="182"/>
+          <line x1="260" y1="160" x2="256" y2="182"/>
+          <line x1="160" y1="186" x2="150" y2="246"/>
+          <line x1="280" y1="186" x2="290" y2="246"/>
+          <line x1="204" y1="294" x2="200" y2="384"/>
+          <line x1="236" y1="294" x2="240" y2="384"/>
+          <line x1="220" y1="156" x2="220" y2="166"/>
+        </g>
+
+        <path d="M206 113 L234 113 L230 129 L210 129 Z" fill="none" stroke="#E2E8EE" stroke-width="1.4"/>
+        <g stroke="#828D98" stroke-width="0.7" opacity="0.8">
+          <line x1="210" y1="128" x2="216" y2="114"/>
+          <line x1="216" y1="128" x2="222" y2="114"/>
+          <line x1="222" y1="128" x2="227" y2="114"/>
+          <line x1="227" y1="128" x2="230" y2="116"/>
+        </g>
+        <line x1="210" y1="121" x2="230" y2="121" stroke="#2E6FB8" stroke-width="1.6"/>
+
+        <g stroke="#828D98" stroke-width="1.1" opacity="0.75">
+          <line x1="188" y1="184" x2="200" y2="188"/>
+          <line x1="187" y1="190" x2="199" y2="194"/>
+          <line x1="252" y1="184" x2="240" y2="188"/>
+          <line x1="253" y1="190" x2="241" y2="194"/>
+        </g>
+        <g stroke="#828D98" stroke-width="1" opacity="0.65">
+          <line x1="187" y1="416" x2="200" y2="416"/><line x1="187" y1="424" x2="200" y2="424"/><line x1="187" y1="432" x2="200" y2="432"/>
+          <line x1="240" y1="416" x2="253" y2="416"/><line x1="240" y1="424" x2="253" y2="424"/><line x1="240" y1="432" x2="253" y2="432"/>
+        </g>
+
+        <path d="M196 255 L244 255 L243 266 L197 266 Z" fill="none" stroke="#E2E8EE" stroke-width="1.2"/>
+        <g stroke="#2E6FB8" stroke-width="2.2">
+          <line x1="203" y1="266" x2="209" y2="255"/>
+          <line x1="215" y1="266" x2="221" y2="255"/>
+          <line x1="227" y1="266" x2="233" y2="255"/>
+        </g>
+
+        <g stroke="#E2E8EE" stroke-width="1.2" opacity="0.85">
+          <line x1="170" y1="489" x2="170" y2="483"/><line x1="180" y1="489" x2="180" y2="483"/><line x1="190" y1="489" x2="190" y2="483"/><line x1="200" y1="489" x2="200" y2="483"/>
+          <line x1="238" y1="489" x2="238" y2="483"/><line x1="248" y1="489" x2="248" y2="483"/><line x1="258" y1="489" x2="258" y2="483"/><line x1="268" y1="489" x2="268" y2="483"/>
+        </g>
+
+        <circle cx="220" cy="238" r="10" fill="none" stroke="#2E6FB8" stroke-width="2"/>
+        <circle cx="220" cy="238" r="5" fill="#2E6FB8">
+          <animate attributeName="r" values="5;8;5" dur="2.8s" repeatCount="indefinite"/>
+          <animate attributeName="opacity" values="1;.4;1" dur="2.8s" repeatCount="indefinite"/>
+        </circle>
+
+        <g font-family="Inter, monospace" font-size="9.5" fill="#9DC4EC">
+          <path d="M226 240 H300" stroke="#2E6FB8" stroke-width="0.8" fill="none"/>
+          <circle cx="300" cy="240" r="2" fill="#2E6FB8"/>
+          <text x="306" y="237" fill="#9DC4EC" font-weight="600">π(aₜ | o₁:ₜ)</text>
+          <text x="306" y="250" fill="#7E8FA1">policy = RFM</text>
+
+          <path d="M108 330 H70 V360" stroke="#7E8FA1" stroke-width="0.6" fill="none" opacity="0.7"/>
+          <text x="20" y="376" fill="#7E8FA1">goal mis-</text>
+          <text x="20" y="388" fill="#7E8FA1">generalization →</text>
+          <text x="20" y="400" fill="#E2E8EE" font-weight="600">physical harm</text>
+
+          <path d="M332 330 H388 V300" stroke="#5E83AB" stroke-width="0.6" fill="none" opacity="0.8"/>
+          <text x="350" y="290" fill="#9DC4EC">interp. /</text>
+          <text x="350" y="302" fill="#9DC4EC">alignment</text>
+          <text x="350" y="314" fill="#9DC4EC" font-weight="600">port here?</text>
+        </g>
+
+        <line x1="120" y1="500" x2="320" y2="500" stroke="#828D98" stroke-width="1" stroke-dasharray="4 4" opacity="0.6"/>
+      </svg>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ KEY FACTS BAND ============ -->
+<div class="facts-band">
+  <div class="wrap">
+    <div class="facts reveal in">
+      <div class="facts-head">Speakers</div>
+      <div class="facts-cells">
+      <div class="cell">
+        <img class="photo" src="assets/speakers/pavone.jpg" alt="Marco Pavone" loading="lazy">
+        <div class="nm">Marco Pavone</div>
+        <div class="aff">Stanford &amp; NVIDIA</div>
+        <a class="bio" href="https://profiles.stanford.edu/marco-pavone" target="_blank" rel="noopener">Bio ↗</a>
+      </div>
+      <div class="cell">
+        <img class="photo" src="assets/speakers/bajcsy.png" alt="Andrea Bajcsy" loading="lazy">
+        <div class="nm">Andrea Bajcsy</div>
+        <div class="aff">Carnegie Mellon</div>
+        <a class="bio" href="https://www.cs.cmu.edu/~abajcsy/" target="_blank" rel="noopener">Bio ↗</a>
+      </div>
+      <div class="cell">
+        <img class="photo" src="assets/speakers/sindhwani.png" alt="Vikas Sindhwani" loading="lazy">
+        <div class="nm">Vikas Sindhwani</div>
+        <div class="aff">Google DeepMind</div>
+        <a class="bio" href="https://vikas.sindhwani.org" target="_blank" rel="noopener">Bio ↗</a>
+      </div>
+      <div class="cell">
+        <img class="photo" src="assets/speakers/fel.png" alt="Thomas Fel" loading="lazy">
+        <div class="nm">Thomas Fel</div>
+        <div class="aff">Goodfire &amp; Harvard</div>
+        <a class="bio" href="https://thomasfel.fr" target="_blank" rel="noopener">Bio ↗</a>
+      </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ THESIS / DESCRIPTION ============ -->
+<section id="thesis" style="background:var(--paper)">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="num">01</span>
+      <div class="ht">
+        <span class="eyebrow">The Thesis</span>
+        <h2>Why this workshop, now</h2>
+      </div>
+    </div>
+
+    <div class="thesis-grid">
+      <div class="thesis-body reveal">
+        <p class="lead-para">Robotics is undergoing a paradigm shift — from modular perception–planning–control pipelines to general-purpose <em>robot foundation models</em> that act directly on the physical world.</p>
+        <p>Because RFMs inherit the same transformer/diffusion substrate that frontier AI-safety research has spent years dissecting, the field's tools for <b>interpretability, alignment, and control</b> may already transfer to robots <a class="ref" href="https://arxiv.org/abs/2509.00328" target="_blank" rel="noopener">Häon et al. 2025</a> <a class="ref" href="https://arxiv.org/abs/2603.05487" target="_blank" rel="noopener">Buurmeijer et al. 2026</a> <a class="ref" href="https://arxiv.org/abs/2603.19183" target="_blank" rel="noopener">Swann et al. 2026</a> <a class="ref" href="https://www.science.org/doi/10.1126/scirobotics.aef2191" target="_blank" rel="noopener">Robey et al. 2026</a> <a class="ref" href="https://arxiv.org/abs/2602.07050" target="_blank" rel="noopener">Joseph et al. 2026</a> <a class="ref" href="https://arxiv.org/abs/2606.12299" target="_blank" rel="noopener">Jeong et al. 2026</a>.</p>
+        <p>The safety case for Physical AI is acute <a class="ref" href="https://paisi.ai/the-case-for-physical-ai-safety" target="_blank" rel="noopener">Stocking & Häon 2026</a>. Failure modes researchers study in LLMs — goal misgeneralization, specification gaming, jailbreaks, deceptive or unintended behavior <a class="ref" href="https://arxiv.org/abs/1606.06565" target="_blank" rel="noopener">Amodei et al. 2016</a> <a class="ref" href="https://arxiv.org/abs/2109.13916" target="_blank" rel="noopener">Hendrycks et al. 2021</a> <a class="ref" href="https://arxiv.org/abs/2501.16496" target="_blank" rel="noopener">Sharkey et al. 2025</a> — could become <b>physical harms</b> when the model controls a robot.</p>
+      </div>
+
+      <div class="thesis-body reveal d2">
+        <p>Yet the two communities best equipped to address this rarely meet: <b>AI safety</b> seldom touches physical hardware, and <b>robot learning</b> seldom engages frontier interpretability and alignment.</p>
+        <p>This workshop convenes them to establish the <b>Science of Physical AI Safety</b> — organized around three questions the field has not yet settled: what AI-safety tools transfer from LLMs, what guarantees carry over from classical robotics, and whether evaluating robot foundation models demands fundamentally new methods.</p>
+        <p>The event is built for active, collaborative work rather than passive listening: anchor talks and spotlights set the technical context, then breakout rooms drive toward grounded consensus, with speakers circulating as mentors. Every participant leaves a contributor to a <b>single, collectively authored paper</b> that names the field's open research problems and sets a shared research agenda.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ THREE QUESTIONS (feature) ============ -->
+<section id="questions" class="questions">
+  <div class="wrap">
+    <div class="sec-head on-dark">
+      <span class="num">02</span>
+      <div class="ht">
+        <span class="eyebrow on-dark">The Agenda</span>
+        <h2>Three open questions</h2>
+      </div>
+    </div>
+    <div class="q-intro reveal">
+      <p>The workshop is organized around three questions that the field has not yet answered. Each anchors talks, a breakout room, and a section of the final paper.</p>
+    </div>
+    <div class="q-grid">
+      <div class="q-col reveal d1">
+        <span class="qn">01</span>
+        <span class="tag">LLM safety → RFM</span>
+        <p>Do AI-safety techniques built for LLMs transfer to robot foundation models?</p>
+      </div>
+      <div class="q-col reveal d2">
+        <span class="qn">02</span>
+        <span class="tag">Classical safety → RFM</span>
+        <p>Does classical robotics safety transfer to robot foundation models?</p>
+      </div>
+      <div class="q-col reveal d3">
+        <span class="qn">03</span>
+        <span class="tag">RFM Evaluations</span>
+        <p>Do RFMs require evaluation techniques that are meaningfully different from both LLMs and classical robotics?</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PROGRAMME / SCHEDULE ============ -->
+<section id="programme" style="background:var(--mist)">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="num">03</span>
+      <div class="ht">
+        <span class="eyebrow">The Programme</span>
+        <h2>Workshop Format</h2>
+      </div>
+    </div>
+
+    <div class="timeline">
+      <div class="tl-row reveal">
+        <div class="phase"><div class="step">Phase I</div><div class="p">Anchor Talks</div><div class="c">3 questions</div></div>
+        <div>
+          <h3>Four talks on the three key questions</h3>
+          <p>Anchor speakers frame each of the core questions, putting concrete technical context on the table for the day's collaborative work.</p>
+          <ul>
+            <li><b>Q1 · LLM safety → RFM</b> — Do AI-safety techniques built for LLMs transfer to robot foundation models?</li>
+            <li><b>Q2 · Classical safety → RFM</b> — Does classical robotics safety transfer to robot foundation models?</li>
+            <li><b>Q3 · RFM Evaluations</b> — Do RFMs require evaluation techniques that are meaningfully different from both LLMs and classical robotics?</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="tl-row reveal">
+        <div class="phase"><div class="step">Phase II</div><div class="p">Breakouts</div><div class="c">3 rooms</div></div>
+        <div>
+          <h3>One breakout room per question</h3>
+          <p>Participants opt into a room aligned to one of the three key questions. Each group works to produce:</p>
+          <ul>
+            <li>Their best <b>consensus statement</b> on the question; <em>and</em></li>
+            <li>A <b>steelman of the counter-argument</b> against that statement.</li>
+            <li><b>Speakers rotate</b> across sub-groups as subject-matter experts.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="tl-row reveal">
+        <div class="phase"><div class="step">Throughout</div><div class="p">Spotlights</div><div class="c">Interspersed</div></div>
+        <div>
+          <h3>Spotlight talks &amp; demos</h3>
+          <ul>
+            <li><b>CFP spotlights</b> — short talks from contributed papers.</li>
+            <li><b>Safety-failure demos</b> — spotlights from the Demo Call, surfacing RFM failure modes beyond collision.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="tl-row output reveal">
+        <div class="phase"><div class="step">Outcome</div><div class="p">The Paper</div><div class="c">Collective</div></div>
+        <div>
+          <h3>One collaboratively authored paper</h3>
+          <p>Breakout artifacts are aggregated into a single paper that names the field's open research problems and sets a shared research agenda. Every participant is a contributor.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PARTICIPATION / OPEN CALLS ============ -->
+<section id="calls" style="background:var(--paper)">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="num">04</span>
+      <div class="ht">
+        <span class="eyebrow">Participation</span>
+        <h2>Two ways to contribute</h2>
+      </div>
+      <span class="soon live aux">Due Oct 1 · AoE</span>
+    </div>
+    <div class="cfp-band">
+      <a class="cfp reveal d1" href="/cfp">
+        <h3>Call for Papers <span class="pill go">CFP</span></h3>
+        <p>Papers (up to 4 pages) on interpretability, alignment, control, and evaluation for robot foundation models. All accepted papers are presented as posters, with the top submissions invited to give lightning talks.</p>
+        <div class="cfp-foot">
+          <div class="stat live">Open · due October 1 (AoE)</div>
+          <span class="more">Read the full call</span>
+        </div>
+      </a>
+      <div class="cfp reveal d2">
+        <h3>Demo Call <span class="pill">Demo</span></h3>
+        <p>Visual media plus optional short analysis of an RFM safety failure <em>beyond collision</em>. Selected demos are spotlighted on the day.</p>
+        <div class="cfp-foot">
+          <div class="stat tba">Submissions open soon · dates TBA</div>
+        </div>
+      </div>
+    </div>
+    <p class="reveal" style="color:var(--ink-faint);margin:36px 0 0;font-size:15.5px">We welcome and value diverse perspectives — and strongly encourage submissions across all career stages, genders, ethnicities, geographies, and institutional backgrounds. This is a real and meaningful commitment, not a formality: capturing the full range of viewpoints is this workshop's central purpose.</p>
+  </div>
+</section>
+
+<!-- ============ TRAVEL GRANT ============ -->
+<section id="grants" class="grants">
+  <div class="wrap">
+    <div class="sec-head on-dark">
+      <span class="num">05</span>
+      <div class="ht">
+        <span class="eyebrow on-dark">Travel Grant by Robocurve</span>
+        <h2>Grants to accelerate physical AI safety</h2>
+      </div>
+    </div>
+
+    <div class="grants-grid">
+      <div class="reveal">
+        <div class="g-stats">
+          <div><div class="v">10</div><div class="k">Grants available</div></div>
+          <div><div class="v">$2,000</div><div class="k">Per recipient</div></div>
+          <div><div class="v">$20,000</div><div class="k">Funded by Robocurve</div></div>
+        </div>
+
+        <p class="g-lead">If you are a graduate student or early-career researcher working on physical AI safety, <em>this grant is for you</em>. This is one of the highest-stakes open problems in AI, and there is real room for your work to shape where it goes.</p>
+        <p><b><a href="https://robocurve.org" target="_blank" rel="noopener">Robocurve</a> is covering the cost toward getting there.</b> They are funding ten grants of $2,000 each — $20,000 in total — for travel, registration and accommodation at SPAIS 2026 in Austin.</p>
+        <p>We are not looking for the longest publication list. We want people who have thought hard about why physical AI safety matters and who will make the breakout rooms better by being in them.</p>
+      </div>
+
+      <aside class="reveal d2">
+        <a class="g-sponsor" href="https://robocurve.org" target="_blank" rel="noopener">
+          <img src="/assets/robocurve-lockup-teal.svg" alt="Robocurve" width="809" height="119">
+          <p>Robocurve funds the grant programme in full and holds a seat on the selection committee alongside the organizers.</p>
+        </a>
+        <div class="g-rail">
+          <div class="g-rail-head">Key Dates</div>
+          <div class="g-dates">
+            <div class="row"><span class="k">Applications close</span><span class="v">October 11 · AoE</span></div>
+            <div class="row"><span class="k">Recipients notified</span><span class="v">October 18</span></div>
+            <div class="row"><span class="k">Funds disbursed</span><span class="v">October 25</span></div>
+            <div class="row"><span class="k">Workshop</span><span class="v">November 12</span></div>
+          </div>
+          <div class="g-apply">
+            <a class="cta block" href="https://airtable.com/appCxf8EI6xaNuxfE/pagaDxTFdxXo60qKj/form" target="_blank" rel="noopener">Apply for a grant ↗</a>
+          </div>
+        </div>
+      </aside>
+    </div>
+
+    <p class="g-fine reveal">Grant selection runs <b>entirely separately from paper review</b>: applying, winning, or being turned down has no bearing on whether your paper is accepted, and vice versa. Grants are awarded and paid by the Physical AI Safety Institute (PAISI); the selection committee includes one Robocurve representative. We may pay your registration directly to the conference, with the balance transferred to you — awards may be taxable, and for recipients outside the US we're generally required to withhold a percentage of the cash portion. No visa support is included. Full terms and privacy details on the <a href="https://airtable.com/appCxf8EI6xaNuxfE/pagaDxTFdxXo60qKj/form" target="_blank" rel="noopener">application form</a>.</p>
+  </div>
+</section>
+
+<!-- ============ COMMITTEE / ORGANIZERS ============ -->
+<section id="organizers" style="background:var(--mist)">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="num">06</span>
+      <div class="ht">
+        <span class="eyebrow">The Committee</span>
+        <h2>Organizers</h2>
+      </div>
+    </div>
+    <div class="org-grid">
+      <a class="org reveal d1" href="https://www.ttic.edu/faculty/stocking/" target="_blank" rel="noopener"><img class="oph" src="assets/organizers/stocking.jpg" alt="Kaylene Stocking" loading="lazy"><div class="otext"><div class="n">Kaylene Stocking</div><div class="a">Physical AI Safety Institute<br>Toyota Technological Institute at Chicago</div></div></a>
+      <a class="org reveal d1" href="https://paisi.ai/#team" target="_blank" rel="noopener"><img class="oph" src="assets/organizers/haon.jpg" alt="Bear Häon" loading="lazy"><div class="otext"><div class="n">Bear Häon</div><div class="a">Physical AI Safety Institute</div></div></a>
+      <a class="org reveal d2" href="https://stanfordasl.github.io/team/hugo-buurmeijer" target="_blank" rel="noopener"><img class="oph" src="assets/organizers/buurmeijer.jpg" alt="Hugo Buurmeijer" loading="lazy"><div class="otext"><div class="n">Hugo Buurmeijer</div><div class="a">Stanford University</div></div></a>
+      <a class="org reveal d2" href="https://camoalon.github.io/" target="_blank" rel="noopener"><img class="oph" src="assets/organizers/alonso.png" alt="Carmen Amo Alonso" loading="lazy"><div class="otext"><div class="n">Carmen Amo Alonso</div><div class="a">Stanford University</div></div></a>
+      <a class="org reveal d3" href="https://isheidlower.github.io" target="_blank" rel="noopener"><img class="oph" src="assets/organizers/sheidlower.jpg" alt="Isaac Sheidlower" loading="lazy"><div class="otext"><div class="n">Isaac Sheidlower</div><div class="a">Brown University</div></div></a>
+      <a class="org reveal d3" href="https://zacravichandran.github.io" target="_blank" rel="noopener"><img class="oph" src="assets/organizers/ravichandran.jpg" alt="Zac Ravichandran" loading="lazy"><div class="otext"><div class="n">Zac Ravichandran</div><div class="a">University of Pennsylvania</div></div></a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FOOTER ============ -->
+<footer>
+  <div class="wrap">
+    <div class="foot-cta">
+      <span class="eyebrow on-dark">C<span class="lc">o</span>RL 2026 · Austin, Texas</span>
+      <h2>One room. Two communities.<br><em>A shared science of physical AI safety.</em></h2>
+    </div>
+    <div class="foot-meta">
+      <div class="foot-crest">
+        <div class="ft"><div class="n">SPAIS&nbsp;2026</div><div class="s">C<span class="lc">o</span>RL Workshop</div></div>
+      </div>
+      <div class="foot-note">
+        The Science of Physical AI Safety · Inaugural Edition<br>
+        Accepted at CoRL 2026
+      </div>
+    </div>
+    <div class="foot-line">
+      <span>Supported by the <a href="https://paisi.ai" target="_blank" rel="noopener">Physical AI Safety Institute</a></span>
+      <a href="mailto:spais-ws@paisi.ai">spais-ws@paisi.ai</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target);} });
+  },{threshold:0.12, rootMargin:"0px 0px -8% 0px"});
+  document.querySelectorAll('.reveal:not(.in)').forEach(el=>io.observe(el));
+</script>
+</body>
+</html>

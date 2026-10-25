@@ -88,8 +88,10 @@ def load_keyword_counts():
     counts = collections.Counter()
     for path in glob.glob(os.path.join(ROOT, "ConferenceTables", "*.csv")):
         for line in open(path):
+            if line.startswith("id\t"):  # header row
+                continue
             cols = line.rstrip("\n").split("\t")
-            kw = cols[3] if len(cols) == 11 else (cols[2] if len(cols) >= 9 else "")
+            kw = cols[3] if len(cols) >= 11 else (cols[2] if len(cols) >= 9 else "")
             seen = set()
             for k in kw.split(";"):
                 k = k.strip()

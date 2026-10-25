@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html>
+<head><base href="https://uncertainwm2026.github.io/">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="_ds/modernist-57bf55a0-158c-467c-930a-d2f52668ded5/styles.css">
+<script src="_ds/modernist-57bf55a0-158c-467c-930a-d2f52668ded5/_ds_bundle.js"></script>
+<script src="./image-slot.js"></script>
+<style>
+  html { scroll-behavior: smooth; scroll-padding-top: 72px; }
+  body { margin: 0; background: var(--color-bg); }
+  a { color: var(--color-accent); }
+  a:hover { color: var(--color-accent-700); }
+</style>
+</helmet>
+
+<div style="min-height:100vh;background:var(--color-bg);color:var(--color-text);font-family:var(--font-body)">
+
+  <nav style="position:sticky;top:0;z-index:20;background:var(--color-bg);border-bottom:2px solid var(--color-divider)">
+    <div style="max-width:1160px;margin:0 auto;padding:0 32px;display:flex;align-items:center;justify-content:space-between;gap:24px;height:70px">
+      <a href="#top" style="font-family:var(--font-heading);font-weight:800;font-size:15px;letter-spacing:-0.01em;text-decoration:none;color:var(--color-text);line-height:1.1;max-width:260px">Modeling Uncertainty in<br>Robotic World Models</a>
+      <div style="display:flex;flex-wrap:wrap;gap:22px;font-family:var(--font-heading);font-weight:800;font-size:11px;letter-spacing:0.09em;text-transform:uppercase">
+        <a href="#about" style="text-decoration:none;color:var(--color-text)" style-hover="color:var(--color-accent)">About</a>
+        <a href="#dates" style="text-decoration:none;color:var(--color-text)" style-hover="color:var(--color-accent)">Dates</a>
+        <a href="#call" style="text-decoration:none;color:var(--color-text)" style-hover="color:var(--color-accent)">Call for Papers</a>
+        <a href="#speakers" style="text-decoration:none;color:var(--color-text)" style-hover="color:var(--color-accent)">Speakers</a>
+        <a href="#schedule" style="text-decoration:none;color:var(--color-text)" style-hover="color:var(--color-accent)">Schedule</a>
+        <a href="#organizers" style="text-decoration:none;color:var(--color-text)" style-hover="color:var(--color-accent)">Organizers</a>
+      </div>
+    </div>
+  </nav>
+
+  <header id="top" style="max-width:1160px;margin:0 auto;padding:0 32px">
+    <div style="padding:64px 0 0">
+      <div style="font-family:var(--font-heading);font-weight:800;font-size:12px;letter-spacing:0.14em;text-transform:uppercase;color:var(--color-accent-700)">CoRL 2026 Workshop</div>
+      <h1 style="font-size:clamp(40px,6.2vw,84px);line-height:1.02;letter-spacing:-0.03em;margin:20px 0 0;max-width:15ch">Modeling Uncertainty in Robotic World Models</h1>
+      <div style="height:2px;background:var(--color-divider);margin:40px 0 0"></div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:0;border-bottom:2px solid var(--color-divider)">
+        <div style="padding:20px 20px 20px 0;border-right:2px solid var(--color-divider)">
+          <div style="font-size:11px;letter-spacing:0.09em;text-transform:uppercase;font-family:var(--font-heading);font-weight:800;color:var(--color-neutral-700)">Date</div>
+          <div style="font-family:var(--font-heading);font-weight:800;font-size:19px;margin-top:6px">November 12, 2026</div>
+        </div>
+        <div style="padding:20px;border-right:2px solid var(--color-divider)">
+          <div style="font-size:11px;letter-spacing:0.09em;text-transform:uppercase;font-family:var(--font-heading);font-weight:800;color:var(--color-neutral-700)">Location</div>
+          <div style="font-family:var(--font-heading);font-weight:800;font-size:19px;margin-top:6px">Austin, Texas, USA</div>
+        </div>
+        <div style="padding:20px;border-right:2px solid var(--color-divider)">
+          <div style="font-size:11px;letter-spacing:0.09em;text-transform:uppercase;font-family:var(--font-heading);font-weight:800;color:var(--color-neutral-700)">Venue</div>
+          <div style="font-family:var(--font-heading);font-weight:800;font-size:19px;margin-top:6px">10th Conference on Robot Learning</div>
+        </div>
+        <div style="padding:20px">
+          <div style="font-size:11px;letter-spacing:0.09em;text-transform:uppercase;font-family:var(--font-heading);font-weight:800;color:var(--color-neutral-700)">Submission deadline</div>
+          <div style="font-family:var(--font-heading);font-weight:800;font-size:19px;margin-top:6px;color:var(--color-accent-700)">September 23, 2026 AoE</div>
+        </div>
+      </div>
+      <div style="display:flex;flex-wrap:wrap;gap:12px;padding:28px 0 0">
+        <a class="btn btn-primary" href="{{ submissionUrl }}" style="padding:14px 22px;font-size:14px">Submit a paper</a>
+        <a class="btn btn-secondary" href="{{ cfpUrl }}" style="padding:14px 22px;font-size:14px">Full call for papers</a>
+        <a class="btn btn-ghost" href="mailto:uncertainty-world-model-corl2026@googlegroups.com" style="padding:14px 22px;font-size:14px">Contact organizers</a>
+      </div>
+    </div>
+  </header>
+
+  <section id="about" style="max-width:1160px;margin:0 auto;padding:72px 32px 0">
+    <div style="display:grid;grid-template-columns:minmax(180px,240px) 1fr;gap:40px;border-top:2px solid var(--color-divider);padding-top:28px">
+      <h2 style="font-size:28px;margin:0;letter-spacing:-0.02em">Abstract</h2>
+      <div style="max-width:74ch;font-size:16.5px;line-height:1.62;text-wrap:pretty">
+        <p>Recent advances in vision-language foundation models and video generation have made learned world models an increasingly important tool for robotic task planning, policy simulation, and reward modeling. Yet real-world robots must operate under uncertainty that many current world models do not adequately represent: noisy sensors, partial observability, imprecise actuation, distribution shift, and unpredictable humans or other agents.</p>
+        <p>Although related communities have studied uncertainty through belief-space planning, probabilistic robotics, conformal prediction, goal inference, safe autonomy, and uncertainty quantification, it remains unclear how these ideas should scale to the high-dimensional latent spaces used by modern learned world models. This workshop will bring together researchers from robot learning, planning, probabilistic robotics, safe autonomy, uncertainty quantification, and human-robot interaction to address that gap.</p>
+        <p style="margin-bottom:0">We aim to clarify which uncertainty representations fit which robotic settings, how uncertainty propagates into downstream planning and reinforcement learning, and which benchmarks and metrics are needed to measure progress. Through invited talks, poster presentations, and roundtable discussions, our goal is to move robotic world models beyond expressiveness alone toward reliable uncertainty awareness for deployment in unstructured real-world environments.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="dates" style="max-width:1160px;margin:0 auto;padding:64px 32px 0">
+    <div style="display:grid;grid-template-columns:minmax(180px,240px) 1fr;gap:40px;border-top:2px solid var(--color-divider);padding-top:28px">
+      <h2 style="font-size:28px;margin:0;letter-spacing:-0.02em">Important Dates</h2>
+      <div>
+        <sc-for list="{{ dates }}" as="d" hint-placeholder-count="3">
+          <div style="display:grid;grid-template-columns:minmax(140px,220px) 1fr;gap:24px;padding:18px 0;border-bottom:1px solid var(--color-neutral-300)">
+            <div style="font-family:var(--font-heading);font-weight:800;font-size:12px;letter-spacing:0.09em;text-transform:uppercase;color:var(--color-neutral-700);padding-top:4px">{{ d.label }}</div>
+            <div style="font-family:var(--font-heading);font-weight:800;font-size:22px;letter-spacing:-0.01em">{{ d.value }}</div>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+  </section>
+
+  <section id="call" style="max-width:1160px;margin:0 auto;padding:64px 32px 0">
+    <div style="display:grid;grid-template-columns:minmax(180px,240px) 1fr;gap:40px;border-top:2px solid var(--color-divider);padding-top:28px">
+      <h2 style="font-size:28px;margin:0;letter-spacing:-0.02em">Call for Papers</h2>
+      <div style="max-width:82ch">
+        <sc-for list="{{ guidelines }}" as="g" hint-placeholder-count="6">
+          <div style="display:grid;grid-template-columns:minmax(130px,190px) 1fr;gap:24px;padding:16px 0;border-bottom:1px solid var(--color-neutral-300)">
+            <div style="font-family:var(--font-heading);font-weight:800;font-size:12px;letter-spacing:0.09em;text-transform:uppercase;color:var(--color-neutral-700);padding-top:2px">{{ g.label }}</div>
+            <div style="font-size:15.5px;line-height:1.6;text-wrap:pretty">
+<sc-for list="{{ g.parts }}" as="p" hint-placeholder-count="2"><span style="font-family:{{ p.font }};font-weight:{{ p.weight }};color:{{ p.color }}">{{ p.t }}</span></sc-for>
+            </div>
+          </div>
+        </sc-for>
+        <div style="display:flex;flex-wrap:wrap;gap:12px;padding-top:24px">
+          <a class="btn btn-primary" href="{{ submissionUrl }}" style="padding:13px 20px;font-size:13px">Submission portal</a>
+          <a class="btn btn-secondary" href="https://2026.corl.org/contributions/instruction-for-authors" style="padding:13px 20px;font-size:13px">CoRL LaTeX template</a>
+          <a class="btn btn-secondary" href="https://conferences.ieeeauthorcenter.ieee.org/write-your-paper/authoring-tools-and-templates/" style="padding:13px 20px;font-size:13px">IEEE template</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="topics" style="max-width:1160px;margin:0 auto;padding:64px 32px 0">
+    <div style="display:grid;grid-template-columns:minmax(180px,240px) 1fr;gap:40px;border-top:2px solid var(--color-divider);padding-top:28px">
+      <div>
+        <h2 style="font-size:28px;margin:0;letter-spacing:-0.02em">Areas of Interest</h2>
+        <p class="text-muted" style="font-size:13.5px;margin-top:10px">Topics include, but are not limited to:</p>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:0 40px">
+        <sc-for list="{{ topics }}" as="t" hint-placeholder-count="8">
+          <div style="display:flex;gap:14px;padding:13px 0;border-bottom:1px solid var(--color-neutral-300);align-items:baseline">
+            <span style="font-family:var(--font-heading);font-weight:800;font-size:11px;color:var(--color-accent);min-width:22px">{{ t.n }}</span>
+            <span style="font-size:15px;line-height:1.45;text-wrap:pretty">{{ t.text }}</span>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+  </section>
+
+  <section id="speakers" style="max-width:1160px;margin:0 auto;padding:64px 32px 0">
+    <div style="border-top:2px solid var(--color-divider);padding-top:28px">
+      <h2 style="font-size:28px;margin:0 0 28px;letter-spacing:-0.02em">Invited Speakers</h2>
+      <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:0;border-top:2px solid var(--color-divider);border-left:2px solid var(--color-divider)">
+        <sc-for list="{{ speakers }}" as="s" hint-placeholder-count="4">
+          <div style="background:var(--color-bg);padding:26px 22px 30px;display:flex;gap:22px;align-items:flex-start;border-right:2px solid var(--color-divider);border-bottom:2px solid var(--color-divider)">
+            <div style="flex:0 0 auto;width:128px;height:150px;background:var(--color-surface)">
+              <image-slot id="{{ s.slot }}" src="{{ s.photo }}" shape="rect" fit="cover" placeholder="Headshot" style="width:128px;height:150px"></image-slot>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:8px;padding-top:2px">
+              <div style="font-family:var(--font-heading);font-weight:800;font-size:12px;color:var(--color-accent)">{{ s.n }}</div>
+              <div style="font-family:var(--font-heading);font-weight:800;font-size:23px;line-height:1.1;letter-spacing:-0.02em">{{ s.name }}</div>
+              <div style="font-size:14px;line-height:1.4;color:var(--color-neutral-700)">{{ s.affiliation }}</div>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+      <p class="text-muted" style="font-size:14px;margin-top:16px">Roundtable speakers will be announced.</p>
+    </div>
+  </section>
+
+  <section id="schedule" style="max-width:1160px;margin:0 auto;padding:64px 32px 0">
+    <div style="display:grid;grid-template-columns:minmax(180px,240px) 1fr;gap:40px;border-top:2px solid var(--color-divider);padding-top:28px">
+      <div>
+        <h2 style="font-size:28px;margin:0;letter-spacing:-0.02em">Tentative Schedule</h2>
+        <p class="text-muted" style="font-size:13.5px;margin-top:10px">Room and location: TBD. All times local to Austin (CST).</p>
+      </div>
+      <div>
+        <sc-for list="{{ schedule }}" as="s" hint-placeholder-count="8">
+          <div style="display:grid;grid-template-columns:minmax(120px,160px) 1fr;gap:24px;padding:14px 0;border-bottom:1px solid var(--color-neutral-300)">
+            <div style="font-family:var(--font-heading);font-weight:800;font-size:14px;color:var(--color-neutral-700)">{{ s.time }}</div>
+            <div style="font-family:var(--font-heading);font-weight:800;font-size:16px;letter-spacing:-0.01em">{{ s.event }}</div>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+  </section>
+
+  <section id="advisors" style="max-width:1160px;margin:0 auto;padding:64px 32px 0">
+    <div style="border-top:2px solid var(--color-divider);padding-top:28px">
+      <div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:20px;width:100%;padding:0 0 30px">
+        <img src="images/mit.png" alt="Massachusetts Institute of Technology" style="height:76px;width:auto;object-fit:contain">
+        <img src="images/harvard.png" alt="Harvard University" style="height:72px;width:auto;object-fit:contain">
+        <img src="images/princeton.png" alt="Princeton University" style="height:60px;width:auto;object-fit:contain">
+        <img src="images/upenn.png" alt="University of Pennsylvania" style="height:72px;width:auto;object-fit:contain">
+        <img src="images/brown.png" alt="Brown University" style="height:72px;width:auto;object-fit:contain">
+        <img src="images/nyu.png?v=3" alt="New York University" style="height:80px;width:auto;object-fit:contain">
+        <img src="images/nvidia.png" alt="NVIDIA" style="height:40px;width:auto;object-fit:contain">
+      </div>
+      <h2 style="font-size:28px;margin:0 0 24px;letter-spacing:-0.02em">Advisory Committee</h2>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:0 40px">
+        <sc-for list="{{ advisors }}" as="p" hint-placeholder-count="8">
+          <div style="padding:14px 0;border-bottom:1px solid var(--color-neutral-300);display:flex;gap:16px;align-items:center">
+            <div style="flex:0 0 auto;width:88px;height:104px;background:var(--color-surface)">
+              <image-slot id="{{ p.slot }}" src="{{ p.photo }}" shape="rect" fit="cover" placeholder="Headshot" style="width:88px;height:104px"></image-slot>
+            </div>
+            <div>
+              <div style="font-family:var(--font-heading);font-weight:800;font-size:17px;letter-spacing:-0.01em">{{ p.name }}</div>
+              <div style="font-size:13.5px;color:var(--color-neutral-700);margin-top:2px">{{ p.affiliation }}</div>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+  </section>
+
+  <section id="organizers" style="max-width:1160px;margin:0 auto;padding:56px 32px 0">
+    <div style="border-top:2px solid var(--color-divider);padding-top:28px">
+      <h2 style="font-size:28px;margin:0 0 24px;letter-spacing:-0.02em">Organizing Committee</h2>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:0 40px">
+        <sc-for list="{{ organizers }}" as="p" hint-placeholder-count="9">
+          <div style="padding:14px 0;border-bottom:1px solid var(--color-neutral-300);display:flex;gap:16px;align-items:center">
+            <div style="flex:0 0 auto;width:88px;height:104px;background:var(--color-surface)">
+              <image-slot id="{{ p.slot }}" src="{{ p.photo }}" shape="rect" fit="cover" placeholder="Headshot" style="width:88px;height:104px"></image-slot>
+            </div>
+            <div>
+              <div style="font-family:var(--font-heading);font-weight:800;font-size:17px;letter-spacing:-0.01em">{{ p.name }}</div>
+              <div style="font-size:13.5px;color:var(--color-neutral-700);margin-top:2px">{{ p.affiliation }}</div>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+  </section>
+
+  <section style="margin-top:80px;background:var(--color-accent);color:#fff">
+    <div style="max-width:1160px;margin:0 auto;padding:72px 32px">
+      <div style="font-family:var(--font-heading);font-weight:800;font-size:12px;letter-spacing:0.14em;text-transform:uppercase;opacity:0.8">Call for Reviewers</div>
+      <h2 style="font-size:clamp(32px,4.6vw,58px);line-height:1.05;letter-spacing:-0.03em;margin:18px 0 0;max-width:20ch;color:#fff">Help us review. Send your CV.</h2>
+      <p style="font-size:17px;max-width:60ch;margin:22px 0 28px;color:#fff">If you would like to serve as a reviewer, email us and include your CV. We appreciate your support.</p>
+      <a href="mailto:uncertainty-world-model-corl2026@googlegroups.com" style="display:inline-block;background:#fff;color:var(--color-accent-700);text-decoration:none;font-family:var(--font-heading);font-weight:800;font-size:15px;padding:16px 24px" style-hover="background:var(--color-accent-100)">uncertainty-world-model-corl2026@googlegroups.com</a>
+    </div>
+  </section>
+
+  <footer style="max-width:1160px;margin:0 auto;padding:32px">
+    <div style="display:flex;flex-wrap:wrap;justify-content:space-between;gap:16px;font-size:13px;color:var(--color-neutral-700)">
+      <div>Modeling Uncertainty in Robotic World Models — CoRL 2026 Workshop, Austin, Texas.</div>
+      <div>November 12, 2026</div>
+    </div>
+  </footer>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;submissionUrl&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;https://openreview.net/group?id=robot-learning.org/CoRL/2026/Workshop/UncertainWM&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Links&quot;},&quot;cfpUrl&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;#call&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Links&quot;}}">
+class Component extends DCLogic {
+  renderVals() {
+    const topics = [
+      "Robotic world models and learned dynamics models",
+      "Uncertainty representation, quantification, decomposition, and calibration",
+      "Aleatoric and epistemic uncertainty in robot learning",
+      "Partial observability, state estimation, and belief-space planning",
+      "Model-based reinforcement learning and uncertainty-aware planning",
+      "Conformal prediction and distribution-free uncertainty methods for robotics",
+      "Out-of-distribution detection, generalization, and robustness",
+      "Latent representation learning under uncertainty",
+      "Generative world models, video prediction, and prediction reliability",
+      "Propagation of model uncertainty into planning, control, and decision-making",
+      "Risk-sensitive, robust, and safe autonomy",
+      "Human-aware world models, goal inference, and human-robot interaction",
+      "Multi-agent world models, coordination, and alignment under uncertainty",
+      "Data collection and learning under uncertain or sparse observations",
+      "Computationally tractable uncertainty-aware modeling",
+      "Benchmarks, datasets, evaluation metrics, and real-world deployment studies",
+    ].map((text, i) => ({ text, n: String(i + 1).padStart(2, "0") }));
+
+    const slug = (s) => "hs-" + s.toLowerCase().replace(/[^a-z]+/g, "-");
+    const person = (name, affiliation, photo) => ({
+      name, affiliation, slot: slug(name),
+      photo: photo ? "images/" + photo : "",
+    });
+
+    // "**bold**" spans render in the heading weight; the rest is body copy.
+    const rich = (label, src) => ({
+      label,
+      parts: src.split(/\*\*(.+?)\*\*/g).map((t, i) => (i % 2
+        ? { t, font: "var(--font-heading)", weight: "800", color: "var(--color-text)" }
+        : { t, font: "var(--font-body)", weight: "400", color: "var(--color-text)" })),
+    });
+
+    return {
+      submissionUrl: this.props.submissionUrl ?? "https://openreview.net/group?id=robot-learning.org/CoRL/2026/Workshop/UncertainWM",
+      cfpUrl: this.props.cfpUrl ?? "#call",
+      topics,
+      dates: [
+        { label: "Submission", value: "September 23, 2026 — 23:59 AoE" },
+        { label: "Notification", value: "October 7, 2026" },
+        { label: "Workshop", value: "November 12, 2026 — Austin, Texas" },
+      ],
+      guidelines: [
+        rich("Length", "**2–4-page extended abstract** or **4–8-page paper**. These page limits are suggestions rather than strict requirements."),
+        rich("Format", "Submissions may use **any paper template** and **must be anonymized**. We recommend either the CoRL 2026 LaTeX template or the IEEE conference template."),
+        rich("Reviews", "The review process will be **double-blind**."),
+        rich("Presentation", "Accepted submissions will be invited for a **poster presentation** at the workshop."),
+        rich("Dual submission", "Published work and work submitted concurrently to other conferences or workshops, **including CoRL and IROS, are welcome**."),
+        rich("Non-archival", "Accepted submissions will be made available on the workshop website as **non-archival reports**, allowing subsequent submission to conferences and journals."),
+      ],
+      speakers: [
+        person("Leslie Kaelbling", "Massachusetts Institute of Technology", "leslie.jpg"),
+        person("Anirudha Majumdar", "Princeton University and Google DeepMind", "ani.jpg"),
+        person("Panpan Cai", "Shanghai Jiao Tong University", "panpan.jpg"),
+        person("Chenhao Li", "ETH Zurich and Google DeepMind", "chenhao.png"),
+      ].map((s, i) => ({ ...s, n: String(i + 1).padStart(2, "0") })),
+      schedule: [
+        { time: "9:00 – 9:10", event: "Opening remarks" },
+        { time: "9:10 – 10:10", event: "Invited talks 1 & 2" },
+        { time: "10:10 – 10:30", event: "Coffee break" },
+        { time: "10:30 – 11:30", event: "Invited talks 3 & 4" },
+        { time: "11:30 – 12:30", event: "Poster session" },
+        { time: "12:30 – 13:30", event: "Lunch" },
+        { time: "13:30 – 14:30", event: "Roundtable discussion" },
+        { time: "14:30 – 15:00", event: "Closing remarks" },
+      ],
+      organizers: [
+        person("Rachel Ma", "Massachusetts Institute of Technology", "rachel.jpeg"),
+        person("Seiji Shaw", "Massachusetts Institute of Technology", "seiji.jpg"),
+        person("Jason Liu", "Massachusetts Institute of Technology", "jason.jpg"),
+        person("Hongyu Li", "Brown University and NVIDIA", "hongyu.jpg"),
+        person("Ying Wang", "New York University", "ying.jpg"),
+        person("Gaoyue Zhou", "New York University", "gaoyue2.webp"),
+        person("Sikata Sengupta", "University of Pennsylvania", "sikata.png"),
+        person("Lihan Zha", "Princeton University", "lihan.jpeg"),
+        person("Tenny Yin", "Princeton University", "tenny.png"),
+      ],
+      advisors: [
+        person("Nicholas Roy", "Massachusetts Institute of Technology", "nick.jpg"),
+        person("Julie Shah", "Massachusetts Institute of Technology", "julie.jpg"),
+        person("Andreea Bobu", "Massachusetts Institute of Technology", "andreea.jpg"),
+        person("Dylan Hadfield-Menell", "Massachusetts Institute of Technology", "dylan.webp"),
+        person("Yann LeCun", "New York University", "yann.jpeg"),
+        person("Mengye Ren", "New York University", "mengye.jpg"),
+        person("Yilun Du", "Harvard University", "yilun.png"),
+        person("George Konidaris", "Brown University", "george.jpg"),
+      ],
+    };
+  }
+}
+
+</script>
+</body>
+</html>

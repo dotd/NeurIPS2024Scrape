@@ -1,0 +1,1171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><base href="https://corl2026-robotcl.github.io/">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pretrain to Adapt: What Makes a Pretrained Policy Adaptable? — CoRL 2026</title>
+  <link rel="icon" type="image/png" href="images/pretrain-to-adapt.png">
+  <link rel="apple-touch-icon" href="images/favicon-180.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400;1,9..144,500&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    /* ── Reset & tokens ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --primary:      #4338ca;
+      --primary-dark: #3730a3;
+      --hero-top:     #1e1b4b;
+      --hero-bot:     #1d4ed8;
+      --text:         #1e293b;
+      --text-muted:   #475569;
+      --border:       #e2e8f0;
+      --bg:           #ffffff;
+      --bg-alt:       #f8fafc;
+      --radius:       10px;
+      --max-w:        960px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after { transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; }
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      color: var(--text);
+      background: var(--bg);
+      line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── Skip link (accessibility) ── */
+    .skip-link {
+      position: absolute;
+      left: -9999px;
+      top: 1rem;
+      z-index: 9999;
+      background: var(--primary);
+      color: #fff;
+      padding: 0.6rem 1.2rem;
+      border-radius: var(--radius);
+      font-weight: 600;
+      font-size: 0.9rem;
+      text-decoration: none;
+    }
+    .skip-link:focus { left: 1rem; }
+
+    /* ── Focus ring ── */
+    :focus-visible {
+      outline: 3px solid var(--primary);
+      outline-offset: 3px;
+      border-radius: 3px;
+    }
+
+    /* ── Sticky nav ── */
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(255,255,255,0.96);
+      border-bottom: 1px solid var(--border);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+    }
+
+    .nav-inner {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 0 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .nav-brand {
+      font-size: 0.78rem;
+      font-weight: 800;
+      color: var(--primary);
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .nav-links {
+      list-style: none;
+      display: flex;
+      margin-left: auto;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+    .nav-links::-webkit-scrollbar { display: none; }
+
+    .nav-links a {
+      display: block;
+      padding: 0.85rem 0.85rem;
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.85rem;
+      font-weight: 500;
+      border-bottom: 2px solid transparent;
+      white-space: nowrap;
+      transition: color 0.15s, border-color 0.15s;
+    }
+    .nav-links a:hover { color: var(--primary); }
+    .nav-links a[aria-current="true"] {
+      color: var(--primary);
+      border-bottom-color: var(--primary);
+      font-weight: 600;
+    }
+
+    /* ── Hero ── */
+    .hero {
+      background: linear-gradient(140deg, var(--hero-top) 0%, #312e81 55%, var(--hero-bot) 100%);
+      color: #fff;
+      padding: 5.5rem 1.5rem 4.5rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Subtle dot-grid overlay */
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: radial-gradient(rgba(255,255,255,0.06) 1px, transparent 1px);
+      background-size: 28px 28px;
+      pointer-events: none;
+    }
+
+    /* Soft glow accents */
+    .hero::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(640px 320px at 18% -10%, rgba(129,140,248,0.35), transparent 70%),
+        radial-gradient(720px 420px at 88% 110%, rgba(56,189,248,0.22), transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero-inner { position: relative; z-index: 1; max-width: var(--max-w); margin: 0 auto; }
+
+    .hero-logo {
+      width: 88px;
+      height: 88px;
+      border-radius: 20px;
+      display: block;
+      margin: 0 auto 1.5rem;
+      border: 1px solid rgba(255,255,255,0.18);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.35);
+    }
+
+    .hero-pill {
+      display: inline-block;
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.22);
+      color: #c7d2fe;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+      padding: 0.28rem 0.9rem;
+      border-radius: 999px;
+      margin-bottom: 1.5rem;
+    }
+
+    .hero h1 {
+      font-family: 'Fraunces', Georgia, 'Times New Roman', serif;
+      font-size: clamp(1.85rem, 4.8vw, 3.1rem);
+      font-weight: 600;
+      line-height: 1.14;
+      letter-spacing: -0.015em;
+      color: #fff;
+      margin-bottom: 1.4rem;
+    }
+
+    .hero-quote {
+      font-family: 'Fraunces', Georgia, serif;
+      font-size: 1.15rem;
+      color: #c7d2fe;
+      font-style: italic;
+      font-weight: 400;
+      max-width: 600px;
+      margin: 0 auto 2.5rem;
+      line-height: 1.6;
+    }
+    .hero-quote a {
+      color: #fff;
+      font-weight: 500;
+      text-decoration: underline;
+      text-underline-offset: 4px;
+      text-decoration-color: rgba(255,255,255,0.5);
+      transition: text-decoration-color 0.15s ease;
+    }
+    .hero-quote a:hover { text-decoration-color: #fff; }
+
+    .hero-badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.55rem;
+      justify-content: center;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.22);
+      color: #e0e7ff;
+      font-size: 0.8rem;
+      font-weight: 500;
+      padding: 0.3rem 0.85rem;
+      border-radius: 999px;
+    }
+
+    /* ── CTA buttons ── */
+    .hero-cta { margin-top: 2.1rem; }
+
+    .btn-hero {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.55rem;
+      background: #fff;
+      color: var(--primary-dark);
+      font-weight: 700;
+      font-size: 0.98rem;
+      padding: 0.8rem 1.8rem;
+      border-radius: 999px;
+      text-decoration: none;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.28);
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+    .btn-hero:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 28px rgba(0,0,0,0.35);
+    }
+
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.55rem;
+      background: linear-gradient(135deg, #4f46e5, #2563eb);
+      color: #fff;
+      font-weight: 700;
+      font-size: 0.95rem;
+      padding: 0.75rem 1.7rem;
+      border-radius: 999px;
+      text-decoration: none;
+      box-shadow: 0 4px 14px rgba(67,56,202,0.35);
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 22px rgba(67,56,202,0.45);
+    }
+
+    /* ── Section shell ── */
+    section { padding: 4.5rem 1.5rem; }
+    section.bg-alt { background: var(--bg-alt); }
+
+    .section-inner { max-width: var(--max-w); margin: 0 auto; }
+
+    .section-label {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--primary);
+      margin-bottom: 0.5rem;
+    }
+    .section-label::before {
+      content: '';
+      width: 2rem;
+      height: 2px;
+      border-radius: 2px;
+      background: linear-gradient(90deg, var(--primary), #a5b4fc);
+    }
+
+    h2 {
+      font-family: 'Fraunces', Georgia, serif;
+      font-size: 1.85rem;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      line-height: 1.2;
+      color: var(--text);
+      margin-bottom: 1.5rem;
+    }
+
+    h3 {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 0.4rem;
+    }
+
+    p { color: var(--text-muted); font-size: 0.97rem; margin-bottom: 1rem; }
+    p:last-child { margin-bottom: 0; }
+
+    /* ── Overview ── */
+    .overview-body { max-width: 700px; }
+    .overview-body p { color: #334155; line-height: 1.85; }
+
+    .key-question {
+      margin-top: 1.75rem;
+      border-left: 4px solid var(--primary);
+      border-radius: 0 var(--radius) var(--radius) 0;
+      background: #eef2ff;
+      padding: 1.1rem 1.4rem;
+      font-size: 0.97rem;
+      font-weight: 500;
+      color: #3730a3;
+      line-height: 1.65;
+    }
+
+    /* ── Icon chips ── */
+    .topic-icon {
+      width: 2.4rem;
+      height: 2.4rem;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      flex-shrink: 0;
+    }
+
+    /* ── Research question cards ── */
+    .rq-list { display: grid; gap: 1.4rem; }
+
+    .rq-card {
+      position: relative;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 1.6rem 1.9rem 1.6rem 1.8rem;
+      box-shadow: 0 1px 2px rgba(15,23,42,0.04);
+      overflow: hidden;
+      transition: box-shadow 0.2s ease, transform 0.2s ease, border-color 0.2s ease;
+    }
+    .rq-card::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 0; bottom: 0;
+      width: 4px;
+      background: var(--accent, var(--primary));
+    }
+    .rq-card:hover {
+      box-shadow: 0 10px 30px rgba(67,56,202,0.10);
+      border-color: #c7d2fe;
+      transform: translateY(-3px);
+    }
+
+    .rq-num {
+      position: absolute;
+      top: 0.35rem;
+      right: 1.15rem;
+      font-family: 'Fraunces', Georgia, serif;
+      font-size: 3.4rem;
+      font-weight: 600;
+      line-height: 1;
+      color: var(--accent, var(--primary));
+      opacity: 0.13;
+      pointer-events: none;
+      user-select: none;
+    }
+
+    .rq-head {
+      display: flex;
+      align-items: center;
+      gap: 0.85rem;
+      margin-bottom: 0.8rem;
+    }
+    .rq-head h3 {
+      font-family: 'Fraunces', Georgia, serif;
+      font-size: 1.22rem;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      margin: 0;
+    }
+
+    .rq-lead {
+      font-family: 'Fraunces', Georgia, serif;
+      font-style: italic;
+      font-size: 1.06rem;
+      font-weight: 500;
+      color: var(--text);
+      line-height: 1.55;
+      margin: 0 0 0.55rem;
+    }
+
+    .rq-body {
+      font-size: 0.92rem;
+      color: var(--text-muted);
+      line-height: 1.7;
+      margin: 0;
+    }
+
+    /* ── Activity steps ── */
+    .activity-flow {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.4rem;
+      margin-top: 1.6rem;
+    }
+
+    .activity-step {
+      position: relative;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 2.1rem 1.5rem 1.6rem;
+      text-align: center;
+      box-shadow: 0 1px 2px rgba(15,23,42,0.04);
+      transition: box-shadow 0.2s ease, transform 0.2s ease, border-color 0.2s ease;
+    }
+    .activity-step:hover {
+      box-shadow: 0 10px 28px rgba(67,56,202,0.10);
+      border-color: #c7d2fe;
+      transform: translateY(-3px);
+    }
+
+    .activity-num {
+      position: absolute;
+      top: -1.1rem;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 2.2rem;
+      height: 2.2rem;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #4f46e5, #2563eb);
+      color: #fff;
+      font-weight: 700;
+      font-size: 0.95rem;
+      box-shadow: 0 4px 12px rgba(67,56,202,0.35);
+    }
+
+    .activity-icon { font-size: 1.7rem; line-height: 1; margin-bottom: 0.65rem; }
+
+    .activity-tag {
+      display: inline-block;
+      font-size: 0.66rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 0.2rem 0.75rem;
+      border-radius: 999px;
+      background: #eef2ff;
+      color: var(--primary-dark);
+      margin-bottom: 0.7rem;
+    }
+
+    .activity-step h3 { font-size: 1.02rem; margin-bottom: 0.45rem; }
+    .activity-step p {
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      line-height: 1.65;
+      margin: 0;
+    }
+
+    /* ── Speaker cards ── */
+    .tba-note {
+      font-style: italic;
+      font-size: 0.9rem;
+      color: #64748b;
+      margin-bottom: 1.5rem;
+    }
+
+    .speaker-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(148px, 1fr));
+      gap: 1.25rem;
+    }
+
+    .speaker-card {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      overflow: hidden;
+      text-align: center;
+      box-shadow: 0 1px 2px rgba(15,23,42,0.04);
+      transition: box-shadow 0.2s ease, transform 0.2s ease, border-color 0.2s ease;
+    }
+    .speaker-card:hover {
+      box-shadow: 0 10px 28px rgba(67,56,202,0.12);
+      border-color: #c7d2fe;
+      transform: translateY(-3px);
+    }
+
+    .speaker-avatar {
+      width: 100%;
+      aspect-ratio: 1;
+      background: #e0e7ff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.4rem;
+      color: #6366f1;
+    }
+    .speaker-avatar img { width: 100%; height: 100%; object-fit: cover; }
+
+    .speaker-body { padding: 0.8rem 0.6rem; }
+    .speaker-body .name { font-size: 0.84rem; font-weight: 700; color: #1e293b; }
+    .speaker-body .name a { color: inherit; text-decoration: none; }
+    .speaker-body .name a:hover { color: var(--primary); text-decoration: underline; }
+    .speaker-body .affil { font-size: 0.74rem; color: #64748b; margin-top: 0.15rem; }
+    .speaker-body .note { font-size: 0.68rem; color: #6366f1; margin-top: 0.3rem; font-style: italic; }
+
+    /* ── Call for Papers ── */
+    .cfp-grid {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 3rem;
+      align-items: start;
+    }
+
+    .cfp-topics ul { list-style: none; padding: 0; margin-top: 0.75rem; }
+    .cfp-topics ul li {
+      font-size: 0.875rem;
+      color: #334155;
+      padding: 0.5rem 0 0.5rem 1.3rem;
+      border-bottom: 1px solid #e2e8f0;
+      position: relative;
+      line-height: 1.5;
+    }
+    .cfp-topics ul li:last-child { border-bottom: none; }
+    .cfp-topics ul li::before {
+      content: '→';
+      position: absolute;
+      left: 0;
+      color: var(--primary);
+      font-size: 0.75rem;
+      top: 0.6rem;
+    }
+
+    .dates-table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      margin-top: 0.75rem;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 1px 2px rgba(15,23,42,0.04);
+      background: var(--bg);
+    }
+    .dates-table th {
+      background: #eef2ff;
+      color: #3730a3;
+      text-align: left;
+      padding: 0.6rem 1rem;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .dates-table td {
+      padding: 0.7rem 1rem;
+      font-size: 0.875rem;
+      border-bottom: 1px solid #e2e8f0;
+      color: #334155;
+    }
+    .dates-table tr:last-child td { border-bottom: none; }
+    .dates-table .tbd { color: #94a3b8; font-style: italic; }
+
+    /* ── Schedule ── */
+    .schedule-block { margin-bottom: 2.5rem; }
+    .schedule-block:last-child { margin-bottom: 0; }
+
+    .schedule-block-title {
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--primary);
+      border-bottom: 2px solid var(--primary);
+      padding-bottom: 0.4rem;
+      margin-bottom: 0.25rem;
+    }
+
+    .schedule-row {
+      display: grid;
+      grid-template-columns: 10rem 1fr;
+      gap: 0 1.5rem;
+      padding: 0.9rem 0.75rem;
+      border-bottom: 1px solid var(--border);
+      align-items: start;
+      border-radius: 10px;
+      transition: background 0.15s ease;
+    }
+    .schedule-row:hover { background: #f8fafc; }
+    .schedule-row:last-child { border-bottom: none; }
+
+    .schedule-time {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+      padding-top: 0.15rem;
+    }
+
+    .schedule-tag {
+      display: inline-block;
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      padding: 0.15rem 0.6rem;
+      border-radius: 999px;
+      margin-bottom: 0.3rem;
+    }
+    .tag-talk    { background: #dbeafe; color: #1d4ed8; }
+    .tag-break   { background: #f1f5f9; color: #64748b; }
+    .tag-special { background: #ede9fe; color: #6d28d9; }
+    .tag-panel   { background: #d1fae5; color: #065f46; }
+    .tag-welcome { background: #fef3c7; color: #92400e; }
+    .tag-closing { background: #ffe4e6; color: #be123c; }
+
+    .schedule-event-title {
+      font-size: 0.92rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+    .schedule-event-desc {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      margin: 0.1rem 0 0;
+    }
+
+    @media (max-width: 500px) {
+      .schedule-row { grid-template-columns: 1fr; gap: 0.2rem; }
+      .schedule-time { color: #94a3b8; font-size: 0.75rem; }
+    }
+
+    /* ── Organizer cards ── */
+    .organizer-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .organizer-card {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 1rem 1.25rem;
+      display: flex;
+      align-items: center;
+      gap: 0.9rem;
+      flex: 1 1 190px;
+      max-width: 260px;
+      box-shadow: 0 1px 2px rgba(15,23,42,0.04);
+      transition: box-shadow 0.2s ease, transform 0.2s ease, border-color 0.2s ease;
+    }
+    .organizer-card:hover {
+      box-shadow: 0 10px 28px rgba(67,56,202,0.10);
+      border-color: #c7d2fe;
+      transform: translateY(-3px);
+    }
+
+    .organizer-avatar {
+      width: 7.5rem;
+      height: 7.5rem;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      font-weight: 800;
+      letter-spacing: 0.02em;
+      flex-shrink: 0;
+    }
+
+    .organizer-info .name { font-size: 0.9rem; font-weight: 700; color: #1e293b; }
+    .organizer-info .name a { color: inherit; text-decoration: none; }
+    .organizer-info .name a:hover { color: var(--primary); text-decoration: underline; }
+    .organizer-info .affil { font-size: 0.76rem; color: #64748b; margin-top: 0.1rem; }
+    .organizer-avatar img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; display: block; }
+
+    /* ── Footer ── */
+    footer {
+      background: var(--hero-top);
+      color: #c7d2fe;
+      padding: 2.5rem 1.5rem;
+      text-align: center;
+      font-size: 0.83rem;
+      line-height: 1.7;
+      border-top: 3px solid transparent;
+      border-image: linear-gradient(90deg, #6366f1, #38bdf8) 1;
+    }
+    footer .sub { margin-top: 0.3rem; opacity: 0.65; font-size: 0.78rem; }
+
+    /* ── Responsive ── */
+    @media (max-width: 700px) {
+      .hero { padding: 3.5rem 1.25rem 3rem; }
+      .nav-brand { display: none; }
+      .nav-links a { padding: 0.8rem 0.6rem; font-size: 0.8rem; }
+      section { padding: 3rem 1.25rem; }
+      h2 { font-size: 1.4rem; }
+      .cfp-grid { grid-template-columns: 1fr; gap: 2rem; }
+      .organizer-card { max-width: 100%; }
+      .activity-flow { grid-template-columns: 1fr; gap: 2rem; }
+    }
+
+    @media (max-width: 440px) {
+      .rq-card { padding: 1.3rem 1.2rem 1.3rem 1.35rem; }
+      .rq-num { font-size: 2.6rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Accessibility: skip to content -->
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+
+  <!-- Sticky navigation -->
+  <header class="site-header">
+    <div class="nav-inner">
+      <span class="nav-brand" aria-hidden="true">CoRL&nbsp;2026</span>
+      <nav aria-label="Page sections">
+        <ul class="nav-links" role="list">
+          <li><a href="#overview">Overview</a></li>
+          <li><a href="#topics">Research Questions</a></li>
+          <li><a href="#speakers">Speakers</a></li>
+          <li><a href="#call">Call for Papers</a></li>
+          <li><a href="#program">Program</a></li>
+          <li><a href="#activities">Activities</a></li>
+          <li><a href="#organizers">Organizers</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Hero banner -->
+  <div class="hero" role="region" aria-label="Workshop header">
+    <div class="hero-inner">
+      <img class="hero-logo" src="images/pretrain-to-adapt.png" alt="Pretrain to Adapt workshop logo">
+      <div class="hero-pill" aria-hidden="true">CoRL 2026 Workshop</div>
+      <h1>Pretrain to Adapt: What Makes a<br>Pretrained Policy Adaptable?</h1>
+      <p class="hero-quote">
+        <a href="https://join.slack.com/t/corl2026pretr-hxl8842/shared_invite/zt-48ya521jp-Zos1fnLA~ZVeiwCrwtGC5A" target="_blank" rel="noopener">Join our Slack</a> if you are interested in this topic and want to discuss!
+      </p>
+      <div class="hero-badges" aria-label="Event details">
+        <span class="badge">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true" focusable="false"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+          November 12, 2026
+        </span>
+        <span class="badge">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true" focusable="false"><path d="M12 22s-8-4.5-8-11.8A8 8 0 0 1 12 2a8 8 0 0 1 8 8.2c0 7.3-8 11.8-8 11.8z"/><circle cx="12" cy="10" r="3"/></svg>
+          Austin, TX
+        </span>
+        <span class="badge">CoRL 2026</span>
+      </div>
+      <div class="hero-cta">
+        <a class="btn-hero" href="https://openreview.net/group?id=robot-learning.org/CoRL/2026/Workshop/pretrain-to-adapt" target="_blank" rel="noopener">
+          Submit via OpenReview
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <main id="main-content">
+
+    <!-- ── Overview ── -->
+    <section id="overview" aria-labelledby="h-overview">
+      <div class="section-inner">
+        <p class="section-label" aria-hidden="true">About</p>
+        <h2 id="h-overview">Overview</h2>
+        <div class="overview-body">
+          <p>The strongest robotic manipulation systems today are typically built in two stages: first, pretrain a generalist policy on a large and diverse dataset, then adapt it to the specific setting where we actually want to deploy it. Adaptation can take many forms &mdash; supervised or RL fine-tuning, in-context learning, or test-time steering &mdash; and can adapt models not only to new tasks, but also to new embodiments and environments. Such adaptation is often critical for achieving effective performance in the target deployment domain.</p>
+          <p>These two stages optimize for different objectives, however: pretraining targets broad competence across many tasks, while adaptation targets the specific deployment setting of interest. Pretraining does not directly optimize for how readily a policy can be adapted &mdash; the final objective we often care about. The community has devoted significant effort to expanding pretrained capabilities by scaling the number of embodiments, tasks, compute, and data diversity considered in pretraining, on the assumption that a stronger pretrained generalist makes a better starting point for adaptation. But the most capable pretrained model is <em>not</em> necessarily the easiest to adapt, and we have no reliable way to tell, before adaptation, whether one pretrained policy is a better starting point than another. Meanwhile, approaches for adapting generalist policies to downstream settings typically assume the generalist policy is fixed, and do not consider how adaptation performance might be limited or enabled by the choice of pretrained policy.</p>
+          <p>This workshop seeks to bridge these two stages and ask <strong>what makes a pretrained policy a good foundation for adaptation?</strong> Our goal is to bring together researchers working on pretraining generalist policies with those developing approaches for adaptation, and to inspire discussion on how the two should be designed together: what properties of a pretrained robot policy make it an effective starting point for downstream adaptation, and how adaptation objectives should shape the way we evaluate and build pretrained models.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Topics ── -->
+    <section id="topics" class="bg-alt" aria-labelledby="h-topics">
+      <div class="section-inner">
+        <p class="section-label" aria-hidden="true">Focus</p>
+        <h2 id="h-topics">Core Research Questions</h2>
+        <div class="rq-list">
+
+          <article class="rq-card" style="--accent:#1d4ed8;" aria-labelledby="topic-limits">
+            <div class="rq-num" aria-hidden="true">01</div>
+            <div class="rq-head">
+              <div class="topic-icon" style="background:#dbeafe; color:#1d4ed8;" role="img" aria-label="Adaptation icon"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4.5"/><circle cx="12" cy="12" r="0.5" fill="currentColor"/></svg></div>
+              <h3 id="topic-limits">Capabilities and limits of adaptation</h3>
+            </div>
+            <p class="rq-lead">What can different forms of adaptation extract from a pretrained policy?</p>
+            <p class="rq-body">Supervised finetuning, reinforcement learning, in-context learning, test-time steering, and continual learning provide very different mechanisms for incorporating new information. When can adaptation efficiently recombine or unlock behaviors already in a pretrained model, and when does it require learning genuinely new capabilities with parameter updates? How do downstream data, feedback, and interaction budgets determine what is reachable from a given pretrained initialization?</p>
+          </article>
+
+          <article class="rq-card" style="--accent:#059669;" aria-labelledby="topic-couple">
+            <div class="rq-num" aria-hidden="true">02</div>
+            <div class="rq-head">
+              <div class="topic-icon" style="background:#d1fae5; color:#047857;" role="img" aria-label="Coupling icon"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg></div>
+              <h3 id="topic-couple">Coupling pretraining and adaptation</h3>
+            </div>
+            <p class="rq-lead">How should the pretraining recipe depend on the adaptation method it will be paired with, and vice versa?</p>
+            <p class="rq-body">Different adaptation methods ask different things of a pretrained model: reinforcement learning needs broad behavioral coverage and the plasticity to keep improving; in-context learning needs the model to treat new task data as a prompt; steering requires that the pretrained model already contains distinct behavioral modes that can be selected through conditioning.</p>
+          </article>
+
+          <article class="rq-card" style="--accent:#d97706;" aria-labelledby="topic-eval">
+            <div class="rq-num" aria-hidden="true">03</div>
+            <div class="rq-head">
+              <div class="topic-icon" style="background:#fef3c7; color:#b45309;" role="img" aria-label="Evaluation icon"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><line x1="6" y1="20" x2="6" y2="14"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="18" y1="20" x2="18" y2="10"/></svg></div>
+              <h3 id="topic-eval">Measuring readiness to adapt</h3>
+            </div>
+            <p class="rq-lead">How can we measure readiness for adaptation?</p>
+            <p class="rq-body">Pretraining is usually judged by validation loss, but loss measures how well a model fits its data, not how well it adapts. Readiness for adaptation is instead a property of a model's learning dynamics: how cheaply it can be steered toward new behaviors. Can it be predicted from offline metrics alone, or estimated efficiently by probing adaptation on a small set of held-out tasks? Can two policies with similar zero-shot performance nevertheless have fundamentally different adaptation potential?</p>
+          </article>
+
+          <article class="rq-card" style="--accent:#7c3aed;" aria-labelledby="topic-pretrain">
+            <div class="rq-num" aria-hidden="true">04</div>
+            <div class="rq-head">
+              <div class="topic-icon" style="background:#ede9fe; color:#6d28d9;" role="img" aria-label="Pretraining icon"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 12 12 17 22 12"/><polyline points="2 17 12 22 22 17"/></svg></div>
+              <h3 id="topic-pretrain">Pretraining for adaptation</h3>
+            </div>
+            <p class="rq-lead">If a pretrained policy will ultimately be adapted to new settings, how should pretraining prepare it for that process?</p>
+            <p class="rq-body">Beyond standard behavior cloning on expert demonstrations, alternative objectives and heterogeneous data&mdash;such as play, suboptimal and failure trajectories, or autonomous experience&mdash;may shape the behavioral coverage, steerability, and plasticity available at adaptation time. Should pretrained policies be explicitly trained to infer and exploit new task information from context? Which pretraining objectives, data mixtures, and training curricula best support efficient downstream adaptation?</p>
+          </article>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Speakers ── -->
+    <section id="speakers" aria-labelledby="h-speakers">
+      <div class="section-inner">
+        <p class="section-label" aria-hidden="true">Invited</p>
+        <h2 id="h-speakers">Speakers</h2>
+        <div class="speaker-grid" aria-label="Invited speakers">
+
+          <div class="speaker-card">
+            <div class="speaker-avatar"><img src="images/karl_pertsch.jpg" alt="Photo of Karl Pertsch" loading="lazy"></div>
+            <div class="speaker-body">
+              <div class="name"><a href="https://kpertsch.github.io/" target="_blank" rel="noopener">Karl Pertsch</a></div>
+              <div class="affil">Physical Intelligence</div>
+            </div>
+          </div>
+
+          <div class="speaker-card">
+            <div class="speaker-avatar"><img src="https://sherryy.github.io/imgs/sherry.jpeg" alt="Photo of Sherry Yang" loading="lazy"></div>
+            <div class="speaker-body">
+              <div class="name"><a href="https://sherryy.github.io/" target="_blank" rel="noopener">Sherry Yang</a></div>
+              <div class="affil">Asst. Professor, NYU</div>
+            </div>
+          </div>
+
+          <div class="speaker-card">
+            <div class="speaker-avatar"><img src="https://www.jessezhang.net/images/profile.jpeg" alt="Photo of Jesse Zhang" loading="lazy"></div>
+            <div class="speaker-body">
+              <div class="name"><a href="https://www.jessezhang.net/" target="_blank" rel="noopener">Jesse Zhang</a></div>
+              <div class="affil">Postdoc, University of Washington</div>
+            </div>
+          </div>
+
+          <div class="speaker-card">
+            <div class="speaker-avatar"><img src="https://www.siddkaramcheti.com/assets/img/sidd.jpg" alt="Photo of Siddharth Karamcheti" loading="lazy"></div>
+            <div class="speaker-body">
+              <div class="name"><a href="https://www.siddkaramcheti.com/" target="_blank" rel="noopener">Siddharth Karamcheti</a></div>
+              <div class="affil">Asst. Professor, Georgia Tech</div>
+            </div>
+          </div>
+
+        </div>
+
+        <p class="tba-note" style="margin-top:2rem; margin-bottom:0;">In addition to our invited speakers, the panel discussion will also feature:</p>
+        <div class="speaker-grid" aria-label="Panelists" style="margin-top:1.25rem;">
+
+          <div class="speaker-card">
+            <div class="speaker-avatar"><img src="https://yanweiw.github.io/images/felix_profile.jpg" alt="Photo of Felix Yanwei Wang" loading="lazy"></div>
+            <div class="speaker-body">
+              <div class="name"><a href="https://yanweiw.github.io/" target="_blank" rel="noopener">Felix Yanwei Wang</a></div>
+              <div class="affil">Generalist AI</div>
+              <div class="note">Panelist</div>
+            </div>
+          </div>
+
+          <div class="speaker-card">
+            <div class="speaker-avatar"><img src="https://www.mengdixu.me/images/profile_24.jpg" alt="Photo of Mengdi Xu" loading="lazy"></div>
+            <div class="speaker-body">
+              <div class="name"><a href="https://www.mengdixu.me/" target="_blank" rel="noopener">Mengdi Xu</a></div>
+              <div class="affil">Asst. Professor, Tsinghua University</div>
+              <div class="note">Panelist</div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Call for Papers ── -->
+    <section id="call" class="bg-alt" aria-labelledby="h-call">
+      <div class="section-inner">
+        <p class="section-label" aria-hidden="true">Submissions</p>
+        <h2 id="h-call">Call for Papers</h2>
+        <div class="cfp-grid">
+
+          <div class="cfp-topics">
+            <h3>Topics</h3>
+            <p style="font-size:0.87rem; margin-bottom:0.25rem;">We welcome submissions on, but not limited to:</p>
+            <ul>
+              <li>Pretraining objectives for adaptable policies (behavior cloning, return-conditioned, world-model, value-based, in-context objectives)</li>
+              <li>Composing and curating heterogeneous pretraining data (demonstrations, play data, suboptimal/failure trajectories, RL rollouts) for downstream adaptability</li>
+              <li>Coupling pretraining recipes with adaptation methods: RL finetuning, in-context learning, and test-time steering</li>
+              <li>Steerability and plasticity of pretrained policies</li>
+              <li>Adapting pretrained policies to new tasks, embodiments, and environments</li>
+              <li>Metrics and benchmarks for measuring readiness to adapt</li>
+              <li>World models as pretraining objectives, evaluation tools, or RL environments</li>
+              <li>Reward modeling and learned rewards for continual policy improvement</li>
+              <li>Position papers, work-in-progress, and retrospectives on any of the above</li>
+            </ul>
+            <p style="margin-top:1.4rem;">
+              <a class="btn-primary" href="https://openreview.net/group?id=robot-learning.org/CoRL/2026/Workshop/pretrain-to-adapt" target="_blank" rel="noopener">
+                Submit via OpenReview
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>
+              </a>
+            </p>
+            <p style="font-size:0.87rem; margin-top:1rem;"><a href="call/" style="color:var(--primary); font-weight:600; text-decoration:none;">See the full submission guidelines &rarr;</a></p>
+          </div>
+
+          <div>
+            <h3>Important Dates</h3>
+            <p style="font-size:0.87rem; margin-bottom:0.25rem;">Times as shown on OpenReview.</p>
+            <table class="dates-table" aria-label="Important submission dates">
+              <thead>
+                <tr>
+                  <th scope="col">Milestone</th>
+                  <th scope="col">Date</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td>Submissions Open</td><td>August 29, 2026, 12:00 AM</td></tr>
+                <tr><td>Submission Deadline</td><td>October 4, 2026, 5:00 AM</td></tr>
+                <tr><td>Acceptance Notification</td><td>October 19, 2026</td></tr>
+                <tr><td>Workshop Day</td><td>November 12, 2026</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Program ── -->
+    <section id="program" aria-labelledby="h-program">
+      <div class="section-inner">
+        <p class="section-label" aria-hidden="true">Schedule</p>
+        <h2 id="h-program">Program</h2>
+        <p class="tba-note">Tentative schedule for November 12, 2026 in Austin, TX &mdash; subject to change.</p>
+        <div class="schedule-block">
+
+          <div class="schedule-row">
+            <div class="schedule-time">8:30 – 8:45 AM</div>
+            <div class="schedule-event">
+              <span class="schedule-tag tag-welcome">Welcome</span>
+              <div class="schedule-event-title">Opening Remarks</div>
+            </div>
+          </div>
+
+          <div class="schedule-row">
+            <div class="schedule-time">8:45 – 9:15 AM</div>
+            <div class="schedule-event">
+              <span class="schedule-tag tag-talk">Invited Talk 1</span>
+              <div class="schedule-event-title" style="color:#94a3b8; font-style:italic;">Speaker to be announced</div>
+            </div>
+          </div>
+
+          <div class="schedule-row">
+            <div class="schedule-time">9:15 – 9:45 AM</div>
+            <div class="schedule-event">
+              <span class="schedule-tag tag-talk">Invited Talk 2</span>
+              <div class="schedule-event-title" style="color:#94a3b8; font-style:italic;">Speaker to be announced</div>
+            </div>
+          </div>
+
+          <div class="schedule-row">
+            <div class="schedule-time">9:45 – 10:15 AM</div>
+            <div class="schedule-event">
+              <span class="schedule-tag tag-talk">Invited Talk 3</span>
+              <div class="schedule-event-title" style="color:#94a3b8; font-style:italic;">Speaker to be announced</div>
+            </div>
+          </div>
+
+          <div class="schedule-row">
+            <div class="schedule-time">10:15 – 11:00 AM</div>
+            <div class="schedule-event">
+              <span class="schedule-tag tag-break">Break &amp; Posters</span>
+              <div class="schedule-event-title">Coffee Break + Poster Session</div>
+            </div>
+          </div>
+
+          <div class="schedule-row">
+            <div class="schedule-time">11:00 – 11:30 AM</div>
+            <div class="schedule-event">
+              <span class="schedule-tag tag-talk">Invited Talk 4</span>
+              <div class="schedule-event-title" style="color:#94a3b8; font-style:italic;">Speaker to be announced</div>
+            </div>
+          </div>
+
+          <div class="schedule-row">
+            <div class="schedule-time">11:30 AM – 12:20 PM</div>
+            <div class="schedule-event">
+              <span class="schedule-tag tag-panel">Panel</span>
+              <div class="schedule-event-title">Panel Discussion</div>
+              <div class="schedule-event-desc">Open discussion with invited speakers and panelists.</div>
+            </div>
+          </div>
+
+          <div class="schedule-row">
+            <div class="schedule-time">12:20 – 12:30 PM</div>
+            <div class="schedule-event">
+              <span class="schedule-tag tag-closing">Closing</span>
+              <div class="schedule-event-title">Awards &amp; Closing</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Interactive Activities ── -->
+    <section id="activities" class="bg-alt" aria-labelledby="h-activities">
+      <div class="section-inner">
+        <p class="section-label" aria-hidden="true">Engagement</p>
+        <h2 id="h-activities">Interactive Activities</h2>
+        <div class="activity-flow">
+
+          <article class="activity-step">
+            <div class="activity-num" aria-hidden="true">1</div>
+            <div class="activity-icon" role="img" aria-label="Slack icon">💬</div>
+            <div class="activity-tag">Before the workshop</div>
+            <h3>Slack Workspace</h3>
+            <p>We have created a <a href="https://join.slack.com/t/corl2026pretr-hxl8842/shared_invite/zt-48ya521jp-Zos1fnLA~ZVeiwCrwtGC5A" target="_blank" rel="noopener" style="color:var(--primary); font-weight:600;">Slack workspace</a> for authors and attendees interested in the workshop topics to discuss ideas and share papers prior to the workshop date.</p>
+          </article>
+
+          <article class="activity-step">
+            <div class="activity-num" aria-hidden="true">2</div>
+            <div class="activity-icon" role="img" aria-label="Panel questions icon">❓</div>
+            <div class="activity-tag">Before &amp; during</div>
+            <h3>Panel Q&amp;A</h3>
+            <p>We will collect questions for the panel discussion from the Slack workspace, an online poll, and in-person attendees.</p>
+          </article>
+
+          <article class="activity-step">
+            <div class="activity-num" aria-hidden="true">3</div>
+            <div class="activity-icon" role="img" aria-label="Poster award icon">🏆</div>
+            <div class="activity-tag">At the workshop</div>
+            <h3>Best Poster Award</h3>
+            <p>We will collect workshop attendees' opinions to select the best poster award.</p>
+          </article>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Organizers ── -->
+    <section id="organizers" aria-labelledby="h-organizers">
+      <div class="section-inner">
+        <p class="section-label" aria-hidden="true">Team</p>
+        <h2 id="h-organizers">Organizers</h2>
+        <div class="organizer-grid">
+
+          <div class="organizer-card">
+            <div class="organizer-avatar" aria-hidden="true"><img src="https://yilin-wu98.github.io/assets/img/yilinwu.jpg" alt=""></div>
+            <div class="organizer-info">
+              <div class="name"><a href="https://yilin-wu98.github.io/" target="_blank" rel="noopener">Yilin Wu</a></div>
+              <div class="affil">Ph.D. Student, CMU</div>
+            </div>
+          </div>
+
+          <div class="organizer-card">
+            <div class="organizer-avatar" aria-hidden="true"><img src="https://zhanyisun.github.io/images/zhanyi.png" alt=""></div>
+            <div class="organizer-info">
+              <div class="name"><a href="https://zhanyisun.github.io/" target="_blank" rel="noopener">Zhanyi Sun</a></div>
+              <div class="affil">Ph.D. Student, Stanford</div>
+            </div>
+          </div>
+
+          <div class="organizer-card">
+            <div class="organizer-avatar" aria-hidden="true"><img src="https://avatars.githubusercontent.com/u/38315247?v=4" alt=""></div>
+            <div class="organizer-info">
+              <div class="name"><a href="https://www.nicklashansen.com/" target="_blank" rel="noopener">Nicklas Hansen</a></div>
+              <div class="affil">Postdoc, NYU</div>
+            </div>
+          </div>
+
+          <div class="organizer-card">
+            <div class="organizer-avatar" aria-hidden="true"><img src="https://huihanl.github.io/profile_new.jpg" alt=""></div>
+            <div class="organizer-info">
+              <div class="name"><a href="https://huihanl.github.io/" target="_blank" rel="noopener">Huihan Liu</a></div>
+              <div class="affil">Member of Technical Staff, Amazon FAR</div>
+            </div>
+          </div>
+
+          <div class="organizer-card">
+            <div class="organizer-avatar" aria-hidden="true"><img src="https://wagenmaker.github.io/andrew2.jpg" alt=""></div>
+            <div class="organizer-info">
+              <div class="name"><a href="https://wagenmaker.github.io/" target="_blank" rel="noopener">Andrew Wagenmaker</a></div>
+              <div class="affil">Incoming Asst. Professor, UT Austin</div>
+            </div>
+          </div>
+
+          <div class="organizer-card">
+            <div class="organizer-avatar" aria-hidden="true"><img src="https://www.cs.cmu.edu/~abajcsy/images/pic1.png" alt=""></div>
+            <div class="organizer-info">
+              <div class="name"><a href="https://www.cs.cmu.edu/~abajcsy/" target="_blank" rel="noopener">Andrea Bajcsy</a></div>
+              <div class="affil">Asst. Professor, CMU</div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer role="contentinfo">
+    <div>CoRL 2026 Workshop &mdash; Pretrain to Adapt: What Makes a Pretrained Policy Adaptable?</div>
+    <div class="sub">Questions? Contact the organizers.</div>
+  </footer>
+
+  <script>
+    // Highlight the nav link for whichever section is currently in view
+    const sections  = document.querySelectorAll('section[id]');
+    const navLinks  = document.querySelectorAll('.nav-links a');
+
+    const setActive = (id) => {
+      navLinks.forEach(link => {
+        const isActive = link.getAttribute('href') === '#' + id;
+        link.setAttribute('aria-current', isActive ? 'true' : 'false');
+      });
+    };
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) setActive(entry.target.id);
+        });
+      },
+      { rootMargin: '-25% 0px -65% 0px' }
+    );
+
+    sections.forEach(s => observer.observe(s));
+  </script>
+
+</body>
+</html>

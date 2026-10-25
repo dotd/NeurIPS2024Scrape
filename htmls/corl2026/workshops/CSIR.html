@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head><base href="https://csircorl.github.io/website/">
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>
+   Continually Self-Improving Robots Workshop | CoRL 2026
+  </title>
+  <meta content="CoRL 2026 workshop on Continually Self-Improving Robots." name="description"/>
+  <link href="https://fonts.googleapis.com" rel="preconnect"/>
+  <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+  <link href="styles.css" rel="stylesheet"/>
+  <style id="headshot-card-style">
+   .headshot {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  border-radius: 18px;
+  border: 1px solid var(--line, #d9ddd7);
+  background: var(--accent, #e9efe8);
+  margin-bottom: 16px;
+  display: block;
+}
+.speaker-card .headshot {
+  border-radius: 22px;
+}
+.person .avatar {
+  display: none;
+}
+  </style>
+ 
+<style id="larger-headshots">
+/* Larger images for speakers, organizers, and advisory board */
+.people-grid{
+  gap: 28px;
+}
+.person{
+  padding: 20px;
+}
+.headshot{
+  width: 100%;
+  max-width: 160px;
+  margin: 0 auto 18px auto;
+  display:block;
+}
+.speaker-card .headshot{
+  max-width: 160px;
+}
+.person h3{
+  margin-top: 10px;
+}
+</style>
+
+</head>
+ <body>
+  <header class="site-header">
+   <nav class="navbar">
+    <a class="brand" href="#top">
+     CSIR 2026
+    </a>
+    <button aria-expanded="false" aria-label="Toggle navigation" class="nav-toggle">
+     ☰
+    </button>
+    <div class="nav-links">
+     <a href="#about">
+      Introduction
+     </a>
+     <!-- <a href="#topics">
+      Topics
+     </a> -->
+     <a href="#speakers">
+      Speakers and Panelists
+     </a>
+     <a href="#cfp">
+      Call for Papers
+     </a>
+     <a href="#format">
+      Format
+     </a>
+     <!-- <a href="#schedule">
+      Schedule
+     </a> -->
+     <a href="#organizers">
+      Organizers
+     </a>
+    </div>
+   </nav>
+  </header>
+  <main id="top">
+   <section class="hero">
+    <div aria-hidden="true" class="hero-bg">
+    </div>
+    <div class="hero-content">
+     <h1>
+      Continually Self-Improving Robots
+     </h1>
+     <p class="workshop-title">
+      Workshop at CoRL 2026 · November 12, 2026 · Austin, Texas
+     </p>
+     <div class="hero-actions">
+      <a class="button secondary" href="#cfp">
+       Call for Papers
+      </a>
+      <a class="button secondary" href="">
+       Livestream
+      </a>
+      <a class="button secondary" href="https://2026.corl.org/" rel="noopener noreferrer" target="_blank">
+       Venue
+      </a>
+      <!-- <a class="button secondary" href="#schedule">
+       View Schedule
+      </a> -->
+     </div>
+    </div>
+   </section>
+   <section class="section narrow" id="about">
+    <div class="section-heading">
+     <h2>
+      Introduction
+     </h2>
+    </div>
+    <p>
+     Developing general-purpose robots capable of autonomously performing diverse tasks in unstructured environments remains a central challenge in robotics. Recent demonstration-driven approaches, including learning from teleoperated robot demonstrations and human video demonstrations, have provided robots with strong behavioral priors and capable initial policies. However, imitation alone is unlikely to close the gap between broad initial competence and reliable performance across the long tail of real-world tasks, objects, and environments. Robots must improve beyond their demonstrated experience: autonomously collecting data, discovering failures, adapting to new situations, and refining their skills through interaction.
+    </p>
+    <p>
+     This workshop advocates for an
+     <strong>
+      era of experiences
+     </strong>
+     in robot learning, where robots continually expand their capabilities by interacting with the world. We aim to bring together researchers across robot learning, reinforcement learning, and continual learning to define the algorithmic and systems-level foundations for self-improving robots.
+    </p>
+   </section>
+   <!-- <section class="section" id="topics">
+    <div class="section-heading">
+     <h2>
+      Core Challenges &amp; Research Questions
+     </h2>
+     <p>
+      We focus on two stepping stones toward scalable robot self-improvement.
+     </p>
+    </div>
+    <div class="cards two-col">
+     <article class="card">
+      <div class="card-number">
+       01
+      </div>
+      <h3>
+       Formalizing Robot Self-Improvement
+      </h3>
+      <p>
+       What does it mean for a robot to improve itself after deployment?
+      </p>
+      <ul>
+       <li>
+        Initial capabilities and policy assumptions
+       </li>
+       <li>
+        Available feedback: rewards, corrections, language, interaction signals
+       </li>
+       <li>
+        Operational constraints: resets, safety, human intervention, hardware wear
+       </li>
+       <li>
+        Objectives: success, improvement rate, robustness, autonomy, sample efficiency
+       </li>
+       <li>
+        Long-horizon settings: fixed suites, open-ended distributions, continual deployment
+       </li>
+      </ul>
+     </article>
+     <article class="card">
+      <div class="card-number">
+       02
+      </div>
+      <h3>
+       Building Practical Self-Improvement Pipelines
+      </h3>
+      <p>
+       How can the full self-improvement loop be implemented on real robotic systems?
+      </p>
+      <ul>
+       <li>
+        Reinforcement learning, online imitation, active learning, and self-supervised learning
+       </li>
+       <li>
+        In-context learning, model-based planning, world models, and autonomous curricula
+       </li>
+       <li>
+        Failure discovery, uncertainty-driven data collection, and data curation
+       </li>
+       <li>
+        Safe exploration, real-to-sim-to-real transfer, logging, resets, and evaluation infrastructure
+       </li>
+       <li>
+        Metrics for autonomy, robustness, safety, generalization, and data efficiency
+       </li>
+      </ul>
+     </article>
+    </div>
+   </section> -->
+   <section class="section" id="speakers">
+    <div class="section-heading">
+     <h2>
+      Speakers and Panelists
+     </h2>
+    </div>
+    <div class="people-grid">
+     <div class="person speaker-card">
+      <img alt="Abhishek Gupta headshot" class="headshot" onerror="this.style.display='none'; this.nextElementSibling.style.display='grid';" src="images/abhishek-gupta.jpg"/>
+      <div class="avatar">
+       AG
+      </div>
+      <h3>
+       <a class="name-link" href="https://homes.cs.washington.edu/~abhgupta/" rel="noopener noreferrer" target="_blank">Abhishek Gupta</a>
+      </h3>
+      <p>
+       UW & Amazon FAR
+      </p>
+     </div>
+     <div class="person speaker-card">
+      <img alt="Kay Ke headshot" class="headshot" onerror="this.style.display='none'; this.nextElementSibling.style.display='grid';" src="images/kay-ke.jpg"/>
+      <div class="avatar">
+       KK
+      </div>
+      <h3>
+       <a class="name-link" href="https://kayke.xyz/" rel="noopener noreferrer" target="_blank">Kay Ke</a>
+      </h3>
+      <p>
+       Physical Intelligence
+      </p>
+     </div>
+     <div class="person speaker-card">
+      <img alt="Jeff Clune headshot" class="headshot" onerror="this.style.display='none'; this.nextElementSibling.style.display='grid';" src="images/jeff-clune.jpg"/>
+      <div class="avatar">
+       JC
+      </div>
+      <h3>
+       <a class="name-link" href="https://jeffclune.com/" rel="noopener noreferrer" target="_blank">Jeff Clune</a>
+      </h3>
+      <p>
+       UBC &amp; Recursive
+      </p>
+     </div>
+     <div class="person speaker-card">
+      <img alt="Jason Ma headshot" class="headshot" onerror="this.style.display='none'; this.nextElementSibling.style.display='grid';" src="images/jason-ma.jpg"/>
+      <div class="avatar">
+       JM
+      </div>
+      <h3>
+       <a class="name-link" href="https://jasonma2016.github.io/" rel="noopener noreferrer" target="_blank">Jason Ma</a>
+      </h3>
+      <p>
+       Dyna
+      </p>
+     </div>
+     <div class="person speaker-card">
+      <img alt="Pete Florence headshot" class="headshot" onerror="this.style.display='none'; this.nextElementSibling.style.display='grid';" src="https://www.peteflorence.com/img/pete-crop-compressed.jpg"/>
+      <div class="avatar">
+       PF
+      </div>
+      <h3>
+       <a class="name-link" href="https://www.peteflorence.com/" rel="noopener noreferrer" target="_blank">Pete Florence</a>
+      </h3>
+      <p>
+       Generalist
+      </p>
+     </div>
+    </div>
+   </section>
+   <section class="section accent-section" id="cfp">
+    <div class="section-heading">
+     <p class="section-kicker">
+      Submissions are open
+     </p>
+     <h2>
+      Call for Papers
+     </h2>
+     <p>
+      We invite contributions that introduce theoretical frameworks, experimental findings, or applications that advance autonomous robot learning and self-improvement.
+     </p>
+    </div>
+    <div class="deadline-banner">
+     <div>
+      <span class="deadline-label">
+       Submission deadline
+      </span>
+      <strong>
+       September 28, 2026 · 11:59 PM AoE
+      </strong>
+     </div>
+     <a class="cfp-button" href="https://openreview.net/group?id=robot-learning.org%2FCoRL%2F2026%2FWorkshop%2FCSIR" rel="noopener noreferrer" target="_blank">
+      Submit on OpenReview <span aria-hidden="true">↗</span>
+     </a>
+    </div>
+    <div class="submission-panel">
+     <h3>
+      Submission Guidelines
+     </h3>
+     <div class="submission-facts">
+      <div class="submission-fact">
+       <span>Template</span>
+       <strong>Any paper template</strong>
+       <p>Authors may use any academic paper template.</p>
+      </div>
+      <div class="submission-fact">
+       <span>Length</span>
+       <strong>Up to 8 pages</strong>
+       <p>References and the appendix do not count toward the page limit.</p>
+      </div>
+      <div class="submission-fact">
+       <span>Review</span>
+       <strong>Double-blind</strong>
+       <p>Remove author names, affiliations, and other identifying information.</p>
+      </div>
+      <div class="submission-fact">
+       <span>Publication</span>
+       <strong>Non-archival</strong>
+       <p>Accepted papers will not appear in archival proceedings.</p>
+      </div>
+     </div>
+    </div>
+    <div class="cards two-col cfp-cards">
+     <article class="mini-card">
+      <h3>
+       Topics of Interest
+      </h3>
+      <p>
+       Robot self-improvement, continual robot learning, RL for robotics, autonomous data collection, failure discovery, safe exploration, world models, in-context robot learning, real-to-sim-to-real transfer, automatic reset systems, and reliable evaluation environments.
+      </p>
+     </article>
+     <article class="mini-card">
+      <h3>
+       Presentation &amp; Participation
+      </h3>
+      <p>
+       Accepted papers will be presented through student spotlights and posters. <strong>Paper awards</strong> will be presented to recognize outstanding research contributions.
+      </p>
+     </article>
+    </div>
+   </section>
+   <section class="section narrow" id="format">
+    <h2>
+     Workshop Format
+    </h2>
+    <p>
+     The workshop will combine invited talks, student spotlights, poster presentations, structured breakout sessions, and moderated group-wide discussions. The format is designed to actively engage participants rather than present a passive sequence of talks.
+    </p>
+    <div class="timeline">
+     <div class="timeline-item">
+      <span>
+       Breakout 1
+      </span>
+      <h3>
+       Formalizing Robot Self-Improvement
+      </h3>
+      <p>
+       Participants will define what it means for a robot to self-improve, including assumptions about initial policy capabilities, available feedback, deployment constraints, allowed human intervention, and simulation benchmark designs.
+      </p>
+     </div>
+     <div class="timeline-item">
+      <span>
+       Breakout 2
+      </span>
+      <h3>
+       Designing Practical Pipelines
+      </h3>
+      <p>
+       Using a multi-purpose warehouse-robot case study, groups will design an end-to-end pipeline for autonomous long-term deployment, including data collection, failure detection, policy updates, safety, transfer, and evaluation.
+      </p>
+     </div>
+     <div class="timeline-item">
+      <span>
+       Outcome
+      </span>
+      <h3>
+       Shared Artifacts &amp; Discussion
+      </h3>
+      <p>
+       Breakout groups will use shared online documents to record assumptions, proposed methods, benchmark ideas, open questions, and disagreements, then report back for moderated debate.
+      </p>
+     </div>
+    </div>
+   </section>
+   <!-- <section class="section narrow" id="schedule">
+    <h2>
+     Schedule
+    </h2>
+    <p>
+     TBD
+    </p>
+   </section> -->
+   <section class="section" id="organizers">
+    <div class="section-heading">
+     <h2>
+      Organizers
+     </h2>
+    </div>
+    <div class="people-grid">
+     <div class="person">
+      <img alt="Jiaheng Hu headshot" class="headshot" onerror="this.style.display='none'; this.nextElementSibling.style.display='grid';" src="images/jiaheng-hu.jpg"/>
+      <div class="avatar">
+       JH
+      </div>
+      <h3>
+       <a class="name-link" href="https://jiahenghu.github.io/" rel="noopener noreferrer" target="_blank">Jiaheng Hu</a>
+      </h3>
+      <p>
+       UT Austin
+      </p>
+      <a href="mailto:jiahengh@utexas.edu">
+       jiahengh@utexas.edu
+      </a>
+     </div>
+     <div class="person">
+      <img alt="Annie Xie headshot" class="headshot" onerror="this.style.display='none'; this.nextElementSibling.style.display='grid';" src="images/annie-xie-square.jpg"/>
+      <div class="avatar">
+       AX
+      </div>
+      <h3>
+       <a class="name-link" href="https://anxie.github.io/" rel="noopener noreferrer" target="_blank">Annie Xie</a>
+      </h3>
+      <p>
+       Google DeepMind
+      </p>
+      <a href="mailto:anniexie@google.com">
+       anniexie@google.com
+      </a>
+     </div>
+     <div class="person">
+      <img alt="Mengdi Xu headshot" class="headshot" onerror="this.style.display='none'; this.nextElementSibling.style.display='grid';" src="images/mengdi-xu.jpg"/>
+      <div class="avatar">
+       MX
+      </div>
+      <h3>
+       <a class="name-link" href="https://www.mengdixu.me/" rel="noopener noreferrer" target="_blank">Mengdi Xu</a>
+      </h3>
+      <p>
+       Tsinghua University
+      </p>
+      <a href="mailto:xumd@mail.tsinghua.edu.cn">
+       xumd@mail.tsinghua.edu.cn
+      </a>
+     </div>
+     <div class="person">
+      <img alt="Chris Paxton headshot" class="headshot" onerror="this.style.display='none'; this.nextElementSibling.style.display='grid';" src="images/chris-paxton.jpg"/>
+      <div class="avatar">
+       CP
+      </div>
+      <h3>
+       <a class="name-link" href="https://cpaxton.github.io/" rel="noopener noreferrer" target="_blank">Chris Paxton</a>
+      </h3>
+      <p>
+       Agility Robotics
+      </p>
+      <a href="mailto:chris.paxton.cs@gmail.com">
+       chris.paxton.cs@gmail.com
+      </a>
+     </div>
+    </div>
+   </section>
+   <section class="section compact" id="advisory">
+    <div class="section-heading">
+     <h2>
+      Advisory Board
+     </h2>
+    </div>
+    <div class="people-grid advisory-grid">
+     <div class="person">
+      <img alt="Peter Stone headshot" class="headshot" onerror="this.style.display='none'; this.nextElementSibling.style.display='grid';" src="images/peter-stone.jpg"/>
+      <div class="avatar">
+       PS
+      </div>
+      <h3>
+       <a class="name-link" href="https://www.cs.utexas.edu/~pstone/" rel="noopener noreferrer" target="_blank">Peter Stone</a>
+      </h3>
+      <p>
+       UT Austin &amp; Sony AI
+      </p>
+     </div>
+     <div class="person">
+      <img alt="Roberto Martín-Martín headshot" class="headshot" onerror="this.style.display='none'; this.nextElementSibling.style.display='grid';" src="images/roberto.jpg"/>
+      <div class="avatar">
+       RM
+      </div>
+      <h3>
+       <a class="name-link" href="https://robertomartinmartin.com/" rel="noopener noreferrer" target="_blank">Roberto Martín-Martín</a>
+      </h3>
+      <p>
+       UT Austin
+      </p>
+     </div>
+     <div class="person">
+      <img alt="Jie Tan headshot" class="headshot" onerror="this.style.display='none'; this.nextElementSibling.style.display='grid';" src="images/jie-tan.jpg"/>
+      <div class="avatar">
+       JT
+      </div>
+      <h3>
+       <a class="name-link" href="https://jie-tan.net/" rel="noopener noreferrer" target="_blank">Jie Tan</a>
+      </h3>
+      <p>
+       Google DeepMind
+      </p>
+     </div>
+    </div>
+   </section>
+  </main>
+  <footer class="footer">
+   <p>
+    © 2026 Continually Self-Improving Robots Workshop. All rights reserved.
+   </p>
+  </footer>
+  <script src="script.js">
+  </script>
+ </body>
+</html>

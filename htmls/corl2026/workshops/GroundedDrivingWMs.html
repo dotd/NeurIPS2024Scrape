@@ -1,0 +1,843 @@
+<!doctype html>
+<html lang="en">
+  <head><base href="https://arlo0o.github.io/Grounded-Driving-World-Models_Workshop/">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="CoRL 2026 workshop and Call for Contributions on grounded 4D multimodal world models for autonomous driving decision making, November 12, 2026 in Austin.">
+    <meta property="og:title" content="Grounded 4D Multimodal World Models for Autonomous Driving Decision Making">
+    <meta property="og:description" content="A CoRL 2026 half-day workshop on decision-centric 4D world models, multimodal simulation, and safety-critical autonomous driving evaluation.">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="https://arlo0o.github.io/Grounded-Driving-World-Models_Workshop/assets/promo/workshop-home.png">
+    <meta property="og:url" content="https://arlo0o.github.io/Grounded-Driving-World-Models_Workshop/">
+    <title>Grounded 4D Multimodal World Models | CoRL 2026 Workshop</title>
+    <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <header class="site-header" data-header>
+      <a class="brand" href="#top" aria-label="Grounded 4D Multimodal World Models home">
+        <span class="brand-mark" aria-hidden="true"></span>
+        <span>Grounded 4D WMs</span>
+      </a>
+      <nav class="nav-links" aria-label="Primary navigation">
+        <a href="#cfp">Contributions</a>
+        <a href="#challenges">Challenges</a>
+        <a href="#format">Format</a>
+        <a href="#resources">Resources</a>
+        <a href="#dates">Dates</a>
+        <a href="#faq">FAQ</a>
+        <a href="#organizers">People</a>
+      </nav>
+    </header>
+
+    <main id="top">
+      <section class="hero-section" aria-label="Workshop introduction">
+        <video class="hero-visual" autoplay muted loop playsinline preload="metadata" poster="assets/uniscenev2/hero_uniscene.png" aria-hidden="true">
+          <source src="assets/uniscenev2/videos/demo_nuplan1.mp4" type="video/mp4">
+        </video>
+        <div class="hero-shade" aria-hidden="true"></div>
+        <div class="hero-content">
+          <p class="eyebrow">CoRL 2026 Half-Day Workshop</p>
+          <h1>Grounded 4D Multimodal World Models for Autonomous Driving Decision Making</h1>
+          <p class="hero-copy">
+            A problem-driven workshop on 4D occupancy, multi-view video, LiDAR, and scenario generation
+            that are useful for planning, control, safety validation, and real autonomous systems.
+          </p>
+          <div class="hero-meta" aria-label="Workshop logistics">
+            <span>November 12, 2026</span>
+            <span>JW Marriott Austin</span>
+            <span>In person</span>
+          </div>
+          <div class="hero-actions">
+            <a class="button primary" href="https://openreview.net/group?id=robot-learning.org/CoRL/2026/Workshop/GroundedDrivingWMs" target="_blank" rel="noreferrer">Submit via OpenReview</a>
+            <a class="button secondary" href="#cfp">Read the Call for Contributions</a>
+          </div>
+          <p class="hero-deadline">Submissions open August 15, 2026 at 12:00 UTC · Deadline October 12, 2026 at 11:59 UTC</p>
+        </div>
+      </section>
+
+      <section class="section contribution-section" id="cfp">
+        <div class="section-grid">
+          <div>
+            <p class="section-kicker">Call for contributions</p>
+            <h2>Contributed work will anchor posters, spotlights, and open discussions.</h2>
+          </div>
+          <div class="intro-copy">
+            <p>
+              We invite anonymous contributions that connect world modeling to autonomous driving decisions:
+              short papers, extended abstracts, benchmark or dataset reports, resource or challenge proposals,
+              position papers, negative results, and early-stage ideas. Contributions may present new results or
+              sharpen the questions, evidence, and shared resources the community needs next.
+            </p>
+            <p>
+              This is a lightweight, double-blind, non-archival workshop. All accepted contributions will be presented
+              as posters; selected submissions will be invited for short spotlight talks designed to seed panel
+              questions, breakout discussion, and shared community takeaways.
+            </p>
+          </div>
+        </div>
+
+        <div class="submission-alert" role="note">
+          <div>
+            <span>Submission deadline</span>
+            <strong>October 12, 2026, 11:59 UTC</strong>
+            <small>Equivalent to October 11, 23:59 Anywhere on Earth.</small>
+          </div>
+          <a class="button primary" href="https://openreview.net/group?id=robot-learning.org/CoRL/2026/Workshop/GroundedDrivingWMs" target="_blank" rel="noreferrer">Open the submission venue</a>
+        </div>
+
+        <div class="submission-grid" aria-label="Contribution formats and workshop participation">
+          <article>
+            <span>Format and length</span>
+            <h3>Anonymous 2-4 page contributions</h3>
+            <p>
+              The limit applies to the main text; references and an optional appendix are excluded. Please use the
+              current CoRL 2026 LaTeX template available through the
+              <a class="inline-link" href="https://www.corl.org/" target="_blank" rel="noreferrer">official CoRL 2026 site</a>.
+            </p>
+          </article>
+          <article>
+            <span>Review process</span>
+            <h3>Double-blind and private</h3>
+            <p>
+              Submissions remain private during review and are assigned manually. Anonymous supporting code, data,
+              video, or project pages are welcome when neither the URL nor its contents reveal author identities.
+            </p>
+          </article>
+          <article>
+            <span>Presentation and release</span>
+            <h3>Posters, selected spotlights</h3>
+            <p>
+              Every accepted contribution is presented as a poster. Selected papers receive a short spotlight.
+              Authors choose whether the accepted PDF is public on OpenReview or remains private.
+            </p>
+          </article>
+        </div>
+
+        <div class="policy-grid" aria-label="Submission policy summary">
+          <div>
+            <strong>Non-archival</strong>
+            <p>Accepted work will not appear in CoRL or PMLR proceedings.</p>
+          </div>
+          <div>
+            <strong>In-person participation</strong>
+            <p>At least one author should attend and present in Austin, or promptly contact the organizers if circumstances change.</p>
+          </div>
+          <div>
+            <strong>Author-controlled PDF release</strong>
+            <p>Authors explicitly choose public OpenReview release or a private PDF with title, authors, and an author-provided public link listed by the workshop.</p>
+          </div>
+          <div>
+            <strong>Create profiles early</strong>
+            <p>New OpenReview profiles without an institutional email may require moderation for up to two weeks; institutional-email profiles are activated automatically.</p>
+          </div>
+        </div>
+
+        <div class="topics" id="topics">
+          <h3>Topics of interest</h3>
+          <ul>
+            <li>Occupancy-centric 4D, object-centric, BEV, video, LiDAR, or hybrid driving world models.</li>
+            <li>Multimodal and sensor-realistic simulation for robot learning and autonomous driving.</li>
+            <li>Decision-aware generative modeling for planning, policy training, and closed-loop evaluation.</li>
+            <li>Long-tail, adversarial, counterfactual, or safety-critical scenario generation.</li>
+            <li>Benchmarks and metrics for sim-to-real validity, planning utility, and failure transfer.</li>
+            <li>Dataset curation, annotation, and scaling laws for grounded 4D multimodal driving world models.</li>
+            <li>Resource and challenge tracks based on open code, datasets, pretrained weights, or reproducible evaluation suites.</li>
+          </ul>
+        </div>
+
+        <div class="cfp-actions">
+          <a class="button primary" href="https://openreview.net/group?id=robot-learning.org/CoRL/2026/Workshop/GroundedDrivingWMs" target="_blank" rel="noreferrer">Go to OpenReview</a>
+          <a class="button outline" href="#faq">Read submission FAQ</a>
+        </div>
+      </section>
+
+      <section class="section intro-section" id="motivation">
+        <div class="section-grid">
+          <div>
+            <p class="section-kicker">Motivation</p>
+            <h2>From realistic generation to grounded 4D multimodal simulation.</h2>
+          </div>
+          <div class="intro-copy">
+            <p>
+              Autonomous driving is a real-world robot learning domain where perception, prediction,
+              decision making, control, safety validation, and human interaction meet. 4D multimodal
+              driving world models now generate semantic occupancy, multi-view video, LiDAR, and
+              interactive scenarios, but the field still lacks shared criteria for when a generated world
+              is useful for action.
+            </p>
+            <p>
+              This workshop asks participants to define and stress-test grounded 4D multimodal world
+              models: models whose scene structure, dynamics, sensor outputs, and evaluations are tied
+              to real autonomous driving decisions.
+            </p>
+          </div>
+        </div>
+
+        <div class="pillars" aria-label="Workshop pillars">
+          <article>
+            <span class="pillar-index">01</span>
+            <h3>Representations for action</h3>
+            <p>Occupancy, BEV, object states, video, LiDAR, trajectories, and hybrid state abstractions.</p>
+          </article>
+          <article>
+            <span class="pillar-index">02</span>
+            <h3>Grounded 4D multimodal worlds</h3>
+            <p>Geometry, semantics, temporal coherence, sensor rigs, and physically plausible interactions.</p>
+          </article>
+          <article>
+            <span class="pillar-index">03</span>
+            <h3>Decision-aware evaluation</h3>
+            <p>Planning utility, no at-fault collisions, drivable area compliance, robustness, and failure transfer.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="section visual-section" id="anchors">
+        <div class="section-heading compact">
+          <p class="section-kicker">Technical anchors</p>
+          <h2>Two concrete entry points for a broader workshop conversation.</h2>
+          <p>
+            The workshop is not limited to these systems, but they provide shared examples for participants:
+            occupancy-centric 4D multimodal world modeling and photorealistic adversarial scenario generation.
+          </p>
+        </div>
+        <div class="anchor-grid">
+          <figure class="anchor-figure">
+            <img src="assets/uniscenev2/overall.png" alt="UniSceneV2 occupancy-centric pipeline for dynamic 4D occupancy, multi-view video, and LiDAR generation">
+            <figcaption>
+              UniSceneV2 connects 4D semantic occupancy to multi-view video, LiDAR, downstream perception, and planning evaluation.
+            </figcaption>
+          </figure>
+          <figure class="anchor-figure">
+            <img src="assets/challenger/images/f1_sm.jpg" alt="Challenger adversarial driving video and trajectory stress-testing visualization">
+            <figcaption>
+              Challenger turns physically plausible adversarial maneuvers into photorealistic driving videos for safety testing.
+            </figcaption>
+          </figure>
+        </div>
+      </section>
+
+      <section class="section" id="challenges">
+        <div class="section-heading">
+          <p class="section-kicker">Core challenges</p>
+          <h2>Focused questions for the half-day workshop.</h2>
+        </div>
+        <div class="challenge-list">
+          <article class="challenge-item">
+            <h3>Decision-grounded 4D representations</h3>
+            <p>What should a 4D multimodal driving world model predict or generate to support planning and control?</p>
+          </article>
+          <article class="challenge-item">
+            <h3>Physical and sensor grounding</h3>
+            <p>How do generated scenes remain consistent across cameras, LiDAR rigs, maps, and ego motion?</p>
+          </article>
+          <article class="challenge-item">
+            <h3>Evaluation beyond visual realism</h3>
+            <p>Which metrics should complement FID and FVD when the goal is robust decision making?</p>
+          </article>
+          <article class="challenge-item">
+            <h3>Long-tail but solvable interactions</h3>
+            <p>How can models generate rare and safety-critical scenarios that are challenging but not impossible?</p>
+          </article>
+          <article class="challenge-item">
+            <h3>From offline generation to robot learning</h3>
+            <p>How should generated data support policy training, audits, monitoring, and sim-to-real validation?</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="section dark-section" id="format">
+        <div class="section-heading">
+          <p class="section-kicker">Format</p>
+          <h2>A workshop that actually workshops.</h2>
+          <p>
+            The half-day session centers on collaborative outputs: evaluation checklists,
+            scenario taxonomies, and an open-problems whitepaper.
+          </p>
+        </div>
+        <div class="schedule" aria-label="Workshop schedule">
+          <div class="schedule-row">
+            <time>8:30</time>
+            <div>
+              <h3>Opening and problem framing</h3>
+              <p>Define decision-centric 4D multimodal world models and the working goals for the day.</p>
+            </div>
+          </div>
+          <div class="schedule-row">
+            <time>8:45</time>
+            <div>
+              <h3>Two focused talks</h3>
+              <p>Structured world modeling and decision-aware evaluation, each followed by guided questions.</p>
+            </div>
+          </div>
+          <div class="schedule-row">
+            <time>9:35</time>
+            <div>
+              <h3>Evaluation clinic</h3>
+              <p>Breakout groups design protocols for synthetic-data training, planning evaluation, and stress testing.</p>
+            </div>
+          </div>
+          <div class="schedule-row">
+            <time>11:00</time>
+            <div>
+              <h3>Paper spotlights and posters</h3>
+              <p>Short spotlights emphasize open problems, negative results, benchmark proposals, and new ideas.</p>
+            </div>
+          </div>
+          <div class="schedule-row">
+            <time>11:35</time>
+            <div>
+              <h3>Scenario-design breakout</h3>
+              <p>Participants specify challenging but solvable driving interactions and the metrics needed to evaluate them.</p>
+            </div>
+          </div>
+          <div class="schedule-row">
+            <time>12:10</time>
+            <div>
+              <h3>Fishbowl discussion</h3>
+              <p>Converge on the post-workshop artifact: open problems in grounded 4D multimodal driving world models.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section resource-section" id="resources">
+        <div class="section-heading">
+          <p class="section-kicker">Starter resources</p>
+          <h2>Route each modality and topic to a runnable codebase, dataset, or checkpoint source.</h2>
+          <p>
+            These resources are intended as optional starting points for workshop contributors.
+            Participants are encouraged to build on them, compare against them, or challenge their assumptions.
+          </p>
+        </div>
+
+        <div class="resource-router">
+          <article class="resource-card accent-teal">
+            <div class="resource-visual contain">
+              <img src="assets/uniscenev2/data_compare.png" alt="Nuplan-Occ dataset comparison graphic">
+            </div>
+            <div class="resource-label">Dataset and checkpoints</div>
+            <h3>Nuplan-Occ and UniSceneV2 pretrained models</h3>
+            <p>Large-scale semantic occupancy data with released checkpoints for 4D occupancy, video, and LiDAR generation.</p>
+            <div class="resource-links">
+              <a href="https://huggingface.co/datasets/Arlolo0/Nuplan-Occupancy/tree/main" target="_blank" rel="noreferrer">Dataset and checkpoints</a>
+              <a href="https://github.com/Arlo0o/UniScene-Unified-Occupancy-centric-Driving-Scene-Generation/tree/v2" target="_blank" rel="noreferrer">UniSceneV2 code</a>
+            </div>
+          </article>
+
+          <article class="resource-card">
+            <div class="resource-visual contain diagram">
+              <img src="assets/uniscenev2/model_occupancy.png" alt="UniSceneV2 occupancy generation module">
+            </div>
+            <div class="resource-label">World model representation</div>
+            <h3>4D occupancy generation</h3>
+            <p>Use this path for spatial expansion, temporal forecasting, and occupancy-centric 4D scene representations.</p>
+            <div class="resource-links">
+              <a href="https://github.com/Arlo0o/UniScene-Unified-Occupancy-centric-Driving-Scene-Generation/tree/v2/occupancy_generation" target="_blank" rel="noreferrer">Occupancy module</a>
+              <a href="https://github.com/Arlo0o/UniScene-Unified-Occupancy-centric-Driving-Scene-Generation/tree/v2/gs_render" target="_blank" rel="noreferrer">Data pipeline</a>
+            </div>
+          </article>
+
+          <article class="resource-card">
+            <div class="resource-visual contain diagram">
+              <img src="assets/uniscenev2/model_video.png" alt="UniSceneV2 multi-view video generation module">
+            </div>
+            <div class="resource-label">Sensor-realistic simulation</div>
+            <h3>Multi-view video and LiDAR generation</h3>
+            <p>Use occupancy-derived conditions for temporally coherent surround-view video and sensor-specific LiDAR outputs.</p>
+            <div class="resource-links">
+              <a href="https://github.com/Arlo0o/UniScene-Unified-Occupancy-centric-Driving-Scene-Generation/tree/v2/video_generation" target="_blank" rel="noreferrer">Video module</a>
+              <a href="https://github.com/Arlo0o/UniScene-Unified-Occupancy-centric-Driving-Scene-Generation/tree/v2/lidar_generation" target="_blank" rel="noreferrer">LiDAR module</a>
+            </div>
+          </article>
+
+          <article class="resource-card accent-coral">
+            <div class="resource-visual">
+              <img src="assets/challenger/images/f1_sm.jpg" alt="Challenger adversarial driving scene visualization">
+            </div>
+            <div class="resource-label">Safety-critical scenarios</div>
+            <h3>Challenger and Adv-nuSc</h3>
+            <p>Generate physically plausible adversarial maneuvers and evaluate vision-based end-to-end driving models under stress.</p>
+            <div class="resource-links">
+              <a href="https://github.com/Pixtella/Challenger" target="_blank" rel="noreferrer">Challenger code</a>
+              <a href="https://huggingface.co/datasets/Pixtella/Adv-nuSc" target="_blank" rel="noreferrer">Adv-nuSc dataset</a>
+            </div>
+          </article>
+
+          <article class="resource-card">
+            <div class="resource-visual contain">
+              <img src="assets/challenger/images/vd_q_fig.jpg" alt="Challenger downstream evaluation overview">
+            </div>
+            <div class="resource-label">Downstream evaluation</div>
+            <h3>Perception and planning baselines</h3>
+            <p>Connect generated data to semantic occupancy prediction and autonomous driving evaluation pipelines.</p>
+            <div class="resource-links">
+              <a href="https://github.com/Arlo0o/UniScene-Unified-Occupancy-centric-Driving-Scene-Generation/tree/v2/SOP/monoscene" target="_blank" rel="noreferrer">SOP baseline</a>
+              <a href="https://github.com/Pixtella/Challenger#6-evaluating-end-to-end-autonomous-driving-models-on-the-generated-adversarial-dataset" target="_blank" rel="noreferrer">E2E AD evaluation</a>
+            </div>
+          </article>
+
+          <article class="resource-card">
+            <div class="resource-visual symbol" aria-hidden="true">
+              <span>CFP</span>
+            </div>
+            <div class="resource-label">Workshop submissions</div>
+            <h3>Suggested starting points</h3>
+            <p>Submit methods, datasets, benchmarks, negative results, position papers, or resource reports that tie 4D multimodal world models to decisions.</p>
+            <div class="resource-links">
+              <a href="#topics">View topics</a>
+              <a href="#cfp">Submission plan</a>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="section media-section">
+        <div class="section-heading compact">
+          <p class="section-kicker">Case study media</p>
+          <h2>Grounded 4D multimodal generation spans structure, sensors, and safety-critical interaction.</h2>
+        </div>
+        <div class="media-grid">
+          <article class="media-tile table-tile">
+            <img src="assets/uniscenev2/data_compare.png" alt="Nuplan-Occ dataset comparison showing scale and sensor modalities">
+            <div class="media-copy">
+              <h3>Large-scale occupancy data</h3>
+              <p>Nuplan-Occ supports 4D scene generation, semantic occupancy prediction, and multimodal simulation.</p>
+            </div>
+          </article>
+          <article class="media-tile multimodal-tile">
+            <div class="multi-modal-media">
+              <figure>
+                <video autoplay muted loop playsinline controls preload="metadata" poster="assets/uniscenev2/model_video.png">
+                  <source src="assets/uniscenev2/videos/demo_lx1.mp4" type="video/mp4">
+                </video>
+                <figcaption>Cross-dataset sensor-rig example</figcaption>
+              </figure>
+              <figure>
+                <video autoplay muted loop playsinline controls preload="metadata" poster="assets/uniscenev2/model_lidar.png">
+                  <source src="assets/uniscenev2/videos/demo_nuplan1.mp4" type="video/mp4">
+                </video>
+                <figcaption>NuPlan-Occ example</figcaption>
+              </figure>
+            </div>
+            <div class="media-copy multimodal-copy">
+              <div>
+                <h3>4D multimodal simulation across datasets</h3>
+                <p>UniSceneV2 treats occupancy as the shared world representation, then renders sensor-level outputs for different datasets and sensor rigs.</p>
+              </div>
+              <ul class="modality-list">
+                <li>
+                  <strong>4D occupancy generation</strong>
+                  <span>Spatial expansion and temporal forecasting of semantic driving scenes.</span>
+                </li>
+                <li>
+                  <strong>Multi-view video generation</strong>
+                  <span>Surround-view visual synthesis conditioned on generated scene structure.</span>
+                </li>
+                <li>
+                  <strong>Sensor-specific LiDAR generation</strong>
+                  <span>LiDAR point clouds aligned with occupancy and camera-space observations.</span>
+                </li>
+              </ul>
+            </div>
+          </article>
+          <article class="media-tile challenger-tile">
+            <video autoplay muted loop playsinline controls>
+              <source src="assets/challenger/videos/sadv_01.mp4" type="video/mp4">
+            </video>
+            <div class="media-copy">
+              <h3>Adversarial interaction</h3>
+              <p>Scenario generation can expose rare failure modes in vision-based end-to-end driving systems.</p>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="section date-section" id="dates">
+        <div class="section-heading">
+          <p class="section-kicker">Important dates</p>
+          <h2>Submission and workshop timeline.</h2>
+          <p>All submission-system times below are stated in UTC.</p>
+        </div>
+        <div class="dates-grid">
+          <div>
+            <span>Submission opens</span>
+            <strong>August 15, 2026</strong>
+            <small>12:00 UTC</small>
+          </div>
+          <div>
+            <span>Submission deadline</span>
+            <strong>October 12, 2026</strong>
+            <small>11:59 UTC · October 11, 23:59 AoE</small>
+          </div>
+          <div>
+            <span>Author notification</span>
+            <strong>October 26, 2026</strong>
+          </div>
+          <div>
+            <span>Final version and poster confirmation</span>
+            <strong>November 2, 2026</strong>
+          </div>
+          <div>
+            <span>Spotlight material due</span>
+            <strong>November 6, 2026</strong>
+          </div>
+          <div>
+            <span>Workshop date</span>
+            <strong>November 12, 2026</strong>
+            <small>JW Marriott Austin · In person</small>
+          </div>
+        </div>
+      </section>
+
+      <section class="section faq-section" id="faq">
+        <div class="section-heading compact">
+          <p class="section-kicker">Submission FAQ</p>
+          <h2>What authors should know before submitting.</h2>
+        </div>
+        <div class="faq-list">
+          <details>
+            <summary>Is the workshop archival?</summary>
+            <p>No. Accepted contributions will not appear in the CoRL or PMLR proceedings. The workshop is designed for timely exchange, constructive feedback, and community discussion.</p>
+          </details>
+          <details>
+            <summary>Are preliminary work, negative results, position papers, resources, and challenge proposals welcome?</summary>
+            <p>Yes. We explicitly welcome early-stage ideas, negative results, benchmark or dataset reports, resource or challenge proposals, and position papers, provided they make a clear contribution to the workshop conversation.</p>
+          </details>
+          <details>
+            <summary>Can the work be submitted to another venue?</summary>
+            <p>Because the workshop is non-archival, concurrent work may be considered, but authors are responsible for complying with every other venue's policies. A submission must not already be accepted to or published at the CoRL 2026 main conference.</p>
+          </details>
+          <details>
+            <summary>Will an accepted PDF automatically become public?</summary>
+            <p>No. The submission form asks authors to choose between public release of the accepted PDF on OpenReview and keeping the PDF private while allowing the workshop to list the title, authors, and an author-provided public link.</p>
+          </details>
+          <details>
+            <summary>Is in-person attendance required?</summary>
+            <p>If accepted, at least one author should attend the workshop in Austin and present the contribution. If circumstances change, authors should contact the organizers promptly; the workshop does not currently promise remote presentation.</p>
+          </details>
+          <details>
+            <summary>How should anonymous code, data, video, or project pages be shared?</summary>
+            <p>Use the optional anonymous-resource field in the submission form. The URL, repository, page content, account names, commit history, and file metadata must not reveal author identities during double-blind review.</p>
+          </details>
+          <details>
+            <summary>When should authors create an OpenReview profile?</summary>
+            <p>Create or update the profile well before the deadline. New profiles without an institutional email may require moderation for up to two weeks, while profiles created with an institutional email are activated automatically.</p>
+          </details>
+        </div>
+      </section>
+
+      <section class="section people-section" id="organizers">
+        <div class="section-heading">
+          <p class="section-kicker">People</p>
+          <h2>Speakers and organizers.</h2>
+          <p>Confirmed speakers and the current organizing team spanning autonomous driving, robot learning, world modeling, simulation, and safety evaluation.</p>
+        </div>
+
+        <div class="people-group">
+          <div class="people-subhead">
+            <span>Confirmed speakers</span>
+            <p>Invited perspectives on world models, autonomous driving, simulation, and safety-critical evaluation.</p>
+          </div>
+          <div class="person-grid speaker-grid">
+            <article class="person-card">
+              <a class="person-photo" href="https://sites.google.com/view/fromandto" target="_blank" rel="noreferrer" aria-label="Hao Zhao personal website">
+                <img loading="lazy" decoding="async" src="assets/bio/zhaohao.jpeg" alt="Hao Zhao">
+              </a>
+              <div class="person-copy">
+                <span>Speaker</span>
+                <h3><a href="https://sites.google.com/view/fromandto" target="_blank" rel="noreferrer">Hao Zhao</a></h3>
+                <p>Assistant Professor, Tsinghua University</p>
+                <a class="person-email" href="mailto:zhaohao@air.tsinghua.edu.cn">zhaohao@air.tsinghua.edu.cn</a>
+              </div>
+            </article>
+            <article class="person-card">
+              <a class="person-photo" href="https://www.hongyang.li/" target="_blank" rel="noreferrer" aria-label="Hongyang Li personal website">
+                <img loading="lazy" decoding="async" src="assets/bio/hongyang_li.webp" alt="Hongyang Li">
+              </a>
+              <div class="person-copy">
+                <span>Speaker</span>
+                <h3><a href="https://www.hongyang.li/" target="_blank" rel="noreferrer">Hongyang Li</a></h3>
+                <p>Assistant Professor, The University of Hong Kong</p>
+                <a class="person-email" href="mailto:hongyang@hku.hk">hongyang@hku.hk</a>
+              </div>
+            </article>
+            <article class="person-card">
+              <a class="person-photo" href="https://long.ooo/" target="_blank" rel="noreferrer" aria-label="Long Chen personal website">
+                <img loading="lazy" decoding="async" src="assets/bio/chenlong.png" alt="Long Chen">
+              </a>
+              <div class="person-copy">
+                <span>Speaker</span>
+                <h3><a href="https://long.ooo/" target="_blank" rel="noreferrer">Long Chen</a></h3>
+                <p>Senior Research Director &amp; Principal Scientist, Xiaomi</p>
+                <a class="person-email" href="mailto:chen@long.ooo">chen@long.ooo</a>
+              </div>
+            </article>
+            <article class="person-card">
+              <a class="person-photo" href="https://wenhao.pub/" target="_blank" rel="noreferrer" aria-label="Wenhao Ding personal website">
+                <img loading="lazy" decoding="async" src="assets/bio/dingwenhao.jpg" alt="Wenhao Ding">
+              </a>
+              <div class="person-copy">
+                <span>Speaker</span>
+                <h3><a href="https://wenhao.pub/" target="_blank" rel="noreferrer">Wenhao Ding</a></h3>
+                <p>Senior Research Scientist, Autonomous Vehicle Group, NVIDIA Research</p>
+                <a class="person-email" href="mailto:wenhaod@nvidia.com">wenhaod@nvidia.com</a>
+              </div>
+            </article>
+          </div>
+        </div>
+
+        <div class="people-group">
+          <div class="people-subhead">
+            <span>Organizers</span>
+            <p>Workshop organization, submissions, resources, and post-workshop artifact coordination.</p>
+          </div>
+          <div class="person-grid organizer-grid">
+            <article class="person-card">
+              <a class="person-photo" href="https://arlo0o.github.io/libohan.github.io/" target="_blank" rel="noreferrer" aria-label="Bohan Li personal website">
+                <img loading="lazy" decoding="async" src="assets/bio/libohan.jpg" alt="Bohan Li">
+              </a>
+              <div class="person-copy">
+                <span>Organizer</span>
+                <h3><a href="https://arlo0o.github.io/libohan.github.io/" target="_blank" rel="noreferrer">Bohan Li</a></h3>
+                <p>Shanghai Jiao Tong University and Eastern Institute of Technology</p>
+                <a class="person-email" href="mailto:bohan.li77@gmail.com">bohan.li77@gmail.com</a>
+              </div>
+            </article>
+            <article class="person-card">
+              <a class="person-photo" href="https://alexhu.top/" target="_blank" rel="noreferrer" aria-label="Hezhen Hu personal website">
+                <img loading="lazy" decoding="async" src="assets/bio/huhezhen.jpg" alt="Hezhen Hu">
+              </a>
+              <div class="person-copy">
+                <span>Organizer</span>
+                <h3><a href="https://alexhu.top/" target="_blank" rel="noreferrer">Hezhen Hu</a></h3>
+                <p>University of Texas at Austin</p>
+                <a class="person-email" href="mailto:alexhu@utexas.edu">alexhu@utexas.edu</a>
+              </div>
+            </article>
+            <article class="person-card">
+              <a class="person-photo" href="https://jinx-ustc.github.io/jinxin.github.io/" target="_blank" rel="noreferrer" aria-label="Xin Jin personal website">
+                <img loading="lazy" decoding="async" src="assets/bio/jinxin.jpeg" alt="Xin Jin">
+              </a>
+              <div class="person-copy">
+                <span>Organizer</span>
+                <h3><a href="https://jinx-ustc.github.io/jinxin.github.io/" target="_blank" rel="noreferrer">Xin Jin</a></h3>
+                <p>Eastern Institute of Technology, Ningbo</p>
+                <a class="person-email" href="mailto:jinxin@eitech.edu.cn">jinxin@eitech.edu.cn</a>
+              </div>
+            </article>
+            <article class="person-card">
+              <a class="person-photo" href="https://djiajunustc.github.io/" target="_blank" rel="noreferrer" aria-label="Jiajun Deng personal website">
+                <img loading="lazy" decoding="async" src="assets/bio/dengjiajun.jpeg" alt="Jiajun Deng">
+              </a>
+              <div class="person-copy">
+                <span>Organizer</span>
+                <h3><a href="https://djiajunustc.github.io/" target="_blank" rel="noreferrer">Jiajun Deng</a></h3>
+                <p>University of Science and Technology of China</p>
+                <a class="person-email" href="mailto:dengjj@ustc.edu.cn">dengjj@ustc.edu.cn</a>
+              </div>
+            </article>
+            <article class="person-card">
+              <a class="person-photo" href="https://lucassheng.github.io/" target="_blank" rel="noreferrer" aria-label="Lu Sheng personal website">
+                <img loading="lazy" decoding="async" src="assets/bio/lusheng.png" alt="Lu Sheng">
+              </a>
+              <div class="person-copy">
+                <span>Organizer</span>
+                <h3><a href="https://lucassheng.github.io/" target="_blank" rel="noreferrer">Lu Sheng</a></h3>
+                <p>Beihang University</p>
+                <a class="person-email" href="mailto:lsheng@buaa.edu.cn">lsheng@buaa.edu.cn</a>
+              </div>
+            </article>
+            <article class="person-card">
+              <a class="person-photo" href="https://ymy4323460.github.io/" target="_blank" rel="noreferrer" aria-label="Mengyue Yang personal website">
+                <img loading="lazy" decoding="async" src="assets/bio/yangmengxue.jpeg" alt="Mengyue Yang">
+              </a>
+              <div class="person-copy">
+                <span>Organizer</span>
+                <h3><a href="https://ymy4323460.github.io/" target="_blank" rel="noreferrer">Mengyue Yang</a></h3>
+                <p>University of Bristol</p>
+                <a class="person-email" href="mailto:mengyue.yang.20@ucl.ac.uk">mengyue.yang.20@ucl.ac.uk</a>
+              </div>
+            </article>
+            <article class="person-card">
+              <a class="person-photo" href="https://geopavlakos.github.io/" target="_blank" rel="noreferrer" aria-label="Georgios Pavlakos personal website">
+                <img loading="lazy" decoding="async" src="assets/bio/Georgios.jpg" alt="Georgios Pavlakos">
+              </a>
+              <div class="person-copy">
+                <span>Organizer</span>
+                <h3><a href="https://geopavlakos.github.io/" target="_blank" rel="noreferrer">Georgios Pavlakos</a></h3>
+                <p>University of Texas at Austin</p>
+                <a class="person-email" href="mailto:geopavlakos@utexas.edu">geopavlakos@utexas.edu</a>
+              </div>
+            </article>
+            <article class="person-card">
+              <a class="person-photo" href="https://scholar.google.com/citations?user=kb0Ky3QAAAAJ&amp;hl=en" target="_blank" rel="noreferrer" aria-label="Shuo Feng personal website">
+                <img loading="lazy" decoding="async" src="assets/bio/shuo feng.jpeg" alt="Shuo Feng">
+              </a>
+              <div class="person-copy">
+                <span>Organizer</span>
+                <h3><a href="https://scholar.google.com/citations?user=kb0Ky3QAAAAJ&amp;hl=en" target="_blank" rel="noreferrer">Shuo Feng</a></h3>
+                <p>Associate Professor, Tsinghua University</p>
+                <a class="person-email" href="mailto:fshuo@tsinghua.edu.cn">fshuo@tsinghua.edu.cn</a>
+              </div>
+            </article>
+            <article class="person-card">
+              <a class="person-photo" href="https://zouchuhang.github.io/" target="_blank" rel="noreferrer" aria-label="Chuhang Zou personal website">
+                <img loading="lazy" decoding="async" src="assets/bio/chuhang_zou.png" alt="Chuhang Zou">
+              </a>
+              <div class="person-copy">
+                <span>Organizer</span>
+                <h3><a href="https://zouchuhang.github.io/" target="_blank" rel="noreferrer">Chuhang Zou</a></h3>
+                <p>Staff AI Research Scientist, Meta Reality Labs</p>
+                <a class="person-email" href="mailto:zouchuhang@gmail.com">zouchuhang@gmail.com</a>
+              </div>
+            </article>
+            <article class="person-card">
+              <a class="person-photo" href="https://anhquancao.github.io/" target="_blank" rel="noreferrer" aria-label="Anh-Quan Cao personal website">
+                <img loading="lazy" decoding="async" src="assets/bio/anh_quan_cao.jpg" alt="Anh-Quan Cao">
+              </a>
+              <div class="person-copy">
+                <span>Organizer</span>
+                <h3><a href="https://anhquancao.github.io/" target="_blank" rel="noreferrer">Anh-Quan Cao</a></h3>
+                <p>Research Scientist, Valeo.ai</p>
+                <a class="person-email" href="mailto:cao.anhquan@outlook.com">cao.anhquan@outlook.com</a>
+              </div>
+            </article>
+            <article class="person-card">
+              <a class="person-photo" href="https://rdecharette.github.io/" target="_blank" rel="noreferrer" aria-label="Raoul de Charette personal website">
+                <img loading="lazy" decoding="async" src="assets/bio/raoul_de_charette.png" alt="Raoul de Charette">
+              </a>
+              <div class="person-copy">
+                <span>Organizer</span>
+                <h3><a href="https://rdecharette.github.io/" target="_blank" rel="noreferrer">Raoul de Charette</a></h3>
+                <p>Research Director, Inria Paris</p>
+                <a class="person-email" href="mailto:raoul.de-charette@inria.fr">raoul.de-charette@inria.fr</a>
+              </div>
+            </article>
+            <article class="person-card">
+              <a class="person-photo" href="https://scholar.google.com/citations?user=_cUfvYQAAAAJ&amp;hl=zh-CN" target="_blank" rel="noreferrer" aria-label="Wenjun Kevin Zeng personal website">
+                <img loading="lazy" decoding="async" src="assets/bio/zengwenjun.jpeg" alt="Wenjun Kevin Zeng">
+              </a>
+              <div class="person-copy">
+                <span>Organizer</span>
+                <h3><a href="https://scholar.google.com/citations?user=_cUfvYQAAAAJ&amp;hl=zh-CN" target="_blank" rel="noreferrer">Wenjun Zeng</a></h3>
+                <p>Eastern Institute of Technology, Ningbo</p>
+                <a class="person-email" href="mailto:wzeng@eitech.edu.cn">wzeng@eitech.edu.cn</a>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section artifact-section">
+        <div class="artifact-panel">
+          <p class="section-kicker">Post-workshop artifact</p>
+          <h2>Open Problems in Grounded 4D Multimodal World Models for Autonomous Driving Decision Making</h2>
+          <p>
+            The workshop will produce a community whitepaper summarizing evaluation protocols,
+            scenario taxonomies, resource gaps, and research directions proposed by attendees.
+          </p>
+        </div>
+      </section>
+
+      <section class="section citation-section" id="citation">
+        <div class="section-heading compact">
+          <p class="section-kicker">Suggested citations</p>
+          <h2>Please cite the source projects when using their code, data, checkpoints, or generated scenarios.</h2>
+          <p>
+            Workshop participants building on the starter resources are encouraged to cite UniScene,
+            UniSceneV2 / Nuplan-Occ, OccScene, OmniNWM, and Challenger as applicable.
+          </p>
+        </div>
+
+        <div class="citation-list">
+          <article class="citation-card">
+            <div class="citation-meta">
+              <span>UniScene</span>
+              <h3>Unified Occupancy-centric Driving Scene Generation</h3>
+              <p>Recommended when using the original UniScene framework or occupancy-centric generation baseline.</p>
+            </div>
+            <pre><code>@inproceedings{li2025uniscene,
+  title={UniScene: Unified Occupancy-centric Driving Scene Generation},
+  author={Li, Bohan and Guo, Jiazhe and Liu, Hongsi and Zou, Yingshuang and Ding, Yikang and Chen, Xiwu and Zhu, Hu and Tan, Feiyang and Zhang, Chi and Wang, Tiancai and others},
+  booktitle={Proceedings of the Computer Vision and Pattern Recognition Conference},
+  pages={11971--11981},
+  year={2025}
+}</code></pre>
+          </article>
+
+          <article class="citation-card">
+            <div class="citation-meta">
+              <span>UniSceneV2 / Nuplan-Occ</span>
+              <h3>Scaling Up Occupancy-centric Driving Scene Generation</h3>
+              <p>Recommended when using UniSceneV2 code, Nuplan-Occ data, checkpoints, or generated multimodal assets.</p>
+            </div>
+            <pre><code>@article{li2026scaling,
+  title={Scaling Up Occupancy-centric Driving Scene Generation: Dataset and Method},
+  author={Li, Bohan and Jin, Xin and Zhu, Hu and Liu, Hongsi and Li, Ruikai and Guo, Jiazhe and Cai, Kaiwen and Ma, Chao and Jin, Yueming and Zhao, Hao and others},
+  journal={IEEE Transactions on Pattern Analysis and Machine Intelligence},
+  year={2026}
+}</code></pre>
+          </article>
+
+          <article class="citation-card">
+            <div class="citation-meta">
+              <span>OccScene</span>
+              <h3>Semantic Occupancy-based Cross-task Mutual Learning</h3>
+              <p>Recommended for semantic occupancy-guided 3D scene generation and cross-task mutual learning.</p>
+            </div>
+            <pre><code>@article{li2025occscene,
+  title={OccScene: Semantic occupancy-based cross-task mutual learning for 3D scene generation},
+  author={Li, Bohan and Jin, Xin and Wang, Jianan and Shi, Yukai and Sun, Yasheng and Wang, Xiaofeng and Ma, Zhuang and Xie, Baao and Ma, Chao and Yang, Xiaokang and others},
+  journal={IEEE Transactions on Pattern Analysis and Machine Intelligence},
+  year={2025},
+  publisher={IEEE}
+}</code></pre>
+          </article>
+
+          <article class="citation-card">
+            <div class="citation-meta">
+              <span>OmniNWM</span>
+              <h3>Omniscient Driving Navigation World Models</h3>
+              <p>Recommended for navigation-conditioned driving world models and decision-making research.</p>
+            </div>
+            <pre><code>@article{li2025omninwm,
+  title={OmniNWM: Omniscient Driving Navigation World Models},
+  author={Li, Bohan and Ma, Zhuang and Du, Dalong and Peng, Baorui and Liang, Zhujin and Liu, Zhenqiang and Ma, Chao and Jin, Yueming and Zhao, Hao and Zeng, Wenjun and others},
+  journal={arXiv preprint arXiv:2510.18313},
+  year={2025}
+}</code></pre>
+          </article>
+
+          <article class="citation-card">
+            <div class="citation-meta">
+              <span>Challenger</span>
+              <h3>Affordable Adversarial Driving Video Generation</h3>
+              <p>Recommended when using Challenger code, Adv-nuSc, or adversarial driving video generation resources.</p>
+            </div>
+            <pre><code>@article{xu2025challenger,
+  title={Challenger: Affordable Adversarial Driving Video Generation},
+  author={Xu, Zhiyuan and Li, Bohan and Gao, Huan-ang and Gao, Mingju and Chen, Yong and Liu, Ming and Yan, Chenxu and Zhao, Hang and Feng, Shuo and Zhao, Hao},
+  journal={arXiv preprint arXiv:2505.15880},
+  year={2025}
+}</code></pre>
+          </article>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <p>Grounded 4D Multimodal World Models for Autonomous Driving Decision Making · CoRL 2026 · November 12, 2026.</p>
+      <div>
+        <a href="https://openreview.net/group?id=robot-learning.org/CoRL/2026/Workshop/GroundedDrivingWMs" target="_blank" rel="noreferrer">OpenReview</a>
+        <a href="https://github.com/Arlo0o/UniScene-Unified-Occupancy-centric-Driving-Scene-Generation" target="_blank" rel="noreferrer">UniSceneV2</a>
+        <a href="https://github.com/Pixtella/Challenger" target="_blank" rel="noreferrer">Challenger</a>
+        <a href="#citation">Citations</a>
+        <a href="#top">Back to top</a>
+      </div>
+    </footer>
+
+    <script src="script.js"></script>
+  </body>
+</html>

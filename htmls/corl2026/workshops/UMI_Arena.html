@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><base href="https://umi-arena.airoa.io/">
+  <meta charset="UTF-8">
+  <title>The UMI Arena — CoRL 2026 Workshop</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta property="og:title" content="The UMI Arena: From Handheld Devices to Real-World Policies">
+  <meta property="og:description" content="CoRL 2026 Workshop. A standardized arena for UMI-style manipulation: a policy competition, a handheld-device exhibition, and a contributed-paper track, built on a large-scale dataset released to registered teams.">
+  <meta property="og:url" content="https://umi-arena.airoa.io/">
+  <!-- Bootstrap (grid + base table styles) -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+  <link rel="stylesheet" type="text/css" href="./stylesheet.css">
+</head>
+<body>
+  <div class="container">
+
+    <!-- Header -->
+    <div class="row">
+      <div class="col-xs-12 text-center">
+        <br>
+        <h1>The UMI Arena</h1>
+        <h3 style="font-weight: 400; color: #555; margin-top: 6px;">From Handheld Devices to Real-World Policies</h3>
+        <br>
+        <h4>CoRL&nbsp;2026 Workshop</h4>
+      </div>
+      <div class="col-xs-12 text-center">
+        <h4 class="linkbar" style="--linkbar-fs: 18px;">
+          <a href="#call-for-papers">[Call for Papers]</a> &nbsp;
+          <a href="#track-devices">[Device Track]</a> &nbsp;
+          <a href="#umi-arena">[Competition]</a> &nbsp;
+          <a href="#release">[Dataset]</a> &nbsp;
+          <a href="#signup">[Sign Up]</a> &nbsp;
+          <span class="soon">[Leaderboard (Coming Soon!)]</span>
+        </h4>
+      </div>
+    </div>
+
+    <!-- Pipeline: competition dataset -> live demo, as one plain flow line -->
+    <div class="row">
+      <!-- <div class="col-xs-12 text-center">
+        <div class="flow"><b>Competition dataset</b><span class="sep">→</span>train policy<span class="sep">→</span>submit model<span class="sep">→</span>organizers evaluate on shared robots<span class="sep">→</span>public leaderboard<span class="sep">→</span><b>winners demo live</b></div>
+      </div> -->
+      <div class="col-xs-12 text-center" style="margin-top: 10px;">
+        <img src="./figs/teaser_arena_web.jpg" alt="The UMI Arena: a human demonstrator and a robot challenger face each other on one arena floor, judged under a single shared protocol." style="width:100%; max-width:900px; height:auto; display:block; margin:0px auto 0;">
+      </div>
+      <div class="col-xs-12 text-left" style="font-size: 14px; margin-top: 6px;">
+        <b>The UMI Arena.</b> Handheld devices turn human demonstrations into robot policies. The arena is where those policies are put to the test, on the same tasks, the same robot, and the same rules.
+      </div>
+    </div>
+
+    <!-- Overview -->
+    <div class="row">
+      <div class="col-xs-12 text-left">
+        <h3>Overview</h3>
+        <p class="fs-16">
+          Robot-free data collection, the founding idea of the
+          <i><a href="https://umi-gripper.github.io/" target="_blank" rel="noopener noreferrer">Universal Manipulation Interface</a></i>
+          (UMI), has gone
+          mainstream. A fast-growing open-source ecosystem
+          (<a href="https://github.com/MrKeee/FastUMI-100K" target="_blank" rel="noopener noreferrer">Fast-UMI</a>,
+          <a href="https://dex-umi.github.io/" target="_blank" rel="noopener noreferrer">DexUMI</a>,
+          <a href="https://yubi.airoa.io/" target="_blank" rel="noopener noreferrer">YUBI</a>, and others) now produces manipulation
+          data at scale. As UMI records end-effector-centric observations and actions, the resulting policies deploy
+          across robots such as bimanual <a href="https://www.franka.de" target="_blank" rel="noopener noreferrer">Franka</a>,
+          <a href="https://tonyzhaozh.github.io/aloha/" target="_blank" rel="noopener noreferrer">ALOHA</a>, and humanoids.
+        </p>
+        <p class="fs-16">
+          The ecosystem has outgrown its measuring tools. There is no shared environment for evaluating the
+          <i>policies</i> this data produces, and no common setting for comparing the <i>handheld devices</i> that collect
+          it. This workshop builds one. Its centerpiece, the <b>UMI Arena</b>, pairs a large data release
+          with a live competition on common hardware, so progress is measured on the same tasks under the same conditions.
+          We treat the two sides of the ecosystem as equal pillars: <b>policy evaluation</b> through a competition, and
+          <b>device development</b> through a hands-on exhibition.
+        </p>
+      </div>
+    </div>
+
+    <!-- Core challenges -->
+    <div class="row">
+      <div class="col-xs-12 text-left">
+        <h3>Core Challenges</h3>
+        <p class="fs-16">
+          Progress in manipulation learning is hard to measure because there is no standard way to evaluate it. Each lab
+          builds its own setup (robot, objects, tasks, metrics), so reported numbers rarely compare. A shared arena lets
+          the community finally measure the questions the UMI ecosystem has opened. We organize the program around three
+          of them:
+        </p>
+        <ul class="fs-16">
+          <li><b>Standardization.</b> Can the community agree on one evaluation environment and protocol for real-world
+            manipulation that is fair, meaningfully hard, and reproducible on common hardware?</li>
+          <li><b>Cross-embodiment deployment.</b> Can one end-effector-centric policy run on arms it was never tuned
+            for &mdash; Franka, TX-G2, OpenArm &mdash; over a task suite it has not seen?</li>
+          <li><b>Devices and data collection.</b> Which handheld devices yield the largest, most diverse, highest-quality
+            data, and how does device design shape the resulting policies?</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Three tracks: overview + comparison table (the one-place index) -->
+    <div class="row" id="umi-arena">
+      <div class="col-xs-12 text-left">
+        <h3>The Three Tracks</h3>
+        <p class="fs-16">
+          The arena runs on one shared setup with three tracks, so policies, the devices that collect their data,
+          and new community ideas meet on the same floor. Everything that can happen in advance does &mdash; policies are evaluated on our robots,
+          exhibitor slots are selected, papers go through review &mdash; so the half-day itself is live robot demos,
+          hands-on device trials, and short talks. Each track has a cash award funded by AIRoA.
+          Most teams arrive belonging to exactly one of the three &mdash; find yours in the table below, then jump to its
+          section for what you submit, how to enter, and by when.
+        </p>
+        <div class="table-responsive">
+          <table class="table mintable">
+            <thead>
+              <tr><th>Track</th><th>You submit</th><th>How to enter</th><th>Deadline</th><th>Judged by</th><th>Award</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><a href="#track-policy">Policy competition</a></td><td>Trained policy model</td><td class="nowrap"><a href="#signup">Sign up</a></td><td class="nowrap">Register by Sep&nbsp;30</td><td>Organizers, on real robots</td><td>Best Policy</td></tr>
+              <tr><td><a href="#track-devices">Device exhibition</a></td><td>Device + video + paper</td><td class="nowrap"><a href="#track-devices">Apply</a></td><td class="nowrap">Apply by Oct&nbsp;9</td><td>Attendee QR vote</td><td>Best Device</td></tr>
+              <tr><td><a href="#track-papers">Paper / poster</a></td><td>4-page paper</td><td class="nowrap"><a href="#call-for-papers">Call for Papers</a></td><td class="nowrap">Oct&nbsp;16</td><td>Program committee</td><td>Best Paper</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Track 1: Policy Competition (dataset + sign-up + submission nested here) -->
+    <div class="row" id="track-policy">
+      <div class="col-xs-12 text-left">
+        <h3>Track 1 &middot; Policy Competition</h3>
+        <p class="fs-16">
+          Eight tasks and a public leaderboard let teams compare policies head-to-head on the same problems: five are
+          published so teams can train and test against them, and three stay held out until the final evaluation. Teams
+          submit trained models, and the organizers run all evaluation on shared
+          robots, scoring every entry by task success rate. We expect 20&ndash;40 teams. The top three join a moderated
+          Q&amp;A on-site, and the winning team gives a live robot demo. The leaderboard stays open after the workshop.
+        </p>
+        <p class="track-go">&rarr; <a href="#signup">Sign up</a> to enter &mdash; registration closes Sep&nbsp;30.</p>
+
+        <h4 id="release"><b>Competition dataset</b></h4>
+        <p class="fs-16">
+          We release a reference <b>policy model</b> with training code, so teams can fine-tune rather than train from
+          scratch &mdash; links coming soon. We also release the low-cost, open-source
+          <b><a href="https://yubi.airoa.io" target="_blank" rel="noopener noreferrer">YUBI</a></b> data-collection
+          hardware, with which a full real-robot setup can be reproduced for <b>under $600</b>. AIRoA releases the dataset
+          in stages: an initial <b>~500 hours</b>, already
+          <a href="https://huggingface.co/datasets/airoa-org/yubi-corl2026-umi-arena" target="_blank" rel="noopener noreferrer">released on Hugging Face</a>,
+          and the full <b>15,000 hours</b> by early September.
+          The data spans manufacturing, retail, and home tasks. AIRoA collects it <b>24/7</b> across <b>forty rigs</b>
+          running in parallel &mdash; a standing operation rather than a one-off campaign, which is what makes a release
+          on this scale possible, and what will keep it growing after the competition. The dataset is shared
+          with competition participants: <a href="#signup">sign up</a> and we grant your team the full release.
+        </p>
+        <img src="./figs/yubi_cover.jpeg" alt="Hundreds of egocentric episodes from the competition dataset, collected across diverse manufacturing, retail, and home scenes with YUBI handheld devices."
+          style="width:100%; max-width:900px; height:auto; display:block; margin:18px auto 4px; border:1px solid var(--rule); border-radius:6px;">
+        <p class="note" style="text-align:center;">Sample episodes from the competition dataset, collected with YUBI handheld devices.</p>
+
+        <h4 id="signup"><b>Sign up &amp; data access</b></h4>
+        <p class="fs-16">
+          Participation is free and open to academic and industry teams alike. The competition dataset is shared with
+          participating teams, so registration is the one thing standing between you and the data.
+          <b>Registration closes September&nbsp;30.</b>
+        </p>
+        <ol class="steps fs-16">
+          <li><b>Submit the form.</b> Tell us about your team and the members who will work with the dataset.</li>
+          <li><b>Sign the data-sharing agreement.</b> We email it to your team's contact for signature.</li>
+          <li><b>Get access.</b> We grant your team dataset access and send the evaluation and submission details.</li>
+        </ol>
+        <p style="margin: 18px 0 6px;">
+          <a class="cta" href="https://docs.google.com/forms/d/e/1FAIpQLSeDxzVwYSvji76T76Uu6tPCtao6Q5n6inZOeoxU9Jn6_1bDvw/viewform"
+            target="_blank" rel="noopener noreferrer">Sign up for the UMI Arena &rarr;</a>
+        </p>
+        <p class="note">
+          Registration is per team. List every member who will work with the dataset.
+        </p>
+        <p class="note">
+          Questions about registering or competing? Email
+          <a href="mailto:umi-arena@airoa.org">umi-arena@airoa.org</a>.
+        </p>
+
+        <h4><b>Submission &amp; evaluation</b></h4>
+        <p class="fs-16">
+          You train or fine-tune a policy &mdash; the reference model and its training code are released, so teams start
+          from a working baseline rather than from scratch &mdash; and submit the trained model. Upload your trained
+          policy to Hugging Face and send us the link &mdash; that is the whole submission.
+        </p>
+        <p class="fs-16">
+          Evaluation then runs in two stages. A <b>simulator benchmark</b>, released around <b>September&nbsp;1</b>,
+          scores every entry first, and the models that clear its success-rate threshold go forward to
+          <b>real robots</b> (Franka, TX-G2, or <a href="https://openarm.dev/" target="_blank" rel="noopener noreferrer">OpenArm</a>). Real-robot evaluation runs <b>every two weeks</b> through
+          October, and teams can resubmit as often as they like &mdash; each round scores your latest model, so a
+          weak early result costs nothing. Results appear on the public leaderboard.
+        </p>
+        <p class="fs-16">
+          Scoring covers <b>eight tasks</b>. Five are open, published ahead of time so teams can train and test
+          against them. The remaining three are held out and appear only in the final evaluation, so the leaderboard
+          measures generalization rather than practice on a known list.
+        </p>
+        <p class="note">
+          The success-rate threshold is coming soon.
+        </p>
+      </div>
+    </div>
+
+    <!-- Track 2: Device Exhibition -->
+    <div class="row" id="track-devices">
+      <div class="col-xs-12 text-left">
+        <h3>Track 2 &middot; Device Exhibition</h3>
+        <p class="fs-16">
+          Groups set up their UMI-like data collection devices on-site. Attendees try
+          them hands-on and vote on the spot via a single QR form on ergonomics, dexterity, strength, reproducibility, cost, etc. The winner receives Best Device, and the three
+          most-voted devices give 5-minute lightning talks.
+        </p>
+        <p class="fs-16">Applying takes two links:</p>
+        <ul class="fs-16" style="margin-bottom: 12px;">
+          <li>A <b>2&ndash;4 page short paper</b> that explains the device and its results.</li>
+          <li>A <b>1&ndash;3 minute video</b> that explains the device and shows rollouts of policies trained on
+            data your device collected.</li>
+        </ul>
+        <p class="fs-16">Bring two things on the day:</p>
+        <ul class="fs-16" style="margin-bottom: 12px;">
+          <li>At least one <b>device</b>, preferably the full rig required for data collection.</li>
+          <li>A <b>laptop or monitor</b> to present your device and play the video.</li>
+        </ul>
+
+        <p class="fs-16">
+          Exhibiting does <b>not</b> require the dataset agreement (NDA) &mdash; you show your own hardware and data.
+          On-site we provide table space with power. A limited number of exhibition
+          slots are selected by the organizers from the applications received, judged on the same criteria attendees
+          vote on.
+        </p>
+        <p style="margin: 18px 0 6px;">
+          <a class="cta" href="https://docs.google.com/forms/d/e/1FAIpQLSe87dc7LBHq9PyeqP06bKSHHSOCIVjjtPz8m_HfsQw7LUb7Tg/viewform"
+            target="_blank" rel="noopener noreferrer">Apply to the UMI Arena: Device Track &rarr;</a>
+        </p>
+        <p class="fs-16">
+          <b>Applications close October&nbsp;9</b>, and we notify selected teams by October&nbsp;16. At least one team
+          member must attend in person on November&nbsp;12 to staff the table, and to give the 5-minute
+          lightning talk if your device finishes in the top three.
+        </p>
+      </div>
+    </div>
+
+    <!-- Track 3: Contributed Papers -->
+    <div class="row" id="track-papers">
+      <div class="col-xs-12 text-left">
+        <h3 id="call-for-papers">Track 3 &middot; Contributed Papers</h3>
+        <p class="fs-16">
+          We invite <b>4-page, non-archival</b> papers on the open problems of UMI-style manipulation. Accepted papers
+          appear as posters with a few spotlight talks, running alongside the device exhibition, and a <b>Best Paper</b>
+          award (cash) rewards clear, reproducible work.
+        </p>
+        <h4><b>Topics of interest</b></h4>
+        <p class="fs-16">Topics of interest include (but are not limited to):</p>
+        <ul class="fs-16">
+          <li>Handheld, robot-free data-collection devices &mdash; ergonomic, dexterous, low-cost hardware design</li>
+          <li>Robust in-the-wild tracking and localization beyond fragile SLAM</li>
+          <li>The egocentric viewpoint gap between handheld collection and robot deployment</li>
+          <li>End-effector-centric policies and cross-embodiment transfer (single-arm, bimanual, mobile, humanoid)</li>
+          <li>Vision-language-action (VLA) models and diffusion policies for real-robot manipulation</li>
+          <li>Force and tactile sensing with multi-finger dexterity</li>
+          <li>Data scaling, curation, and quality for large-scale demonstration datasets</li>
+          <li>Standardized benchmarking, evaluation protocols, and reproducibility on shared hardware</li>
+          <li>Failure detection, recovery, and robustness in real-world deployment</li>
+          <li>Sim-to-real transfer and data-efficient learning for manipulation</li>
+        </ul>
+        <h4><b>Submission</b></h4>
+        <p class="fs-16">
+          Papers are <b>4 pages</b> excluding references, <b>non-archival</b>, and reviewed <b>single-blind</b> (at least
+          two reviews each). <b>The submission deadline is October&nbsp;16.</b> The OpenReview submission venue and the
+          formatting template are coming soon.
+        </p>
+      </div>
+    </div>
+
+    <!-- Important dates -->
+    <div class="row">
+      <div class="col-xs-12 text-left">
+        <h3>Important Dates</h3>
+        <p class="note">The registration deadline and the workshop day are fixed. Other milestones are provisional.</p>
+        <div class="table-responsive">
+          <table class="table mintable">
+            <thead>
+              <tr><th>Date</th><th>Milestone</th><th>Detail</th></tr>
+            </thead>
+            <tbody>
+              <tr><td class="nowrap">Aug 11</td><td>Registration opened</td><td><a href="#signup">Sign-up</a> is open now</td></tr>
+              <tr><td class="nowrap">Mid-Aug</td><td>Initial release</td><td>~500 h <a href="https://huggingface.co/datasets/airoa-org/yubi-corl2026-umi-arena" target="_blank" rel="noopener noreferrer">released on Hugging Face</a></td></tr>
+              <tr><td class="nowrap">Aug 24</td><td>Device track opens</td><td>Applications open for the <a href="#track-devices">device exhibition</a> (limited slots)</td></tr>
+              <tr><td class="nowrap">Sep 1</td><td>Simulator benchmark</td><td>Screening benchmark released; clearing it opens the real-robot rounds</td></tr>
+              <tr><td class="nowrap">Early Sep</td><td>Full dataset</td><td>Complete 15,000 h release</td></tr>
+              <tr><td class="nowrap">Sep 30</td><td>Registration closes</td><td>Last day to sign up for the <a href="#signup">policy competition</a></td></tr>
+              <tr><td class="nowrap">Oct 9</td><td>Device applications close</td><td>Last day to apply to the <a href="#track-devices">device exhibition</a></td></tr>
+              <tr><td class="nowrap">Oct 16</td><td>Paper deadline</td><td>Contributed <a href="#call-for-papers">paper</a> submissions close</td></tr>
+              <tr><td class="nowrap">Oct 16</td><td>Exhibitors notified</td><td>Device exhibition line-up confirmed</td></tr>
+              <tr><td class="nowrap">Through Oct</td><td>Evaluation rounds</td><td>Bi-weekly real-robot evaluation</td></tr>
+              <tr><td class="nowrap">Late Oct</td><td>Policy submissions close</td><td>Final policy model deadline</td></tr>
+              <tr><td class="nowrap">Nov 12</td><td>Workshop day</td><td>Finalists &amp; winners announced</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Schedule -->
+    <div class="row">
+      <div class="col-xs-12 text-left">
+        <h3>Schedule</h3>
+        <p class="note">Tentative.</p>
+        <p class="fs-16">Half-day, in-person (~60&ndash;100 attendees). Afternoon session, 14:00&ndash;18:00.</p>
+        <div class="table-responsive">
+          <table class="table mintable">
+            <thead>
+              <tr><th>Time</th><th>Session</th></tr>
+            </thead>
+            <tbody>
+              <tr><td class="nowrap"><span class="mono">14:00&ndash;14:05</span></td><td>Opening remarks<span class="sub">Organizers</span></td></tr>
+              <tr><td class="nowrap"><span class="mono">14:05&ndash;15:05</span></td><td>Invited talks &times;3</td></tr>
+              <tr><td class="nowrap"><span class="mono">15:05&ndash;15:30</span></td><td>UMI Arena finalists</td></tr>
+              <tr><td class="nowrap"><span class="mono">15:30&ndash;16:00</span></td><td>Coffee break<span class="sub">Device exhibition &amp; posters open; viewing and voting</span></td></tr>
+              <tr><td class="nowrap"><span class="mono">16:00&ndash;16:50</span></td><td>Poster session + live demo<span class="sub">Spotlight talks + winning-team live robot demo</span></td></tr>
+              <tr><td class="nowrap"><span class="mono">16:50&ndash;17:10</span></td><td>Invited talk &times;1</td></tr>
+              <tr><td class="nowrap"><span class="mono">17:10&ndash;17:25</span></td><td>Device lightning talks<span class="sub">Top-3 most-voted devices (5 min each)</span></td></tr>
+              <tr><td class="nowrap"><span class="mono">17:25&ndash;17:55</span></td><td>Results-analysis panel &amp; breakouts<span class="sub">Open problems the leaderboard reveals</span></td></tr>
+              <tr><td class="nowrap"><span class="mono">17:55&ndash;18:00</span></td><td>Awards + closing<span class="sub">Best Policy / Device / Paper</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Invited speakers -->
+    <div class="row">
+      <div class="col-xs-12 text-left">
+        <h3>Invited Speakers</h3>
+        <div class="people">
+          <div class="person">
+            <a href="https://shurans.github.io/" target="_blank" rel="noopener noreferrer"><img class="pphoto" src="./figs/faces/shuran-song.png" alt="Shuran Song"></a>
+            <div class="pname"><a href="https://shurans.github.io/" target="_blank" rel="noopener noreferrer">Shuran Song</a></div>
+            <div class="paffil">Stanford University</div>
+            <!-- <div class="ptopic">Invented UMI; UMI-on-Legs, ManiWAV, DexUMI</div> -->
+          </div>
+          <div class="person">
+            <a href="https://andyzeng.github.io/" target="_blank" rel="noopener noreferrer"><img class="pphoto" src="./figs/faces/andy-zeng.jpg" alt="Andy Zeng"></a>
+            <div class="pname"><a href="https://andyzeng.github.io/" target="_blank" rel="noopener noreferrer">Andy Zeng</a></div>
+            <div class="paffil">Generalist Robotics</div>
+            <!-- <div class="ptopic">Generalist foundation models; Grasping in the Wild, Code as Policies, PaLM-E</div> -->
+          </div>
+          <div class="person">
+            <a href="https://fang-haoshu.github.io/" target="_blank" rel="noopener noreferrer"><img class="pphoto" src="./figs/faces/hao-shu-fang.png" alt="Hao-Shu Fang"></a>
+            <div class="pname"><a href="https://fang-haoshu.github.io/" target="_blank" rel="noopener noreferrer">Hao-Shu Fang</a></div>
+            <div class="paffil">MIT CSAIL</div>
+            <!-- <div class="ptopic">DEXOP handheld dexterous device; RH20T, AnyGrasp, GraspNet</div> -->
+          </div>
+          <div class="person">
+            <a href="https://yang-gao.weebly.com/" target="_blank" rel="noopener noreferrer"><img class="pphoto" src="./figs/faces/yang-gao.png" alt="Yang Gao"></a>
+            <div class="pname"><a href="https://yang-gao.weebly.com/" target="_blank" rel="noopener noreferrer">Yang Gao</a></div>
+            <div class="paffil">Tsinghua University (IIIS)</div>
+            <!-- <div class="ptopic">Scaling laws for UMI-style collection; Universal Humanoid Interface</div> -->
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Organizers -->
+    <div class="row">
+      <div class="col-xs-12 text-left">
+        <h3>Organizers</h3>
+        <div class="people">
+          <div class="person">
+            <a href="https://keiohta.github.io/" target="_blank" rel="noopener noreferrer"><img class="pphoto" src="./figs/faces/kei-ota.jpg" alt="Kei Ota"></a>
+            <div class="pname"><a href="https://keiohta.github.io/" target="_blank" rel="noopener noreferrer">Kei Ota</a></div>
+            <div class="paffil">AIRoA, RIKEN AIP</div>
+          </div>
+          <div class="person">
+            <a href="https://tkhkaeio.github.io/" target="_blank" rel="noopener noreferrer"><img class="pphoto" src="./figs/faces/takehiko-ohkawa.jpg" alt="Take Ohkawa"></a>
+            <div class="pname"><a href="https://tkhkaeio.github.io/" target="_blank" rel="noopener noreferrer">Take Ohkawa</a></div>
+            <div class="paffil">AIRoA</div>
+          </div>
+          <div class="person">
+            <a href="https://sites.google.com/view/yukinoguchi" target="_blank" rel="noopener noreferrer"><img class="pphoto" src="./figs/faces/yuki-noguchi.jpeg" alt="Yuki Noguchi"></a>
+            <div class="pname"><a href="https://sites.google.com/view/yukinoguchi" target="_blank" rel="noopener noreferrer">Yuki Noguchi</a></div>
+            <div class="paffil">Toyota Motor Corporation</div>
+          </div>
+          <div class="person">
+            <a href="https://yifan-hou.github.io/" target="_blank" rel="noopener noreferrer"><img class="pphoto" src="./figs/faces/yifan-hou.jpg" alt="Yifan Hou"></a>
+            <div class="pname"><a href="https://yifan-hou.github.io/" target="_blank" rel="noopener noreferrer">Yifan Hou</a></div>
+            <div class="paffil">NVIDIA</div>
+          </div>
+          <div class="person">
+            <a href="https://xinyuezhu.com/" target="_blank" rel="noopener noreferrer"><img class="pphoto" src="./figs/faces/xinyue-zhu.jpg" alt="Xinyue Zhu"></a>
+            <div class="pname"><a href="https://xinyuezhu.com/" target="_blank" rel="noopener noreferrer">Xinyue Zhu</a></div>
+            <div class="paffil">Columbia University</div>
+          </div>
+          <div class="person">
+            <a href="https://orayyan.com/" target="_blank" rel="noopener noreferrer"><img class="pphoto" src="./figs/faces/omar-rayyan.jpg" alt="Omar Rayyan"></a>
+            <div class="pname"><a href="https://orayyan.com/" target="_blank" rel="noopener noreferrer">Omar Rayyan</a></div>
+            <div class="paffil">UCLA</div>
+          </div>
+          <div class="person">
+            <a href="https://mengdaxu.github.io/" target="_blank" rel="noopener noreferrer"><img class="pphoto" src="./figs/faces/mengda-xu.jpeg" alt="Mengda Xu"></a>
+            <div class="pname"><a href="https://mengdaxu.github.io/" target="_blank" rel="noopener noreferrer">Mengda Xu</a></div>
+            <div class="paffil">NVIDIA GEAR Lab</div>
+          </div>
+          <div class="person">
+            <a href="https://yunzhuli.github.io/" target="_blank" rel="noopener noreferrer"><img class="pphoto" src="./figs/faces/yunzhu-li.png" alt="Yunzhu Li"></a>
+            <div class="pname"><a href="https://yunzhuli.github.io/" target="_blank" rel="noopener noreferrer">Yunzhu Li</a></div>
+            <div class="paffil">Columbia University</div>
+          </div>
+        </div>
+        <p class="fs-16" style="margin-top: 20px;">
+          The organizers have run this kind of competition before. They designed the ICRA&nbsp;2026 challenge
+          <a href="https://icra2026vlapipeline.github.io/">"From Data to Decisions: VLA Pipelines for Real Robots"</a>,
+          which evaluated <b>36 teams</b>' VLA models on shared real-robot hardware with a public leaderboard. The UMI
+          Arena scales that up, from one Toyota HSR at ~10,000 hours to UMI handheld data at 15,000 hours, and adds
+          standardized real-world evaluation and a device exhibition.
+        </p>
+      </div>
+    </div>
+
+    <!-- Resources -->
+    <div class="row">
+      <div class="col-xs-12 text-left">
+        <h3>Resources</h3>
+        <p class="fs-16">
+          Community catalogs and papers on UMI-style data collection and hardware, which we use to look up
+          devices, datasets, and prior work.
+        </p>
+        <div class="refs fs-16">
+          <p>[1]&nbsp; UMI Robot Dataset Community.
+            <a href="https://umi-data.github.io/" target="_blank" rel="noopener noreferrer">https://umi-data.github.io/</a></p>
+          <p>[2]&nbsp; Awesome UMI: A Curated List of UMI-Style Data-Collection Devices.
+            <a href="https://commissure-inc.github.io/Awesome-UMI/" target="_blank" rel="noopener noreferrer">https://commissure-inc.github.io/Awesome-UMI/</a></p>
+          <p>[3]&nbsp; C. Chi et al. Universal Manipulation Interface: In-The-Wild Robot Teaching Without In-The-Wild
+            Robots. <i>Robotics: Science and Systems (RSS)</i>, 2024.
+            <a href="https://umi-gripper.github.io/" target="_blank" rel="noopener noreferrer">https://umi-gripper.github.io/</a></p>
+          <p>[4]&nbsp; T. Ohkawa et al. YUBI: Yielding Universal Bidigital Interface for Bimanual Dexterous Manipulation
+            at Scale. <a href="https://arxiv.org/abs/2606.10244" target="_blank" rel="noopener noreferrer">arXiv:2606.10244</a>, 2026.
+            <a href="https://yubi.airoa.io/" target="_blank" rel="noopener noreferrer">https://yubi.airoa.io/</a></p>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-xs-12 pagefoot">
+        <p>
+          Organized by <b>AIRoA</b> for CoRL&nbsp;2026.
+          Contact <a href="mailto:umi-arena@airoa.org">umi-arena@airoa.org</a>.
+        </p>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Lazy-load the dataset video: fetch and play only when near the viewport, pause when scrolled away. -->
+  <script>
+    (function () {
+      var vids = document.querySelectorAll('video.lazy-video');
+      function load(v) {
+        var s = v.querySelector('source[data-src]');
+        if (s && !s.src) { s.src = s.getAttribute('data-src'); v.load(); }
+      }
+      if (!('IntersectionObserver' in window)) { vids.forEach(load); return; }
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) {
+          var v = e.target;
+          if (e.isIntersecting) {
+            load(v);
+            var p = v.play();
+            if (p && p.catch) { p.catch(function () {}); }
+          } else {
+            v.pause();
+          }
+        });
+      }, { rootMargin: '200px 0px', threshold: 0.1 });
+      vids.forEach(function (v) { io.observe(v); });
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><base href="https://corl2026-memory.github.io/">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Memory for Robot Foundation Models — CoRL 2026 Workshop</title>
+  <meta name="description" content="A CoRL 2026 half-day workshop on memory for robot foundation models and vision–language–action (VLA) models: what robots should remember, and how memory should be learned, built, evaluated, and deployed." />
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            serif: ['Fraunces', 'Georgia', 'serif'],
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace'],
+          },
+          colors: {
+            ink:    { DEFAULT: '#15161d', soft: '#23252f' },
+            cream:  { DEFAULT: '#f7f3ea', deep: '#efe9db' },
+            ember:  { DEFAULT: '#c6700f', light: '#e0902a', soft: '#f3e2c8' },
+          },
+        }
+      }
+    }
+  </script>
+
+  <style>
+    html { scroll-behavior: smooth; }
+    body { -webkit-font-smoothing: antialiased; }
+
+    /* Memory-lattice dot field used behind the dark hero */
+    .lattice {
+      background-image:
+        radial-gradient(rgba(224,144,42,0.55) 1.4px, transparent 1.6px),
+        radial-gradient(rgba(255,255,255,0.07) 1.4px, transparent 1.6px);
+      background-size: 46px 46px, 23px 23px;
+      background-position: 0 0, 11px 11px;
+      mask-image: radial-gradient(ellipse 90% 75% at 50% 35%, #000 30%, transparent 80%);
+      -webkit-mask-image: radial-gradient(ellipse 90% 75% at 50% 35%, #000 30%, transparent 80%);
+    }
+
+    /* Section-entry reveal */
+    .reveal { opacity: 0; transform: translateY(22px); transition: opacity .7s cubic-bezier(.2,.7,.2,1), transform .7s cubic-bezier(.2,.7,.2,1); }
+    .reveal.in { opacity: 1; transform: none; }
+
+    .link-underline { background-image: linear-gradient(currentColor,currentColor); background-size: 0% 1.5px; background-repeat: no-repeat; background-position: 0 100%; transition: background-size .3s ease; }
+    .link-underline:hover { background-size: 100% 1.5px; }
+
+    /* High-visibility CTA: warm gradient + sweeping shine, crisp edge (no outer glow) */
+    .cta {
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(100deg, #e0902a 0%, #f5b153 45%, #c6700f 100%);
+      color: #15161d;
+      transition: transform .2s ease, filter .2s ease;
+    }
+    .cta::after {
+      content: "";
+      position: absolute; inset: 0;
+      pointer-events: none;
+      background: linear-gradient(105deg, transparent 34%, rgba(255,255,255,0.6) 50%, transparent 66%);
+      transform: translateX(-130%);
+      animation: ctaShine 3.8s ease-in-out infinite;
+    }
+    .cta:hover { transform: translateY(-2px); filter: brightness(1.06); }
+    .cta > * { position: relative; z-index: 1; }
+
+    @keyframes ctaShine { 0%, 58% { transform: translateX(-130%); } 88%, 100% { transform: translateX(130%); } }
+
+    /* Key-dates banner */
+    .date-banner {
+      background: linear-gradient(135deg, #1d1f29 0%, #15161d 52%, #2a1d10 100%);
+      box-shadow: 0 26px 60px -32px rgba(21,22,29,0.7), inset 0 1px 0 rgba(255,255,255,0.06);
+    }
+    .pulse-dot { animation: dotPulse 1.9s ease-in-out infinite; }
+    @keyframes dotPulse {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(224,144,42,0.7); opacity: 1; }
+      70%      { box-shadow: 0 0 0 7px rgba(224,144,42,0); opacity: .75; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      .cta, .cta::after, .pulse-dot { animation: none; }
+      .reveal { opacity: 1; transform: none; transition: none; }
+    }
+
+    ::selection { background: #e0902a; color: #15161d; }
+  </style>
+</head>
+
+<body class="font-sans text-ink bg-cream antialiased">
+
+  <!-- ===================== NAV ===================== -->
+  <nav id="nav" class="fixed top-0 inset-x-0 z-50 transition-colors duration-300">
+    <div class="max-w-6xl mx-auto px-5 sm:px-6 h-16 flex items-center justify-between">
+      <a href="#top" id="brand" class="font-serif font-semibold tracking-tight text-[15px] text-white transition-colors">
+        Memory&nbsp;·&nbsp;<span class="opacity-70">CoRL 2026</span>
+      </a>
+      <div id="navlinks" class="hidden md:flex items-center gap-7 text-[13px] font-medium text-white/80">
+        <a href="#about" class="hover:text-white transition-colors">About</a>
+        <a href="#speakers" class="hover:text-white transition-colors">Speakers</a>
+        <a href="#schedule" class="hover:text-white transition-colors">Schedule</a>
+        <a href="#challenges" class="hover:text-white transition-colors">Open Problems</a>
+        <a href="#cfp" class="hover:text-white transition-colors">Call for Papers</a>
+        <a href="#organizers" class="hover:text-white transition-colors">Organizers</a>
+      </div>
+      <a href="#cfp" id="navcta" class="cta text-[13px] font-bold uppercase tracking-wider px-5 py-2.5 rounded-full">
+        <span class="flex items-center gap-1.5">Submit <span aria-hidden="true">→</span></span>
+      </a>
+    </div>
+  </nav>
+
+  <!-- ===================== HERO ===================== -->
+  <header id="top" class="relative overflow-hidden bg-ink text-cream">
+    <div class="absolute inset-0 lattice pointer-events-none"></div>
+    <!-- gradient wash -->
+    <div class="absolute inset-0 pointer-events-none"
+         style="background:
+           radial-gradient(900px 520px at 78% -10%, rgba(224,144,42,0.20), transparent 60%),
+           radial-gradient(760px 520px at 12% 8%, rgba(86,96,160,0.22), transparent 62%),
+           linear-gradient(180deg, rgba(21,22,29,0) 60%, rgba(21,22,29,0.6) 100%);"></div>
+
+    <div class="relative max-w-5xl mx-auto px-5 sm:px-6 pt-36 pb-24 sm:pt-40 sm:pb-28">
+      <p class="text-ember-light font-semibold tracking-[0.28em] text-[11px] sm:text-xs uppercase mb-6">
+        CoRL 2026 · Half-Day Workshop
+      </p>
+      <h1 class="font-serif font-semibold leading-[1.04] tracking-tight text-[2.6rem] sm:text-6xl md:text-[4.4rem] mb-6">
+        Memory for Robot<br class="hidden sm:block" /> Foundation Models
+      </h1>
+      <p class="text-lg sm:text-xl text-cream/70 font-light max-w-2xl leading-relaxed mb-9">
+        Toward persistent autonomy: what robots and vision–language–action models should
+        <span class="text-cream">remember</span> — and how memory should be learned, built,
+        evaluated, and deployed.
+      </p>
+
+      <div class="flex flex-wrap items-center gap-3 mb-14">
+        <a href="#cfp" class="cta px-7 py-3.5 rounded-full font-bold text-[0.9375rem] tracking-wide">
+          <span class="flex items-center gap-2">Call for Papers <span aria-hidden="true">→</span></span>
+        </a>
+        <a href="#schedule" class="px-6 py-3 rounded-full border border-white/30 text-cream font-semibold text-sm hover:bg-white/10 transition-colors">
+          View Program
+        </a>
+      </div>
+
+      <!-- detail strip -->
+      <div class="flex flex-wrap items-center gap-x-8 gap-y-3 text-sm text-cream/65 border-t border-white/10 pt-6">
+        <span class="flex items-center gap-2">
+          <span class="text-ember-light">◷</span> November 12, 2026
+        </span>
+        <span class="flex items-center gap-2">
+          <span class="text-ember-light">⌖</span> Austin, TX, USA
+        </span>
+        <span class="flex items-center gap-2">
+          <span class="text-ember-light">✦</span> Conference on Robot Learning
+        </span>
+        <a href="#cfp" class="flex items-center gap-2 text-ember-light font-semibold hover:text-cream transition-colors">
+          <span class="pulse-dot w-2 h-2 rounded-full bg-ember-light"></span> Submissions due Sep 24 (AoE)
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- ===================== ABOUT ===================== -->
+  <section id="about" class="bg-cream py-20 px-5 sm:px-6">
+    <div class="max-w-3xl mx-auto reveal">
+      <p class="text-ember font-semibold tracking-[0.2em] text-xs uppercase mb-4">About the Workshop</p>
+      <h2 class="font-serif font-semibold text-3xl sm:text-4xl tracking-tight mb-7 leading-tight">
+        Memory is central to embodied intelligence.
+      </h2>
+      <div class="text-[1.0625rem] leading-relaxed text-ink/80 space-y-5">
+        <p>
+          A robot in the physical world cannot treat every timestep as a fresh start — it may need to recall
+          that a mug went into a cupboard, that a drawer was already checked, or that a grasp failed because
+          the object slipped. By <em>memory</em> we mean the ability to store past experience and call it
+          back when it is relevant, not just to keep recent observations in view — which matters most in
+          partially observable, long-horizon tasks. Yet most robot foundation models — generalist policies,
+          vision–language–action (VLA) models, and video world models — treat memory only shallowly: a
+          window of recent context, a replay buffer, or retrieval over past observations.
+        </p>
+        <p>
+          This workshop works toward a shared vocabulary for robot memory, the failure modes it must
+          address, and evaluation criteria that isolate what memory actually contributes.
+        </p>
+      </div>
+
+      <figure class="mt-9 border-l-2 border-ember pl-6">
+        <blockquote class="font-serif text-xl sm:text-2xl leading-snug tracking-tight text-ink">
+          What should memory mean for autonomous robots — and how should we learn, build, evaluate, and
+          deploy it?
+        </blockquote>
+      </figure>
+    </div>
+  </section>
+
+  <!-- ===================== SPEAKERS ===================== -->
+  <section id="speakers" class="bg-ink text-cream py-20 px-5 sm:px-6 relative overflow-hidden">
+    <div class="absolute inset-0 lattice opacity-40 pointer-events-none"></div>
+    <div class="relative max-w-5xl mx-auto">
+      <div class="text-center mb-14 reveal">
+        <p class="text-ember-light font-semibold tracking-[0.2em] text-xs uppercase mb-4">Speakers</p>
+        <h2 class="font-serif font-semibold text-3xl sm:text-4xl tracking-tight">Invited Speakers</h2>
+      </div>
+
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-8 reveal">
+        <div class="text-center">
+          <div class="relative w-28 h-28 mx-auto mb-4">
+            <img src="assets/speakers/bernadette_bucher.png"
+                 alt="Bernadette Bucher" class="w-28 h-28 rounded-full object-cover ring-1 ring-white/15" />
+            <span class="absolute -bottom-1 left-1/2 -translate-x-1/2 text-[10px] font-semibold tracking-wide uppercase bg-ember-light text-ink px-2 py-0.5 rounded-full">In&nbsp;Person</span>
+          </div>
+          <a href="https://bucherb.github.io/" target="_blank" rel="noopener"
+             class="font-semibold text-cream link-underline">Bernadette Bucher</a>
+          <p class="text-sm text-cream/55 mt-1">University of Michigan</p>
+        </div>
+
+        <div class="text-center">
+          <div class="relative w-28 h-28 mx-auto mb-4">
+            <img src="assets/speakers/yuejiang_liu.jpg"
+                 alt="Yuejiang Liu" class="w-28 h-28 rounded-full object-cover ring-1 ring-white/15" />
+            <span class="absolute -bottom-1 left-1/2 -translate-x-1/2 text-[10px] font-semibold tracking-wide uppercase bg-ember-light text-ink px-2 py-0.5 rounded-full">In&nbsp;Person</span>
+          </div>
+          <a href="https://yuejiangliu.github.io/" target="_blank" rel="noopener"
+             class="font-semibold text-cream link-underline">Yuejiang Liu</a>
+          <p class="text-sm text-cream/55 mt-1">Stanford University</p>
+        </div>
+
+        <div class="text-center">
+          <div class="relative w-28 h-28 mx-auto mb-4">
+            <img src="assets/speakers/katerina_fragkiadaki.png"
+                 alt="Katerina Fragkiadaki" class="w-28 h-28 rounded-full object-cover ring-1 ring-white/15" />
+            <span class="absolute -bottom-1 left-1/2 -translate-x-1/2 text-[10px] font-semibold tracking-wide uppercase bg-ember-light text-ink px-2 py-0.5 rounded-full">In&nbsp;Person</span>
+          </div>
+          <a href="https://www.cs.cmu.edu/~katef/" target="_blank" rel="noopener"
+             class="font-semibold text-cream link-underline">Katerina Fragkiadaki</a>
+          <p class="text-sm text-cream/55 mt-1">Carnegie Mellon University</p>
+        </div>
+
+        <div class="text-center">
+          <div class="relative w-28 h-28 mx-auto mb-4">
+            <img src="assets/speakers/karl_pertsch.jpg"
+                 alt="Karl Pertsch" class="w-28 h-28 rounded-full object-cover ring-1 ring-white/15" />
+            <span class="absolute -bottom-1 left-1/2 -translate-x-1/2 text-[10px] font-semibold tracking-wide uppercase bg-ember-light text-ink px-2 py-0.5 rounded-full">In&nbsp;Person</span>
+          </div>
+          <a href="https://kpertsch.github.io/" target="_blank" rel="noopener"
+             class="font-semibold text-cream link-underline">Karl Pertsch</a>
+          <p class="text-sm text-cream/55 mt-1">Physical Intelligence</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== SCHEDULE ===================== -->
+  <section id="schedule" class="bg-cream py-20 px-5 sm:px-6">
+    <div class="max-w-3xl mx-auto">
+      <div class="mb-14 reveal">
+        <p class="text-ember font-semibold tracking-[0.2em] text-xs uppercase mb-4">Program</p>
+        <h2 class="font-serif font-semibold text-3xl sm:text-4xl tracking-tight leading-tight">Half-day schedule</h2>
+      </div>
+
+      <ol class="relative border-l border-ink/15 ml-3 space-y-2 reveal">
+        <li class="relative pl-8 py-3">
+          <span class="absolute -left-[6.5px] top-5 w-3 h-3 rounded-full bg-ember ring-4 ring-cream"></span>
+          <div class="flex flex-col sm:flex-row sm:items-baseline sm:gap-5">
+            <span class="font-mono text-sm text-ink/50 sm:w-40 shrink-0">08:30 – 08:45</span>
+            <span class="font-medium">Welcome</span>
+          </div>
+        </li>
+        <li class="relative pl-8 py-3">
+          <span class="absolute -left-[6.5px] top-5 w-3 h-3 rounded-full bg-ink/30 ring-4 ring-cream"></span>
+          <div class="flex flex-col sm:flex-row sm:items-baseline sm:gap-5">
+            <span class="font-mono text-sm text-ink/50 sm:w-40 shrink-0">08:45 – 09:15</span>
+            <span class="font-medium">Invited Speaker 1</span>
+          </div>
+        </li>
+        <li class="relative pl-8 py-3">
+          <span class="absolute -left-[6.5px] top-5 w-3 h-3 rounded-full bg-ink/30 ring-4 ring-cream"></span>
+          <div class="flex flex-col sm:flex-row sm:items-baseline sm:gap-5">
+            <span class="font-mono text-sm text-ink/50 sm:w-40 shrink-0">09:15 – 09:45</span>
+            <span class="font-medium">Invited Speaker 2</span>
+          </div>
+        </li>
+        <li class="relative pl-8 py-3">
+          <span class="absolute -left-[6.5px] top-5 w-3 h-3 rounded-full bg-ember ring-4 ring-cream"></span>
+          <div class="flex flex-col sm:flex-row sm:items-baseline sm:gap-5">
+            <span class="font-mono text-sm text-ink/50 sm:w-40 shrink-0">09:45 – 10:30</span>
+            <span class="font-medium">Lightning Position Talks &amp; Audience Discussion</span>
+          </div>
+        </li>
+        <li class="relative pl-8 py-3">
+          <span class="absolute -left-[6.5px] top-5 w-3 h-3 rounded-full bg-ember ring-4 ring-cream"></span>
+          <div class="flex flex-col sm:flex-row sm:items-baseline sm:gap-5">
+            <span class="font-mono text-sm text-ink/50 sm:w-40 shrink-0">10:30 – 11:15</span>
+            <span class="font-medium">Posters &amp; Coffee Break</span>
+          </div>
+        </li>
+        <li class="relative pl-8 py-3">
+          <span class="absolute -left-[6.5px] top-5 w-3 h-3 rounded-full bg-ink/30 ring-4 ring-cream"></span>
+          <div class="flex flex-col sm:flex-row sm:items-baseline sm:gap-5">
+            <span class="font-mono text-sm text-ink/50 sm:w-40 shrink-0">11:15 – 11:45</span>
+            <span class="font-medium">Invited Speaker 3</span>
+          </div>
+        </li>
+        <li class="relative pl-8 py-3">
+          <span class="absolute -left-[6.5px] top-5 w-3 h-3 rounded-full bg-ink/30 ring-4 ring-cream"></span>
+          <div class="flex flex-col sm:flex-row sm:items-baseline sm:gap-5">
+            <span class="font-mono text-sm text-ink/50 sm:w-40 shrink-0">11:45 – 12:15</span>
+            <span class="font-medium">Invited Speaker 4</span>
+          </div>
+        </li>
+        <li class="relative pl-8 py-3">
+          <span class="absolute -left-[6.5px] top-5 w-3 h-3 rounded-full bg-ember ring-4 ring-cream"></span>
+          <div class="flex flex-col sm:flex-row sm:items-baseline sm:gap-5">
+            <span class="font-mono text-sm text-ink/50 sm:w-40 shrink-0">12:15 – 12:30</span>
+            <span class="font-medium">Final Discussion &amp; Conclusion</span>
+          </div>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- ===================== OPEN PROBLEMS ===================== -->
+  <section id="challenges" class="bg-cream-deep py-20 px-5 sm:px-6">
+    <div class="max-w-5xl mx-auto">
+      <div class="max-w-2xl mb-14 reveal">
+        <p class="text-ember font-semibold tracking-[0.2em] text-xs uppercase mb-4">Open Problems</p>
+        <h2 class="font-serif font-semibold text-3xl sm:text-4xl tracking-tight leading-tight">
+          Open problems we aim to address
+        </h2>
+      </div>
+
+      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-px bg-ink/10 rounded-2xl overflow-hidden reveal">
+        <div class="bg-cream p-7 hover:bg-ember-soft/60 transition-colors">
+          <span class="font-mono text-ember text-sm">01</span>
+          <h3 class="font-serif font-semibold text-lg mt-3 mb-2 leading-snug">The role of memory in robot behavior</h3>
+          <p class="text-sm text-ink/70 leading-relaxed">
+            Beyond perception and policy execution, what should memory enable — tracking hidden state,
+            avoiding repeated mistakes, recovering from failures, adapting to environments and users, and
+            accumulating reusable knowledge?
+          </p>
+        </div>
+        <div class="bg-cream p-7 hover:bg-ember-soft/60 transition-colors">
+          <span class="font-mono text-ember text-sm">02</span>
+          <h3 class="font-serif font-semibold text-lg mt-3 mb-2 leading-snug">What to store and retrieve</h3>
+          <p class="text-sm text-ink/70 leading-relaxed">
+            Observations, language summaries, object states, maps, action traces, failures, preferences, or
+            latent representations? And how can a robot retrieve the right memory under partial observability
+            without surfacing stale or irrelevant entries?
+          </p>
+        </div>
+        <div class="bg-cream p-7 hover:bg-ember-soft/60 transition-colors">
+          <span class="font-mono text-ember text-sm">03</span>
+          <h3 class="font-serif font-semibold text-lg mt-3 mb-2 leading-snug">Consolidation, abstraction &amp; forgetting</h3>
+          <p class="text-sm text-ink/70 leading-relaxed">
+            How should robots compress repeated experience into reusable knowledge, preserve rare but
+            important events, and revise or forget memories when environments, tasks, or users change?
+          </p>
+        </div>
+        <div class="bg-cream p-7 hover:bg-ember-soft/60 transition-colors">
+          <span class="font-mono text-ember text-sm">04</span>
+          <h3 class="font-serif font-semibold text-lg mt-3 mb-2 leading-snug">Integrating memory with policies &amp; planners</h3>
+          <p class="text-sm text-ink/70 leading-relaxed">
+            Should memory be external, latent, structured, or end-to-end learned — and how should it interact
+            with reactive control, long-horizon planning, prediction, and language-conditioned reasoning?
+          </p>
+        </div>
+        <div class="bg-cream p-7 hover:bg-ember-soft/60 transition-colors">
+          <span class="font-mono text-ember text-sm">05</span>
+          <h3 class="font-serif font-semibold text-lg mt-3 mb-2 leading-snug">Learning from remembered experience</h3>
+          <p class="text-sm text-ink/70 leading-relaxed">
+            How can memories of failed grasps, unsuccessful searches, misunderstood instructions, or changing
+            environments lead to improved future behavior rather than passive recall?
+          </p>
+        </div>
+        <div class="bg-cream p-7 hover:bg-ember-soft/60 transition-colors">
+          <span class="font-mono text-ember text-sm">06</span>
+          <h3 class="font-serif font-semibold text-lg mt-3 mb-2 leading-snug">Evaluating memory-enabled learning</h3>
+          <p class="text-sm text-ink/70 leading-relaxed">
+            What benchmarks and metrics can distinguish genuine memory use from larger context windows,
+            environment memorization, or task-specific shortcuts?
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== CALL FOR PAPERS ===================== -->
+  <section id="cfp" class="bg-cream py-20 px-5 sm:px-6 scroll-mt-16">
+    <div class="max-w-5xl mx-auto">
+
+      <div class="max-w-2xl mb-10 reveal">
+        <p class="text-ember font-semibold tracking-[0.2em] text-xs uppercase mb-4">Call for Papers</p>
+        <h2 class="font-serif font-semibold text-3xl sm:text-4xl tracking-tight leading-tight mb-5">
+          Contribute to the workshop
+        </h2>
+        <p class="text-[1.0625rem] leading-relaxed text-ink/75">
+          We invite short papers on any aspect of memory for robot foundation models. Position papers,
+          works-in-progress, benchmark and dataset contributions, and negative or ablation results are
+          explicitly welcome.
+        </p>
+      </div>
+
+      <!-- ---------- KEY DATES (high-visibility banner) ---------- -->
+      <div class="reveal date-banner relative overflow-hidden rounded-3xl text-cream p-7 sm:p-9 mb-16 ring-1 ring-ember/30">
+        <div class="absolute inset-0 lattice opacity-50 pointer-events-none"></div>
+        <div class="relative">
+          <div class="flex flex-wrap items-center justify-between gap-3 mb-7">
+            <p class="text-ember-light font-bold tracking-[0.24em] text-[11px] uppercase">Key Dates</p>
+            <span class="inline-flex items-center gap-2 text-[11px] font-semibold uppercase tracking-wider text-cream/70">
+              <span class="pulse-dot w-2 h-2 rounded-full bg-ember-light"></span> Submissions now open
+            </span>
+          </div>
+
+          <div class="grid sm:grid-cols-3 gap-4">
+            <div class="rounded-2xl bg-ember-light/15 ring-1 ring-ember-light/45 p-5">
+              <p class="text-[10px] font-bold uppercase tracking-[0.16em] text-ember-light mb-2">Submission deadline</p>
+              <p class="font-mono text-2xl sm:text-[1.75rem] font-medium text-cream leading-none">Sep 24</p>
+              <p class="text-xs text-cream/60 mt-1.5">2026 · Anywhere on Earth</p>
+            </div>
+            <div class="rounded-2xl bg-white/[0.04] ring-1 ring-white/10 p-5">
+              <p class="text-[10px] font-bold uppercase tracking-[0.16em] text-cream/50 mb-2">Notification</p>
+              <p class="font-mono text-2xl sm:text-[1.75rem] font-medium text-cream/85 leading-none">Oct 12</p>
+              <p class="text-xs text-cream/50 mt-1.5">2026</p>
+            </div>
+            <div class="rounded-2xl bg-white/[0.04] ring-1 ring-white/10 p-5">
+              <p class="text-[10px] font-bold uppercase tracking-[0.16em] text-cream/50 mb-2">Workshop day</p>
+              <p class="font-mono text-2xl sm:text-[1.75rem] font-medium text-cream leading-none">Nov 12</p>
+              <p class="text-xs text-cream/50 mt-1.5">Austin, TX, USA</p>
+            </div>
+          </div>
+
+          <!-- live countdown to the submission deadline -->
+          <div class="mt-7 pt-6 border-t border-white/10 flex flex-col sm:flex-row sm:items-end sm:justify-between gap-6">
+            <a href="https://openreview.net/group?id=robot-learning.org/CoRL/2026/Workshop/RoboMem"
+               target="_blank" rel="noopener"
+               class="cta inline-flex self-start rounded-full px-5 py-2.5 font-bold text-sm tracking-wide">
+              <span class="flex items-center gap-2">Submit on OpenReview <span aria-hidden="true">→</span></span>
+            </a>
+
+            <div class="sm:text-right">
+              <p id="countdown-label" class="text-[10px] font-bold uppercase tracking-[0.16em] text-cream/50 mb-3">
+                Time left to submit
+              </p>
+
+              <div id="countdown" class="flex items-stretch gap-2 sm:gap-3">
+                <div class="text-center rounded-xl bg-white/[0.06] ring-1 ring-white/10 px-3 sm:px-4 py-2.5 min-w-[3.5rem]">
+                  <span id="cd-d" class="block font-mono text-xl sm:text-2xl font-medium text-cream tabular-nums leading-none">–</span>
+                  <span class="block text-[9px] font-bold uppercase tracking-[0.14em] text-cream/45 mt-1.5">days</span>
+                </div>
+                <div class="text-center rounded-xl bg-white/[0.06] ring-1 ring-white/10 px-3 sm:px-4 py-2.5 min-w-[3.5rem]">
+                  <span id="cd-h" class="block font-mono text-xl sm:text-2xl font-medium text-cream tabular-nums leading-none">–</span>
+                  <span class="block text-[9px] font-bold uppercase tracking-[0.14em] text-cream/45 mt-1.5">hrs</span>
+                </div>
+                <div class="text-center rounded-xl bg-white/[0.06] ring-1 ring-white/10 px-3 sm:px-4 py-2.5 min-w-[3.5rem]">
+                  <span id="cd-m" class="block font-mono text-xl sm:text-2xl font-medium text-cream tabular-nums leading-none">–</span>
+                  <span class="block text-[9px] font-bold uppercase tracking-[0.14em] text-cream/45 mt-1.5">min</span>
+                </div>
+                <div class="text-center rounded-xl bg-ember-light/15 ring-1 ring-ember-light/40 px-3 sm:px-4 py-2.5 min-w-[3.5rem]">
+                  <span id="cd-s" class="block font-mono text-xl sm:text-2xl font-medium text-ember-light tabular-nums leading-none">–</span>
+                  <span class="block text-[9px] font-bold uppercase tracking-[0.14em] text-ember-light/60 mt-1.5">sec</span>
+                </div>
+              </div>
+
+              <p id="countdown-closed" class="hidden text-sm font-semibold text-ember-light">
+                The submission deadline has passed — thank you to everyone who submitted.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ---------- TOPICS OF INTEREST ---------- -->
+      <div class="reveal mb-16">
+        <h3 class="font-serif font-semibold text-2xl sm:text-3xl tracking-tight mb-9">Topics of Interest</h3>
+
+        <div class="grid sm:grid-cols-2 gap-x-12 gap-y-8">
+          <div class="border-t-2 border-ember/70 pt-4">
+            <div class="flex items-baseline gap-3 mb-2">
+              <span class="font-mono text-xs text-ember font-medium">01</span>
+              <h4 class="font-semibold text-[1.0625rem] leading-snug">Memory architectures &amp; implementation</h4>
+            </div>
+            <p class="text-sm text-ink/70 leading-relaxed">
+              Recurrent and state-space memory · compressed or gated KV caches · external memory banks ·
+              retrieval-augmented policies · on-robot latency and compute budgets
+            </p>
+          </div>
+
+          <div class="border-t-2 border-ember/70 pt-4">
+            <div class="flex items-baseline gap-3 mb-2">
+              <span class="font-mono text-xs text-ember font-medium">02</span>
+              <h4 class="font-semibold text-[1.0625rem] leading-snug">Spatial &amp; scene memory</h4>
+            </div>
+            <p class="text-sm text-ink/70 leading-relaxed">
+              Persistent 3D and 4D scene representations · semantic maps · object-centric and surfel memory ·
+              Gaussian splats · object permanence under occlusion · re-localization and revisit consistency
+            </p>
+          </div>
+
+          <div class="border-t-2 border-ember/70 pt-4">
+            <div class="flex items-baseline gap-3 mb-2">
+              <span class="font-mono text-xs text-ember font-medium">03</span>
+              <h4 class="font-semibold text-[1.0625rem] leading-snug">Episodic memory, retrieval &amp; lifelong improvement</h4>
+            </div>
+            <p class="text-sm text-ink/70 leading-relaxed">
+              Recall of trajectories, failures and corrections · retrieval-based adaptation · consolidation
+              into reusable skills · forgetting stale memories · catastrophic interference
+            </p>
+          </div>
+
+          <div class="border-t-2 border-ember/70 pt-4">
+            <div class="flex items-baseline gap-3 mb-2">
+              <span class="font-mono text-xs text-ember font-medium">04</span>
+              <h4 class="font-semibold text-[1.0625rem] leading-snug">Memory in world models &amp; long-horizon planning</h4>
+            </div>
+            <p class="text-sm text-ink/70 leading-relaxed">
+              Memory-augmented action-conditioned prediction · spatial and physical consistency over long
+              rollouts · hallucination in revisited scenes · memory-conditioned planning · hierarchical task state
+            </p>
+          </div>
+
+          <div class="border-t-2 border-ember/70 pt-4">
+            <div class="flex items-baseline gap-3 mb-2">
+              <span class="font-mono text-xs text-ember font-medium">05</span>
+              <h4 class="font-semibold text-[1.0625rem] leading-snug">Benchmarks, datasets &amp; evaluation protocols</h4>
+            </div>
+            <p class="text-sm text-ink/70 leading-relaxed">
+              Genuinely partially observable, history-dependent tasks · temporal, spatial, object and procedural
+              memory taxonomies · controls that rule out longer context, memorization and task shortcuts
+            </p>
+          </div>
+
+          <div class="border-t-2 border-ember/70 pt-4">
+            <div class="flex items-baseline gap-3 mb-2">
+              <span class="font-mono text-xs text-ember font-medium">06</span>
+              <h4 class="font-semibold text-[1.0625rem] leading-snug">Human-centered memory</h4>
+            </div>
+            <p class="text-sm text-ink/70 leading-relaxed">
+              Preferences, instructions and corrections across sessions and users · interpretable and editable
+              memory · privacy, consent and the right to be forgotten
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ---------- SUBMISSION GUIDELINES ---------- -->
+      <div class="reveal">
+        <h3 class="font-serif font-semibold text-2xl sm:text-3xl tracking-tight mb-9">Submission Guidelines</h3>
+
+        <ul class="max-w-3xl space-y-5 text-[1.0625rem] leading-relaxed text-ink/75">
+          <li class="flex gap-3.5">
+            <span class="mt-[0.6rem] w-1.5 h-1.5 rounded-full bg-ember shrink-0"></span>
+            <span><strong class="font-semibold text-ink">Page Limit:</strong> We welcome submissions of up to
+              4 pages (excluding references) describing completed research, ongoing work, or benchmark
+              datasets relevant to the workshop topics.</span>
+          </li>
+          <li class="flex gap-3.5">
+            <span class="mt-[0.6rem] w-1.5 h-1.5 rounded-full bg-ember shrink-0"></span>
+            <span><strong class="font-semibold text-ink">Formatting:</strong> Authors are encouraged to use the
+              <a href="https://drive.google.com/file/d/1R9irIW0ImqeDHh5g8Ukm2XGy91sWxOsQ/view?usp=drive_link"
+                 target="_blank" rel="noopener"
+                 class="font-medium text-ember link-underline hover:text-ink transition-colors">CoRL 2026 paper template</a>.</span>
+          </li>
+          <li class="flex gap-3.5">
+            <span class="mt-[0.6rem] w-1.5 h-1.5 rounded-full bg-ember shrink-0"></span>
+            <span><strong class="font-semibold text-ink">Reviews:</strong> Each submission will receive at least
+              two reviews from the organizing committee and external reviewers.</span>
+          </li>
+          <li class="flex gap-3.5">
+            <span class="mt-[0.6rem] w-1.5 h-1.5 rounded-full bg-ember shrink-0"></span>
+            <span><strong class="font-semibold text-ink">Anonymity:</strong> All submissions will be
+              double-anonymized.</span>
+          </li>
+          <li class="flex gap-3.5">
+            <span class="mt-[0.6rem] w-1.5 h-1.5 rounded-full bg-ember shrink-0"></span>
+            <span><strong class="font-semibold text-ink">Dual Submission:</strong> We welcome submissions that
+              are under review or recently published at relevant venues.</span>
+          </li>
+          <li class="flex gap-3.5">
+            <span class="mt-[0.6rem] w-1.5 h-1.5 rounded-full bg-ember shrink-0"></span>
+            <span><strong class="font-semibold text-ink">Non-Archival:</strong> This workshop is non-archival.
+              Accepted papers will be posted on the workshop website.</span>
+          </li>
+          <li class="flex gap-3.5">
+            <span class="mt-[0.6rem] w-1.5 h-1.5 rounded-full bg-ember shrink-0"></span>
+            <span><strong class="font-semibold text-ink">Presentation:</strong> Accepted papers will be presented
+              in an interactive poster session, with the top 3–5 papers selected for oral spotlight
+              presentations. Authors are expected to present in person.</span>
+          </li>
+        </ul>
+
+        <!-- ---------- SUBMIT CTA ---------- -->
+        <div class="mt-12 text-center">
+          <a href="https://openreview.net/group?id=robot-learning.org/CoRL/2026/Workshop/RoboMem"
+             target="_blank" rel="noopener"
+             class="cta inline-flex rounded-full px-9 py-4 font-bold text-base tracking-wide">
+            <span class="flex items-center gap-2.5">Submit on OpenReview <span aria-hidden="true">→</span></span>
+          </a>
+          <p class="text-xs text-ink/50 mt-4">Submissions close September 24, 2026 · 23:59 Anywhere on Earth.</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ===================== ORGANIZERS ===================== -->
+  <section id="organizers" class="bg-cream-deep py-20 px-5 sm:px-6">
+    <div class="max-w-5xl mx-auto">
+      <div class="text-center mb-14 reveal">
+        <h2 class="font-serif font-semibold text-3xl sm:text-4xl tracking-tight">Organizers</h2>
+      </div>
+
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-8 reveal">
+        <div class="text-center">
+          <img src="assets/organizers/pembe_ozdil.png"
+               alt="Pembe Gizem Özdil" class="w-24 h-24 rounded-full mx-auto mb-3 object-cover ring-1 ring-ink/10" />
+          <a href="https://gizemozd.github.io/" target="_blank" rel="noopener" class="font-semibold text-sm link-underline">Pembe Gizem Özdil</a>
+          <p class="text-xs text-ink/55 mt-1">Kempner Institute, Harvard</p>
+        </div>
+        <div class="text-center">
+          <img src="assets/organizers/weirui_ye.jpg"
+               alt="Weirui Ye" class="w-24 h-24 rounded-full mx-auto mb-3 object-cover ring-1 ring-ink/10" />
+          <a href="https://yewr.github.io/" target="_blank" rel="noopener" class="font-semibold text-sm link-underline">Weirui Ye</a>
+          <p class="text-xs text-ink/55 mt-1">MIT</p>
+        </div>
+        <div class="text-center">
+          <img src="assets/organizers/tarik_kelestemur.jpg"
+               alt="Tarık Keleştemur" class="w-24 h-24 rounded-full mx-auto mb-3 object-cover ring-1 ring-ink/10" />
+          <a href="https://kelestemur.com/" target="_blank" rel="noopener" class="font-semibold text-sm link-underline">Tarık Keleştemur</a>
+          <p class="text-xs text-ink/55 mt-1">Eka Robotics</p>
+        </div>
+        <div class="text-center">
+          <img src="assets/organizers/huangyuan_su.jpg"
+               alt="Huangyuan Su" class="w-24 h-24 rounded-full mx-auto mb-3 object-cover ring-1 ring-ink/10" />
+          <a href="https://hither1.github.io/" target="_blank" rel="noopener" class="font-semibold text-sm link-underline">Huangyuan Su</a>
+          <p class="text-xs text-ink/55 mt-1">Kempner Institute, Harvard</p>
+        </div>
+        <div class="text-center">
+          <img src="assets/organizers/francesco_paissan.jpg"
+               alt="Francesco Paissan" class="w-24 h-24 rounded-full mx-auto mb-3 object-cover ring-1 ring-ink/10" />
+          <a href="https://francescopaissan.it/" target="_blank" rel="noopener" class="font-semibold text-sm link-underline">Francesco Paissan</a>
+          <p class="text-xs text-ink/55 mt-1">Mila, Université Laval</p>
+        </div>
+        <div class="text-center">
+          <img src="assets/organizers/zhiyi_li.jpeg"
+               alt="Zhiyi Li" class="w-24 h-24 rounded-full mx-auto mb-3 object-cover ring-1 ring-ink/10" />
+          <a href="https://www.linkedin.com/in/zhiyili24/" target="_blank" rel="noopener" class="font-semibold text-sm link-underline">Zhiyi Li</a>
+          <p class="text-xs text-ink/55 mt-1">MIT</p>
+        </div>
+        <div class="text-center">
+          <img src="assets/organizers/jan_nico_zaech.jpg"
+               alt="Jan-Nico Zaech" class="w-24 h-24 rounded-full mx-auto mb-3 object-cover ring-1 ring-ink/10" />
+          <a href="https://jannicozaech.github.io/" target="_blank" rel="noopener" class="font-semibold text-sm link-underline">Jan-Nico Zaech</a>
+          <p class="text-xs text-ink/55 mt-1">Woven by Toyota</p>
+        </div>
+        <div class="text-center">
+          <img src="assets/organizers/yilun_du.png"
+               alt="Yilun Du" class="w-24 h-24 rounded-full mx-auto mb-3 object-cover ring-1 ring-ink/10" />
+          <a href="https://yilundu.github.io/" target="_blank" rel="noopener" class="font-semibold text-sm link-underline">Yilun Du</a>
+          <p class="text-xs text-ink/55 mt-1">Kempner Institute, Harvard</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== FOOTER ===================== -->
+  <footer class="bg-ink text-cream/60 py-14 px-5 sm:px-6">
+    <div class="max-w-5xl mx-auto">
+      <div class="flex flex-col md:flex-row md:items-end justify-between gap-8 border-b border-white/10 pb-10">
+        <div>
+          <p class="font-serif font-semibold text-cream text-xl tracking-tight">Memory for Robot Foundation Models</p>
+          <p class="text-sm mt-2">A half-day workshop at CoRL 2026 · Austin, TX, USA · November 12, 2026</p>
+        </div>
+        <nav class="flex flex-wrap gap-x-6 gap-y-2 text-sm">
+          <a href="#about" class="hover:text-cream transition-colors">About</a>
+          <a href="#speakers" class="hover:text-cream transition-colors">Speakers</a>
+          <a href="#schedule" class="hover:text-cream transition-colors">Schedule</a>
+          <a href="#challenges" class="hover:text-cream transition-colors">Open Problems</a>
+          <a href="#cfp" class="hover:text-cream transition-colors">Call for Papers</a>
+        </nav>
+      </div>
+      <div class="pt-8 text-sm">
+        <p>© 2026 Memory for Robot Foundation Models · Workshop Organizers</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ===================== SCRIPTS ===================== -->
+  <script>
+    // Nav: transparent over hero, solid (cream) after scroll
+    const nav = document.getElementById('nav');
+    const brand = document.getElementById('brand');
+    const navlinks = document.getElementById('navlinks');
+
+    function onScroll() {
+      const solid = window.scrollY > 60;
+      nav.classList.toggle('bg-cream/95', solid);
+      nav.classList.toggle('backdrop-blur', solid);
+      nav.classList.toggle('shadow-sm', solid);
+      nav.classList.toggle('border-b', solid);
+      nav.classList.toggle('border-ink/10', solid);
+
+      brand.classList.toggle('text-white', !solid);
+      brand.classList.toggle('text-ink', solid);
+
+      navlinks.classList.toggle('text-white/80', !solid);
+      navlinks.classList.toggle('text-ink/70', solid);
+    }
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+
+    // Reveal on scroll
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+    }, { threshold: 0.12 });
+    document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+    // Countdown to the submission deadline.
+    // Sept 24, 2026, 23:59:59 Anywhere on Earth (AoE = UTC-12) → Sept 25, 11:59:59 UTC.
+    const DEADLINE = Date.UTC(2026, 8, 25, 11, 59, 59);
+    const cd = {
+      wrap: document.getElementById('countdown'),
+      label: document.getElementById('countdown-label'),
+      closed: document.getElementById('countdown-closed'),
+      d: document.getElementById('cd-d'),
+      h: document.getElementById('cd-h'),
+      m: document.getElementById('cd-m'),
+      s: document.getElementById('cd-s'),
+    };
+
+    function tickCountdown() {
+      let left = Math.floor((DEADLINE - Date.now()) / 1000);
+      if (left <= 0) {
+        cd.wrap.classList.add('hidden');
+        cd.label.classList.add('hidden');
+        cd.closed.classList.remove('hidden');
+        return false;
+      }
+      const pad = n => String(n).padStart(2, '0');
+      cd.d.textContent = Math.floor(left / 86400);
+      cd.h.textContent = pad(Math.floor(left / 3600) % 24);
+      cd.m.textContent = pad(Math.floor(left / 60) % 60);
+      cd.s.textContent = pad(left % 60);
+      return true;
+    }
+
+    if (tickCountdown()) {
+      const timer = setInterval(() => { if (!tickCountdown()) clearInterval(timer); }, 1000);
+    }
+  </script>
+
+</body>
+</html>

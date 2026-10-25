@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><base href="https://learn-at-deploy.github.io/">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Learn@Deploy: Robot Learning at Deployment | CoRL 2026 Workshop</title>
+  <meta name="description" content="Robot Learning at Deployment (Learn@Deploy): a half-day workshop at CoRL 2026 on continuous adaptation, test-time optimization, and safe online learning for deployed robots.">
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Learn@Deploy: Robot Learning at Deployment (CoRL 2026)">
+  <meta property="og:description" content="A half-day CoRL 2026 workshop on deployment-time adaptation, test-time optimization, and safe online learning for robots in the wild.">
+  <meta property="og:type" content="website">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="./static/favicon.svg">
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap">
+
+  <!-- Bulma + FontAwesome (vendored locally) -->
+  <link rel="stylesheet" href="./static/css/bulma.min.css">
+  <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+
+  <!-- Local styles -->
+  <link rel="stylesheet" href="./static/css/index.css">
+</head>
+<body>
+
+<!-- ============================ NAVBAR ============================ -->
+<nav class="navbar is-fixed-top is-white" role="navigation" aria-label="main navigation">
+  <div class="container">
+    <div class="navbar-brand">
+      <a class="navbar-item brand-tag" href="#home">Learn@Deploy</a>
+      <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navMenu">
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+      </a>
+    </div>
+    <div id="navMenu" class="navbar-menu">
+      <div class="navbar-end">
+        <a class="navbar-item" href="#about">About</a>
+        <a class="navbar-item" href="#challenges">Challenges</a>
+        <a class="navbar-item" href="#speakers">Speakers</a>
+        <a class="navbar-item" href="#schedule">Schedule</a>
+        <a class="navbar-item" href="#organizers">Organizers</a>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- ============================ HERO ============================ -->
+<header class="ld-hero section-anchor" id="home">
+  <div class="container has-text-centered">
+    <h1 class="title is-1">
+      Workshop on Robot Learning at Deployment (Learn@Deploy)
+    </h1>
+    <p class="subtitle is-4 mt-4">
+      Conference on Robot Learning (CoRL 2026) &middot; Proposed Half-Day Workshop
+    </p>
+    <div class="buttons is-centered mt-5">
+      <a class="button is-ld is-medium" href="#speakers">
+        <span class="icon"><i class="fas fa-microphone-lines"></i></span>
+        <span>Speakers</span>
+      </a>
+      <a class="button is-ld-outline is-medium" href="#schedule">
+        <span class="icon"><i class="far fa-calendar"></i></span>
+        <span>Schedule</span>
+      </a>
+    </div>
+  </div>
+</header>
+
+<!-- ============================ ABOUT ============================ -->
+<section class="section section-anchor" id="about">
+  <div class="container">
+    <h2 class="title is-3 ld-section-title">About the Workshop</h2>
+    <div class="content is-medium">
+      <p>
+        Robots deployed in the real world inevitably face novel variations, unseen
+        tasks, and edge cases that no amount of offline pretraining can anticipate. Yet
+        standard paradigms rely on static policies that cannot correct errors,
+        self-critique, or optimize online.
+      </p>
+      <p>
+        This half-day workshop focuses on <strong>Robot Learning at Deployment Time
+        (Learn@Deploy)</strong>: the methods, safety guardrails, and evaluation
+        strategies for continuous adaptation and test-time optimization <em>after</em>
+        deployment, under real constraints on compute, memory, streaming data, and
+        physical safety. We bring together industry and academic researchers across
+        <strong>robot learning, embodied AI, planning, control, and computer vision</strong>
+        to discuss the principles of safe, resource-bounded online adaptation, with an
+        emphasis on interactive, small-group discussions.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ CHALLENGES ============================ -->
+<section class="section ld-soft section-anchor" id="challenges">
+  <div class="container">
+    <h2 class="title is-3 ld-section-title">Core Challenges &amp; Research Questions</h2>
+    <div class="columns is-multiline">
+      <div class="column is-half">
+        <div class="challenge-card">
+          <span class="num">01</span>
+          <h4>Test-Time Optimization under Real-World Constraints</h4>
+        </div>
+      </div>
+      <div class="column is-half">
+        <div class="challenge-card">
+          <span class="num">02</span>
+          <h4>Agentic Guidance &amp; Code Generation in the Loop</h4>
+        </div>
+      </div>
+      <div class="column is-half">
+        <div class="challenge-card">
+          <span class="num">03</span>
+          <h4>Deployment-Time Evaluation &amp; Performance Correlation</h4>
+        </div>
+      </div>
+      <div class="column is-half">
+        <div class="challenge-card">
+          <span class="num">04</span>
+          <h4>Adaptive Reasoning, Self-Critiquing &amp; Failure Remediation</h4>
+        </div>
+      </div>
+      <div class="column is-half">
+        <div class="challenge-card">
+          <span class="num">05</span>
+          <h4>Streaming Sample-Efficiency &amp; Catastrophic Forgetting</h4>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ SPEAKERS ============================ -->
+<section class="section section-anchor" id="speakers">
+  <div class="container">
+    <h2 class="title is-3 ld-section-title">Speakers</h2>
+    <div class="columns is-multiline is-centered mt-4">
+
+      <div class="column is-one-quarter">
+        <div class="person">
+          <img src="./static/images/speakers/davidfan.jpg" alt="David Fan"
+               onerror="this.style.visibility='hidden'">
+          <div class="name">David Fan</div>
+          <div class="role">CTO</div>
+          <div class="affil">Field AI</div>
+          <div class="links">
+            <a href="https://scholar.google.com/citations?user=vbhA9hwAAAAJ&amp;hl=en" target="_blank" rel="noopener" title="Homepage"><i class="fas fa-globe"></i></a>
+          </div>
+        </div>
+      </div>
+
+      <div class="column is-one-quarter">
+        <div class="person">
+          <img src="./static/images/speakers/guanya.jpg" alt="Guanya Shi"
+               onerror="this.style.visibility='hidden'">
+          <div class="name">Guanya Shi</div>
+          <div class="role">Assistant Professor</div>
+          <div class="affil">Carnegie Mellon University</div>
+          <div class="links">
+            <a href="https://www.gshi.me/" target="_blank" rel="noopener" title="Homepage"><i class="fas fa-globe"></i></a>
+          </div>
+        </div>
+      </div>
+
+      <div class="column is-one-quarter">
+        <div class="person">
+          <img src="./static/images/speakers/mengdixu.jpg" alt="Mengdi Xu"
+               onerror="this.style.visibility='hidden'">
+          <div class="name">Mengdi Xu</div>
+          <div class="role">Assistant Professor</div>
+          <div class="affil">Tsinghua University</div>
+          <div class="links">
+            <a href="https://www.mengdixu.me/" target="_blank" rel="noopener" title="Homepage"><i class="fas fa-globe"></i></a>
+          </div>
+        </div>
+      </div>
+
+      <div class="column is-one-quarter">
+        <div class="person">
+          <img src="./static/images/speakers/michellelee.png" alt="Michelle Lee"
+               onerror="this.style.visibility='hidden'">
+          <div class="name">Michelle Lee</div>
+          <div class="role">CEO</div>
+          <div class="affil">Medra</div>
+          <div class="links">
+            <a href="https://www.medra.ai/about" target="_blank" rel="noopener" title="Homepage"><i class="fas fa-globe"></i></a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============================ SCHEDULE ============================ -->
+<section class="section ld-soft section-anchor" id="schedule">
+  <div class="container">
+    <h2 class="title is-3 ld-section-title">Schedule</h2>
+    <p class="content is-medium mb-4">Half-day program. Times are tentative and subject to change.</p>
+    <table class="table is-fullwidth date-table schedule-table">
+      <tbody>
+        <tr><td class="when">8:30 - 8:40</td><td>Opening Remarks</td></tr>
+        <tr><td class="when">8:40 - 9:05</td><td>Keynote 1</td></tr>
+        <tr><td class="when">9:05 - 9:30</td><td>Keynote 2</td></tr>
+        <tr><td class="when">9:30 - 10:10</td><td>Mentor-Mentee Discussions <span class="has-text-grey">(interactive theme tables)</span></td></tr>
+        <tr><td class="when">10:10 - 10:30</td><td>Spotlight Talks &amp; Best Paper Award</td></tr>
+        <tr class="is-break"><td class="when">10:30 - 11:00</td><td>Coffee Break &amp; Interactive Partner Poster Stroll</td></tr>
+        <tr><td class="when">11:00 - 11:25</td><td>Keynote 3</td></tr>
+        <tr><td class="when">11:25 - 11:50</td><td>Keynote 4</td></tr>
+        <tr><td class="when">11:50 - 12:30</td><td>Theme Group Catch-up &amp; Takeaway Summary</td></tr>
+        <tr class="is-end"><td class="when">12:30</td><td>End of Session</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ============================ ORGANIZERS ============================ -->
+<section class="section ld-soft section-anchor" id="organizers">
+  <div class="container">
+    <h2 class="title is-3 ld-section-title">Organizers</h2>
+    <div class="columns is-multiline is-centered mt-4">
+
+      <div class="column is-one-quarter">
+        <div class="person">
+          <img src="./static/images/organizers/shivam.jpeg" alt="Shivam Vats"
+               onerror="this.style.visibility='hidden'">
+          <div class="name">Shivam Vats</div>
+          <div class="role">Postdoc</div>
+          <div class="affil">Brown University</div>
+          <div class="links">
+            <a href="https://shivamvats.com/" target="_blank" rel="noopener" title="Homepage"><i class="fas fa-globe"></i></a>
+          </div>
+        </div>
+      </div>
+
+      <div class="column is-one-quarter">
+        <div class="person">
+          <img src="./static/images/organizers/cherie.png" alt="Cherie Ho"
+               onerror="this.style.visibility='hidden'">
+          <div class="name">Cherie Ho</div>
+          <div class="role">Postdoc</div>
+          <div class="affil">Stanford University</div>
+          <div class="links">
+            <a href="https://cherieho.com/" target="_blank" rel="noopener" title="Homepage"><i class="fas fa-globe"></i></a>
+          </div>
+        </div>
+      </div>
+
+      <div class="column is-one-quarter">
+        <div class="person">
+          <img src="./static/images/organizers/jon.png" alt="Jonathan Francis"
+               onerror="this.style.visibility='hidden'">
+          <div class="name">Jonathan Francis</div>
+          <div class="role">Lead Research Scientist</div>
+          <div class="affil">Bosch Center for AI</div>
+          <div class="links">
+            <a href="https://jonfranc.com/" target="_blank" rel="noopener" title="Homepage"><i class="fas fa-globe"></i></a>
+          </div>
+        </div>
+      </div>
+
+      <div class="column is-one-quarter">
+        <div class="person">
+          <img src="./static/images/organizers/huihan.jpg" alt="Huihan Liu"
+               onerror="this.style.visibility='hidden'">
+          <div class="name">Huihan Liu</div>
+          <div class="role">PhD Candidate</div>
+          <div class="affil">UT Austin</div>
+          <div class="links">
+            <a href="https://huihanl.github.io/" target="_blank" rel="noopener" title="Homepage"><i class="fas fa-globe"></i></a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============================ FOOTER ============================ -->
+<footer class="footer ld-footer">
+  <div class="container has-text-centered">
+    <p class="has-text-weight-bold is-size-5">Robot Learning at Deployment (Learn@Deploy)</p>
+    <p>Proposed Half-Day Workshop &middot; CoRL 2026</p>
+    <p class="mt-3 is-size-7">
+      Questions? Contact the organizers.
+    </p>
+  </div>
+</footer>
+
+<!-- ============================ JS ============================ -->
+<script>
+  // Mobile burger toggle
+  document.addEventListener('DOMContentLoaded', () => {
+    const burger = document.querySelector('.navbar-burger');
+    const menu = document.getElementById(burger.dataset.target);
+    burger.addEventListener('click', () => {
+      burger.classList.toggle('is-active');
+      menu.classList.toggle('is-active');
+    });
+    // Close menu after clicking a link (mobile)
+    menu.querySelectorAll('.navbar-item').forEach(item =>
+      item.addEventListener('click', () => {
+        burger.classList.remove('is-active');
+        menu.classList.remove('is-active');
+      })
+    );
+  });
+</script>
+</body>
+</html>

@@ -18,3 +18,4 @@ pdfs/
 # CoRL 2026 paper browser: large generated assets
 htmls/corl2026/pdfs/
 htmls/corl2026/figs/
+secrets/

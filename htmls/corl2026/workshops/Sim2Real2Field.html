@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><base href="https://sim2real2field-corl26.github.io/">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sim2Real2Field — CoRL 2026 Workshop</title>
+  <meta name="description" content="Sim-to-Real-to-Field (SRF): The Science of Transfer. A CoRL 2026 workshop on the full arc from simulation, to the lab, to robust deployment in the field." />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <!-- ===== Nav (journal masthead) ===== -->
+  <header class="nav" id="nav">
+    <div class="masthead">
+      <div class="masthead-brand">
+        <div class="masthead-brand-inner">
+          <a class="brand" href="#top"><span class="sim">Sim</span><span class="two">2</span><span class="real">Real</span><span class="two">2</span><span class="field">Field</span></a>
+        </div>
+      </div>
+      <nav class="nav-links" aria-label="Sections">
+        <a href="#about">About</a>
+        <a href="#cfp">Call for Papers</a>
+        <a href="#program">Program</a>
+        <a href="#speakers">Speakers</a>
+        <a href="#organizers">Organizers</a>
+        <a href="#info">Info</a>
+        <a href="https://openreview.net/group?id=robot-learning.org%2FCoRL%2F2026%2FWorkshop%2FSim2Real2Field" target="_blank" rel="noopener">OpenReview&nbsp;&#8599;</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- ===== Floating CfP button ===== -->
+  <a class="cfp-fab" href="#cfp">Call for Papers</a>
+
+  <!-- ===== Hero ===== -->
+  <section id="top" class="hero">
+    <div class="container">
+      <h1 class="wordmark"><span class="sim">Sim</span><span class="two">2</span><span class="real">Real</span><span class="two">2</span><span class="field">Field</span></h1>
+      <p class="hero-sub">Sim-to-Real-to-Field: The Science of Transfer</p>
+      <p class="hero-meta">CoRL 2026 Workshop&nbsp;&middot;&nbsp;2026 <span class="tba-inline">(date TBA)</span>&nbsp;&middot;&nbsp;<span class="tba-inline">location TBA</span></p>
+      <p class="hero-tagline">From simulation, to the lab, to robust deployment in the field.</p>
+      <p class="hero-cta">
+        <a class="btn" href="https://openreview.net/group?id=robot-learning.org%2FCoRL%2F2026%2FWorkshop%2FSim2Real2Field" target="_blank" rel="noopener">Submit on OpenReview&nbsp;&rarr;</a>
+      </p>
+      <div class="sim-real-bar" aria-hidden="true"></div>
+    </div>
+  </section>
+
+  <!-- ===== About ===== -->
+  <section id="about" class="section">
+    <div class="container">
+      <h2>About</h2>
+      <p>
+        Robot learning has made remarkable progress at crossing the <strong>reality gap</strong>:
+        we train in simulation, where data is cheap, exploration is safe, and scale is attainable,
+        then transfer to physical hardware. But &ldquo;real&rdquo; usually means a single robot in a
+        controlled lab, and the transfer is <em>not finished there</em>. A lab demonstration
+        certifies a point; deployment in the <strong>field</strong> demands robustness measured
+        <em>distributionally</em> &mdash; across many robots, sites, and operating conditions, where
+        rare failure modes rather than average performance decide success.
+      </p>
+      <p>
+        We call this fuller arc <strong>sim-to-real-to-field (SRF)</strong>. Robot learning is our
+        center of gravity; we draw selectively on adjacent sim-to-real fields &mdash; scientific
+        machine learning, control, and systems &mdash; for methods and evaluation standards the
+        robotics community can borrow and lend.
+      </p>
+      <h3 class="q-head">Three driving questions</h3>
+      <ol class="questions">
+        <li><strong>Q1 &mdash; Training environments to field deployment.</strong> How do we design
+          and combine simulation environments &mdash; across fidelity, diversity, and abstraction
+          &mdash; so that what robots learn in simulation remains useful in the field?</li>
+        <li><strong>Q2 &mdash; Lab metric to field guarantee.</strong> How do we scope, monitor, and
+          survive transfer &mdash; characterizing the operating distribution, estimating achieved
+          transfer from onboard signals alone, and staying safe under transfer failure?</li>
+        <li><strong>Q3 &mdash; Adaptation algorithms for field transfer.</strong> What lets a deployed
+          policy adapt online to the distribution shifts it meets in the wild &mdash; and can
+          foundation models help handle shifts unanticipated before deployment?</li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- ===== Call for Papers ===== -->
+  <section id="cfp" class="section section-soft">
+    <div class="container">
+      <h2>Call for Papers</h2>
+      <p>
+        We host an <strong>open call for contributed papers</strong>, inviting submissions that foster
+        discussion and exploration of emerging ideas in sim-to-real transfer. We particularly
+        encourage <strong>early-stage research, novel problem formulations, negative results, lessons
+        learned from practical deployments, and system-building experiences</strong>. Selected
+        submissions are featured as interactive poster sessions to maximize discussion.
+      </p>
+      <div class="callout">
+        <p class="callout-title">Before you submit</p>
+        <ul>
+          <li><strong>All authors must have an OpenReview profile.</strong> Per OpenReview: new
+            profiles created <em>without an institutional email</em> go through a moderation process
+            that can take <strong>up to two weeks</strong> &mdash; create your profile well ahead of
+            the deadline.</li>
+          <li><strong>Reviewing commitment.</strong> At least one author of each submitted paper must
+            be willing to review for the workshop, with a workload of at most 2 papers.</li>
+        </ul>
+      </div>
+      <p class="cfp-actions">
+        <a class="btn" href="https://openreview.net/group?id=robot-learning.org%2FCoRL%2F2026%2FWorkshop%2FSim2Real2Field" target="_blank" rel="noopener">Submit on OpenReview&nbsp;&rarr;</a>
+      </p>
+      <p class="note">
+        Submissions are short and <strong>non-archival</strong>. We discourage papers already accepted
+        to the main CoRL 2026 conference. Reviewing follows standard CoRL guidelines. Deadlines will
+        be posted here.
+      </p>
+    </div>
+  </section>
+
+  <!-- ===== Program ===== -->
+  <section id="program" class="section">
+    <div class="container">
+      <h2>Program</h2>
+      <p class="note">A half-day, in-person workshop built around exchange &mdash; less than 25% of the program is talks. Schedule is <em>tentative</em> and subject to change.</p>
+      <table class="schedule">
+        <tbody>
+          <tr><td class="t">0:00</td><td>Opening: framing the three questions + polling</td></tr>
+          <tr><td class="t">0:10</td><td>Invited talks &mdash; Amy Zhang (UT Austin) &amp; Zhongyu Li (CUHK)</td></tr>
+          <tr><td class="t">0:55</td><td>Invited talks &mdash; Claire Tomlin (UC Berkeley) &amp; Michael Lutter (Boston Dynamics)</td></tr>
+          <tr><td class="t">1:25</td><td>Poster session &amp; coffee; cross-domain matchmaking; mentoring corner</td></tr>
+          <tr><td class="t">2:05</td><td>Breakouts on Q1&ndash;Q3 (mixed-domain) &rarr; report-back</td></tr>
+          <tr><td class="t">2:50</td><td>Fishbowl panel: <em>what predicts transfer &mdash; scale, metrics, or structure?</em></td></tr>
+          <tr><td class="t">3:35</td><td>Closing &amp; community next steps</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ===== Speakers ===== -->
+  <section id="speakers" class="section section-soft">
+    <div class="container">
+      <h2>Speakers</h2>
+      <p class="note">Four invited speakers spanning career stages, academia and industry, and regions. Each addresses elements of Q1&ndash;Q3 and how the field should move forward.</p>
+      <ul class="org-grid people">
+        <li class="person"><img class="avatar" src="images/claire-tomlin.jpg" alt="Claire Tomlin" loading="lazy" width="68" height="68" /><div class="person-info"><a class="org-name" href="https://www2.eecs.berkeley.edu/Faculty/Homepages/tomlin.html" target="_blank" rel="noopener">Claire Tomlin</a><span class="org-aff">UC Berkeley</span></div></li>
+        <li class="person"><img class="avatar" src="images/amy-zhang.jpg" alt="Amy Zhang" loading="lazy" width="68" height="68" /><div class="person-info"><a class="org-name" href="https://amyzhang.github.io/" target="_blank" rel="noopener">Amy Zhang</a><span class="org-aff">UT Austin</span></div></li>
+        <li class="person"><img class="avatar" src="images/michael-lutter.png" alt="Michael Lutter" loading="lazy" width="68" height="68" /><div class="person-info"><a class="org-name" href="https://www.mlutter.eu/" target="_blank" rel="noopener">Michael Lutter</a><span class="org-aff">Boston Dynamics &mdash; Atlas Dexterous Manipulation</span></div></li>
+        <li class="person"><img class="avatar" src="images/zhongyu-li.png" alt="Zhongyu Li" loading="lazy" width="68" height="68" /><div class="person-info"><a class="org-name" href="https://www4.mae.cuhk.edu.hk/peoples/li-zhongyu/" target="_blank" rel="noopener">Zhongyu Li</a><span class="org-aff">CUHK</span></div></li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ===== Organizers ===== -->
+  <section id="organizers" class="section">
+    <div class="container">
+      <h2>Organizers</h2>
+      <ul class="org-grid people">
+        <li class="person"><img class="avatar" src="images/jonas-frey.jpg" alt="Jonas Frey" loading="lazy" width="68" height="68" /><div class="person-info"><a class="org-name" href="https://jonasfrey96.github.io/" target="_blank" rel="noopener">Jonas Frey</a><span class="org-aff">Stanford / UC Berkeley &middot; coordinator</span></div></li>
+        <li class="person"><img class="avatar" src="images/rosario-scalise.jpg" alt="Rosario Scalise" loading="lazy" width="68" height="68" /><div class="person-info"><a class="org-name" href="https://rosarioscalise.com/" target="_blank" rel="noopener">Rosario Scalise</a><span class="org-aff">University of Washington &middot; co-coordinator</span></div></li>
+        <li class="person"><img class="avatar" src="images/bike-zhang.jpg" alt="Bike Zhang" loading="lazy" width="68" height="68" /><div class="person-info"><a class="org-name" href="https://bikezhang106.github.io/" target="_blank" rel="noopener">Bike Zhang</a><span class="org-aff">UC Berkeley</span></div></li>
+        <li class="person"><img class="avatar" src="images/siming-he.jpg" alt="Siming He" loading="lazy" width="68" height="68" /><div class="person-info"><span class="org-name">Siming He</span><span class="org-aff">UC Berkeley</span></div></li>
+        <li class="person"><img class="avatar" src="images/aayam-shrestha.jpg" alt="Aayam Shrestha" loading="lazy" width="68" height="68" /><div class="person-info"><a class="org-name" href="https://engineering.oregonstate.edu/people/aayam-shrestha" target="_blank" rel="noopener">Aayam Shrestha</a><span class="org-aff">Oregon State University</span></div></li>
+        <li class="person"><img class="avatar" src="images/skand-peri.jpg" alt="Skand Peri" loading="lazy" width="68" height="68" /><div class="person-info"><a class="org-name" href="https://pvskand.github.io/" target="_blank" rel="noopener">Skand Peri</a><span class="org-aff">Oregon State &rarr; UT Austin (incoming)</span></div></li>
+        <li class="person"><img class="avatar" src="images/yue-hu.jpg" alt="Yue Hu" loading="lazy" width="68" height="68" /><div class="person-info"><a class="org-name" href="https://phyllish.github.io/" target="_blank" rel="noopener">Yue Hu</a><span class="org-aff">University of Michigan</span></div></li>
+        <li class="person"><img class="avatar" src="images/haoran-xu.jpg" alt="Haoran Xu" loading="lazy" width="68" height="68" /><div class="person-info"><a class="org-name" href="https://ryanxhr.github.io/" target="_blank" rel="noopener">Haoran Xu</a><span class="org-aff">UT Austin</span></div></li>
+        <li class="person"><img class="avatar" src="images/arjun-krishna.png" alt="Arjun Krishna" loading="lazy" width="68" height="68" /><div class="person-info"><a class="org-name" href="https://arjun-krishna.github.io/" target="_blank" rel="noopener">Arjun Krishna</a><span class="org-aff">University of Pennsylvania</span></div></li>
+        <li class="person"><img class="avatar" src="images/dinesh-jayaraman.jpg" alt="Dinesh Jayaraman" loading="lazy" width="68" height="68" /><div class="person-info"><a class="org-name" href="https://www.engineering.upenn.edu/~dineshj/" target="_blank" rel="noopener">Dinesh Jayaraman</a><span class="org-aff">University of Pennsylvania</span></div></li>
+        <li class="person"><img class="avatar" src="images/shankar-sastry.jpg" alt="Shankar Sastry" loading="lazy" width="68" height="68" /><div class="person-info"><a class="org-name" href="https://www2.eecs.berkeley.edu/Faculty/Homepages/sastry.html" target="_blank" rel="noopener">Shankar Sastry</a><span class="org-aff">UC Berkeley</span></div></li>
+        <li class="person"><img class="avatar" src="images/susmit-jha.png" alt="Susmit Jha" loading="lazy" width="68" height="68" /><div class="person-info"><a class="org-name" href="https://susmitjha.github.io/" target="_blank" rel="noopener">Susmit Jha</a><span class="org-aff">DARPA / SRI International</span></div></li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ===== Info ===== -->
+  <section id="info" class="section section-soft">
+    <div class="container">
+      <h2>Information</h2>
+      <div class="info-grid">
+        <div class="info-item"><span class="info-label">Venue</span><span>CoRL 2026 <span class="tba-inline">(location TBA)</span></span></div>
+        <div class="info-item"><span class="info-label">Date</span><span>2026 <span class="tba-inline">(TBA)</span></span></div>
+        <div class="info-item"><span class="info-label">Format</span><span>Half-day, in-person</span></div>
+        <div class="info-item"><span class="info-label">Proceedings</span><span>Non-archival</span></div>
+      </div>
+      <p class="contact">
+        Contact: <a href="mailto:rosario@cs.washington.edu">rosario@cs.washington.edu</a>
+      </p>
+    </div>
+  </section>
+
+  <!-- ===== Footer ===== -->
+  <footer class="footer">
+    <div class="container">
+      <p><span class="sim">Sim</span><span class="two">2</span><span class="real">Real</span><span class="two">2</span><span class="field">Field</span> &middot; CoRL 2026 Workshop</p>
+      <p class="footer-links"><a href="https://www.corl.org/" target="_blank" rel="noopener">CoRL 2026</a></p>
+    </div>
+  </footer>
+
+  <script>
+    (function () {
+      var nav = document.getElementById('nav');
+      var hero = document.getElementById('top');
+      var links = Array.prototype.slice.call(document.querySelectorAll('.nav-links a[href^="#"]'));
+      var byId = {};
+      links.forEach(function (a) { byId[a.getAttribute('href').slice(1)] = a; });
+
+      // Compact masthead once the hero has scrolled past
+      new IntersectionObserver(function (entries) {
+        nav.classList.toggle('compact', !entries[0].isIntersecting);
+      }, { rootMargin: '-70px 0px 0px 0px' }).observe(hero);
+
+      // Scrollspy: gold underline follows the section in view
+      var spy = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) {
+          if (!e.isIntersecting) return;
+          links.forEach(function (a) { a.classList.remove('active'); });
+          if (byId[e.target.id]) byId[e.target.id].classList.add('active');
+        });
+      }, { rootMargin: '-40% 0px -55% 0px' });
+      Object.keys(byId).forEach(function (id) {
+        var s = document.getElementById(id);
+        if (s) spy.observe(s);
+      });
+    })();
+  </script>
+
+</body>
+</html>

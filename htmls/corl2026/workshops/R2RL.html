@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head><base href="https://r2rl-workshop.github.io/">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Roadmap to Sample-Efficient Real-World Reinforcement Learning Workshop (R2RL)</title>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;0,9..144,900;1,9..144,400;1,9..144,500;1,9..144,700;1,9..144,900&family=JetBrains+Mono:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <nav class="sigma-spine" id="sigma-spine">
+        <div class="spine-inner">
+            <div class="spine-brand" title="Back to top" onclick="window.scrollTo({top:0,behavior:'smooth'});">
+                <span class="brand-mark">R2RL</span>
+            </div>
+            <div class="spine-track" id="spine-track">
+                <div class="spine-bar"></div>
+                <div class="spine-cursor" id="spine-cursor"></div>
+                <a class="spine-stop" href="#overview" style="--p:0%"><span class="dot"></span><span class="lbl">Overview</span></a>
+                <a class="spine-stop" href="#unique" style="--p:16.7%"><span class="dot"></span><span class="lbl">Unique</span></a>
+                <a class="spine-stop" href="#speakers-and-breakout-leads" style="--p:33.3%"><span class="dot"></span><span class="lbl">Speakers</span></a>
+                <a class="spine-stop" href="#schedule" style="--p:50%"><span class="dot"></span><span class="lbl">Schedule</span></a>
+                <a class="spine-stop" href="#callforpapers" style="--p:66.7%"><span class="dot"></span><span class="lbl">CFP</span></a>
+                <a class="spine-stop" href="#organizers" style="--p:83.3%"><span class="dot"></span><span class="lbl">Organizers</span></a>
+                <a class="spine-stop" href="#contact" style="--p:100%"><span class="dot"></span><span class="lbl">Contact</span></a>
+            </div>
+            <div class="spine-actions">
+                <span class="chip">CoRL 2026</span>
+                <span class="chip">Austin, TX</span>
+                <span class="chip">Nov 12</span>
+            </div>
+        </div>
+    </nav>
+
+    <header class="hero">
+        <span class="hero-meta">R2RL Workshop <span class="dot-sep">·</span> CoRL 2026</span>
+        <h1 class="hero-brand">Roadmap to Sample-Efficient Real-World Reinforcement Learning</h1>
+        <p class="hero-subtitle">What’s Standing Between Us and Real-World Deployment?</p>
+        <p class="hero-tagline">
+            A focused workshop on the <b>bottlenecks, methods, and roadmap</b> for making reinforcement learning practical on real robots.
+        </p>
+        <div class="hero-venue">Austin, TX · November 12, 2026</div>
+        <div class="hero-quick-links">
+            <a class="qlink link-accent" href="#overview">Overview</a>
+            <a class="qlink link-accent" href="#speakers-and-breakout-leads">Speakers</a>
+            <a class="qlink link-accent" href="#callforpapers">Call for Papers</a>
+        </div>
+    </header>
+
+    <section id="overview" class="overview">
+        <h2>Overview</h2>
+        <video class="overview-video" width="1280" height="720" autoplay muted playsinline controls>
+            <source src="assets/overview_vid.mp4" type="video/mp4">
+            <source src="assets/overview_vid.mov" type="video/quicktime">
+        </video>
+        <p>
+          Reinforcement learning (RL) has long promised autonomous, self-improving robots, yet a stubborn gap separates 
+          impressive sim results from reliable real-world deployment. At the heart of that gap is <strong>sample efficiency</strong>: 
+          making every trial require extensive wall-clock time and associated human supervision. This workshop asks:
+        </p>
+                <div class="overview-question">
+                        <strong>What problems preclude making RL algorithms sample-efficient enough for real-world deployment and what should we focus on over the next few years to solve them?</strong>
+                </div>
+    </section>
+
+    <section id="unique">
+        <h2>What makes this workshop unique?</h2>
+        <ul class="unique-grid">
+            <li>
+                <strong>1. ONLY Early-career speakers (students + scientists):</strong>
+                The people actually running real-robot RL who are familiar with its bottlenecks through heavy experimentation.
+            </li>
+            <li>
+                <strong>2. A crowdsourced problem board:</strong>
+                Placed at the entrance, where attendees propose and vote on problems precluding sample-efficient real-world RL.
+            </li>
+            <li>
+                <strong>3. Breakout sessions:</strong>
+                Top-voted, crowdsourced problems formed into interactive audience discussion where a promising solution is discussed and presented by each breakout group.
+            </li>
+            <li>
+                <strong>4. Interactive panel discussion:</strong>
+                Both speakers and audience members that led each breakout session discuss each problem and solution.
+            </li>
+            <li>
+                <strong>5. A roadmap whitepaper co-produced during the workshop:</strong>
+                The post-workshop paper is constructed from organizers scribing talks, breakout sessions, and the resulting panel discussion.
+                We release this paper for the community to read and learn from the workshop's findings. 
+            </li>
+        </ul>
+    </section>
+
+    <section id="speakers-and-breakout-leads">
+        <h2>Speakers</h2>
+        <div class="speaker-list">
+            <div class="speaker-card">
+                <a class="speaker-photo" href="https://zhanyisun.github.io/" target="_blank" rel="noopener">
+                    <img src="assets/zhanyi.png" alt="Speaker 1">
+                </a>
+                <div class="speaker-name">Zhanyi Sun</div>
+                <div class="speaker-org">Stanford University</div>
+            </div>
+            <div class="speaker-card">
+                <a class="speaker-photo" href="https://lei-kun.github.io/" target="_blank" rel="noopener">
+                    <img src="assets/kun.jpg" alt="Speaker 2">
+                </a>
+                <div class="speaker-name">Kun Lei</div>
+                <div class="speaker-org">Shanghai Jiao Tong University</div>
+            </div>
+            <div class="speaker-card">
+                <a class="speaker-photo" href="https://kayke.xyz/" target="_blank" rel="noopener">
+                    <img src="assets/kay.jpg" alt="Speaker 3">
+                </a>
+                <div class="speaker-name">Kay Ke</div>
+                <div class="speaker-org">Physical Intelligence (&pi;)</div>
+            </div>
+            <div class="speaker-card">
+                <a class="speaker-photo" href="https://zhouzypaul.github.io/" target="_blank" rel="noopener">
+                    <img src="assets/paul.png" alt="Speaker 4">
+                </a>
+                <div class="speaker-name">Zhiyuan "Paul" Zhou</div>
+                <div class="speaker-org">UC Berkeley</div>
+            </div>
+        </div>
+
+        <h2>Breakout Session Leads</h2>
+        <p style="text-align:center; margin-bottom:24px; color: var(--text-secondary); font-size: 1.07em;">
+            <em>Note: Speakers will also participate in the breakout sessions as leads and facilitators. All audience members also can participate.</em>
+      
+        </p>
+        <div class="speaker-list">
+            <div class="speaker-card">
+                <a class="speaker-photo" href="https://pearl-lab.com/people/rickmer-krohn/" target="_blank" rel="noopener">
+                    <img src="assets/rickmer.png" alt="Breakout Session Lead 1">
+                </a>
+                <div class="speaker-name">Rickmer Krohn</div>
+                <div class="speaker-org">TU Darmstadt</div>
+            </div>
+            <div class="speaker-card">
+                <a class="speaker-photo" href="https://www.utn.de/person/tobias-juelg/" target="_blank" rel="noopener">
+                    <img src="assets/tobias.jpg" alt="Breakout Session Lead 2">
+                </a>
+                <div class="speaker-name">Tobias Jülg</div>
+                <div class="speaker-org">University of Technology Nuremberg</div>
+            </div>
+        </div>
+    </section>
+
+    <section id="schedule">
+        <h2>Workshop Schedule (Tentative)</h2>
+        <p class="schedule-meta">Location: TBD, Austin, TX</p>
+        <p class="schedule-meta">Date: Monday, November 12, 2026</p>
+        <table class="schedule-table">
+            <tbody>
+                <tr>
+                    <td>8:30 - 8:40</td>
+                    <td>Opening, Central Question, and Problem-board Framing</td>
+                </tr>
+                <tr>
+                    <td>8:40 - 9:50</td>
+                    <td>Keynote Talks</td>
+                </tr>
+                <tr>
+                    <td>9:50 - 10:00</td>
+                    <td>Problem-board Voting</td>
+                </tr>
+                <tr>
+                    <td>10:00 - 10:30</td>
+                    <td>Oral Spotlights of Key Contributed Papers</td>
+                </tr>
+                <tr>
+                    <td>10:30 - 11:00</td>
+                    <td>Poster Session + Coffee Break</td>
+                </tr>
+                <tr>
+                    <td>11:00 - 11:50</td>
+                    <td>Breakout Sessions on Top-voted Problems</td>
+                </tr>
+                <tr>
+                    <td>11:50 - 12:20</td>
+                    <td>Panel Discussion with Speakers and Audience Volunteers</td>
+                </tr>
+                <tr>
+                    <td>12:20 - 12:30</td>
+                    <td>Summary, Whitepaper Next Steps, (Tentative) Workshop Best Paper Prize</td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+
+    <section id="callforpapers">
+        <h2>Call for Papers</h2>
+        <div class="cfp-layout">
+            <div class="cfp-main submission-content">
+            <p>
+                We welcome submissions on sample-efficient real-world RL, 
+                especially work that identifies practical bottlenecks, reports lessons learned from 
+                real-robot experiments, or proposes methods that reduce the cost of learning on hardware.
+                Topics of interest include, but are not limited to:
+            </p>
+            <details class="topics-expandable">
+                <summary>Example Topics</summary>
+                <div class="topics-content">
+                    <ul>
+                        <li>
+                            <strong>Supervision and Reward Cost:</strong> Methods for obtaining useful learning 
+                            signals cheaply, including learned reward models, human feedback, 
+                            human-in-the-loop interventions, and strategies for avoiding supervision as the bottleneck.
+                        </li>
+                        <li>
+                            <strong>Exploration and Safety on Hardware:</strong> Algorithms and systems for efficient 
+                            exploration under safety constraints, reset-free or autonomous RL, safe online 
+                            adaptation, and approaches that improve wall-clock efficiency during real-world training.
+                        </li>
+                        <li>
+                            <strong>Leveraging Priors for Real-World RL:</strong> Approaches that use pretrained policies, 
+                            VLAs, offline datasets, world models, or sim-to-real 
+                            transfer to reduce the number of required on-robot interactions.
+                        </li>
+                        <li>
+                            <strong>Post-Deployment Adaptation:</strong> Methods for finetuning deployed policies, 
+                            improving robustness to distribution shift, learning new behaviors from experience, and 
+                            adapting generalist policies without catastrophic forgetting.
+                        </li>
+                        <li>
+                            <strong>Long-Horizon and Contact-Rich RL:</strong> Techniques for improving sample efficiency 
+                            in long-horizon manipulation, dexterous control, contact-rich tasks, and settings with delayed 
+                            rewards, compounding errors, or difficult exploration.
+                        </li>
+                        <li>
+                            <strong>Benchmarks, Metrics, and Lessons Learned:</strong> Benchmarks, evaluation protocols, 
+                            shared platforms, negative results, system-level insights, and analysis of what worked, what 
+                            failed, and why in real-world RL experiments.
+                        </li>
+                    </ul>
+                </div>
+            </details>
+
+            <h3>Submission Guidelines</h3>
+            <ul>
+                <li><strong>Submission portal:</strong> all papers must be submitted through our <a href="https://openreview.net/group?id=robot-learning.org/CoRL/2026/Workshop/R2RL" class="link-text" target="_blank" rel="noopener">OpenReview portal</a>.</li>
+                <li><strong>Page limit:</strong> submissions should be 4–8 pages, excluding references and appendix.</li>
+                <li><strong>Format:</strong> submissions must follow the official <a href="https://www.corl.org/contributions/instruction-for-authors" class="link-text" target="_blank" rel="noopener">CoRL paper template and style</a>, and must be properly anonymized for double-blind review.</li>
+                <li><strong>Dual submission policy:</strong> we <strong>disallow</strong> work already accepted to the main CoRL 2026 conference. Accepted workshop papers will be listed on the website but are <strong>non-archival</strong> and will not appear in formal proceedings.</li>
+            </ul>
+
+            <h3>Spotlight Talks</h3>
+            <p>
+                All accepted papers will be presented at an in-person poster session. A small number
+                of selected papers will additionally give a 5-minute spotlight talk. Camera-ready versions 
+                of all accepted papers will be made available on the workshop website.
+            </p>
+            </div>
+
+            <aside class="cfp-sidebar">
+                <h3>Important Dates</h3>
+                <div class="date-item">
+                    <div class="date-label">Submission Deadline</div>
+                    <div class="date-value">September 30, 2026</div>
+                </div>
+                <div class="date-item">
+                    <div class="date-label">Notification</div>
+                    <div class="date-value">October 21, 2026</div>
+                </div>
+                <div class="date-item">
+                    <div class="date-label">Workshop Date</div>
+                    <div class="date-value">November 12, 2026</div>
+                </div>
+                <p class="date-note">All deadlines are <strong>Anywhere on Earth (AoE)</strong> time. Workshop is a half-day morning session.</p>
+                <a class="btn-submit" href="https://openreview.net/group?id=robot-learning.org/CoRL/2026/Workshop/R2RL" target="_blank" rel="noopener">Submit via OpenReview</a>
+            </aside>
+        </div>
+    </section>
+
+    <section id="organizers">
+        <h2>Organizers</h2>
+        <div class="people organizers-grid">
+            <div class="organizer">
+                <a href="https://jessezhang.net/" target="_blank">
+                    <img src="assets/jesse.jpeg" alt="Organizer 1">
+                    <p><strong>Jesse Zhang</strong><br><span class="affiliation">University of Washington</span></p>
+                </a>
+            </div>
+            <div class="organizer">
+                <a href="https://ygtkorkmaz.github.io/" target="_blank">
+                    <img src="assets/yigit.png" alt="Organizer 2">
+                    <p><strong>Yigit Korkmaz</strong><br><span class="affiliation">USC</span></p>
+                </a>
+            </div>
+            <div class="organizer">
+                <a href="https://lakshitadodeja.github.io/website/" target="_blank">
+                    <img src="assets/lakshita.png" alt="Organizer 3">
+                    <p><strong>Lakshita Dodeja</strong><br><span class="affiliation">Brown University</span></p>
+                </a>
+            </div>
+            <div class="organizer">
+                <a href="https://thomasweng.com/" target="_blank">
+                    <img src="assets/thomas.jpeg" alt="Organizer 4">
+                    <p><strong>Thomas Weng</strong><br><span class="affiliation">Robotics & AI Institute</span></p>
+                </a>
+            </div>
+            <div class="organizer">
+                <a href="https://lauramsmith.github.io/" target="_blank">
+                    <img src="assets/laura.jpg" alt="Organizer 5">
+                    <p><strong>Laura Smith</strong><br><span class="affiliation">Physical Intelligence (&pi;)</span></p>
+                </a>
+            </div>
+            <div class="organizer">
+                <a href="https://www.amazon.science/author/anusha-nagabandi" target="_blank">
+                    <img src="assets/anusha.jpeg" alt="Organizer 6">
+                    <p><strong>Anusha Nagabandi</strong><br><span class="affiliation">Amazon AGI Labs</span></p>
+                </a>
+            </div>
+            <div class="organizer">
+                <a href="https://yang-gao.weebly.com/" target="_blank">
+                    <img src="assets/yang.png" alt="Organizer 7">
+                    <p><strong>Yang Gao</strong><br><span class="affiliation">Tsinghua University</span></p>
+                </a>
+            </div>
+            <div class="organizer">
+                <a href="https://www.kth.se/profile/dani" target="_blank">
+                    <img src="assets/danica.png" alt="Organizer 10">
+                    <p><strong>Danica Kragic</strong><br><span class="affiliation">KTH</span></p>
+                </a>
+              </div>  
+            <div class="organizer">
+              <a href="https://shaohua0116.github.io/" target="_blank">
+                  <img src="assets/shaohua.png" alt="Organizer 8">
+                  <p><strong>Shao-Hua Sun</strong><br><span class="affiliation">National Taiwan University</span></p>
+              </a>
+            </div>
+            <div class="organizer">
+              <a href="https://abhishekunique.github.io/" target="_blank">
+                  <img src="assets/abhishek.jpeg" alt="Organizer 9">
+                  <p><strong>Abhishek Gupta</strong><br><span class="affiliation">University of Washington</span></p>
+              </a>
+            </div>
+        </div>
+    </section>
+
+    <section id="sponsorship" class="sponsorship-panel">
+        <h2>Workshop Sponsor</h2>
+        <p class="sponsor-intro">This workshop is proudly sponsored by</p>
+        <a class="sponsor-name" href="https://www.dyna.co/" target="_blank" rel="noopener">DYNA</a>
+    </section>
+
+    <section id="contact">
+        <h2>Contact Us</h2>
+        <p class="contact-email">Contact us at: <a href="mailto:corl26-r2rl-workshop@googlegroups.com">corl26-r2rl-workshop@googlegroups.com</a></p>
+    </section>
+
+    <footer>
+        &copy; The website template is adapted from the 
+        <a href="https://rss-workshop-2026.github.io/" target="_blank" rel="noopener" style="color: var(--panel);">Data-Centric Robotics Workshop @ RSS 2026</a> and 
+        <a href="https://weirdlabuw.github.io/tmrl/" target="_blank" rel="noopener" style="color: var(--panel);">TMRL</a> websites.
+  
+    </footer>
+
+    <script>
+        (function () {
+            var spine = document.getElementById('sigma-spine');
+            var cursor = document.getElementById('spine-cursor');
+            var stops = document.querySelectorAll('.spine-stop');
+            var sectionIds = ['overview', 'unique', 'speakers-and-breakout-leads', 'schedule', 'callforpapers', 'organizers', 'contact'];
+            var sections = sectionIds.map(function (id) { return document.getElementById(id); }).filter(Boolean);
+
+            stops.forEach(function (s) {
+                s.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    var t = document.querySelector(this.getAttribute('href'));
+                    if (t) {
+                        var top = t.getBoundingClientRect().top + window.scrollY - spine.offsetHeight - 12;
+                        window.scrollTo({ top: top, behavior: 'smooth' });
+                    }
+                });
+            });
+
+            function parsePct(s) { return parseFloat(s) || 0; }
+
+            function getSpineP() {
+                var spineH = spine.offsetHeight;
+                var anchor = spineH + 8;
+                var winY = window.scrollY;
+                var idx = -1;
+
+                for (var i = 0; i < sections.length; i++) {
+                    var r = sections[i].getBoundingClientRect();
+                    if (r.top - anchor <= 0) idx = i;
+                    else break;
+                }
+
+                if (idx === -1) {
+                    var first = sections[0];
+                    var ftop = first.getBoundingClientRect().top + winY - anchor;
+                    var frac = ftop > 0 ? Math.max(0, Math.min(1, winY / ftop)) : 1;
+                    return frac * parsePct(stops[0].style.getPropertyValue('--p'));
+                }
+
+                if (idx >= sections.length - 1) {
+                    var lastP = parsePct(stops[idx].style.getPropertyValue('--p'));
+                    var sec = sections[idx];
+                    var sTop = sec.getBoundingClientRect().top + winY - anchor;
+                    var sBot = sec.getBoundingClientRect().bottom + winY - anchor;
+                    var span = Math.max(1, sBot - sTop);
+                    var f = Math.max(0, Math.min(1, (winY - sTop) / span));
+                    return lastP + (100 - lastP) * f;
+                }
+
+                var p0 = parsePct(stops[idx].style.getPropertyValue('--p'));
+                var p1 = parsePct(stops[idx + 1].style.getPropertyValue('--p'));
+                var s0 = sections[idx].getBoundingClientRect().top + winY - anchor;
+                var s1 = sections[idx + 1].getBoundingClientRect().top + winY - anchor;
+                var span2 = Math.max(1, s1 - s0);
+                var f2 = Math.max(0, Math.min(1, (winY - s0) / span2));
+                return p0 + (p1 - p0) * f2;
+            }
+
+            function setActive() {
+                var spineH = spine.offsetHeight;
+                var anchor = spineH + 8;
+                var activeIdx = -1;
+
+                for (var i = 0; i < sections.length; i++) {
+                    var r = sections[i].getBoundingClientRect();
+                    if (r.top - anchor <= 0) activeIdx = i;
+                }
+
+                stops.forEach(function (s, i) {
+                    s.classList.toggle('active', i === activeIdx);
+                    s.classList.toggle('passed', i < activeIdx);
+                });
+            }
+
+            function tick() {
+                cursor.style.left = getSpineP() + '%';
+                setActive();
+            }
+
+            var raf = null;
+            function onScroll() {
+                if (raf) return;
+                raf = requestAnimationFrame(function () {
+                    tick();
+                    raf = null;
+                });
+            }
+
+            window.addEventListener('scroll', onScroll, { passive: true });
+            window.addEventListener('resize', tick);
+            tick();
+        }());
+    </script>
+
+</body>
+
+</html>

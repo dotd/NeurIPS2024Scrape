@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><base href="https://beneath-the-policy.github.io/">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Workshop on Everything Beneath the Policy: How Controllers, Hardware, Data Infrastructure Shape Robot Learning — CoRL 2026</title>
+  <meta name="description" content="Join the CoRL 2026 Workshop on Everything Beneath the Policy on November 12 in Austin. Submissions are open through October 9, 2026, at 11:59 p.m. CT.">
+  <meta property="og:title" content="Workshop on Everything Beneath the Policy: How Controllers, Hardware, Data Infrastructure Shape Robot Learning">
+  <meta property="og:description" content="Join us at CoRL 2026 on November 12 in Austin. Submissions are open through October 9 at 11:59 p.m. CT.">
+  <meta property="og:url" content="https://beneath-the-policy.github.io/">
+  <meta property="og:image" content="https://beneath-the-policy.github.io/images/beneath-policy-hero.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Workshop on Everything Beneath the Policy — CoRL 2026">
+  <meta name="twitter:description" content="November 12 in Austin. Submissions are open through October 9 at 11:59 p.m. CT.">
+  <meta name="twitter:image" content="https://beneath-the-policy.github.io/images/beneath-policy-hero.png">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-inner">
+    <a class="topbar-brand" href="#top" aria-label="Back to top — Workshop on Everything Beneath the Policy, CoRL 2026">
+      <span class="topbar-title">Workshop on Everything Beneath the Policy</span>
+      <span class="topbar-subtitle">How controllers, hardware, data infrastructure shape robot learning</span>
+    </a>
+    <a class="topbar-logo" href="https://www.corl.org/" aria-label="CoRL 2026">
+      <img src="images/organizers/corl-logo.png" alt="CoRL 2026 logo">
+    </a>
+  </div>
+</div>
+
+<main>
+
+  <header id="top">
+    <figure class="hero-visual">
+      <img src="images/beneath-policy-hero.png" alt="A robot arm above layered hardware, controller, simulation, and data abstractions">
+    </figure>
+    <h1>Workshop on Everything Beneath the Policy</h1>
+    <p class="subtitle">How controllers, hardware, data infrastructure shape robot learning</p>
+    <p class="meta">
+      Half-day workshop at <a href="https://www.corl.org/">CoRL 2026</a><br>
+      JW Marriott Austin · <time datetime="2026-11-12">November 12, 2026</time>
+    </p>
+  </header>
+
+  <div class="announcement-strip" role="region" aria-label="Workshop announcements">
+    <div class="announcement-row submission-banner">
+      <p><strong class="announcement-title">Submissions are open.</strong> Four-page papers are due <span class="announcement-emphasis"><time datetime="2026-10-09T23:59:00-05:00">October 9 at 11:59 p.m. CT</time></span>. <a class="announcement-link" href="https://openreview.net/invitation?id=robot-learning.org%2FCoRL%2F2026%2FWorkshop%2FWEBP%2F-%2FSubmission">Submit on OpenReview <span aria-hidden="true">&rarr;</span></a></p>
+      <p class="countdown-block"><span class="countdown-label">Time left</span><span class="countdown-value" data-submission-countdown role="timer" aria-label="Time remaining until the submission deadline">Calculating&hellip;</span></p>
+    </div>
+    <div class="announcement-row award-banner">
+      <p><a href="https://www.robotis.us/">ROBOTIS</a> is sponsoring <span class="award-amount">$1000 worth of credit</span> for the workshop's Best Paper Awards.</p>
+      <a class="award-banner-logo" href="https://www.robotis.us/" aria-label="ROBOTIS website">
+        <img src="images/logo_robotis.png" alt="ROBOTIS logo">
+      </a>
+    </div>
+  </div>
+
+  <section id="overview">
+    <h2>Overview</h2>
+    <p>
+      Robot learning has recently made striking progress in challenging domains such as dexterous manipulation, legged locomotion, and whole-body control. These advances are often credited to better policies, achieved through improved network architectures, novel learning algorithms, and, perhaps most importantly, increased data scale.
+    </p>
+    <p>
+      However, robot policies do not exist in a vacuum, and neither does the data used for training. Instead, they sit on top of multiple layers of design choices constituting a complex robot system that spans from data collection to deployment. Our workshop will focus explicitly on these design decisions: <span class="intro-highlight">everything that sits <em>beneath</em> the policy</span>. The process of training a robot policy and its outcome hinges on the kinematics and dynamics of the body being controlled, the type of actuators and low-level controllers, the action and observation spaces exposed to the policy, the sensing and data collection pipeline, the choice of a simulator, the evaluation protocol, and much more.
+    </p>
+    <p>
+      Although such design choices are essential to create every robot-learning result, they are <span class="intro-highlight">rarely treated as an object of study in their own right</span>. Instead, such components are often described as mere implementation details or left implicit in hardware, software, and lab-specific defaults. Recent studies reveal that these choices can heavily determine which behaviors are reachable, which behaviors are easy to learn, and which algorithms appear to work best. A method that succeeds with one set of design decisions may fail with another, and an apparent algorithmic improvement may partly reflect the substrate on which the method was trained, evaluated, and deployed.
+    </p>
+    <p>
+      This workshop makes these robotics design decisions a central object of study. It asks which non-policy choices are impactful, which can be measured, which remain hidden in vendor defaults, and how they interact with each other. We will bring together robot-learning researchers, platform builders, control and simulation researchers, dataset and benchmark builders, industry practitioners, and students centered around the goal of <span class="intro-highlight">making these hidden design choices explicit, measurable, and easier to report</span>.
+    </p>
+  </section>
+
+  <section id="challenges">
+    <h2>Core Challenges and Research Questions</h2>
+    <ol>
+      <li>
+        <strong>Identification.</strong> Which hidden design choices in current robot-learning pipelines are impactful, measurable, or buried in vendor defaults?
+      </li>
+      <li>
+        <strong>Interaction.</strong> How do motor dynamics, embodiment, controller gains, action spaces, control rates, and demonstration interfaces combine to shape learning?
+      </li>
+      <li>
+        <strong>Methodology.</strong> Which experimental templates, such as factorial designs, scaling-style ablations, or model-organism tasks, make this layer tractable to study?
+      </li>
+      <li>
+        <strong>Reporting.</strong> What should papers report so results are reproducible, interpretable, and easier to compare? Can the community converge on a practical checklist?
+      </li>
+    </ol>
+  </section>
+
+  <section id="why-now">
+    <h2>Why Now</h2>
+    <ol>
+      <li>
+        <strong>Scaling the best data.</strong> The community is increasingly focused on scaling robot learning along the data axis. However, we believe that better understanding the substrate beneath the data and policy will substantially enhance the effectiveness of data collection efforts. The key question is not only how much data to collect, but <span class="intro-highlight"><em>what</em> should be scaled</span>. However, the community lacks <span class="intro-highlight">shared scientific tools and machinery</span> for studying this layer. Other empirical sciences use factorial designs, controlled ablations, scaling analyses, and carefully chosen model organisms to isolate important variables. Robot learning has no comparable norm for studying the interface among robot, data, controller, simulator, and optimizer.
+      </li>
+      <li>
+        <strong>Scientific rigor and reproducibility.</strong> The community is also increasingly suffering from reproducibility failures, which frequently come down to details that are rarely foregrounded in robotics publications: hardware settings, simulator versions, controller gains, control rates, data collection interfaces, reset distributions, and evaluation protocols. Clear reporting of these design choices would make it easier to interpret results, diagnose failed replications, and <span class="intro-highlight">distinguish algorithmic improvements from substrate-specific effects</span>. But reporting alone is not enough. Because these choices can change the strength, scope, or even direction of an empirical claim, methodological contributions should also examine how sensitive their conclusions are to key substrate choices. The field needs better language, methods, and reporting norms for studying how robot-learning results depend on the interface beneath the policy. This workshop will be a first step toward building that machinery and culture.
+      </li>
+    </ol>
+  </section>
+
+  <section id="speakers">
+    <h2>Invited Speakers</h2>
+    <div class="speaker-grid">
+      <article class="speaker">
+        <a class="speaker-photo" href="https://www.ri.cmu.edu/ri-faculty/zeynep-temel/" aria-label="Zeynep Temel website">
+          <img src="images/speakers/zeynep.webp" alt="Zeynep Temel">
+        </a>
+        <div class="speaker-details">
+          <h3><a href="https://www.ri.cmu.edu/ri-faculty/zeynep-temel/">Zeynep Temel</a></h3>
+          <p class="speaker-affil">Associate Professor, CMU Robotics Institute</p>
+        </div>
+      </article>
+      <article class="speaker">
+        <a class="speaker-photo" href="https://www.ias.informatik.tu-darmstadt.de/Team/JanPeters" aria-label="Jan Peters website">
+          <img src="images/speakers/jan-peters.jpg" alt="Jan Peters">
+        </a>
+        <div class="speaker-details">
+          <h3><a href="https://www.ias.informatik.tu-darmstadt.de/Team/JanPeters">Jan Peters</a></h3>
+          <p class="speaker-affil">Full Professor (W3), TU Darmstadt; Head, DFKI SAIROL</p>
+        </div>
+      </article>
+      <article class="speaker">
+        <a class="speaker-photo" href="https://mcube.mit.edu/" aria-label="Alberto Rodriguez website">
+          <img src="images/speakers/alberto-rodriguez.jpg" alt="Alberto Rodriguez">
+        </a>
+        <div class="speaker-details">
+          <h3><a href="https://mcube.mit.edu/">Alberto Rodriguez</a></h3>
+          <p class="speaker-affil">Director of Robot Behavior, Atlas, Boston Dynamics</p>
+        </div>
+      </article>
+      <article class="speaker">
+        <a class="speaker-photo" href="https://fang-haoshu.github.io/" aria-label="Hao-Shu Fang website">
+          <img src="images/speakers/haoshu-fang.jpg" alt="Hao-Shu Fang">
+        </a>
+        <div class="speaker-details">
+          <h3><a href="https://fang-haoshu.github.io/">Hao-Shu Fang</a></h3>
+          <p class="speaker-affil">Incoming Assistant Professor of CS, UMD</p>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section id="schedule">
+    <h2>Schedule</h2>
+    <p>
+      The half-day workshop is built around four confirmed invited talks, contributed lightning previews, a poster session, a moderated panel, and a closing synthesis. Speakers will be asked to attend the full session so they can join the panel and engage with contributed papers. Exact placement will depend on whether CoRL assigns the workshop to the morning or afternoon block.
+    </p>
+    <div class="schedule-switch" role="group" aria-label="Schedule version">
+      <button type="button" class="schedule-tab active" data-schedule-target="morning" aria-pressed="true" aria-controls="schedule-morning">Morning</button>
+      <button type="button" class="schedule-tab" data-schedule-target="afternoon" aria-pressed="false" aria-controls="schedule-afternoon">Afternoon</button>
+    </div>
+
+    <div id="schedule-morning" class="schedule-panel active" data-schedule-panel="morning">
+      <table class="schedule">
+        <tr>
+          <td class="time">8:30&ndash;8:40</td>
+          <td><strong>Opening framing.</strong> Organizers introduce the four open challenges and the reporting-artifact goal.</td>
+        </tr>
+        <tr class="speaker-row">
+          <td class="time">8:40&ndash;9:10</td>
+          <td><strong>Speaker 1.</strong> Invited talk.</td>
+        </tr>
+        <tr class="speaker-row">
+          <td class="time">9:10&ndash;9:40</td>
+          <td><strong>Speaker 2.</strong> Invited talk.</td>
+        </tr>
+        <tr class="speaker-row">
+          <td class="time">9:40&ndash;10:10</td>
+          <td><strong>Speaker 3.</strong> Invited talk.</td>
+        </tr>
+        <tr>
+          <td class="time">10:10&ndash;10:30</td>
+          <td><strong>Lightning previews.</strong> Short contributed-paper previews and poster setup before the conference coffee break.</td>
+        </tr>
+        <tr>
+          <td class="time">10:30&ndash;11:00</td>
+          <td><strong>Coffee break and posters.</strong> Accepted papers are presented as posters during the conference coffee break.</td>
+        </tr>
+        <tr class="speaker-row">
+          <td class="time">11:00&ndash;11:30</td>
+          <td><strong>Speaker 4.</strong> Invited talk.</td>
+        </tr>
+        <tr>
+          <td class="time">11:30&ndash;12:10</td>
+          <td><strong>Panel discussion.</strong> Speakers and contributed-paper authors discuss what papers should report and how the field should study the substrate, with time for audience discussion.</td>
+        </tr>
+        <tr>
+          <td class="time">12:10&ndash;12:30</td>
+          <td><strong>Closing synthesis.</strong> Themes from talks, posters, and panel; checklist takeaways and pointers to the post-workshop artifact.</td>
+        </tr>
+      </table>
+    </div>
+
+    <div id="schedule-afternoon" class="schedule-panel" data-schedule-panel="afternoon" hidden>
+      <table class="schedule">
+        <tr>
+          <td class="time">2:00&ndash;2:10</td>
+          <td><strong>Opening framing.</strong> Organizers introduce the four open challenges and the reporting-artifact goal.</td>
+        </tr>
+        <tr class="speaker-row">
+          <td class="time">2:10&ndash;2:40</td>
+          <td><strong>Invited Talk: Jan Peters.</strong></td>
+        </tr>
+        <tr class="speaker-row">
+          <td class="time">2:40&ndash;3:10</td>
+          <td><strong>Invited Talk: Hao-Shu Fang.</strong></td>
+        </tr>
+        <tr>
+          <td class="time">3:10&ndash;3:30</td>
+          <td><strong>Lightning previews.</strong> Short contributed-paper previews and poster setup before the conference coffee break.</td>
+        </tr>
+        <tr>
+          <td class="time">3:30&ndash;4:00</td>
+          <td><strong>Coffee break and posters.</strong> Accepted papers are presented as posters during the conference coffee break.</td>
+        </tr>
+        <tr class="speaker-row">
+          <td class="time">4:00&ndash;4:30</td>
+          <td><strong>Invited Talk: Zeynep Temel.</strong></td>
+        </tr>
+        <tr class="speaker-row">
+          <td class="time">4:30&ndash;5:00</td>
+          <td><strong>Invited Talk: Alberto Rodriguez.</strong></td>
+        </tr>
+        <tr>
+          <td class="time">5:00&ndash;5:40</td>
+          <td><strong>Panel discussion.</strong> Speakers and contributed-paper authors discuss what papers should report and how the field should study the substrate, with time for audience discussion.</td>
+        </tr>
+        <tr>
+          <td class="time">5:40&ndash;6:00</td>
+          <td><strong>Closing synthesis.</strong> Themes from talks, posters, and panel; checklist takeaways and pointers to the post-workshop artifact.</td>
+        </tr>
+      </table>
+    </div>
+  </section>
+
+  <section id="cfp">
+    <h2>Call for Papers</h2>
+    <div class="submission-details" role="note" aria-label="Paper submission details">
+      <p class="submission-details-label">Submissions Open</p>
+      <div class="submission-details-row">
+        <div class="submission-details-copy">
+          <p>Paper deadline: <span class="announcement-emphasis"><time datetime="2026-10-09T23:59:00-05:00">October 9, 2026, at 11:59 p.m. Central Time</time></span></p>
+          <p class="submission-countdown"><span class="countdown-label">Time remaining</span><span class="countdown-value" data-submission-countdown role="timer" aria-label="Time remaining until the submission deadline">Calculating&hellip;</span></p>
+        </div>
+        <a class="submit-button" href="https://openreview.net/invitation?id=robot-learning.org%2FCoRL%2F2026%2FWorkshop%2FWEBP%2F-%2FSubmission">Submit on OpenReview <span aria-hidden="true">&rarr;</span></a>
+      </div>
+    </div>
+    <p>
+      We solicit 4-page (excluding references) contributed papers on any aspect of the hardware, control, or data infrastructure beneath robot learning. In-scope contributions include:
+    </p>
+    <ul>
+      <li>Controlled studies of design choices.</li>
+      <li>Factorial or scaling-style ablations.</li>
+      <li>Negative or surprising results.</li>
+      <li>New reporting conventions.</li>
+      <li>Tools, benchmarks, or datasets that expose hidden choices.</li>
+    </ul>
+    <p>
+      <strong>Review.</strong> Reviews will be double blind through OpenReview, with 2&ndash;3 reviewers per paper. Papers will be selected based on what they teach the community about the substrate beneath the policy, not on state-of-the-art task performance. Best paper awards, sponsored by <a href="https://www.robotis.us/">ROBOTIS</a>, will recognize especially strong submissions with <span class="award-amount">$1000 worth of credit</span>.
+    </p>
+    <p>
+      <strong>Format.</strong> Accepted papers will receive poster slots. Selected authors will receive lightning previews and may be invited to participate in the panel.
+    </p>
+    <p>
+      <strong>Exclusions.</strong> Per CoRL 2026 policy, papers already accepted to the main CoRL 2026 conference are not eligible. Concurrent submissions to other venues are permitted if disclosed.
+    </p>
+    <h3 class="important-dates-heading">Important Dates</h3>
+    <p class="important-dates-note">All dates are in 2026.</p>
+    <table class="schedule submission-timeline">
+      <tbody>
+        <tr>
+          <td class="time"><time datetime="2026-08-24">August 24</time></td>
+          <td><strong>Submissions open.</strong></td>
+        </tr>
+        <tr class="deadline-row">
+          <td class="time"><time datetime="2026-10-09T23:59:00-05:00">October 9</time></td>
+          <td><strong>Submission deadline.</strong> 11:59 p.m. Central Time.</td>
+        </tr>
+        <tr>
+          <td class="time"><time datetime="2026-10-10">October 10</time>&ndash;<time datetime="2026-10-23">23</time></td>
+          <td><strong>Review period.</strong></td>
+        </tr>
+        <tr>
+          <td class="time"><time datetime="2026-10-26">October 26</time></td>
+          <td><strong>Acceptance notification.</strong></td>
+        </tr>
+        <tr>
+          <td class="time"><time datetime="2026-11-02">November 2</time></td>
+          <td><strong>Camera-ready and poster/lightning confirmation.</strong></td>
+        </tr>
+        <tr>
+          <td class="time"><time datetime="2026-11-12">November 12</time></td>
+          <td><strong>Workshop.</strong></td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="sponsor-award" role="note" aria-label="Workshop sponsor">
+      <p class="sponsor-label">Workshop Sponsor</p>
+      <div class="sponsor-award-row">
+        <p class="sponsor-prize"><a href="https://www.robotis.us/">ROBOTIS</a> is sponsoring <span class="award-amount">$1000 worth of credit</span> for the workshop's Best Paper Awards.</p>
+        <a class="sponsor-logo-link" href="https://www.robotis.us/" aria-label="ROBOTIS website">
+          <img src="images/logo_robotis.png" alt="ROBOTIS logo">
+        </a>
+      </div>
+      <p class="sponsor-products"><a href="https://www.robotis.us/">ROBOTIS</a> (Robot is...) is a leading global robotics solutions provider specializing in high-precision, intelligent actuators designed for Physical AI and advanced robotic systems.  Research institutions, universities, and innovative startups — including numerous Physical AI companies worldwide — rely on <a href="https://www.robotis.us/">ROBOTIS’s</a> comprehensive DYNAMIXEL series. These all-in-one smart actuators integrate a motor, controller, driver, and networking capabilities into compact, high-performance modules. They empower the development of diverse applications, including teleoperation systems, semi-humanoids, full humanoids, delivery robots, dexterous manipulators, robot hand, and intelligent automation platforms.</p>
+      <p class="sponsor-products">The credit can be used toward <a href="https://www.robotis.us/">ROBOTIS</a> hardware such as DYNAMIXEL actuators, TurtleBot3 and OpenMANIPULATOR kits, controllers, and related robotics accessories.</p>
+    </div>
+  </section>
+
+  <section id="artifact">
+    <h2>Workshop Artifact</h2>
+    <p>
+      The organizers commit to producing a <strong>Design Choice Reporting Checklist v0.1</strong> after the workshop. The checklist will synthesize lessons from invited talks, contributed papers, posters, the panel, and audience discussion. It will cover hardware and embodiment, motors and actuation, kinematics, controller gains and rates, action spaces, observations, demonstrations, simulation, reward design, and reset distributions.
+    </p>
+    <p>
+      The goal is to make the checklist specific enough for prospective authors and reviewers to use. After the workshop, we will circulate a draft to speakers and contributed-paper authors, incorporate feedback, and publicly release the checklist with a short whitepaper on open challenges, candidate methodologies, and community follow-up.
+    </p>
+  </section>
+
+  <section id="organizers">
+    <h2>Organizers</h2>
+    <div class="organizer-grid">
+      <a href="https://younghyopark.me/" class="organizer">
+        <img src="images/organizers/younghyo.jpg" alt="Younghyo Park">
+        <p class="org-name">Younghyo Park</p>
+        <p class="org-affil">MIT CSAIL</p>
+        <p class="org-tag">Lead contact</p>
+      </a>
+      <a href="https://tonibronars.github.io/" class="organizer">
+        <img src="images/organizers/toni.jpg" alt="Antonia Bronars">
+        <p class="org-name">Antonia Bronars</p>
+        <p class="org-affil">MIT CSAIL</p>
+      </a>
+      <a href="https://patelvatsalv.github.io/" class="organizer">
+        <img src="images/organizers/vatsal.png" alt="Vatsal V. Patel">
+        <p class="org-name">Vatsal V. Patel</p>
+        <p class="org-affil">MIT Postdoc</p>
+      </a>
+      <a href="https://yswhynot.github.io/" class="organizer">
+        <img src="images/organizers/shayi.jpeg" alt="Sha Yi">
+        <p class="org-name">Sha Yi</p>
+        <p class="org-affil">UC San Diego Postdoc</p>
+      </a>
+      <div class="organizer">
+        <img src="images/organizers/kehlani.jpeg" alt="Kehlani Fay">
+        <p class="org-name">Kehlani Fay</p>
+        <p class="org-affil">UC San Diego PhD</p>
+      </div>
+      <!-- <a href="https://eliealjalbout.github.io/" class="organizer">
+        <img src="images/organizers/elie.jpg" alt="Elie Aljalbout">
+        <p class="org-name">Elie Aljalbout</p>
+        <p class="org-affil">NVIDIA</p>
+      </a> -->
+      <a href="https://people.csail.mit.edu/pulkitag/" class="organizer">
+        <img src="images/organizers/pulkit.jpg" alt="Pulkit Agrawal">
+        <p class="org-name">Pulkit Agrawal</p>
+        <p class="org-affil">MIT CSAIL</p>
+      </a>
+    </div>
+    <p class="contact">
+      Contact: <a href="mailto:younghyo@mit.edu">younghyo@mit.edu</a>
+    </p>
+  </section>
+
+</main>
+
+<aside class="toc" aria-label="On this page">
+  <p class="toc-label">On this page</p>
+  <a href="#overview">Overview</a>
+  <a href="#challenges">Open Challenges</a>
+  <a href="#speakers">Invited Speakers</a>
+  <a href="#schedule">Schedule</a>
+  <a href="#cfp">Call for Papers</a>
+  <a href="#artifact">Artifact</a>
+  <a href="#organizers">Organizers</a>
+</aside>
+
+<footer>
+  <p>Workshop on Everything Beneath the Policy &middot; CoRL 2026</p>
+</footer>
+
+<script>
+  (function () {
+    const deadline = new Date('2026-10-09T23:59:00-05:00').getTime();
+    const countdowns = Array.from(document.querySelectorAll('[data-submission-countdown]'));
+    let countdownInterval;
+
+    const updateCountdowns = () => {
+      const remaining = deadline - Date.now();
+
+      if (remaining <= 0) {
+        countdowns.forEach(countdown => {
+          countdown.textContent = 'Submissions closed';
+        });
+        clearInterval(countdownInterval);
+        return;
+      }
+
+      const totalSeconds = Math.floor(remaining / 1000);
+      const days = Math.floor(totalSeconds / 86400);
+      const hours = Math.floor((totalSeconds % 86400) / 3600);
+      const minutes = Math.floor((totalSeconds % 3600) / 60);
+      const seconds = totalSeconds % 60;
+      const pad = value => String(value).padStart(2, '0');
+      const display = `${days}d ${pad(hours)}h ${pad(minutes)}m ${pad(seconds)}s`;
+
+      countdowns.forEach(countdown => {
+        countdown.textContent = display;
+      });
+    };
+
+    updateCountdowns();
+    if (deadline > Date.now()) {
+      countdownInterval = setInterval(updateCountdowns, 1000);
+    }
+  })();
+
+  (function () {
+    const tocLinks = Array.from(document.querySelectorAll('.toc a'));
+    const sections = tocLinks
+      .map(link => document.querySelector(link.getAttribute('href')))
+      .filter(Boolean);
+
+    const setActive = (id) => {
+      tocLinks.forEach(link => {
+        link.classList.toggle('active', link.getAttribute('href') === '#' + id);
+      });
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      const visible = entries
+        .filter(e => e.isIntersecting)
+        .sort((a, b) => a.target.offsetTop - b.target.offsetTop);
+      if (visible.length) setActive(visible[0].target.id);
+    }, { rootMargin: '-15% 0px -70% 0px', threshold: 0 });
+
+    sections.forEach(s => observer.observe(s));
+  })();
+
+  (function () {
+    const tabs = Array.from(document.querySelectorAll('.schedule-tab'));
+    const panels = Array.from(document.querySelectorAll('[data-schedule-panel]'));
+
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        const target = tab.dataset.scheduleTarget;
+
+        tabs.forEach(item => {
+          const active = item === tab;
+          item.classList.toggle('active', active);
+          item.setAttribute('aria-pressed', active ? 'true' : 'false');
+        });
+
+        panels.forEach(panel => {
+          const active = panel.dataset.schedulePanel === target;
+          panel.classList.toggle('active', active);
+          panel.hidden = !active;
+        });
+      });
+    });
+  })();
+</script>
+
+</body>
+</html>

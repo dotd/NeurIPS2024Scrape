@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><base href="https://actiongapworkshop.github.io">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>G2A: From Generative Models to Robot Actions | CoRL 2026 Workshop</title>
+<meta name="description" content="G2A: From Generative Models to Robot Actions — a workshop at CoRL 2026, November 12, 2026, Austin, Texas.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <a class="brand" href="#"><span class="dot"></span>CoRL&nbsp;2026&nbsp;G2A</a>
+    <button class="nav-toggle" aria-label="Menu" onclick="document.getElementById('nl').classList.toggle('open')">&#9776;</button>
+    <div class="nav-links" id="nl">
+      <a href="#about">About</a>
+      <a href="#speakers">Speakers</a>
+      <a href="#papers">Call for Papers</a>
+      <a href="#schedule">Schedule</a>
+      <a href="#committee">Organizers</a>
+      <a href="#sponsor">Sponsor</a>
+    </div>
+  </div>
+</nav>
+
+<main>
+<header class="hero">
+  <h1><span class="g2a">G2A</span>: From Generative Models to Robot Actions</h1>
+  <p class="sub">Workshop at CoRL 2026</p>
+
+  <div class="hero-facts">
+    <div class="fact">
+      <span class="lbl">Date</span>
+      <span class="val">Thursday, November&nbsp;12, 2026</span>
+      <span class="note">CoRL 2026 workshop day</span>
+    </div>
+    <div class="fact">
+      <span class="lbl">Time</span>
+      <span class="val">08:30 – 12:30 CST</span>
+      <span class="note">Half-day · morning session</span>
+    </div>
+    <div class="fact">
+      <span class="lbl">Location</span>
+      <span class="val">Austin, Texas, USA</span>
+      <span class="note">Room assignment to be announced</span>
+    </div>
+  </div>
+
+  <div class="cta-row">
+    <a href="#papers" class="btn btn-primary">Call for Papers</a>
+    <a class="btn btn-ghost" href="https://openreview.net/group?id=robot-learning.org/CoRL/2026/Workshop/TAG" target="_blank" rel="noopener">
+      <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"
+           stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M12 3.2 4 8v8l8 4.8 8-4.8V8z"></path>
+        <path d="M12 3.2v17.6"></path>
+        <path d="M4 8l8 4.6L20 8"></path>
+      </svg>
+      OpenReview
+    </a>
+  </div>
+</header>
+
+<section id="about">
+  <div class="sec-head"><span class="sec-num">01</span><h2>About</h2></div>
+  <p class="lead">Large-scale generative models pretrained on video, image, and 3D data learn rich representations of objects, spatial structure, physical interactions, and how the visual world changes over time. These models are a promising source of prior knowledge for robot learning, especially because large-scale robot data remains expensive to collect and limited in diversity.</p>
+  <p class="prose" style="margin-top:18px;">However, most pretraining data contains no robot action labels, while a policy must ultimately produce executable actions that respect the embodiment, dynamics, and sensing constraints of a physical system. This mismatch creates an <b>action gap</b> between generative pretraining and robot policy learning.</p>
+  <p class="prose">A video model can predict how a scene should change, and a 3D generative model can capture the geometry of an environment — but neither directly specifies which robot actions will reliably produce the desired change. <b>G2A</b> places the interface between generative models and robot policies at the center, asking how models trained to represent or generate changes in the world can help robots learn the actions that cause those changes.</p>
+
+  <div class="callout">
+    <span class="k">Central question</span>
+    <p>How can knowledge learned from large-scale video, image, and 3D data collected <i>without</i> robot action labels be converted into executable robot policies?</p>
+  </div>
+</section>
+<section id="speakers">
+  <div class="sec-head"><span class="sec-num">02</span><h2>Invited Speakers</h2></div>
+  <p class="lead">Leading researchers across generative world models, robot policy learning, embodiment grounding, human-video learning, and evaluation.</p>
+  <div class="spk-grid">
+    <figure class="spk">
+      <img src="assets/speakers/yilun-du.jpg" alt="Yilun Du" width="156" height="156" loading="lazy">
+      <figcaption><span class="nm">Yilun Du</span><span class="aff">Harvard University</span></figcaption>
+    </figure>
+    <figure class="spk">
+      <img src="assets/speakers/furong-huang.jpg" alt="Furong Huang" width="156" height="156" loading="lazy">
+      <figcaption><span class="nm">Furong Huang</span><span class="aff">University of Maryland</span></figcaption>
+    </figure>
+    <figure class="spk">
+      <img src="assets/speakers/amir-bar.jpg" alt="Amir Bar" width="156" height="156" loading="lazy">
+      <figcaption><span class="nm">Amir Bar</span><span class="aff">Imperial College London</span></figcaption>
+    </figure>
+    <figure class="spk">
+      <img src="assets/speakers/qwen.png" alt="Qwen" width="156" height="156" loading="lazy">
+      <figcaption><span class="nm">Qwen Robotics Team</span><span class="aff">Alibaba</span></figcaption>
+    </figure>
+  </div>
+</section>
+<section id="papers">
+  <div class="sec-head"><span class="sec-num">03</span><h2>Call for Papers</h2></div>
+  <p class="lead">We invite submissions on any aspect of turning pretrained generative models into robot policies. We welcome new, preliminary, and in-progress work — including negative results, empirical comparisons, position papers, benchmarks, and evaluation methodologies.</p>
+
+  <h3 class="sub-head">Topics of interest</h3>
+  <ul class="topic-list">
+    <li><b>Generative world models for robot learning.</b> Generative models pretrained on video, images, and 3D data that learn representations of objects, spatial structure, physical interactions, and temporal changes, and their use as priors for robot policy learning.</li>
+    <li><b>Vision-language-action models.</b> Vision-language models and action-grounded variants, including VLAs and VLNs, that connect visual and semantic understanding to executable robot actions for navigation, manipulation, and other embodied tasks.</li>
+    <li><b>World action models.</b> Models that couple predictions of future world evolution with robot action generation, providing a direct interface between generative world modeling and executable robot behavior.</li>
+    <li><b>World-to-action grounding.</b> Methods for translating generated future states, trajectories, or observations into executable robot actions, including action inference, inverse dynamics, trajectory optimization, and policy learning.</li>
+    <li><b>Predictive dynamics models.</b> Models that learn how environments evolve under robot actions, including prediction of future states, observations, rewards, and interaction outcomes for model-based policy learning and planning.</li>
+    <li><b>Closed-loop control from generative models.</b> Methods that ground generative predictions into reliable behavior through feedback, replanning, error correction, uncertainty estimation, and recovery from prediction errors.</li>
+    <li><b>Sim-to-real transfer.</b> Methods for transferring generative priors, representations, policies, and predictive models from simulation to physical robots, including adaptation to visual, sensing, embodiment, and dynamics gaps.</li>
+    <li><b>Cross-embodiment grounding.</b> Methods for transferring action knowledge learned from videos, demonstrations, simulations, or other robots across different embodiments while respecting their kinematic, dynamic, and sensing constraints.</li>
+    <li><b>Object- and interaction-centric representations.</b> Representations of objects, geometry, contact, affordances, and interactions that expose actionable structure for connecting generative world models to robot behavior.</li>
+    <li><b>Action supervision from diverse data.</b> Methods for extracting, generating, or acquiring action supervision from large-scale video, image, and 3D data, human demonstrations, simulation, and robot interactions, including action inference, action discovery, human-to-robot retargeting, demonstration synthesis, and scalable data collection.</li>
+    <li><b>Robot data efficiency and knowledge transfer.</b> Methods for leveraging pretrained generative models and diverse data sources to reduce the amount of robot data required for policy learning, including data selection, quality assessment, adaptation, fine-tuning, and transfer of knowledge across tasks, environments, and embodiments.</li>
+    <li><b>Evaluation of the action gap.</b> Benchmarks and evaluation protocols for measuring how well generative models translate world knowledge into executable behavior, including action feasibility, controllability, generalization, robustness, data efficiency, long-horizon consistency, and inference cost.</li>
+  </ul>
+
+  <h3 class="sub-head">Submission tracks</h3>
+  <div class="track-grid">
+    <div class="track">
+      <span class="tag">Track 1</span>
+      <h4>Research papers</h4>
+      <p>Novel methods, empirical studies, algorithmic advances, benchmarks, datasets, or system demonstrations that bridge generative pretraining and robot action.</p>
+      <span class="len">4–9 pages + references</span>
+    </div>
+    <div class="track">
+      <span class="tag">Track 2</span>
+      <h4>Position &amp; negative-result papers</h4>
+      <p>Opinionated positions on the right abstractions or evaluation criteria, reproducibility studies, and rigorous negative results that the community should know about.</p>
+      <span class="len">4–9 pages + references</span>
+    </div>
+  </div>
+
+  <h3 class="sub-head">Submission guidelines</h3>
+  <p class="prose">Submissions should follow the <a href="https://drive.google.com/file/d/1R9irIW0ImqeDHh5g8Ukm2XGy91sWxOsQ/view?usp=drive_link" target="_blank" rel="noopener">CoRL 2026 LaTeX template</a> and be between 4 and 9 pages, excluding references and appendices. All papers must be submitted as anonymized PDFs for double-blind review via <a href="https://openreview.net/group?id=robot-learning.org/CoRL/2026/Workshop/TAG" target="_blank" rel="noopener">OpenReview</a>, with author names, affiliations, and acknowledgments removed and prior work cited in the third person.</p>
+
+  <p class="prose">Accepted papers will be featured in a poster session, with a small number selected for oral presentation. Proceedings are non-archival, allowing future conference or journal submissions; work under review at or accepted by other venues is welcome, though CoRL 2026 main-conference papers are not eligible.</p>
+
+  <h3 class="sub-head">Important dates</h3>
+  <div class="dates-wrap">
+    <table class="dates">
+      <thead>
+        <tr><th>Milestone</th><th>Date (AoE)</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Submission deadline</td><td class="dt">October 8, 2026</td></tr>
+        <tr><td>Acceptance notification</td><td class="dt">October 29, 2026</td></tr>
+        <tr><td>Camera-ready due</td><td class="dt">November 5, 2026</td></tr>
+        <tr class="hl"><td>Workshop day</td><td class="dt">November 12, 2026</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="dates-note">All deadlines are 11:59 PM Anywhere on Earth.</p>
+
+  <h3 class="sub-head">Awards</h3>
+  <p class="prose">Thanks to the generous sponsorship of <a href="https://lambda.ai/" target="_blank" rel="noopener"><b>Lambda</b></a>, the workshop will present:</p>
+  <ul class="topic-list">
+    <li><b>Best Paper Award:</b> $3,000 in compute credits, selected from all accepted papers across both tracks and announced during the closing synthesis.</li>
+    <li><b>Oral Paper Awards:</b> $1,500 in compute credits each, for a small number of accepted papers selected for oral presentation at the workshop, chosen on review scores and breadth of interest to the audience.</li>
+    <li><b>All other accepted papers:</b> $400 in compute credits.</li>
+  </ul>
+
+  <div class="cfp-box">
+    <h3>Spread the word</h3>
+    <p>The call is distributed through this website, relevant mailing lists, social media, and the networks of the organizers and speakers. We especially encourage submissions from junior researchers, underrepresented groups, and institutions across different geographic regions.</p>
+    <p>Questions about the call? Contact <a href="mailto:action.gap.workshop@gmail.com">action.gap.workshop@gmail.com</a>.</p>
+  </div>
+</section>
+<section id="schedule">
+  <div class="sec-head"><span class="sec-num">04</span><h2>Schedule</h2></div>
+  <p class="lead">An interactive half-day event rather than a sequence of talks. Invited talks are paired with oral presentations of accepted papers and open discussion.</p>
+  <div class="sched" style="margin-top:26px;">
+    <div class="sched-row"><div class="t">08:30 – 08:45</div><div class="d"><span class="sched-tag">Framing</span><b>Opening framing</b></div></div>
+    <div class="sched-row"><div class="t">08:45 – 09:10</div><div class="d"><span class="sched-tag">Talk</span><b>Invited talk 1</b></div></div>
+    <div class="sched-row"><div class="t">09:15 – 09:40</div><div class="d"><span class="sched-tag">Talk</span><b>Invited talk 2</b></div></div>
+    <div class="sched-row"><div class="t">09:40 – 10:00</div><div class="d"><span class="sched-tag">Orals</span><b>Oral paper presentations · session 1</b></div></div>
+    <div class="sched-row"><div class="t">10:00 – 10:30</div><div class="d"><span class="sched-tag">Discussion</span><b>Benchmark / evaluation discussion</b></div></div>
+    <div class="sched-row"><div class="t">10:30 – 11:00</div><div class="d"><span class="sched-tag">Break</span><b>Coffee break &amp; poster session</b></div></div>
+    <div class="sched-row"><div class="t">11:00 – 11:25</div><div class="d"><span class="sched-tag">Talk</span><b>Invited talk 3</b></div></div>
+    <div class="sched-row"><div class="t">11:30 – 11:55</div><div class="d"><span class="sched-tag">Talk</span><b>Invited talk 4</b></div></div>
+    <div class="sched-row"><div class="t">11:55 – 12:15</div><div class="d"><span class="sched-tag">Orals</span><b>Oral paper presentations · session 2</b></div></div>
+    <div class="sched-row"><div class="t">12:15 – 12:30</div><div class="d"><span class="sched-tag">Synthesis</span><b>Closing discussion and synthesis</b></div></div>
+  </div>
+  <p class="sched-note">Tentative morning schedule. Times subject to change as the program is finalized.</p>
+</section>
+<section id="committee">
+  <div class="sec-head"><span class="sec-num">05</span><h2>Organizers</h2></div>
+
+  <div class="spk-grid org-grid">
+
+    <figure class="spk">
+      <img src="assets/organizers/xinyi-xu.jpg" alt="Xinyi Xu" width="156" height="156" loading="lazy">
+      <figcaption>
+        <a class="nm" href="https://XinyiXu-0214.github.io" target="_blank" rel="noopener">Xinyi Xu</a>
+        <span class="aff">Northeastern University</span>
+      </figcaption>
+    </figure>
+
+    <figure class="spk">
+      <img src="assets/organizers/yu-qi.jpg" alt="Yu Qi" width="156" height="156" loading="lazy">
+      <figcaption>
+        <a class="nm" href="https://yqi19.github.io/" target="_blank" rel="noopener">Yu Qi</a>
+        <span class="aff">Northeastern University</span>
+      </figcaption>
+    </figure>
+
+    <figure class="spk">
+      <img src="assets/organizers/yifan-yin.jpg" alt="Yifan Yin" width="156" height="156" loading="lazy">
+      <figcaption>
+        <a class="nm" href="https://yifanyin11.github.io/" target="_blank" rel="noopener">Yifan Yin</a>
+        <span class="aff">Johns Hopkins University</span>
+      </figcaption>
+    </figure>
+
+    <figure class="spk">
+      <img src="assets/organizers/kevin-zhang.jpg" alt="Kevin Zhang" width="156" height="156" loading="lazy">
+      <figcaption>
+        <a class="nm" href="https://scholar.google.com/citations?user=TJAXRy8AAAAJ&hl=en" target="_blank" rel="noopener">Kevin Zhang</a>
+        <span class="aff">Peking University</span>
+      </figcaption>
+    </figure>
+
+    <figure class="spk">
+      <img src="assets/organizers/xiaowei-chi.jpg" alt="Xiaowei Chi" width="156" height="156" loading="lazy">
+      <figcaption>
+        <a class="nm" href="https://litwellchi.github.io/" target="_blank" rel="noopener">Xiaowei Chi</a>
+        <span class="aff">HKUST</span>
+      </figcaption>
+    </figure>
+
+    <figure class="spk">
+      <img src="assets/organizers/siyuan-ma.jpg" alt="Siyuan Ma" width="156" height="156" loading="lazy">
+      <figcaption>
+        <a class="nm" href="https://SiyuanMaCS.github.io" target="_blank" rel="noopener">Siyuan Ma</a>
+        <span class="aff">CUHK</span>
+      </figcaption>
+    </figure>
+
+    <figure class="spk">
+      <img src="assets/organizers/siyuan-wang.jpg" alt="Siyuan Wang" width="156" height="156" loading="lazy">
+      <figcaption>
+        <a class="nm" href="https://siyuanwangw.github.io/" target="_blank" rel="noopener">Siyuan Wang</a>
+        <span class="aff">CUHK</span>
+      </figcaption>
+    </figure>
+
+    <figure class="spk">
+      <img src="assets/organizers/lawson-wong.jpg" alt="Lawson Wong" width="156" height="156" loading="lazy">
+      <figcaption>
+        <a class="nm" href="https://www.ccs.neu.edu/home/lsw/" target="_blank" rel="noopener">Lawson Wong</a>
+        <span class="aff">Northeastern University</span>
+      </figcaption>
+    </figure>
+
+    <figure class="spk">
+      <img src="assets/organizers/tianmin-shu.jpg" alt="Tianmin Shu" width="156" height="156" loading="lazy">
+      <figcaption>
+        <a class="nm" href="https://www.tshu.io/" target="_blank" rel="noopener">Tianmin Shu</a>
+        <span class="aff">Johns Hopkins University</span>
+      </figcaption>
+    </figure>
+
+    <figure class="spk">
+      <img src="assets/organizers/jiayuan-mao.jpg" alt="Jiayuan Mao" width="156" height="156" loading="lazy">
+      <figcaption>
+        <a class="nm" href="https://jiayuanm.com/" target="_blank" rel="noopener">Jiayuan Mao</a>
+        <span class="aff">UPenn · Amazon</span>
+      </figcaption>
+    </figure>
+
+    <figure class="spk">
+      <img src="assets/organizers/jonathan-tremblay.jpg" alt="Jonathan Tremblay" width="156" height="156" loading="lazy">
+      <figcaption>
+        <a class="nm" href="https://jtremblay.org/" target="_blank" rel="noopener">Jonathan Tremblay</a>
+        <span class="aff">NVIDIA</span>
+      </figcaption>
+    </figure>
+
+    <figure class="spk">
+      <img src="assets/organizers/valts-blukis.jpg" alt="Valts Blukis" width="156" height="156" loading="lazy">
+      <figcaption>
+        <a class="nm" href="https://www.linkedin.com/in/valtsblukis" target="_blank" rel="noopener">Valts Blukis</a>
+        <span class="aff">NVIDIA</span>
+      </figcaption>
+    </figure>
+
+    <figure class="spk">
+      <img src="assets/organizers/weiyang-liu.jpg" alt="Weiyang Liu" width="156" height="156" loading="lazy">
+      <figcaption>
+        <a class="nm" href="https://wyliu.com/" target="_blank" rel="noopener">Weiyang Liu</a>
+        <span class="aff">CUHK</span>
+      </figcaption>
+    </figure>
+
+    <figure class="spk">
+      <img src="assets/organizers/jianwen-xie.jpg" alt="Jianwen Xie" width="156" height="156" loading="lazy">
+      <figcaption>
+        <a class="nm" href="https://scholar.google.com/citations?user=O3p4CIQAAAAJ&hl=en" target="_blank" rel="noopener">Jianwen Xie</a>
+        <span class="aff">Lambda</span>
+      </figcaption>
+    </figure>
+
+  </div>
+</section>
+<section id="sponsor">
+  <div class="sec-head"><span class="sec-num">06</span><h2>Sponsor</h2></div>
+  <div class="sponsor-block">
+    <a class="sponsor-mark" href="https://lambda.ai/" target="_blank" rel="noopener"><svg class="lambda-logo" role="img" aria-label="Lambda" viewBox="0 0 196 42" xmlns="http://www.w3.org/2000/svg"><path d="M94.0212 22.9599C94.0212 18.203 91.8203 14.2378 84.9883 14.2378C81.263 14.2378 78.4559 15.2323 77.0335 16.0177L79.0685 19.6155C80.3952 19.0011 82.1689 18.545 83.8592 18.545C86.9978 18.545 87.5845 20.0716 87.5845 21.1483V22.3772C80.9565 22.3772 75.5663 23.9164 75.5663 29.1674C75.5663 32.3915 78.0351 35.3685 82.188 35.3685C84.6183 35.3685 86.7108 34.5007 88.0502 32.8918H88.178L88.5544 34.9188H94.0212V22.9662V22.9599ZM87.8017 26.089V27.5522C87.8017 27.9259 87.7568 28.2933 87.6738 28.6226C87.2594 29.9022 85.9581 30.9409 84.363 30.9409C82.9406 30.9409 81.4416 30.4975 81.4289 28.8824C81.448 26.317 84.2737 26.0826 87.7953 26.0826L87.8017 26.089Z" fill="currentColor"/><path d="M151.582 24.4359C151.627 18.2411 148.086 14.2316 143.263 14.2316C140.463 14.2316 138.364 15.3464 137.165 17.0819H137.082V6.26953H130.83V34.8872H135.972L136.22 32.0749H136.303C137.745 34.4692 140.01 35.3369 142.357 35.3369C146.97 35.3369 151.582 31.7012 151.582 24.4295V24.4359ZM140.877 30.3773C139.066 30.3773 137.624 29.0978 137.209 27.4066C137.126 27.0772 137.088 26.7035 137.088 26.2918V23.3211C137.088 22.9093 137.126 22.5356 137.209 22.1619C137.624 20.344 139.187 19.0645 140.877 19.0645C143.799 19.0645 145.203 21.5412 145.203 24.6829C145.203 28.3187 143.557 30.3837 140.877 30.3837V30.3773Z" fill="currentColor"/><path d="M196 22.9599C196 18.203 193.793 14.2378 186.967 14.2378C183.241 14.2378 180.435 15.2323 179.012 16.0177L181.047 19.6155C182.374 19.0011 184.147 18.545 185.838 18.545C188.977 18.545 189.563 20.0716 189.563 21.1483V22.3772C182.935 22.3772 177.545 23.9164 177.545 29.1674C177.545 32.3915 180.02 35.3685 184.166 35.3685C186.597 35.3685 188.689 34.5007 190.029 32.8918H190.156L190.533 34.9188H196V22.9662V22.9599ZM189.786 27.5522C189.786 27.9259 189.742 28.2933 189.659 28.6226C189.238 29.9022 187.943 30.9409 186.348 30.9409C184.925 30.9409 183.426 30.4975 183.42 28.8824C183.433 26.317 186.265 26.0826 189.78 26.0826V27.5522H189.786Z" fill="currentColor"/><path d="M168.639 6.26367V16.506H168.556C167.638 15.0998 165.673 14.232 163.172 14.232C158.292 14.232 153.993 18.1655 154.031 24.9874C154.031 31.2709 157.909 35.3627 162.751 35.3627C165.379 35.3627 167.842 34.2036 169.137 31.9296H169.22L169.513 34.9067H174.974V6.26367H168.639ZM168.633 25.8995C168.633 26.4379 168.588 26.894 168.467 27.35C168.091 29.1299 166.63 30.3651 164.792 30.3651C162.164 30.3651 160.455 28.2178 160.455 24.7847C160.455 21.5986 161.96 19.0397 164.837 19.0397C166.796 19.0397 168.174 20.4458 168.55 22.1434C168.594 22.4727 168.633 22.9288 168.633 23.2582V25.9059V25.8995Z" fill="currentColor"/><path d="M120.737 14.2378C119.231 14.2378 117.981 14.5672 116.859 15.2323C115.895 15.815 114.983 16.6384 114.23 17.6709H114.147C113.274 15.5616 111.187 14.2378 108.559 14.2378C105.05 14.2378 103.258 16.138 102.384 17.4239H102.257L101.963 14.6939H96.7897V34.9125H102.965V23.131C102.965 22.6369 103.009 22.0605 103.213 21.5601C103.59 20.5276 104.547 19.2861 106.174 19.2861C108.176 19.2861 109.095 21.0217 109.095 23.587V34.9188H115.27V23.0929C115.27 22.5989 115.353 21.9338 115.519 21.4841C115.934 20.2869 116.98 19.2925 118.441 19.2925C120.482 19.2925 121.445 20.99 121.445 23.9227V34.9188H127.621V23.0106C127.621 16.9741 124.66 14.2441 120.737 14.2441V14.2378Z" fill="currentColor"/><path d="M62.0867 29.6105H73.2697V34.9059H55.7013V7.03564H62.0867V29.6105Z" fill="currentColor"/><path d="M10.9895 7.3167L18.3554 20.1225L10.1598 34.9527L15.4345 34.9485L20.8954 24.8307L26.7119 34.9527H32.0881L16.3658 7.3125L10.9895 7.3167Z" fill="currentColor"/><path d="M0 0V42H42.3326V0H0ZM38.5946 38.3025H3.73797V3.6975H38.5946V38.3025Z" fill="currentColor"/></svg></a>
+    <p>We gratefully acknowledge <a href="https://lambda.ai/" target="_blank" rel="noopener"><b>Lambda</b></a> for sponsoring the paper awards and compute credits at this workshop.</p>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="foot-inner">
+    <div class="brand"><span class="dot"></span>G2A · CoRL 2026 · Austin, TX</div>
+    <div class="sponsor">Sponsored by <a href="https://lambda.ai/" target="_blank" rel="noopener"><svg class="lambda-logo" role="img" aria-label="Lambda" viewBox="0 0 196 42" xmlns="http://www.w3.org/2000/svg"><path d="M94.0212 22.9599C94.0212 18.203 91.8203 14.2378 84.9883 14.2378C81.263 14.2378 78.4559 15.2323 77.0335 16.0177L79.0685 19.6155C80.3952 19.0011 82.1689 18.545 83.8592 18.545C86.9978 18.545 87.5845 20.0716 87.5845 21.1483V22.3772C80.9565 22.3772 75.5663 23.9164 75.5663 29.1674C75.5663 32.3915 78.0351 35.3685 82.188 35.3685C84.6183 35.3685 86.7108 34.5007 88.0502 32.8918H88.178L88.5544 34.9188H94.0212V22.9662V22.9599ZM87.8017 26.089V27.5522C87.8017 27.9259 87.7568 28.2933 87.6738 28.6226C87.2594 29.9022 85.9581 30.9409 84.363 30.9409C82.9406 30.9409 81.4416 30.4975 81.4289 28.8824C81.448 26.317 84.2737 26.0826 87.7953 26.0826L87.8017 26.089Z" fill="currentColor"/><path d="M151.582 24.4359C151.627 18.2411 148.086 14.2316 143.263 14.2316C140.463 14.2316 138.364 15.3464 137.165 17.0819H137.082V6.26953H130.83V34.8872H135.972L136.22 32.0749H136.303C137.745 34.4692 140.01 35.3369 142.357 35.3369C146.97 35.3369 151.582 31.7012 151.582 24.4295V24.4359ZM140.877 30.3773C139.066 30.3773 137.624 29.0978 137.209 27.4066C137.126 27.0772 137.088 26.7035 137.088 26.2918V23.3211C137.088 22.9093 137.126 22.5356 137.209 22.1619C137.624 20.344 139.187 19.0645 140.877 19.0645C143.799 19.0645 145.203 21.5412 145.203 24.6829C145.203 28.3187 143.557 30.3837 140.877 30.3837V30.3773Z" fill="currentColor"/><path d="M196 22.9599C196 18.203 193.793 14.2378 186.967 14.2378C183.241 14.2378 180.435 15.2323 179.012 16.0177L181.047 19.6155C182.374 19.0011 184.147 18.545 185.838 18.545C188.977 18.545 189.563 20.0716 189.563 21.1483V22.3772C182.935 22.3772 177.545 23.9164 177.545 29.1674C177.545 32.3915 180.02 35.3685 184.166 35.3685C186.597 35.3685 188.689 34.5007 190.029 32.8918H190.156L190.533 34.9188H196V22.9662V22.9599ZM189.786 27.5522C189.786 27.9259 189.742 28.2933 189.659 28.6226C189.238 29.9022 187.943 30.9409 186.348 30.9409C184.925 30.9409 183.426 30.4975 183.42 28.8824C183.433 26.317 186.265 26.0826 189.78 26.0826V27.5522H189.786Z" fill="currentColor"/><path d="M168.639 6.26367V16.506H168.556C167.638 15.0998 165.673 14.232 163.172 14.232C158.292 14.232 153.993 18.1655 154.031 24.9874C154.031 31.2709 157.909 35.3627 162.751 35.3627C165.379 35.3627 167.842 34.2036 169.137 31.9296H169.22L169.513 34.9067H174.974V6.26367H168.639ZM168.633 25.8995C168.633 26.4379 168.588 26.894 168.467 27.35C168.091 29.1299 166.63 30.3651 164.792 30.3651C162.164 30.3651 160.455 28.2178 160.455 24.7847C160.455 21.5986 161.96 19.0397 164.837 19.0397C166.796 19.0397 168.174 20.4458 168.55 22.1434C168.594 22.4727 168.633 22.9288 168.633 23.2582V25.9059V25.8995Z" fill="currentColor"/><path d="M120.737 14.2378C119.231 14.2378 117.981 14.5672 116.859 15.2323C115.895 15.815 114.983 16.6384 114.23 17.6709H114.147C113.274 15.5616 111.187 14.2378 108.559 14.2378C105.05 14.2378 103.258 16.138 102.384 17.4239H102.257L101.963 14.6939H96.7897V34.9125H102.965V23.131C102.965 22.6369 103.009 22.0605 103.213 21.5601C103.59 20.5276 104.547 19.2861 106.174 19.2861C108.176 19.2861 109.095 21.0217 109.095 23.587V34.9188H115.27V23.0929C115.27 22.5989 115.353 21.9338 115.519 21.4841C115.934 20.2869 116.98 19.2925 118.441 19.2925C120.482 19.2925 121.445 20.99 121.445 23.9227V34.9188H127.621V23.0106C127.621 16.9741 124.66 14.2441 120.737 14.2441V14.2378Z" fill="currentColor"/><path d="M62.0867 29.6105H73.2697V34.9059H55.7013V7.03564H62.0867V29.6105Z" fill="currentColor"/><path d="M10.9895 7.3167L18.3554 20.1225L10.1598 34.9527L15.4345 34.9485L20.8954 24.8307L26.7119 34.9527H32.0881L16.3658 7.3125L10.9895 7.3167Z" fill="currentColor"/><path d="M0 0V42H42.3326V0H0ZM38.5946 38.3025H3.73797V3.6975H38.5946V38.3025Z" fill="currentColor"/></svg></a></div>
+    <p>Contact: <a href="mailto:action.gap.workshop@gmail.com">action.gap.workshop@gmail.com</a></p>
+  </div>
+</footer>
+
+<script>
+(function () {
+  var links = [].slice.call(document.querySelectorAll('.nav-links a[href^="#"]'));
+  var items = links
+    .map(function (a) { return { a: a, el: document.getElementById(a.getAttribute('href').slice(1)) }; })
+    .filter(function (i) { return i.el; });
+  if (!items.length) return;
+
+  var nav = document.querySelector('nav');
+
+  function setActive(el) {
+    items.forEach(function (i) {
+      var on = i.a === el;
+      i.a.classList.toggle('active', on);
+      if (on) { i.a.setAttribute('aria-current', 'true'); } else { i.a.removeAttribute('aria-current'); }
+    });
+  }
+
+  function update() {
+    // the line just below the sticky nav decides which section we are "in"
+    var line = window.pageYOffset + (nav ? nav.offsetHeight : 0) + 12;
+    var current = items[0];
+    items.forEach(function (i) {
+      if (i.el.getBoundingClientRect().top + window.pageYOffset <= line) current = i;
+    });
+    // last section can be too short to ever reach the line — force it at the bottom
+    if (window.innerHeight + window.pageYOffset >= document.documentElement.scrollHeight - 2) {
+      current = items[items.length - 1];
+    }
+    setActive(current.a);
+  }
+
+  // called directly rather than gated behind requestAnimationFrame: update() is
+  // six getBoundingClientRect reads, and an rAF gate silently wedges shut if the
+  // callback never fires (background tabs, reduced-motion/headless contexts).
+  window.addEventListener('scroll', update, { passive: true });
+  window.addEventListener('resize', update);
+  // collapse the mobile menu after tapping a link
+  links.forEach(function (a) {
+    a.addEventListener('click', function () { document.getElementById('nl').classList.remove('open'); });
+  });
+  update();
+})();
+</script>
+
+</body>
+</html>
