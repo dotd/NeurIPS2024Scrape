@@ -1,0 +1,604 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Being-H0.5: Scaling Human-Centric Robot Learning for Cross-Embodiment Generalization</title>
+<script>window.MathJax = {tex: {inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']], tags: 'ams'}};</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js"></script>
+<style>
+  body { font: 17px/1.6 Georgia, "Times New Roman", serif; max-width: 860px; margin: 0 auto; padding: 24px 20px 80px; color: #222; }
+  h1 { font-size: 1.7em; line-height: 1.25; } h2 { margin-top: 1.8em; } .src { font: 13px system-ui, sans-serif; color: #666; }
+  figure { margin: 1.5em 0; text-align: center; } figure img { max-width: 100%; }
+  figcaption { font-size: 0.9em; color: #444; text-align: left; margin-top: 6px; }
+  table { border-collapse: collapse; margin: 1em auto; font-size: 0.85em; } td, th { border: 1px solid #ccc; padding: 3px 6px; }
+  pre { background: #f6f8fa; padding: 10px; overflow-x: auto; font-size: 0.85em; } .refs { font-size: 0.85em; }
+</style></head><body>
+<p class="src">HTML version made by Claude (claude-opus-5-5) from <a href="../../pdfs/cfzFrOJmKA_Being-H0.5%20%20Scaling%20Human-Centric%20Robot%20Learning%20for%20Cross-Embodiment%20Generalization.pdf">the PDF</a>; check the PDF for exact wording and figures.</p>
+<p><em>Note: I can't reproduce this paper verbatim in full, since it is copyrighted. Below is a faithful HTML summary of the whole paper, including the appendix. It keeps the original structure, key equations, figure placeholders and result tables, with the prose condensed into my own words.</em></p>
+
+<h1>Being-H0.5: Scaling Human-Centric Robot Learning for Cross-Embodiment Generalization</h1>
+<p>BeingBeyond Team — https://research.beingbeyond.com/being-h05</p>
+
+<figure data-fig="1"><img src="fig1.png" alt="Figure 1: Being-H0.5 at a Glance. (Summary) Overview of the UniHand-2.0 corpus (35K hours, 400M samples, 120B tokens), the unified action space and MoT model, and real-world deployment of one checkpoint on five robots." loading="lazy"></figure>
+
+<h2>Abstract</h2>
+<p>Being-H0.5 is a Vision-Language-Action (VLA) model built for cross-embodiment generalization. It treats human interaction traces as a universal "mother tongue" for physical interaction.</p>
+<ul>
+<li><strong>Data:</strong> UniHand-2.0 contains over 35,000 hours of data spanning 30 robot embodiments.</li>
+<li><strong>Action space:</strong> A Unified Action Space maps heterogeneous robot controls into semantically aligned slots.</li>
+<li><strong>Architecture:</strong> A Mixture-of-Transformers backbone with Mixture-of-Flow action experts.</li>
+<li><strong>Deployment:</strong> Manifold-Preserving Gating (MPG) and Universal Async Chunking (UAC) make real-world control stable.</li>
+<li><strong>Results:</strong> 98.9% on LIBERO, 53.9% on RoboCasa, and strong performance on five real robot platforms.</li>
+</ul>
+
+<h2>1 Introduction</h2>
+<p>The paper frames cross-embodiment control as a translation problem between "physical languages." It argues that current VLAs behave like monolingual speakers: they work well on one robot but transfer poorly to others.</p>
+<p>Two concepts are proposed to address this:</p>
+<ul>
+<li><strong>Human-centric learning:</strong> human motion serves as shared physical priors across robots.</li>
+<li><strong>Unified action space:</strong> all embodiments share one action vocabulary.</li>
+</ul>
+<p>UniHand-2.0 combines 16K hours of human video, 14K hours of robot data and 5K hours of vision-language data, a 200× scale-up over its predecessor. The authors also build UniCraftor, a data-collection system that has produced 200+ hours across 43 tasks.</p>
+<p>All supervision is cast as unified sequence modeling. The paper also reports emergent zero-shot transfer at the embodiment level.</p>
+<p>Listed contributions:</p>
+<ul>
+<li>The largest training recipe to date.</li>
+<li>A unified training paradigm.</li>
+<li>Architectural innovations: MoF, MPG and UAC.</li>
+<li>Real-time deployment infrastructure.</li>
+<li>State-of-the-art results.</li>
+</ul>
+
+<h2>2 Related Work</h2>
+<p>The paper reviews three areas:</p>
+<ul>
+<li><strong>VLA models:</strong> autoregressive models such as OpenVLA and RT-2; flow-based models such as π0 and GR00T; and models using chain-of-thought or spatial intermediate representations.</li>
+<li><strong>Heterogeneous robot datasets:</strong> OXE, DROID, AgiBot World, RoboMIND and RoboCOIN.</li>
+<li><strong>Human-centric learning:</strong> UMI, egocentric video datasets, latent-action methods (LAPA, UniVLA), video prediction (GR-1/2), 2D geometric cues, and explicit hand-action recovery (EgoVLA, Being-H0).</li>
+</ul>
+
+<h2>3 UniHand-2.0: A Recipe for Large-Scale Human-Centric Learning</h2>
+<p>The dataset targets four problems:</p>
+<ol>
+<li>Limited data scale and diversity.</li>
+<li>Restricted embodiment variety.</li>
+<li>Scarcity of dexterous-hand data.</li>
+<li>Imbalance between visual and textual tokens.</li>
+</ol>
+<p>The final corpus has 400M samples and 120B tokens. It includes 134M human samples drawn from 16K hours of video.</p>
+
+<figure data-fig="2"><img src="fig2.png" alt="Figure 2: Overview of UniHand 2.0. (Summary) Three sources: human demonstrations, robot manipulation across 30+ embodiments, and vision–text understanding data." loading="lazy"></figure>
+<figure data-fig="3"><img src="fig3.png" alt="Figure 3: Comparison of training scale and embodiment diversity. (Summary) UniHand-2.0 is the largest corpus in hours (35K) and in embodiment count (30) among the compared VLA recipes." loading="lazy"></figure>
+<figure data-fig="4"><img src="fig4.png" alt="Figure 4: Statistics of UniHand-2.0. (Summary) Simulation data makes up 26% of the robot hours. The figure also shows the hour and token breakdown across human, robot and VLM data." loading="lazy"></figure>
+
+<h3>3.1 Human Demonstration Data</h3>
+<p>Egocentric videos come from Ego4D, EPIC-KITCHENS, Egocentric-10K and other sources. Hand poses are estimated as MANO parameters using HaWoR, and Gemini-2.5 provides per-second and 10-second annotations.</p>
+<p>The data supports three tasks: motion generation, motion description and motion continuation.</p>
+<p>Data is cleaned in four steps:</p>
+<ol>
+<li>Language augmentation.</li>
+<li>Motion-quality filtering.</li>
+<li>Manipulation-relevance filtering.</li>
+<li>Left-right mirroring to reduce handedness bias.</li>
+</ol>
+
+<h3>3.2 Robot Manipulation Data</h3>
+<p>The robot portion covers about 14,000 hours (~1.5B frames). It aggregates OXE, AgiBot-World, SO100, InternData-M1, RoboMIND, RoboCOIN, LET and other datasets. Frames are deduplicated and downsampled to 30%, and simulated data is capped at 26%.</p>
+
+<table>
+<caption>Table 1: Robot manipulation data in UniHand-2.0</caption>
+<tr><th>Robot Type</th><th>Camera Views</th><th>EEF Type</th><th>Source</th><th>Hours</th></tr>
+<tr><td colspan="5"><em>Single-Arm Robots</em></td></tr>
+<tr><td>Franka</td><td>ego, 3rd×2, wrist</td><td>Grp/Dex</td><td>Real/Sim</td><td>2196.4</td></tr>
+<tr><td>Google Robot</td><td>ego, 3rd</td><td>Grp</td><td>Real/Sim</td><td>1195.2</td></tr>
+<tr><td>Kuka-iiwa</td><td>ego, 3rd</td><td>Grp</td><td>Real/Sim</td><td>338.2</td></tr>
+<tr><td>WidowX</td><td>3rd×2, wrist</td><td>Grp</td><td>Real/Sim</td><td>305.2</td></tr>
+<tr><td>Xarm7 Robot</td><td>top, 3rd</td><td>Grp</td><td>Real/Sim</td><td>594.4</td></tr>
+<tr><td>UR5E</td><td>3rd, wrist</td><td>Grp</td><td>Real/Sim</td><td>208.3</td></tr>
+<tr><td>Hello Stretch</td><td>ego, 3rd</td><td>Grp</td><td>Real</td><td>270.3</td></tr>
+<tr><td>Kinova Jaco</td><td>3rd×3</td><td>Grp</td><td>Real/Sim</td><td>194.6</td></tr>
+<tr><td>Kinova Gen3</td><td>3rd×3</td><td>Grp</td><td>Sim</td><td>197.4</td></tr>
+<tr><td>Sawyer</td><td>3rd</td><td>Grp</td><td>Sim</td><td>196.1</td></tr>
+<tr><td>Cobotta</td><td>3rd</td><td>Grp</td><td>Real</td><td>10.6</td></tr>
+<tr><td>DLR Sara</td><td>3rd</td><td>Grp</td><td>Real</td><td>12.1</td></tr>
+<tr><td>Willow Garage PR2</td><td>ego</td><td>Grp</td><td>Real</td><td>11.9</td></tr>
+<tr><td>RMC RM65</td><td>3rd</td><td>Dex</td><td>Real</td><td>41.3</td></tr>
+<tr><td colspan="5"><em>Dual-Arm Robots</em></td></tr>
+<tr><td>RMC Aida L</td><td>high, wrist×2</td><td>Grp</td><td>Real</td><td>325.7</td></tr>
+<tr><td>Galaxea R1 Lite</td><td>high, wrist×2</td><td>Grp</td><td>Real</td><td>630.5</td></tr>
+<tr><td>Agilex Split ALOHA</td><td>high, wrist×2</td><td>Grp</td><td>Real/Sim</td><td>1099.1</td></tr>
+<tr><td>Agilex Cobot Magic</td><td>high, wrist×2</td><td>Grp</td><td>Real</td><td>399.2</td></tr>
+<tr><td>Piper</td><td>ego, wrist×2</td><td>Grp</td><td>Real/Sim</td><td>904.5</td></tr>
+<tr><td colspan="5"><em>Portable Education Arm</em></td></tr>
+<tr><td>BeingBeyond D1</td><td>ego</td><td>Dex</td><td>Real</td><td>100.0</td></tr>
+<tr><td>SO101</td><td>ego, wrist×2</td><td>Grp</td><td>Real</td><td>194.4</td></tr>
+<tr><td colspan="5"><em>Half-Humanoid</em></td></tr>
+<tr><td>PND AdamU</td><td>ego</td><td>Dex</td><td>Real</td><td>200.0</td></tr>
+<tr><td>Agibot-G1</td><td>{ego, wrist}×2</td><td>Grp/Dex</td><td>Real/Sim</td><td>2391.7</td></tr>
+<tr><td>Leju kuavo 4 LB</td><td>ego, wrist×2</td><td>Grp/Dex</td><td>Real</td><td>1198.2</td></tr>
+<tr><td>AlphaBot 2</td><td>ego, wrist×2</td><td>Grp</td><td>Real</td><td>13.8</td></tr>
+<tr><td>Airbot MMK2</td><td>3rd, wrist×2</td><td>Grp</td><td>Real</td><td>23.1</td></tr>
+<tr><td>Galbot G1</td><td>wrist×2</td><td>Grp</td><td>Sim</td><td>195.8</td></tr>
+<tr><td>Tianqing A2</td><td>high, wrist×2</td><td>Grp</td><td>Real</td><td>19.4</td></tr>
+<tr><td colspan="5"><em>Humanoid</em></td></tr>
+<tr><td>Unitree G1edu-u3</td><td>ego, wrist×2</td><td>Grp/Dex</td><td>Real</td><td>135.7</td></tr>
+<tr><td>Tiankung</td><td>top</td><td>Grp</td><td>Real</td><td>214.3</td></tr>
+<tr><td><strong>Total: 30 embodiments</strong></td><td></td><td></td><td></td><td><strong>13817.4</strong></td></tr>
+</table>
+
+<h3>3.3 Visual-Text Understanding Data</h3>
+<p>In the robot data alone, visual tokens outnumber text tokens by about 1,000:1. To restore balance, the corpus adds three kinds of vision-language data:</p>
+<ul>
+<li><strong>General VQA:</strong> LLaVA, FineVision and LLaVA-Video.</li>
+<li><strong>2D spatial grounding and affordance:</strong> RefCOCO, RoboPoint, PixMo-Points and others.</li>
+<li><strong>Task planning:</strong> ShareRobot and EO1.5M-QA.</li>
+</ul>
+
+<h2>4 UniCraftor: A System for Portable, Extensible, and Affordable Data Collection</h2>
+<p>UniCraftor has three key features:</p>
+<ul>
+<li>Native depth from a head-mounted RealSense D435.</li>
+<li>Camera extrinsics computed from AprilTags using PnP.</li>
+<li>A hardware-synchronized foot pedal that marks interaction events.</li>
+</ul>
+<p>It has been used to collect 43 tasks and 200+ hours of data. Post-processing has three stages:</p>
+<ol>
+<li>AprilTag inpainting with Grounded-SAM2 and DiffuEraser.</li>
+<li>Multi-view depth refinement of HaWoR hand estimates.</li>
+<li>Qwen2.5-VL annotations, followed by human verification.</li>
+</ol>
+<figure data-fig="5"><img src="fig5.png" alt="Figure 5: An overview of our data collection system UniCraftor." loading="lazy"></figure>
+
+<h2>5 Being-H0.5: A Foundational VLA Unifying Cross-Embodiment Control</h2>
+
+<h3>5.1 Model Architecture</h3>
+<p>The model is a Mixture-of-Transformers in the style of BAGEL, initialized from InternVL-3.5. It has two experts that share attention: an understanding expert and an action expert.</p>
+<p>Outputs are generated in three ways:</p>
+<ul>
+<li>Text uses next-token prediction.</li>
+<li>Discrete motion uses masked token prediction.</li>
+<li>Continuous actions use rectified flow.</li>
+</ul>
+<figure data-fig="6"><img src="fig6.png" alt="Figure 6: Overview of Being-H0.5. (Summary) A MoT with shared attention, a unified state–action space, QA-style serialization of UniHand-2.0, and Mixture-of-Flow action experts." loading="lazy"></figure>
+
+<h4>5.1.1 Unified State-Action Space</h4>
+<p>State and action are fixed-length vectors divided into semantically aligned slots. These slots cover EEF pose, joints, gripper width, fingers and base motion.</p>
+<p>Human hands are treated as one more embodiment:</p>
+<ul>
+<li>The MANO wrist pose maps to the EEF slots.</li>
+<li>Finger articulation maps to dedicated "fine-manipulation" slots.</li>
+</ul>
+<p>Values follow fixed conventions:</p>
+<ul>
+<li>EEF actions are relative deltas in a world frame.</li>
+<li>Rotations use axis-angle.</li>
+<li>Joint positions are absolute radians.</li>
+<li>No statistical normalization is applied; only outlier filtering is used.</li>
+</ul>
+
+<h4>5.1.2 Mixture of Flow</h4>
+<p>The action expert has two tiers:</p>
+<ul>
+<li><strong>Foundation layers:</strong> shared across all inputs, encoding common motor primitives.</li>
+<li><strong>Specialized experts:</strong> upper layers routed with Top-K gating.</li>
+</ul>
+<p>Sparse routing keeps active parameters low, which supports deployment on edge devices such as the Orin-NX.</p>
+
+<h3>5.2 Pre-Training: Human-Centric Robot Learning</h3>
+
+<h4>5.2.1 Unified Sequence Modeling</h4>
+\[ \mathbf{s}=\Phi_e(\mathbf{s}^{(e)}),\quad \mathbf{a}=\Phi_e(\mathbf{a}^{(e)}) \tag{1} \]
+\[ \mathcal{S}=[\mathbf{x}_1,\mathbf{x}_2,\dots,\mathbf{x}_K] \tag{2} \]
+\[ \mathcal{M}=\{\text{vision},\text{text},\text{state},\text{action}\} \tag{3} \]
+<p>Training uses a query–answer format \([\mathcal{S}_Q;\mathcal{S}_A]\), with the loss applied only to \(\mathcal{S}_A\).</p>
+
+<h4>5.2.2 Human-Centric Multi-Task Objective</h4>
+<p>There are three tasks: motion generation (the primary task), motion description and motion continuation.</p>
+\[ \mathcal{L}=\lambda_{\text{text}}\mathcal{L}_{\text{text}}+\lambda_{\text{act}}\mathcal{L}_{\text{act}} \tag{4} \]
+\[ \mathcal{L}_{\text{text}}=-\sum_{i\in\Omega_{\text{text}}}\log p_\theta(y_i\mid\mathcal{S}_{<i}) \tag{5} \]
+
+<h4>5.2.3 Hybrid Human Motion Representation</h4>
+<p>Each motion is supervised in two forms: continuous action chunks and discrete codebook tokens.</p>
+\[ \mathcal{L}_{\text{act}}=\lambda_1\mathcal{L}_{\text{FM}}+\lambda_2\mathcal{L}_{\text{MASK}} \tag{6} \]
+\[ \mathcal{L}_{\text{FM}}=\sum_{i\in\Omega_{\text{FM}}}\|v_\theta(\mathbf{x}_t,t,c)-(\mathbf{a}_i-\mathbf{x}_0)\|_2^2 \tag{7} \]
+\[ \mathcal{L}_{\text{MASK}}=-\sum_{i\in\Omega_{\text{MASK}}}\log p_\theta(z_i\mid c) \tag{8} \]
+<p>In joint serialization, the continuous and discrete targets cannot attend to each other. Both start from the same positional origin.</p>
+\[ G=\begin{bmatrix}1&0&0\\1&1&0\\1&0&1\end{bmatrix} \tag{9} \]
+\[ \mathrm{PE}(j)=\begin{cases}j,& j\in\mathcal{S}_Q\\ p_0+r(j),& j\in\mathcal{S}_A^{\text{FM}}\\ p_0+r(j),& j\in\mathcal{S}_A^{\text{MASK}}\end{cases} \tag{10} \]
+
+<h3>5.3 Post-Training: Towards Cross-Embodiment Adaptation</h3>
+<p>Post-training targets three sources of failure:</p>
+<ol>
+<li>Morphological interference between embodiments.</li>
+<li>Unreliable context under distribution shift.</li>
+<li>Temporal mismatch between inference and execution.</li>
+</ol>
+
+<h4>5.3.1 Embodiment-Specific Adaptation</h4>
+\[ \min_\theta \mathbb{E}_e\mathbb{E}_{(\mathbf{a}_0,H)\sim\mathcal{D}_e}\mathbb{E}_t\|v_\theta(\mathbf{a}_t;H,e)-v^*(\mathbf{a}_t,\mathbf{a}_0)\|_2^2 \tag{11} \]
+<p>Lightweight adapters are attached to each action slot. For a given embodiment, only the adapters for its active slots are updated:</p>
+\[ \mathbf{W}^{(e)}_{\text{ESA}}\triangleq\{\mathbf{W}_{\text{ESA}}[k]:k\in\mathcal{I}_e\},\quad \Delta\mathbf{W}_{\text{ESA}}[k]=\mathbf{0}\ \forall k\notin\mathcal{I}_e \tag{12} \]
+
+<figure data-fig="7"><img src="fig7.png" alt="Figure 7: MPG and UAC Overview. (Summary) Left: an SWD-based gate scales a feature residual, while an ungated prior offset is always applied. Right: delay-dependent splitting of each chunk into a committed prefix and a predicted postfix, with a dual-thread buffer." loading="lazy"></figure>
+
+<h4>5.3.2 Manifold-Preserving Gating</h4>
+\[ \tilde H=H+\lambda g\,\mathbf{W}_{\text{MPG}}\mathcal{E}_{\text{obs}}(H)+\lambda\mathbf{b}_{\text{MPG}} \tag{13} \]
+\[ D\approx\frac{1}{M}\sum_{m=1}^M\left\|\mathrm{sort}(\theta_m^\top\hat H)-\mathrm{sort}(\theta_m^\top\hat Z)\right\|_2^2 \tag{14} \]
+\[ g=\exp(-D/\tau)\in(0,1] \tag{15} \]
+\[ \frac{\partial\tilde H}{\partial H}\approx \mathbf{I}+\lambda g\mathbf{W}_{\text{MPG}}\frac{\partial\mathcal{E}_{\text{obs}}(H)}{\partial H} \tag{16} \]
+<p>A stop-gradient is applied to the gate \(g\). The gate acts before the projection, so the bias term is not scaled by \(g\); this reduces variance compared with gating the output.</p>
+
+<h4>5.3.3 Universal Async Chunking</h4>
+<p>UAC extends training-time RTC so that the delay depends on the embodiment: \(\lceil L^{(e)}/\Delta t^{(e)}\rceil\).</p>
+\[ d\sim\pi^{(e)}(d),\ d\in\{0,\dots,d^{(e)}_{\max}-1\} \tag{17} \]
+\[ t_i=\mathbb{1}[i<d]+\mathbb{1}[i\ge d]\cdot t_{\text{base}} \tag{18} \]
+\[ \mathcal{L}_{\text{UAC}}=\sum_{i\ge d}\|\hat v_i-v_i^*\|_2^2 \tag{19} \]
+
+<h2>6 Infrastructure: Real-Time Cross-Embodiment Deployment</h2>
+
+<h3>6.1 Manifold-Preserving Refinement</h3>
+\[ \mathbf{a}^{(k+1)}=\mathbf{a}^{(k)}+\Delta t\cdot v_\theta(\mathbf{a}^{(k)},t^{(k)}\mid H) \tag{20} \]
+<p>The vision-language prefix is KV-cached, and fewer than 10 denoising steps (\(K<10\)) are used.</p>
+<p>Inference with MPG runs in two stages:</p>
+<ol>
+<li>A baseline pass without MPG produces an initial prediction.</li>
+<li>One to three MPG refinement rounds use the previous prediction as the anchor.</li>
+</ol>
+\[ \bar Z^{(n-1)}=\mathrm{MeanPool}(\mathrm{Enc}(\mathbf{a}^{(n-1)}_{\text{pred}},\sigma=0)),\quad \mathbf{a}^{(n)}_{\text{pred}}=\mathrm{FlowDenoise}(H;\bar Z^{(n-1)}) \tag{21} \]
+
+<h3>6.2 Universal Async Chunking Protocol</h3>
+\[ d\ge\lceil t_{\text{inference}}/t^{(e)}_{\text{control}}\rceil+\epsilon_{\text{safety}} \tag{22} \]
+\[ \mathbf{a}_i^{(k)}\leftarrow\begin{cases}\mathcal{B}_i,& i<d\\ \mathbf{a}_i^{(k)},& i\ge d\end{cases} \tag{23} \]
+\[ \mathbf{a}^{(n)}_{\text{exec}}=\mathbf{a}^{(n-1)}_{<d}\oplus\mathbf{a}^{(n)}_{\ge d} \tag{24} \]
+
+<h3>6.3 Dual-Thread Deployment Architecture</h3>
+<p>Two threads share a ring buffer at least twice the chunk length:</p>
+<ul>
+<li>A control thread acts as consumer, sending actions at a fixed rate.</li>
+<li>An inference thread acts as producer, writing new action chunks.</li>
+</ul>
+<p>This setup supports control rates from 10 to 50 Hz, on both cloud and edge hardware.</p>
+
+<table>
+<caption>Table 2: Hardware specifications of real-robot embodiments</caption>
+<tr><th>Group</th><th>Name</th><th>DoF</th><th>Joints</th><th>Hand</th><th>Camera</th><th>Configuration</th></tr>
+<tr><td>Upper-body Humanoid</td><td>PND Adam-U</td><td>31</td><td>Bimanual+Head+Waist</td><td>Dexterous (6DoF)</td><td>ZED Mini</td><td>Movable (ego), dual-camera</td></tr>
+<tr><td>Upper-body Humanoid</td><td>Unitree G1 + LinkerBot O6</td><td>26</td><td>Bimanual</td><td>Dexterous (6DoF)</td><td>D435</td><td>Fixed (ego)</td></tr>
+<tr><td>Single arm + Dexterous hand</td><td>FR3 + Inspire Hand</td><td>13</td><td>Single-arm</td><td>Dexterous (6DoF)</td><td>2×D435</td><td>Fixed (3rd-person)</td></tr>
+<tr><td>Single arm + Dexterous hand</td><td>BeingBeyond D1</td><td>14</td><td>Single-arm</td><td>Dexterous (6DoF)</td><td>D435</td><td>Movable (ego)</td></tr>
+<tr><td>Single arm + Gripper</td><td>LeRobot SO-101</td><td>6</td><td>Single-arm</td><td>Gripper</td><td>D435</td><td>Fixed (3rd-person)</td></tr>
+</table>
+
+<h2>7 Experiment</h2>
+
+<h3>7.1 Comparison across Real Robots</h3>
+
+<h4>7.1.1 Experimental Setup</h4>
+<p>Each task has 30–60 minutes of demonstration data. Five variants are compared:</p>
+<ul>
+<li>Being-H0.5 specialist (fine-tuned per embodiment).</li>
+<li>Being-H0.5 generalist (one checkpoint for all embodiments).</li>
+<li>Scratch specialist (no UniHand-2.0 pre-training).</li>
+<li>Scratch generalist (no UniHand-2.0 pre-training).</li>
+<li>π0.5, specialist only.</li>
+</ul>
+<p>Evaluation is blind and randomized through a black-box inference server, with K=20 trials per configuration.</p>
+<figure data-fig="8"><img src="fig8.png" alt="Figure 8: Real-robot embodiments. We evaluate on five robotic platforms spanning upper-body humanoids, single-arm dexterous manipulation, and lightweight parallel grippers." loading="lazy"></figure>
+
+<table>
+<caption>Table 3: Real-robot task suite</caption>
+<tr><th>Category</th><th>Task</th><th>Embodiment</th></tr>
+<tr><td>Spatial</td><td>Arrange Flowers</td><td>Adam-U</td></tr>
+<tr><td>Spatial</td><td>Water Plant</td><td>FR3+Inspire</td></tr>
+<tr><td>Spatial</td><td>Stack Bowls</td><td>FR3+Inspire</td></tr>
+<tr><td>Spatial</td><td>Stack Blocks</td><td>D1</td></tr>
+<tr><td>Long-horizon</td><td>Drawer: Open → Place → Close</td><td>FR3+Inspire</td></tr>
+<tr><td>Long-horizon</td><td>Package: Flip → Scan</td><td>G1+O6</td></tr>
+<tr><td>Bimanual</td><td>Hand-over → Box</td><td>Adam-U</td></tr>
+<tr><td>Bimanual</td><td>Pack two products → Close lid</td><td>G1+O6</td></tr>
+<tr><td>Generalization</td><td>Wipe Whiteboard</td><td>FR3+Inspire</td></tr>
+<tr><td>Generalization</td><td>Clear Table</td><td>Adam-U</td></tr>
+<tr><td>Generalization</td><td>Clear Table</td><td>SO-101</td></tr>
+</table>
+
+<h4>7.1.2 Result Analysis</h4>
+<ul>
+<li>The specialist scores best overall, and the generalist stays close; on Generalization tasks the generalist actually scores higher.</li>
+<li>Both Being-H0.5 variants clearly beat π0.5, especially on long-horizon and bimanual tasks.</li>
+<li>Without pre-training, the generalist degrades sharply.</li>
+<li>Adam-U shows non-zero zero-shot success on task–embodiment pairs it never saw in training.</li>
+</ul>
+<figure data-fig="9"><img src="fig9.png" alt="Figure 9: Example rollouts of representative real-robot task suites. (Only show one task for each embodiment. The full rollouts of all tasks are shown in Appendix B)." loading="lazy"></figure>
+<figure data-fig="10"><img src="fig10.png" alt="Figure 10: Real-robot success rates (%) on four task suites." loading="lazy"></figure>
+
+<table>
+<caption>Figure 10 values (%)</caption>
+<tr><th>Method</th><th>Spatial</th><th>Long Horizon</th><th>Bimanual</th><th>Generalization</th></tr>
+<tr><td>Specialist</td><td>75</td><td>60</td><td>55</td><td>75</td></tr>
+<tr><td>Generalist</td><td>70</td><td>60</td><td>45</td><td>80</td></tr>
+<tr><td>π0.5</td><td>55</td><td>45</td><td>40</td><td>65</td></tr>
+<tr><td>Scratch (specialist)</td><td>50</td><td>35</td><td>25</td><td>60</td></tr>
+<tr><td>Scratch (generalist)</td><td>35</td><td>25</td><td>30</td><td>50</td></tr>
+</table>
+
+<h3>7.2 Comparison on Simulation Benchmarks</h3>
+<p>All simulation results use 224×224 RGB input and a 2B backbone. The generalist is trained jointly on LIBERO and RoboCasa for twice as many steps.</p>
+
+<table>
+<caption>Table 4: LIBERO success rates (%)</caption>
+<tr><th>Method</th><th>L-Spatial</th><th>L-Object</th><th>L-Goal</th><th>L-Long</th><th>Average</th></tr>
+<tr><td>Diffusion Policy</td><td>78.5</td><td>87.5</td><td>73.5</td><td>64.8</td><td>76.1</td></tr>
+<tr><td>OpenVLA</td><td>84.7</td><td>88.4</td><td>79.2</td><td>53.7</td><td>76.5</td></tr>
+<tr><td>SpatialVLA</td><td>88.2</td><td>89.9</td><td>78.6</td><td>55.5</td><td>78.1</td></tr>
+<tr><td>CoT-VLA</td><td>87.5</td><td>91.6</td><td>87.6</td><td>69.0</td><td>83.9</td></tr>
+<tr><td>π0-Fast</td><td>96.4</td><td>96.8</td><td>88.6</td><td>60.2</td><td>85.5</td></tr>
+<tr><td>GR00T-N1</td><td>94.4</td><td>97.6</td><td>93.0</td><td>90.6</td><td>93.9</td></tr>
+<tr><td>π0</td><td>98.0</td><td>96.8</td><td>94.4</td><td>88.4</td><td>94.4</td></tr>
+<tr><td>F1</td><td>98.2</td><td>97.8</td><td>95.4</td><td>91.3</td><td>95.7</td></tr>
+<tr><td>InternVLA-M1</td><td>98.0</td><td>99.0</td><td>93.8</td><td>92.6</td><td>95.9</td></tr>
+<tr><td>Discrete Diffusion VLA</td><td>97.2</td><td>98.6</td><td>97.4</td><td>92.0</td><td>96.3</td></tr>
+<tr><td>π0.5</td><td>98.8</td><td>98.2</td><td>98.0</td><td>92.4</td><td>96.9</td></tr>
+<tr><td>OpenVLA-OFT</td><td>97.6</td><td>98.4</td><td>97.9</td><td>94.5</td><td>97.1</td></tr>
+<tr><td>X-VLA</td><td>98.2</td><td>98.6</td><td>97.8</td><td>97.6</td><td>98.1</td></tr>
+<tr><td>EO1</td><td>99.7</td><td>99.8</td><td>99.2</td><td>94.8</td><td>98.2</td></tr>
+<tr><td>Being-H0.5 (generalist)</td><td>97.0</td><td>98.2</td><td>99.0</td><td>96.2</td><td>97.6</td></tr>
+<tr><td>Being-H0.5 (specialist)</td><td>99.2</td><td>99.6</td><td>99.4</td><td>97.4</td><td>98.9</td></tr>
+</table>
+
+<h4>7.2.1 Results on LIBERO</h4>
+<p>Training uses chunk size 8, batch size 128 and 45k steps on 4×A800 GPUs. The specialist reaches 98.9% and the generalist 97.6%.</p>
+
+<table>
+<caption>Table 5: RoboCasa 24-task success rates (%)</caption>
+<tr><th>Modality</th><th>Method</th><th>Pick &amp; Place</th><th>Doors/Drawers</th><th>Others</th><th>Total Avg.</th></tr>
+<tr><td>3D</td><td>3DA</td><td>0.0</td><td>2.3</td><td>13.1</td><td>5.5</td></tr>
+<tr><td>3D</td><td>DP3</td><td>1.5</td><td>41.7</td><td>32.0</td><td>22.8</td></tr>
+<tr><td>3D</td><td>GWM</td><td>14.8</td><td>54.3</td><td>49.8</td><td>39.3</td></tr>
+<tr><td>RGB (256×256)</td><td>BC</td><td>4.3</td><td>47.0</td><td>42.2</td><td>28.9</td></tr>
+<tr><td>RGB (256×256)</td><td>GR00T-N1</td><td>18.6</td><td>50.2</td><td>39.1</td><td>36.0</td></tr>
+<tr><td>RGB (256×256)</td><td>π0.5</td><td>21.5</td><td>57.8</td><td>44.9</td><td>41.4</td></tr>
+<tr><td>RGB (256×256)</td><td>π0</td><td>14.0</td><td>53.1</td><td>58.5</td><td>42.4</td></tr>
+<tr><td>RGB (224×224)</td><td>Being-H0.5 (generalist)</td><td>40</td><td>73</td><td>52</td><td>53.3</td></tr>
+<tr><td>RGB (224×224)</td><td>Being-H0.5 (specialist)</td><td>36</td><td>71.7</td><td>57.6</td><td>53.9</td></tr>
+</table>
+
+<h4>7.2.2 Results on RoboCasa</h4>
+<p>The evaluation uses the Human-50 setting with five held-out scenes. Being-H0.5 sets a new state of the art, with the largest gain on Pick &amp; Place.</p>
+
+<h3>7.3 Ablation Study</h3>
+
+<h4>7.3.1 How Do Human-Centric Learning Benefit Downstream Adaptation?</h4>
+<p>These ablations use LIBERO 5-shot with 10K training steps.</p>
+
+<table>
+<caption>Table 6: Single-task 5-shot (%)</caption>
+<tr><th>Frozen</th><th>Init</th><th>L-Spatial</th><th>L-Object</th><th>L-Goal</th><th>L-Long</th><th>Avg.</th></tr>
+<tr><td>Und+Proj+ViT</td><td>Native VLM</td><td>67.8</td><td>76.8</td><td>57.2</td><td>29.8</td><td>57.9</td></tr>
+<tr><td>Und+Proj+ViT</td><td>Human-Centric</td><td>78.6</td><td>78.9</td><td>72.6</td><td>46.2</td><td>69.0</td></tr>
+<tr><td>Und+Proj+ViT</td><td>Δ</td><td>+10.8</td><td>+2.1</td><td>+15.4</td><td>+16.4</td><td>+11.1</td></tr>
+<tr><td>Und+ViT</td><td>Native VLM</td><td>70.6</td><td>50.0</td><td>67.0</td><td>17.4</td><td>51.3</td></tr>
+<tr><td>Und+ViT</td><td>Human-Centric</td><td>85.0</td><td>84.2</td><td>80.0</td><td>59.0</td><td>77.1</td></tr>
+<tr><td>Und+ViT</td><td>Δ</td><td>+14.4</td><td>+34.4</td><td>+13.0</td><td>+41.6</td><td>+25.8</td></tr>
+<tr><td>Und Only</td><td>Native VLM</td><td>78.4</td><td>84.8</td><td>62.0</td><td>49.2</td><td>68.6</td></tr>
+<tr><td>Und Only</td><td>Human-Centric</td><td>83.2</td><td>79.6</td><td>74.0</td><td>63.6</td><td>75.1</td></tr>
+<tr><td>Und Only</td><td>Δ</td><td>+4.8</td><td>-5.2</td><td>+12.0</td><td>+14.4</td><td>+6.5</td></tr>
+<tr><td>Proj+ViT</td><td>Native VLM</td><td>87.2</td><td>86.6</td><td>80.8</td><td>58.0</td><td>78.2</td></tr>
+<tr><td>Proj+ViT</td><td>Human-Centric</td><td>86.2</td><td>86.2</td><td>84.6</td><td>66.8</td><td>81.0</td></tr>
+<tr><td>Proj+ViT</td><td>Δ</td><td>-1.0</td><td>-0.4</td><td>+3.8</td><td>+8.8</td><td>+2.8</td></tr>
+<tr><td>None (Full FT)</td><td>Native VLM</td><td>84.2</td><td>83.6</td><td>75.0</td><td>65.8</td><td>77.2</td></tr>
+<tr><td>None (Full FT)</td><td>Human-Centric</td><td>87.2</td><td>91.4</td><td>81.6</td><td>66.8</td><td>81.8</td></tr>
+<tr><td>None (Full FT)</td><td>Δ</td><td>+3.0</td><td>+7.8</td><td>+6.6</td><td>+1.0</td><td>+4.6</td></tr>
+</table>
+
+<table>
+<caption>Table 7: Multi-task 5-shot (%)</caption>
+<tr><th>Frozen</th><th>Init</th><th>L-Spatial</th><th>L-Object</th><th>L-Goal</th><th>L-Long</th><th>Avg.</th></tr>
+<tr><td>Und+Proj+ViT</td><td>Native VLM</td><td>61.6</td><td>77.0</td><td>68.0</td><td>36.0</td><td>60.7</td></tr>
+<tr><td>Und+Proj+ViT</td><td>Human-Centric</td><td>80.8</td><td>81.8</td><td>74.4</td><td>52.4</td><td>72.4</td></tr>
+<tr><td>Und+Proj+ViT</td><td>Δ</td><td>+19.2</td><td>+4.8</td><td>+6.4</td><td>+16.4</td><td>+11.7</td></tr>
+<tr><td>Und+ViT</td><td>Native VLM</td><td>78.4</td><td>84.8</td><td>71.4</td><td>38.6</td><td>68.3</td></tr>
+<tr><td>Und+ViT</td><td>Human-Centric</td><td>83.6</td><td>82.6</td><td>80.8</td><td>59.2</td><td>76.6</td></tr>
+<tr><td>Und+ViT</td><td>Δ</td><td>+5.2</td><td>-2.2</td><td>+9.4</td><td>+20.6</td><td>+8.3</td></tr>
+<tr><td>Und Only</td><td>Native VLM</td><td>75.8</td><td>84.2</td><td>71.2</td><td>59.8</td><td>72.8</td></tr>
+<tr><td>Und Only</td><td>Human-Centric</td><td>85.2</td><td>90.6</td><td>84.2</td><td>68.4</td><td>82.1</td></tr>
+<tr><td>Und Only</td><td>Δ</td><td>+9.4</td><td>+6.4</td><td>+13.0</td><td>+8.6</td><td>+9.3</td></tr>
+<tr><td>Proj+ViT</td><td>Native VLM</td><td>87.6</td><td>91.0</td><td>82.2</td><td>62.6</td><td>80.9</td></tr>
+<tr><td>Proj+ViT</td><td>Human-Centric</td><td>89.6</td><td>88.8</td><td>89.6</td><td>65.8</td><td>83.5</td></tr>
+<tr><td>Proj+ViT</td><td>Δ</td><td>+2.0</td><td>-2.2</td><td>+7.4</td><td>+3.2</td><td>+2.6</td></tr>
+<tr><td>None (Full FT)</td><td>Native VLM</td><td>87.8</td><td>94.6</td><td>82.6</td><td>71.4</td><td>84.1</td></tr>
+<tr><td>None (Full FT)</td><td>Human-Centric</td><td>88.8</td><td>90.2</td><td>85.4</td><td>76.0</td><td>85.1</td></tr>
+<tr><td>None (Full FT)</td><td>Δ</td><td>+1.0</td><td>-4.4</td><td>+2.8</td><td>+4.6</td><td>+1.0</td></tr>
+</table>
+
+<p>Findings from the pre-training ablations:</p>
+<ul>
+<li>Pre-training helps most when the backbone is frozen, up to +25.8% average.</li>
+<li>LIBERO-Long benefits the most from pre-training.</li>
+<li>The benefit shrinks as more of the model is fine-tuned.</li>
+</ul>
+<p>For the action expert itself, freezing up to 7 layers is harmless, but freezing more than 14 layers causes a sharp drop.</p>
+<figure data-fig="11"><img src="fig11.png" alt="Figure 11: Ablation study on the number of frozen layers in the action expert. (Summary) Compares models without pre-training, with pre-training, and with pre-training plus MoF; the MLLM is frozen throughout and 20 rollouts are used per task." loading="lazy"></figure>
+<figure data-fig="12"><img src="fig12.png" alt="Figure 12: Ablation Study on the Number of Frozen Layers in the Action Expert. (Summary) Performance relative to the peak, plotted against the number of frozen layers and the trainable-parameter ratio." loading="lazy"></figure>
+
+<h4>7.3.2 How Does Masked Motion Token Prediction Benefit Capturing Behavior Priors?</h4>
+<p>This ablation is measured with MWDS: the cosine similarity between predicted and ground-truth wrist displacement.</p>
+<table>
+<caption>Table 8: Ablation on masked motion token prediction (MWDS ↑)</caption>
+<tr><th>Method</th><th>Lab ↑</th><th>Wild ↑</th></tr>
+<tr><td>Hybrid (Ours)</td><td>0.33</td><td>0.20</td></tr>
+<tr><td>w/o \(\mathcal{L}_{\text{MASK}}\)</td><td>0.35</td><td>0.28</td></tr>
+</table>
+<p>The paper states that removing \(\mathcal{L}_{\text{MASK}}\) lowers MWDS, especially on in-the-wild data. However, the table as printed shows the opposite: the ablated model scores higher on both splits.</p>
+
+<h4>7.3.3 Real-Time Efficiency: MPG and UAC</h4>
+<figure data-fig="13"><img src="fig13.png" alt="Figure 13: Ablation of MPG+UAC on real robots. Removing MPG+UAC hurts long-horizon and bimanual categories the most, where execution delay and unreliable context amplify compounding errors." loading="lazy"></figure>
+<table>
+<caption>Figure 13 values (%)</caption>
+<tr><th>Variant</th><th>Spatial</th><th>Long Horizon</th><th>Bimanual</th><th>Generalization</th></tr>
+<tr><td>Generalist</td><td>70</td><td>60</td><td>45</td><td>80</td></tr>
+<tr><td>w/o MPG</td><td>55</td><td>55</td><td>40</td><td>60</td></tr>
+<tr><td>w/o UAC</td><td>65</td><td>40</td><td>20</td><td>80</td></tr>
+<tr><td>w/o MPG+UAC</td><td>50</td><td>35</td><td>20</td><td>55</td></tr>
+</table>
+<p>Removing UAC hurts long-horizon and bimanual tasks the most. Spatial and generalization tasks degrade less.</p>
+
+<h2>8 Conclusion</h2>
+<p>Being-H0.5 combines a unified human–robot state-action space, UniHand-2.0 pre-training, a MoT architecture, and MPG and UAC for deployment. Together these let a single checkpoint control five heterogeneous robots robustly.</p>
+
+<h2>References</h2>
+<ol class="refs">
+<li>Devlin et al. BERT. NAACL 2019.</li>
+<li>Brown et al. Language models are few-shot learners. NeurIPS 2020.</li>
+<li>Eisenschlos et al. MultiFiT. EMNLP 2019.</li>
+<li>Pires et al. How multilingual is multilingual BERT? 2019.</li>
+<li>Conneau &amp; Lample. Cross-lingual language model pretraining. NeurIPS 2019.</li>
+<li>Kim et al. OpenVLA. 2024.</li>
+<li>O'Neill et al. Open X-Embodiment. ICRA 2024.</li>
+<li>Black et al. π0. 2024.</li>
+<li>NVIDIA. GR00T N1. 2025.</li>
+<li>Luo et al. Being-H0. 2025.</li>
+<li>Zheng et al. X-VLA. 2025.</li>
+<li>Shazeer et al. Sparsely-gated mixture-of-experts. 2017.</li>
+<li>Berscheid et al. IROS 2019.</li>
+<li>Dasari et al. RoboNet. 2019.</li>
+<li>Fang et al. RH20T. 2023.</li>
+<li>Shafiullah et al. On bringing robots home. 2023.</li>
+<li>Brohan et al. RT-1. 2022.</li>
+<li>Zitkovich et al. RT-2. CoRL 2023.</li>
+<li>Janner et al. Planning with diffusion. 2022.</li>
+<li>Chi et al. Diffusion Policy. IJRR 2025.</li>
+<li>Steiner et al. PaliGemma 2. 2024.</li>
+<li>Li et al. Eagle 2. 2025.</li>
+<li>Wang et al. Qwen2-VL. 2024.</li>
+<li>Zhang et al. From pixels to tokens. ICLR 2025.</li>
+<li>Zhang et al. Unified multimodal understanding via byte-pair visual encoding. 2025.</li>
+<li>Luo et al. OpenMMEgo. NeurIPS 2025.</li>
+<li>Feng et al. VideoOrion. ICCV 2025.</li>
+<li>Qu et al. SpatialVLA. 2025.</li>
+<li>Li et al. CogACT. 2024.</li>
+<li>Liu et al. RDT-1B. 2024.</li>
+<li>Liang et al. Discrete Diffusion VLA. 2025.</li>
+<li>Ho et al. DDPM. NeurIPS 2020.</li>
+<li>Lipman et al. Flow matching. 2022.</li>
+<li>Physical Intelligence. π0.5. 2025.</li>
+<li>Wen et al. DexVLA. 2025.</li>
+<li>Zhong et al. DexGraspVLA. 2025.</li>
+<li>Zawalski et al. Embodied chain-of-thought. 2024.</li>
+<li>Lin et al. OneTwoVLA. 2025.</li>
+<li>Clark et al. Action-free reasoning. 2025.</li>
+<li>Wei et al. Chain-of-thought prompting. NeurIPS 2022.</li>
+<li>Griffin. Mobile robot manipulation using pure object detection. WACV 2023.</li>
+<li>Laskin et al. CURL. ICML 2020.</li>
+<li>Ten Pas &amp; Platt. Grasp poses in 3D point clouds. 2017.</li>
+<li>Lee et al. MolmoAct. 2025.</li>
+<li>Khazatsky et al. DROID. 2024.</li>
+<li>Walke et al. BridgeData V2. CoRL 2023.</li>
+<li>Shukor et al. SmolVLA. 2025.</li>
+<li>Bu et al. AgiBot World Colosseo. 2025.</li>
+<li>Wu et al. RoboMIND. 2024.</li>
+<li>Hou et al. RoboMIND 2.0. 2025.</li>
+<li>Wu et al. RoboCOIN. 2025.</li>
+<li>Jiang et al. Galaxea open-world dataset and G0. 2025.</li>
+<li>Ye et al. Dex1B. 2025.</li>
+<li>Chen et al. InternVLA-M1. 2025.</li>
+<li>Chi et al. UMI. 2024.</li>
+<li>Xu et al. DexUMI. 2025.</li>
+<li>Ha et al. UMI on Legs. 2024.</li>
+<li>Gen Robot. 10kh-realomin-opendata. 2025.</li>
+<li>Feichtenhofer et al. SlowFast. ICCV 2019.</li>
+<li>Lin et al. UniVTG. ICCV 2023.</li>
+<li>Grauman et al. Ego4D. CVPR 2022.</li>
+<li>Grauman et al. Ego-Exo4D. CVPR 2024.</li>
+<li>Damen et al. EPIC-KITCHENS. ECCV 2018.</li>
+<li>Hoque et al. EgoDex. 2025.</li>
+<li>Nair et al. R3M. CoRL 2022.</li>
+<li>Ma et al. VIP. ICLR 2023.</li>
+<li>Yang et al. CoMo. 2025.</li>
+<li>Chen et al. villa-X. 2025.</li>
+<li>Luo et al. Predictive embedding as latent action. 2025.</li>
+<li>Ye et al. LAPA. 2024.</li>
+<li>Bu et al. UniVLA. 2025.</li>
+<li>Oquab et al. DINOv2. 2023.</li>
+<li>Wu et al. GR-1. 2023.</li>
+<li>Cheang et al. GR-2. 2024.</li>
+<li>Bharadhwaj et al. Gen2Act. 2024.</li>
+<li>Chen et al. VidBot. CVPR 2025.</li>
+<li>Ma et al. GLOVER++. 2025.</li>
+<li>Gavryushin et al. MAPLE. 2025.</li>
+<li>Bahl et al. Human-to-robot imitation in the wild. 2022.</li>
+<li>Bahl et al. Affordances from human videos. CVPR 2023.</li>
+<li>Wen et al. Any-point trajectory modeling. 2023.</li>
+<li>Yang et al. Magma. CVPR 2025.</li>
+<li>Gemini Robotics Team. Gemini Robotics. 2025.</li>
+<li>Kareer et al. EgoMimic. ICRA 2025.</li>
+<li>Feng et al. Spatial-aware VLA pretraining. 2025.</li>
+<li>Punamiya et al. EgoBridge. 2025.</li>
+<li>Zhu et al. EMMA. 2025.</li>
+<li>Li et al. Scalable VLA pretraining with real-life human activity videos. 2025.</li>
+<li>Bi et al. H-RDT. 2025.</li>
+<li>Yang et al. EgoVLA. 2025.</li>
+<li>Kim et al. OpenVLA-OFT. 2025.</li>
+<li>LEJU. LET dataset. 2025.</li>
+<li>Zhai et al. Igniting VLMs toward the embodied space. 2025.</li>
+<li>Qu et al. EmbodiedOneVision. 2025.</li>
+<li>Fu et al. Metis. 2025.</li>
+<li>Damen et al. The EPIC-KITCHENS dataset. TPAMI 2020.</li>
+<li>Build AI. Egocentric-10K. 2025.</li>
+<li>Zhang et al. HaWoR. CVPR 2025.</li>
+<li>Romero et al. Embodied hands (MANO). 2022.</li>
+<li>Comanici et al. Gemini 2.5. 2025.</li>
+<li>Ji et al. OXE-AugE. 2025.</li>
+<li>Liu et al. LLaVA-1.5. CVPR 2024.</li>
+<li>Li et al. LLaVA-OneVision. 2024.</li>
+<li>Wiedmann et al. FineVision. 2025.</li>
+<li>Zhang et al. Video instruction tuning with synthetic data. 2024.</li>
+<li>Yu et al. Modeling context in referring expressions. ECCV 2016.</li>
+<li>Zhou et al. RoboRefer. 2025.</li>
+<li>Yuan et al. RoboPoint. 2024.</li>
+<li>Ji et al. RoboBrain. CVPR 2025.</li>
+<li>Lu et al. VL-Grasp. IROS 2023.</li>
+<li>Sermanet et al. RoboVQA. ICRA 2024.</li>
+<li>Xu et al. A0. 2025.</li>
+<li>Deitke et al. Molmo and PixMo. CVPR 2025.</li>
+<li>Wang et al. All-Seeing Project V2. 2024.</li>
+<li>Build AI. Egocentric-10K. 2025.</li>
+<li>Perrett et al. HD-EPIC. 2025.</li>
+<li>Liu et al. HOI4D. CVPR 2022.</li>
+<li>Olson. AprilTag. ICRA 2011.</li>
+<li>Yu et al. Dyn-HaMR. CVPR 2025.</li>
+<li>Ren et al. Grounded SAM. 2024.</li>
+<li>Li et al. DiffuEraser. 2025.</li>
+<li>Bai et al. Qwen2.5-VL. 2025.</li>
+<li>Deng et al. BAGEL. 2025.</li>
+<li>Liang et al. Mixture-of-Transformers. 2024.</li>
+<li>Liu et al. Rectified flow. 2022.</li>
+<li>Wang et al. InternVL3.5. 2025.</li>
+<li>Seedream Team. Seedream 4.0. 2025.</li>
+<li>Zhang et al. DiG-Flow. 2025.</li>
+<li>Bonneel et al. Sliced and Radon Wasserstein barycenters. 2015.</li>
+<li>Kolouri et al. Generalized sliced Wasserstein distances. NeurIPS 2019.</li>
+<li>Black et al. Training-time action conditioning for real-time chunking. 2025.</li>
+<li>Zhao et al. CoT-VLA. CVPR 2025.</li>
+<li>Pertsch et al. FAST. 2025.</li>
+<li>Lv et al. F1. 2025.</li>
+<li>Liu et al. LIBERO. NeurIPS 2023.</li>
+<li>Nasiriany et al. RoboCasa. 2024.</li>
+<li>Kim et al. Fine-tuning VLA models. 2025.</li>
+<li>Ke et al. 3D Diffuser Actor. 2024.</li>
+<li>Ze et al. 3D Diffusion Policy. RSS 2024.</li>
+<li>Lu et al. GWM. ICCV 2025.</li>
+</ol>
+
+<h2>Appendix</h2>
+<h3>A Contributions</h3>
+<p>† denotes leading the part.</p>
+<ul>
+<li><strong>Core Contributors (alphabetical):</strong> Hao Luo, Ye Wang, Wanpeng Zhang, Sipeng Zheng</li>
+<li><strong>Model Training:</strong> Hao Luo, Ye Wang, Wanpeng Zhang, Sipeng Zheng</li>
+<li><strong>Infrastructure:</strong> Wanpeng Zhang†, Ye Wang, Chaoyi Xu, Chi Zhang, Haoqi Yuan</li>
+<li><strong>Human Data:</strong> Hao Luo†, Ziheng Xi, Yiqing Wang, Yicheng Feng</li>
+<li><strong>Robot Data:</strong> Ye Wang†, Sipeng Zheng†, Haiweng Xu</li>
+<li><strong>Experiments:</strong> Wanpeng Zhang, Ye Wang, Hao Luo, Sipeng Zheng</li>
+<li><strong>Project Lead:</strong> Sipeng Zheng, Zongqing Lu</li>
+</ul>
+<h3>B Full Rollouts</h3>
+<figure data-fig="14"><img src="fig14.png" alt="Figure 14: Example rollouts of all real-robot task suites." loading="lazy"></figure>
+</body></html>

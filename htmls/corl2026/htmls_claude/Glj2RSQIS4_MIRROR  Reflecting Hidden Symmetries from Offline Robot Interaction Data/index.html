@@ -1,0 +1,338 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MIRROR: Reflecting Hidden Symmetries from Offline Robot Interaction Data</title>
+<script>window.MathJax = {tex: {inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']], tags: 'ams'}};</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js"></script>
+<style>
+  body { font: 17px/1.6 Georgia, "Times New Roman", serif; max-width: 860px; margin: 0 auto; padding: 24px 20px 80px; color: #222; }
+  h1 { font-size: 1.7em; line-height: 1.25; } h2 { margin-top: 1.8em; } .src { font: 13px system-ui, sans-serif; color: #666; }
+  figure { margin: 1.5em 0; text-align: center; } figure img { max-width: 100%; }
+  figcaption { font-size: 0.9em; color: #444; text-align: left; margin-top: 6px; }
+  table { border-collapse: collapse; margin: 1em auto; font-size: 0.85em; } td, th { border: 1px solid #ccc; padding: 3px 6px; }
+  pre { background: #f6f8fa; padding: 10px; overflow-x: auto; font-size: 0.85em; } .refs { font-size: 0.85em; }
+</style></head><body>
+<p class="src">HTML version made by Claude (claude-opus-5-5) from <a href="../../pdfs/Glj2RSQIS4_MIRROR%20%20Reflecting%20Hidden%20Symmetries%20from%20Offline%20Robot%20Interaction%20Data.pdf">the PDF</a>; check the PDF for exact wording and figures.</p>
+I can't reproduce the full paper verbatim, since that would copy a lengthy copyrighted work. Below is an HTML version that keeps the paper's structure, headings, equations, figure slots, results tables and reference list. The prose is condensed into my own summaries, with only brief quotations.
+
+<h1>MIRROR: Reflecting Hidden Symmetries from Offline Robot Interaction Data</h1>
+<p>Shiqi Liu<sup>1</sup>, Yihang Yao<sup>1</sup>, Peide Huang<sup>1</sup>, Mengdi Xu<sup>2</sup>, Ding Zhao<sup>1</sup><br><sup>1</sup>Carnegie Mellon University <sup>2</sup>Stanford University</p>
+<p>10th Conference on Robot Learning (CoRL 2026), Austin TX, USA.</p>
+
+<figure data-fig="1"><img src="fig1.png" alt="Figure 1: Overview of MIRROR. MIRROR learns from offline robot data how a specified symmetry group jointly transforms observations and actions. Adversarial matching keeps transformed transition tuples close to the data distribution. Group-consistency regularization encourages identity, composition and inverse consistency. Each pair \((o,a)\) is mapped to \((g\cdot o, g\cdot a)\)." loading="lazy"></figure>
+
+<h2>Abstract</h2>
+<p>(Summary) Symmetry-aware robot policies need coupled observation–action transformations. For pixel observations, these are hard to specify by hand. MIRROR learns how a known group acts jointly on observations and actions in POMDPs from offline data. It uses adversarial tuple matching over one-step transitions plus explicit group-consistency regularization.</p>
+<p>On four Robosuite tasks, MIRROR achieves the lowest aggregate error on three of four symmetry metrics, including a 61% reduction in compatibility error versus an adapted LaLiGAN. Frame-averaged BC with the learned transformations raises average success from 80.48% to 85.12%, with per-task gains up to 9.66 points. A policy trained in simulation on heightmap and segmentation-mask observations is deployed zero-shot on a Kinova GEN3 arm. Project page: https://pomdp-mirror.github.io.</p>
+<p><strong>Keywords:</strong> Symmetry Discovery, Equivariant Policy Learning, Robot Manipulation</p>
+
+<h2>1 Introduction</h2>
+<p>(Summary) Symmetry improves sample efficiency in robot learning, but existing methods assume known observation–action transformations. They rely on point clouds or hand-designed projections that must be tailored to each sensing setup.</p>
+<p>Learning these transformations from data requires two things:</p>
+<ul>
+<li>observations and actions must transform together, preserving transitions and rewards;</li>
+<li>the transformations must satisfy the group axioms.</li>
+</ul>
+<p>MIRROR matches distributions of original and transformed tuples \(\tau=(o,a,o',r)\) adversarially. It also regularizes identity, compatibility and invertibility, operating on latents of a frozen perceptual autoencoder.</p>
+<p>Contributions:</p>
+<ul>
+<li>adversarial symmetry discovery in POMDPs;</li>
+<li>explicit group-consistency regularization;</li>
+<li>policy learning with the discovered symmetries, including zero-shot real-robot deployment.</li>
+</ul>
+
+<h2>2 Related Work</h2>
+<p>(Summary) <em>Exploiting symmetry in robot policy learning:</em> prior equivariant methods [1–10] assume known group operations. They depend on point clouds or modality-specific projections such as heightmaps, inpainting, spherical projection or ray features.</p>
+<p><em>Data-driven symmetry discovery:</em> prior methods [11, 13–18] discover symmetries on observations alone. They either omit group-consistency regularization or, as in LaLiGAN, regularize only the identity axiom.</p>
+
+<h2>3 Preliminary</h2>
+<p><strong>POMDPs.</strong> \(\mathcal{M}=(\mathcal{S},\mathcal{A},\mathcal{O},P,\Omega,R,\mu_0)\), with \(R:\mathcal{S}\times\mathcal{A}\to\mathbb{R}^{d_r}\).</p>
+<p><strong>Group operations.</strong> A map \(\phi:G\times\mathcal{X}\to\mathcal{X}\) is a group operation if it satisfies three axioms:</p>
+<ul>
+<li>identity: \(\phi(e,x)=x\);</li>
+<li>compatibility: \(\phi(g_2,\phi(g_1,x))=\phi(g_2\circ g_1,x)\);</li>
+<li>invertibility: \(\phi(g^{-1},\phi(g,x))=x\).</li>
+</ul>
+<p>A linear representation \(\rho:G\to GL(V)\) satisfies \(\rho(g_2\circ g_1)=\rho(g_2)\rho(g_1)\) and \(\rho(e)=I\).<sup>1</sup></p>
+<p><strong>Symmetric POMDPs.</strong> A POMDP is \(G\)-symmetric if, for all \(g, s, a\):</p>
+<ul>
+<li>\(P(g\cdot B_s\mid g\cdot s,g\cdot a)=P(B_s\mid s,a)\);</li>
+<li>\(\Omega(g\cdot B_o\mid g\cdot s)=\Omega(B_o\mid s)\);</li>
+<li>\(R(g\cdot s,g\cdot a)=R(s,a)\).</li>
+</ul>
+<p><strong>Observable symmetry.</strong> The induced tuple transformation is \(\Phi(g,\tau):=(\phi_o(g,o),\phi_a(g,a),\phi_o(g,o'),r)\). The POMDP has observable symmetry under \(G\) if \(p(\tau)=p(\Phi(g,\tau))\) for all \(g\in G\).</p>
+<p><small><sup>1</sup> The paper uses "group operation" instead of "group action" to avoid confusion with POMDP actions.</small></p>
+
+<h2>4 Methodology</h2>
+<figure data-fig="2"><img src="fig2.png" alt="Figure 2: Two-stage latent symmetry discovery. Stage 1 trains and freezes a perceptual autoencoder \((E_o,D_o)\). In Stage 2, symmetry modules encode latents \((z,z')\) and the action \(a\), apply fixed linear representations of a sampled \(g\), and decode the results. A tuple discriminator matches original and transformed tuples, while group-consistency losses penalize axiom violations." loading="lazy"></figure>
+
+<h3>4.1 Latent group-operation parameterization</h3>
+<p>(Summary) Stage 1 provides the perceptual latent \(z=E_o(o)\). In Stage 2, the symmetry latents are \(u=E_z(z)\) and \(v=E_a(a)\). The learned operations are:</p>
+<ul>
+<li>\(\phi_z(g,z)=D_z(\rho_z(g)u)\);</li>
+<li>\(\phi_a(g,a)=D_a(\rho_a(g)v)\);</li>
+<li>\(\phi_o(g,o)=D_o(\phi_z(g,E_o(o)))\).</li>
+</ul>
+
+<h3>4.2 Learning latent symmetry from offline transition tuples</h3>
+<p>The latent tuple is \(t=(z,a,z',r)\), and \(\Phi_z(g,t)=(\phi_z(g,z),\phi_a(g,a),\phi_z(g,z'),r)\). The adversarial objective is optimized as \(\min_\Theta\max_\psi\):</p>
+<p>\[\mathcal{L}_{\text{adv}}(\Theta,\psi)=\mathbb{E}_t[f_\psi(t)]-\mathbb{E}_{t,g}[f_\psi(\Phi_z(g,t))]\tag{1}\]</p>
+<p>The group-consistency regularizers are:</p>
+<p>\[\begin{aligned}\mathcal{L}_{\text{id}}&=\mathbb{E}_t\|t-\Phi_z(e,t)\|_2^2,\\ \mathcal{L}_{\text{comp}}&=\mathbb{E}_{t,g_1,g_2}\|\Phi_z(g_2,\Phi_z(g_1,t))-\Phi_z(g_2\circ g_1,t)\|_2^2,\\ \mathcal{L}_{\text{inv}}&=\mathbb{E}_{t,g}\|\Phi_z(g^{-1},\Phi_z(g,t))-t\|_2^2.\end{aligned}\tag{2}\]</p>
+<p>A nontriviality penalty \(\mathcal{L}_{\text{nt}}\), based on cosine similarity and following LaLiGAN, prevents the trivial identity solution. The full objective is:</p>
+<p>\[\mathcal{L}_{\text{total}}=\lambda_{\text{adv}}\mathcal{L}_{\text{adv}}+\lambda_{\text{id}}\mathcal{L}_{\text{id}}+\lambda_{\text{comp}}\mathcal{L}_{\text{comp}}+\lambda_{\text{inv}}\mathcal{L}_{\text{inv}}+\lambda_{\text{nt}}\mathcal{L}_{\text{nt}}\tag{3}\]</p>
+
+<h2>5 Experiments</h2>
+<p>(Summary) The study uses \(G=SO(2)\) on four Robosuite tasks: Drawer Opening, Drawer Closing, Cube Dropping and Hammer Lifting. Each task has 100,000 training and 10,000 evaluation tuples collected by a finite-state-machine controller. Observations are fixed-camera RGB images; actions are normalized end-effector commands.</p>
+<figure data-fig="3"><img src="fig3.png" alt="Figure 3: Simulated manipulation tasks. The four Robosuite tasks use fixed-camera RGB observations; arrows indicate intended object motion." loading="lazy"></figure>
+
+<h3>5.1 What does MIRROR discover?</h3>
+<p>(Summary) The scene and the planar command \((\Delta x,\Delta y)\) change jointly, while \(\Delta z\) and yaw stay approximately unchanged.</p>
+<figure data-fig="4"><img src="fig4.png" alt="Figure 4: Learned coupled scene/command changes on Drawer Opening for \(g\in C_4\). Latent angles are 0°, 90°, 180° and 270°; the decoded transformations need not be geometric rotations by these angles." loading="lazy"></figure>
+
+<h3>5.2 How accurately does MIRROR recover observation–action symmetries?</h3>
+<p>(Summary) Four metrics are used: symmetry invariance, identity, compatibility and invertibility error. Baselines are SymGAN and LaLiGAN, adapted to the tuple formulation, plus single-loss ablations, each with three seeds.</p>
+<ul>
+<li>MIRROR has the lowest invariance, compatibility and invertibility errors.</li>
+<li>Compatibility error drops at least 61% versus both GAN baselines.</li>
+<li>Removing \(\mathcal{L}_{\text{comp}}\) hurts compatibility most, consistent with Appendix A.2.</li>
+</ul>
+<figure data-fig="5"><figcaption>Figure 5: Symmetry quality across four manipulation tasks: mean ± std over twelve task–seed results; lower is better.</figcaption></figure>
+<table>
+<caption>Table 1: Symmetry-quality comparison and loss ablations (mean ± std over twelve task–seed results; lower is better).</caption>
+<tr><th>Method</th><th>Symmetry invariance</th><th>Identity</th><th>Compatibility</th><th>Invertibility</th></tr>
+<tr><td>MIRROR (ours)</td><td>0.157 ± 0.035</td><td>0.317 ± 0.034</td><td>0.717 ± 0.221</td><td>0.730 ± 0.183</td></tr>
+<tr><td>SymGAN</td><td>0.237 ± 0.061</td><td>1.954 ± 0.206</td><td>1.994 ± 0.167</td><td>1.198 ± 0.389</td></tr>
+<tr><td>LaLiGAN</td><td>0.329 ± 0.122</td><td>0.296 ± 0.066</td><td>1.838 ± 0.155</td><td>1.476 ± 0.314</td></tr>
+<tr><td>w/o \(\mathcal{L}_{\text{adv}}\)</td><td>1.701 ± 0.195</td><td>0.156 ± 0.031</td><td>3.394 ± 0.344</td><td>5.131 ± 0.995</td></tr>
+<tr><td>w/o \(\mathcal{L}_{\text{id}}\)</td><td>0.162 ± 0.037</td><td>0.483 ± 0.166</td><td>0.818 ± 0.251</td><td>0.814 ± 0.211</td></tr>
+<tr><td>w/o \(\mathcal{L}_{\text{comp}}\)</td><td>0.174 ± 0.036</td><td>0.325 ± 0.016</td><td>1.134 ± 0.301</td><td>0.788 ± 0.250</td></tr>
+<tr><td>w/o \(\mathcal{L}_{\text{inv}}\)</td><td>0.164 ± 0.038</td><td>0.337 ± 0.036</td><td>0.813 ± 0.333</td><td>0.826 ± 0.253</td></tr>
+</table>
+<figure data-fig="6"><img src="fig6.png" alt="Figure 6: Compatibility error heatmaps on Drawer Opening over 256 ordered pairs of 16 angles; MIRROR maintains low error." loading="lazy"></figure>
+
+<h3>5.3 Do the discovered symmetries improve robot policy learning?</h3>
+<p>(Summary) Frame-averaged BC (EBC) averages over the subgroup \(H=C_n\). EBC-MIRROR improves on vanilla BC on all tasks at \(C_{16}\), while the other symmetry sources fall below BC.</p>
+<table>
+<caption>Table 2: Episodic success rates (%) at \(H=C_{16}\).</caption>
+<tr><th>Method</th><th>Drawer Opening</th><th>Drawer Closing</th><th>Cube Dropping</th><th>Hammer Lifting</th><th>Average</th></tr>
+<tr><td>EBC-ExSym</td><td>64.7 ± 2.2</td><td>86.4 ± 4.7</td><td>80.9 ± 5.9</td><td>85.1 ± 5.7</td><td>79.3 ± 9.9</td></tr>
+<tr><td>EBC-SymGAN</td><td>66.3 ± 11.3</td><td>85.8 ± 3.6</td><td>81.9 ± 9.4</td><td>49.8 ± 16.3</td><td>71.0 ± 18.1</td></tr>
+<tr><td>EBC-LaLiGAN</td><td>65.3 ± 2.0</td><td>73.6 ± 6.2</td><td>84.5 ± 6.2</td><td>61.3 ± 5.6</td><td>71.2 ± 10.3</td></tr>
+<tr><td>EBC-MIRROR</td><td>71.7 ± 1.4</td><td>89.8 ± 2.0</td><td>90.3 ± 2.9</td><td>88.7 ± 2.5</td><td>85.1 ± 8.1</td></tr>
+<tr><td>BC</td><td>71.4 ± 0.8</td><td>88.1 ± 5.9</td><td>80.6 ± 2.5</td><td>81.8 ± 3.0</td><td>80.5 ± 7.0</td></tr>
+</table>
+<figure data-fig="7"><img src="fig7.png" alt="Figure 7: RGB policy performance versus subgroup size. EBC-MIRROR improves with \(n\) and exceeds BC (80.48%) at \(C_4\), \(C_8\) and \(C_{16}\)." loading="lazy"></figure>
+
+<h2>6 Sim-to-Real Deployment</h2>
+<p>(Summary) Symmetry discovery and EBC-MIRROR training are repeated in simulation on heightmap plus segmentation-mask observations. The policy is then deployed zero-shot on a Kinova GEN3 arm. Successes over 20 trials:</p>
+<ul>
+<li>Drawer Opening: 13/20</li>
+<li>Drawer Closing: 19/20</li>
+<li>Cube Dropping: 9/20</li>
+<li>Hammer Lifting: 16/20</li>
+</ul>
+<figure data-fig="8"><img src="fig8.png" alt="Figure 8: Real-world tasks and policy observations: (a)–(d) the tasks; (e, f) simulated and real heightmap and segmentation-mask observations." loading="lazy"></figure>
+
+<h2>7 Conclusion</h2>
+<p>(Summary) Learning coupled observation–action transformations from offline data, with adversarial tuple matching and group-consistency regularization, improves symmetry quality and visual policy learning. It does so without hand-specifying how the group acts on images and commands.</p>
+
+<h2>8 Limitations</h2>
+<p>(Summary) There are two limitations:</p>
+<ul>
+<li>The group \(G\) must be specified in advance.</li>
+<li>Only symmetries present in the data can be recovered. Without variation along the symmetry, \((\phi_o,\phi_a)\) may collapse toward the identity.</li>
+</ul>
+
+<h2>Acknowledgments</h2>
+<p>The authors thank Haohong Lin and William Jongwon Han.</p>
+
+<h2>References</h2>
+<ol class="refs">
+<li>D. Wang, R. Walters, R. Platt. SO(2)-equivariant reinforcement learning. ICLR 2022.</li>
+<li>S. Liu et al. Continual vision-based reinforcement learning with group symmetries. CoRL 2023.</li>
+<li>H. Ryu et al. Equivariant descriptor fields. ICLR 2023.</li>
+<li>H. Huang et al. Fourier transporter. ICLR 2024.</li>
+<li>B. Eisner et al. Deep SE(3)-equivariant geometric reasoning for precise placement tasks. ICLR 2024.</li>
+<li>J. Yang et al. Equibot. CoRL 2024.</li>
+<li>D. Wang et al. Equivariant diffusion policy. CoRL 2024.</li>
+<li>C. Gao et al. RiEMann. CoRL 2024.</li>
+<li>B. Hu et al. 3D equivariant visuomotor policy learning via spherical projection. NeurIPS 2025.</li>
+<li>D. Klee et al. RAVEN. ICLR 2026.</li>
+<li>J. Yang, N. Dehmamy, R. Walters, R. Yu. Latent space symmetry discovery. ICML 2024.</li>
+<li>Y. Zhu et al. robosuite. arXiv:2009.12293, 2020.</li>
+<li>N. Dehmamy et al. Automatic symmetry discovery with Lie algebra convolutional network. NeurIPS 2021.</li>
+<li>A. Moskalev et al. LieGG. NeurIPS 2022.</li>
+<li>L. Hu, Y. Li, Z. Lin. Explicit discovery of nonlinear symmetries from dynamic data. ICML 2025.</li>
+<li>J. Yang et al. Generative adversarial symmetry discovery. ICML 2023.</li>
+<li>K. Desai, B. Nachman, J. Thaler. Symmetry discovery with deep learning. Phys. Rev. D, 2022.</li>
+<li>J. Liu et al. Physically plausible multi-system trajectory generation and symmetry discovery. arXiv:2509.23003, 2025.</li>
+<li>R. Rombach et al. Latent diffusion models. CVPR 2022.</li>
+<li>A. van den Oord et al. Neural discrete representation learning. NeurIPS 2017.</li>
+<li>A. Razavi et al. VQ-VAE-2. NeurIPS 2019.</li>
+<li>P. Esser et al. Taming transformers. CVPR 2021.</li>
+<li>O. Puny et al. Frame averaging. ICLR 2022.</li>
+<li>D. Wang et al. The surprising effectiveness of equivariant models in domains with latent symmetry. ICLR 2023.</li>
+<li>D. Zhao, J. Zhu, B. Zhang. Latent variables on spheres for autoencoders in high dimensions. 2020.</li>
+<li>N. Ravi et al. SAM 2. ICLR 2025.</li>
+<li>K. Lin et al. Constraint-preserving data generation for one-shot visuomotor policy generalization. CoRL 2025.</li>
+</ol>
+
+<h2>A Theoretical Analysis</h2>
+<h3>A.1 Preservation of Group-Operation Axioms under Two-Stage Encoding</h3>
+<p>The induced observation-space operation is:</p>
+<p>\[\phi_o(g,o):=D_o(\phi_z(g,E_o(o)))\tag{4}\]</p>
+<p><strong>Lemma 1</strong> (summary). Assume three things:</p>
+<ul>
+<li>\(\mathcal{Z}_*=E_o(\mathcal{O}_*)\) is \(G\)-invariant;</li>
+<li>\(\phi_z\) is a group operation on \(\mathcal{Z}_*\), satisfying (5) \(\phi_z(e,z)=z\) and (6) \(\phi_z(g_2,\phi_z(g_1,z))=\phi_z(g_2\circ g_1,z)\);</li>
+<li>\(E_o, D_o\) are mutual inverses on these supports (7).</li>
+</ul>
+<p>Then \(\phi_o\) satisfies (8) identity and (9) compatibility on \(\mathcal{O}_*\). The proof cancels \(E_o\circ D_o\); invertibility follows by taking \(g_2=g_1^{-1}\). In practice the autoencoder is only approximately invertible, so residual violations are measured empirically.</p>
+
+<h3>A.2 Logical Dependence among the Group-Operation Axioms</h3>
+<p>The axioms are numbered as follows:</p>
+<ul>
+<li>(10) identity;</li>
+<li>(11) compatibility;</li>
+<li>(12) invertibility.</li>
+</ul>
+<p><strong>Lemma 2:</strong> (11) and (12) imply (10), via \(\phi(e,x)=\phi(g^{-1}\circ g,x)=\phi(g^{-1},\phi(g,x))=x\).</p>
+<p><strong>Lemma 3:</strong> (11) and (10) imply (12).</p>
+<p><strong>Counterexample:</strong> identity and invertibility do not imply compatibility. Take \(\phi(R_\theta,x)=x+\sin\theta\). It satisfies identity and invertibility, but \(\phi(R_{\pi/2},\phi(R_{\pi/2},x))=x+2\neq x=\phi(R_\pi,x)\).</p>
+
+<h2>B Simulation Setup and Evaluation Protocol</h2>
+<h3>B.1 Robosuite Setup</h3>
+<p>(Summary) The simulation uses a 7-DoF Kinova GEN3 arm with a Robotiq 2F85 gripper. The simulated camera is calibrated to match a real RealSense D435.</p>
+
+<h3>B.2 Per-Task Observation and Action Coordinates</h3>
+<p>Observations are RGB images. Actions per task:</p>
+<ul>
+<li>Drawer Opening and Drawer Closing: \((\Delta x,\Delta y,\Delta z,\Delta\psi)\);</li>
+<li>Cube Dropping: \((\Delta x,\Delta y,\Delta z,\Delta w)\);</li>
+<li>Hammer Lifting: \((\Delta x,\Delta y,\Delta z,\Delta\psi,\Delta w)\).</li>
+</ul>
+<p>Each component is normalized as \(a_i=\delta_i/s_i\in[-1,1]\).</p>
+
+<h3>B.3 Environment Reward Functions</h3>
+<p>\[d^{\text{reach}}_t=\|p^{\text{grp}}_t-p^{\text{target}}_t\|_2,\quad r^{\text{reach}}_t=1-\tanh(10d^{\text{reach}}_t),\quad r^{\text{action}}_t=-\|a_t\|_2\tag{13}\]</p>
+<p>\[r^{\text{open}}_t=\tanh(p_t),\quad r^{\text{close}}_t=1-\tanh(p_t),\quad r^{\text{yaw}}_t=\cos^2(\epsilon^{\text{yaw}}_t)\tag{14}\]</p>
+<p>\[r^{\text{grasp}}_t=g_t,\quad r^{\text{lift}}_t=\tanh(10\Delta h_t)\tag{15}\]</p>
+<p>\[d^{\text{align}}_t=\|p^{\text{cube}}_{t,1:2}-p^{\text{pot}}_{t,1:2}\|_2,\quad r^{\text{align}}_t=1-\tanh(10d^{\text{align}}_t)\tag{16}\]</p>
+<p>The success reward \(r^{\text{success}}_t=1\) when the cube is in the pot and released.</p>
+<table>
+<caption>Table 3: Per-task reward composition.</caption>
+<tr><th>Task</th><th>Reaching target</th><th>Reward vector</th></tr>
+<tr><td>Drawer Opening</td><td>Drawer handle</td><td>\((r^{\text{reach}},r^{\text{open}},r^{\text{yaw}},r^{\text{action}})\)</td></tr>
+<tr><td>Drawer Closing</td><td>Drawer handle</td><td>\((r^{\text{reach}},r^{\text{close}},r^{\text{yaw}},r^{\text{action}})\)</td></tr>
+<tr><td>Cube Dropping</td><td>Cube</td><td>\((r^{\text{reach}},r^{\text{grasp}},r^{\text{lift}},r^{\text{align}},r^{\text{success}},r^{\text{action}})\)</td></tr>
+<tr><td>Hammer Lifting</td><td>Hammer</td><td>\((r^{\text{reach}},r^{\text{grasp}},r^{\text{lift}},r^{\text{action}})\)</td></tr>
+</table>
+
+<h3>B.4 Offline Dataset and Behavior Policy</h3>
+<p>(Summary) A finite-state-machine waypoint controller collects the data:</p>
+<ul>
+<li>Drawer Opening: pre-grasp, grasp, pull.</li>
+<li>Drawer Closing: approach, contact, push.</li>
+<li>Cube Dropping: approach, descend, lift, transfer, drop.</li>
+<li>Hammer Lifting: approach, descend, grasp, lift.</li>
+</ul>
+
+<h3>B.5 Evaluation Metrics and Protocol</h3>
+<p>\[\mathcal{E}_{\text{sym}}(g)=W_2(\mathcal{D},\Phi(g,\mathcal{D}))\tag{17}\]</p>
+<p>\[d_f(\tau,\tau')=\|f_o(o)-f_o(\bar o)\|_2^2+\|a-\bar a\|_2^2+\|f_o(o')-f_o(\bar o')\|_2^2\tag{18}\]</p>
+<p>\[\begin{aligned}\mathcal{E}_{\text{id}}&=\mathbb{E}[d_f(\Phi(e,\tau),\tau)],\\ \mathcal{E}_{\text{comp}}(g_1,g_2)&=\mathbb{E}[d_f(\Phi(g_2,\Phi(g_1,\tau)),\Phi(g_2\circ g_1,\tau))],\\ \mathcal{E}_{\text{inv}}(g)&=\mathbb{E}[d_f(\Phi(g^{-1},\Phi(g,\tau)),\tau)].\end{aligned}\tag{19}\]</p>
+<p>(Summary) For evaluation, invariance and invertibility errors are averaged over 256 random angles. Compatibility error is averaged over 16×16 grid pairs.</p>
+
+<h2>C Symmetry-Discovery Implementation</h2>
+<p>(Summary) Architecture:</p>
+<ul>
+<li>Stage 1: a convolutional spherical autoencoder with latent \(z\in\mathbb{S}^{15}\).</li>
+<li>Stage 2: residual MLP symmetry modules with \(d_u=64\) and \(d_v=16\).</li>
+<li>Discriminator: spectral-normalized, with a transition head and a marginal head.</li>
+</ul>
+<p>Training:</p>
+<ul>
+<li>hinge-GAN loss with 1:1 updates;</li>
+<li>\(\theta_g\sim\mathcal{N}(0,\pi^2)\bmod 2\pi\);</li>
+<li>Adam; Stage 1 learning rate \(2\times10^{-4}\) with batch 32; Stage 2 learning rate \(10^{-4}\) with batch 4096; 100k updates each;</li>
+<li>loss weights all 1.0 except \(\lambda_{\text{nt}}=0.1\); seeds 1–3.</li>
+</ul>
+<table>
+<caption>Table 4: Decomposition of symmetry latents.</caption>
+<tr><th>Latent</th><th>Rotating blocks \(K\)</th><th>Invariant coords \(M\)</th><th>Total</th></tr>
+<tr><td>Observation \(u\)</td><td>16</td><td>32</td><td>64</td></tr>
+<tr><td>Action \(v\)</td><td>4</td><td>8</td><td>16</td></tr>
+</table>
+<table>
+<caption>Table 5: Optimization settings.</caption>
+<tr><th>Setting</th><th>Stage 1</th><th>Stage 2</th></tr>
+<tr><td>Optimizer</td><td>Adam</td><td>Adam</td></tr>
+<tr><td>Learning rate</td><td>2e-4</td><td>1e-4</td></tr>
+<tr><td>Gradient updates</td><td>100,000</td><td>100,000</td></tr>
+<tr><td>Batch size</td><td>32</td><td>4096</td></tr>
+<tr><td>Weight decay</td><td>0</td><td>0</td></tr>
+<tr><td>Grad clip</td><td>1.0</td><td>1.0</td></tr>
+</table>
+
+<h2>D Additional Symmetry-Discovery Results</h2>
+<p>(Summary) Per-task tables 6–9 broadly confirm the aggregate results. Removing \(\mathcal{L}_{\text{adv}}\) is the worst on every task. Removing \(\mathcal{L}_{\text{comp}}\) raises compatibility error on every task. There are some task-level exceptions, such as Drawer Closing.</p>
+<table>
+<caption>Tables 6–9 (All Tasks rows): MIRROR / SymGAN / LaLiGAN.</caption>
+<tr><th>Metric</th><th>MIRROR</th><th>SymGAN</th><th>LaLiGAN</th></tr>
+<tr><td>Invariance</td><td>0.157</td><td>0.237</td><td>0.329</td></tr>
+<tr><td>Identity</td><td>0.317</td><td>1.954</td><td>0.296</td></tr>
+<tr><td>Compatibility</td><td>0.717</td><td>1.994</td><td>1.838</td></tr>
+<tr><td>Invertibility</td><td>0.730</td><td>1.198</td><td>1.476</td></tr>
+</table>
+<figure data-fig="9"><figcaption>Figure 9: Symmetry invariance error across latent rotation angles for the four tasks.</figcaption></figure>
+<figure data-fig="10"><figcaption>Figure 10: Compatibility error heatmaps across four tasks.</figcaption></figure>
+<figure data-fig="11"><figcaption>Figure 11: Invertibility error across latent rotation angles.</figcaption></figure>
+<figure data-fig="12"><figcaption>Figure 12: Learned RGB observation–action transformations for \(g\in C_4\).</figcaption></figure>
+<figure data-fig="13"><figcaption>Figure 13: PCA alignment of original and transformed transition-tuple embeddings during training.</figcaption></figure>
+
+<h2>E Frame-Averaged Behavior Cloning</h2>
+<h3>E.1 Frame-Averaged Policy and Equivariance Conditions</h3>
+<p>\[\pi_\theta(o)=\frac{1}{|H|}\sum_{g\in H}\phi_a(g^{-1},f_\theta(\phi_o(g,o)))\tag{20}\]</p>
+<p>\[\phi_a\Big(h,\tfrac{1}{|H|}\textstyle\sum_k a_k\Big)=\tfrac{1}{|H|}\textstyle\sum_k\phi_a(h,a_k)\tag{21}\]</p>
+<p>(Summary) If the axioms hold exactly and (21) holds, then \(\pi_\theta\) is \(H\)-equivariant. Neither condition is guaranteed for the learned transformations.</p>
+
+<h3>E.2 Policy Architecture and Training Objective</h3>
+<p>(Summary) The base policy is a ResNet-18 followed by a two-layer MLP with 64 hidden units, trained with:</p>
+<p>\[\min_\theta\mathbb{E}_{(o,a)\sim\mathcal{D}}\|\pi_\theta(o)-a\|_2^2\tag{22}\]</p>
+
+<h3>E.3 Baselines and Evaluation Protocol</h3>
+<p>(Summary) EBC-ExSym rotates images in pixel space and rotates \((\Delta x,\Delta y)\) by \(R(\theta_g)\). The sweep covers \(n\in\{2,4,8,16\}\).</p>
+
+<h3>E.4 Effect of Subgroup Size</h3>
+<table>
+<caption>Table 10: Average success rates (%) by subgroup size.</caption>
+<tr><th>Method</th><th>C2</th><th>C4</th><th>C8</th><th>C16</th></tr>
+<tr><td>EBC-ExSym</td><td>78.0</td><td>79.6</td><td>77.9</td><td>79.3</td></tr>
+<tr><td>EBC-SymGAN</td><td>79.5</td><td>76.4</td><td>73.5</td><td>71.0</td></tr>
+<tr><td>EBC-LaLiGAN</td><td>79.3</td><td>74.7</td><td>70.2</td><td>71.2</td></tr>
+<tr><td>EBC-MIRROR</td><td>80.2</td><td>81.9</td><td>83.6</td><td>85.1</td></tr>
+<tr><td>BC</td><td colspan="4">80.5</td></tr>
+</table>
+
+<h2>F Sim-to-Real Experiments</h2>
+<p>(Summary) The real setup uses a Kinova GEN3 arm, a Robotiq gripper and a RealSense D435. Observations are a heightmap clipped to [0, 0.3] m plus a SAM 2 segmentation mask. Symmetry discovery and policy training happen in simulation, followed by zero-shot deployment.</p>
+<figure data-fig="14"><img src="fig14.png" alt="Figure 14: Real-world observation preprocessing into a heightmap and segmentation mask." loading="lazy"></figure>
+<table>
+<caption>Table 11: Simulated success with heightmap and mask observations (average).</caption>
+<tr><th>Method</th><th>Average</th></tr>
+<tr><td>EBC-MIRROR C2</td><td>0.7531</td></tr>
+<tr><td>EBC-MIRROR C4</td><td>0.7819</td></tr>
+<tr><td>EBC-MIRROR C8</td><td>0.8016</td></tr>
+<tr><td>EBC-MIRROR C16</td><td>0.8197</td></tr>
+<tr><td>BC</td><td>0.7772</td></tr>
+</table>
+<table>
+<caption>Table 12: Real-world success counts.</caption>
+<tr><th>Task</th><th>Successful trials</th></tr>
+<tr><td>Drawer Opening</td><td>13/20</td></tr>
+<tr><td>Drawer Closing</td><td>19/20</td></tr>
+<tr><td>Cube Dropping</td><td>9/20</td></tr>
+<tr><td>Hammer Lifting</td><td>16/20</td></tr>
+</table>
+<figure data-fig="15"><figcaption>Figure 15: Learned transformations with simulated heightmap and segmentation-mask observations for \(g\in C_4\).</figcaption></figure>
+</body></html>

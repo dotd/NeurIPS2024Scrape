@@ -1,0 +1,250 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SCoCaT: Success Conditioned Constrained Reinforcement Learning for Spacecraft Docking</title>
+<script>window.MathJax = {tex: {inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']], tags: 'ams'}};</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js"></script>
+<style>
+  body { font: 17px/1.6 Georgia, "Times New Roman", serif; max-width: 860px; margin: 0 auto; padding: 24px 20px 80px; color: #222; }
+  h1 { font-size: 1.7em; line-height: 1.25; } h2 { margin-top: 1.8em; } .src { font: 13px system-ui, sans-serif; color: #666; }
+  figure { margin: 1.5em 0; text-align: center; } figure img { max-width: 100%; }
+  figcaption { font-size: 0.9em; color: #444; text-align: left; margin-top: 6px; }
+  table { border-collapse: collapse; margin: 1em auto; font-size: 0.85em; } td, th { border: 1px solid #ccc; padding: 3px 6px; }
+  pre { background: #f6f8fa; padding: 10px; overflow-x: auto; font-size: 0.85em; } .refs { font-size: 0.85em; }
+</style></head><body>
+<p class="src">HTML version made by Claude (claude-opus-5-5) from <a href="../../pdfs/SUV5PudsyI_SCoCaT%20%20Success%20Conditioned%20Constrained%20Reinforcement%20Learning%20for%20Spacecraft%20Docking.pdf">the PDF</a>; check the PDF for exact wording and figures.</p>
+I can't reproduce this paper verbatim in full, since that would mean copying a long copyrighted work. Below is a faithful HTML rendering that keeps the paper's structure, equations, figure slots, key tables and references, with the prose condensed into summaries and short quotations.
+
+<h1>SCoCaT: Success Conditioned Constrained Reinforcement Learning for Spacecraft Docking</h1>
+<p>Aman Arora, Ricard Marsal I Castan, Matteo El-Hariry, Miguel Olivares-Mendez<br>SnT - Interdisciplinary Centre for Security, Reliability and Trust, University of Luxembourg, Luxembourg<br>{aman.arora, ricard.marsal, matteo.elhariry, miguel.olivaresmendez}@uni.lu</p>
+<p><em>10th Conference on Robot Learning (CoRL 2026), Austin TX, USA.</em> Project page: https://snt-spacer.github.io/scocat-cstr-RL-docking/ · Code: https://github.com/snt-spacer/scocat-cstr-RL-docking</p>
+
+<h2>Abstract (summary)</h2>
+<p>Termination-based constrained RL, such as Constraints as Terminations (CaT), has several advantages for safety-critical deployment. It needs no online optimization, scales with one scalar per constraint, and is simpler than Lagrangian methods. The authors identify a failure mode on terminal-navigation tasks, where the goal lies inside a region in which constraints tighten. There, the survival-weighted objective makes "dwelling outside the goal region strictly preferable to entering." They call this "feasibility collapse," formalize it, and resolve it with a minimal PPO augmentation: a dense per-step success signal learned through an auxiliary value critic. The method is validated on a 6U CubeSat (6-DoF) and on an air-bearing floating platform with zero-shot sim-to-real transfer.</p>
+<p><strong>Keywords:</strong> Constrained Reinforcement Learning, Spacecraft Docking, Sim-to-Real Transfer</p>
+
+<h2>1 Introduction (summary)</h2>
+<p>Terminal navigation tasks share three properties:</p>
+<ul>
+<li>a precise goal configuration;</li>
+<li>safety constraints that concentrate along the approach;</li>
+<li>failures that are irreversible.</li>
+</ul>
+<p>Examples include docking, precision landing, peg-in-hole insertion, surgical tool placement and underwater mating. SWaP-limited platforms need controllers whose runtime cost is only a network forward pass. This rules out MPC and online QP-based shields and motivates deep RL.</p>
+<p>CaT stochastically terminates future rewards upon violation, using a survival product \(\prod(1-\delta_t)\). In terminal navigation, however, states just outside the goal corridor offer near-maximal reward at near-zero termination probability, which causes feasibility collapse. SCoCaT adds a per-step success indicator and an auxiliary critic \(V_s\) trained against environment-only terminations, inspired by Roy et al. [15].</p>
+<p><strong>Contributions:</strong></p>
+<ul>
+<li>A formalization of feasibility collapse and of the threshold at which hovering becomes CaT-preferred.</li>
+<li>SCoCaT, a minimal extension of CaT with a decoupled success signal.</li>
+<li>Validation on 3-DoF and 6-DoF platforms, including sim-to-real transfer, against PPO, CaT and gradient-projection baselines.</li>
+</ul>
+
+<h2>2 Related Work (summary)</h2>
+<p><strong>Constrained RL.</strong> The paper covers three families of approaches:</p>
+<ul>
+<li><em>Primal-dual CMDP methods:</em> CPO [11], FOCOPS [13] and PID-Lagrangian [12].</li>
+<li><em>Termination-based methods:</em> ET-MDP [14] and CaT [7], which has been extended to loco-manipulation [16].</li>
+<li><em>Other approaches:</em> state augmentation (Sauté RL [17]), gradient projection [18, 19], and Direct Behavior Specification [15]. The last is the closest prior work, but it is Lagrangian and off-policy.</li>
+</ul>
+<p><strong>RL for spacecraft proximity operations.</strong> Prior work includes planar and 6-DoF RL docking [3, 6, 20, 21], run-time assurance and CBF approaches [2, 5, 22, 23], and air-bearing or UAV sim-to-real testbeds [3, 24, 25, 26].</p>
+
+<figure data-fig="1"><img src="fig1.png" alt="Figure 1: Left: Ablation Pareto scatter of goal corridor occupancy vs. constraint compliance per reward×success-indicator configuration. SCoCaT occupies the ideal region (compliance ≥ 0.97, GCO &gt; 0.5), while CaT is compliant but collapses. Right: Radar plots of corridor entry, TCR and per-constraint compliance for the Floating Platform and the 6U CubeSat. On the CubeSat, CaT enters the corridor in 3.7% of episodes, while SCoCaT reaches 79.4% TCR at 0.945 compliance (CaT: 0.971). PPO has compliance of 0.839. (Caption condensed.)" loading="lazy"></figure>
+
+<h2>3 Methodology</h2>
+<p>The setting is an MDP augmented with constraints \(c_i\), subject to the chance constraints</p>
+\[\mathbb{P}_{(s,a)\sim\rho^\pi_\gamma}[c_i(s,a)&gt;0]\le\tilde\varepsilon_i\quad\forall i\in\mathcal{I}.\tag{1}\]
+
+<h3>3.1 Problem Formulation</h3>
+<p>Let \(\mathcal{G}\) be the goal region and \(\partial\mathcal{G}^\epsilon=\{s:\mathrm{dist}(s,\mathcal{G})\le\epsilon\}\setminus\mathcal{G}\) the surrounding annulus.</p>
+<p><strong>Definition 1 (Feasibility Collapse).</strong> A policy concentrates its stationary distribution on \(\partial\mathcal{G}^\epsilon\) while \(\mathbb{P}_\pi(s_t\in\mathcal{G})\approx0\).</p>
+<p><strong>Proposition 1.</strong> Consider a three-state MDP \(\{s_{far},s_\partial,s_\mathcal{G}\}\) satisfying:</p>
+<ul>
+<li>(i) \(r(s_\partial)=R&gt;0\) and \(r(s_\mathcal{G})=0\), with \(s_\mathcal{G}\) absorbing;</li>
+<li>(ii) \(\delta(s_\mathcal{G})=\bar\delta&gt;0\);</li>
+<li>(iii) \(\delta(s_\partial)=0\).</li>
+</ul>
+<p>Then hovering at \(s_\partial\) is a strict local optimum of the CaT objective.</p>
+<p>Proposition 1b covers a non-absorbing, rewarding goal. In that case hovering is preferred iff \(R&gt;\kappa r_\mathcal{G}\), where \(\kappa=1\) at \(\bar\delta=0\) and \(\kappa=0.023\) at \(\bar\delta=0.3\).</p>
+
+<h3>3.2 Constraints as Terminations</h3>
+\[J_{\mathrm{CaT}}(\pi)=\mathbb{E}_{\tau\sim\pi}\Big[\sum_{t=0}^{\infty}\Big(\prod_{t'=0}^{t-1}\gamma(1-\delta_{t'})\Big)r(s_t,a_t)\Big]\tag{2}\]
+<p>Here \(\delta_t=\max_i p_i^{\max}\cdot\mathrm{clip}(c_i^+/c_i^{\max},0,1)\).</p>
+
+<h3>3.3 Success-Conditioned Constraints as Terminations (SCoCaT)</h3>
+<p>The binary success indicator gates on pose and velocity:</p>
+\[I_{\mathrm{succ},t}=\mathbf{1}[\|p_t-p_\mathcal{G}\|&lt;\varepsilon_p]\cdot\mathbf{1}[e_{\mathrm{orient},t}&lt;\varepsilon_o]\cdot\mathbf{1}[\|v_t\|&lt;\varepsilon_v]\cdot\mathbf{1}[\|\omega_t\|&lt;\varepsilon_\omega]\tag{3}\]
+<p>A continuous variant is also evaluated:</p>
+\[I^{\mathrm{cont}}_{\mathrm{succ},t}=e^{-\|p_t-p_\mathcal{G}\|/\sigma_p}e^{-e_{\mathrm{orient},t}/\sigma_o}\big[1-w_t(1-e^{-\|v_t\|/\sigma_v}e^{-\|\omega_t\|/\sigma_\omega})\big]\tag{4}\]
+<p>The method uses two advantage streams:</p>
+\[A_{r,t}=\mathrm{GAE}(r_t(1-\delta_t),V_r,\delta_t)\tag{5}\]
+\[A_{s,t}=\mathrm{GAE}(I_{\mathrm{succ},t},V_s,d^{\mathrm{env}}_t)\tag{6}\]
+\[A^{\mathrm{tot}}_t=\mathrm{standardize}(A_{r,t}+A_{s,t})\tag{7}\]
+<p><strong>Proposition 2.</strong> Hovering is not a local optimum of the SCoCaT objective, because</p>
+\[A^{\mathrm{tot}}(s_\partial\to s_\mathcal{G})=-\frac{R\gamma}{1-\gamma}+\gamma V_s(s_\mathcal{G})\tag{8}\]
+<p>is positive once \(V_s(s_\mathcal{G})&gt;R/(1-\gamma)\). The required bound is \(R&lt;1\) for the binary signal, \(R&lt;0.67\) for the continuous signal, and \(R&lt;0.64\) in the finite-horizon worst case. The paper's reward satisfies \(R\le0.099\).</p>
+
+<pre>Algorithm 1 SCoCaT-PPO
+Require: policy πθ, critics Vr, Vs, constraints {ci, pi_max}
+1: for epoch = 1..N do
+2:   τ ← CollectTrajectories(πθ)
+3:   δt ← max_i pi_max · clip(ci+/ci_max, 0, 1)        [CaT]
+4:   τ.rewards ← τ.rewards × (1 − δt)                   [CaT]
+5:   τ.dones_cat ← δt                                    [CaT]
+6:   Ar ← GAE(τ.rewards, Vr, τ.dones_cat)
+7:   As ← GAE(τ.Isucc, Vs, τ.dones_env)                  [SCoCaT]
+8:   Atot ← standardize(Ar + As)                         [SCoCaT]
+9:   UpdatePolicy(πθ, Atot)
+10:  UpdateCritic(Vr, τ.rewards, τ.dones_cat)
+11:  UpdateCritic(Vs, τ.Isucc, τ.dones_env)              [SCoCaT]
+12: end for</pre>
+
+<h3>3.4 Implementation Details (summary)</h3>
+<p><strong>Task.</strong> The vehicle must hold the pose within tolerance for 100 consecutive steps.</p>
+<ul>
+<li><em>Floating Platform tolerances:</em> 10 mm / 2° during training; 10 mm / 0.1 rad at evaluation.</li>
+<li><em>CubeSat tolerances:</em> 10 mm / 10° for both training and evaluation.</li>
+<li><em>Velocity gates:</em> \(\|v\|&lt;0.05\) m/s during training, tightened to 0.01 m/s at evaluation; \(\|\omega\|&lt;5°\)/s throughout.</li>
+<li><em>Spawn range:</em> 0.01–4.0 m from the goal.</li>
+</ul>
+<p><strong>Metrics.</strong> Corridor Entry (Ent.), TCR (at least 10% of timesteps in the corridor), GCO, Hold, Declared success, and position and heading error.</p>
+<p><strong>Constraint severity tiers.</strong></p>
+<ul>
+<li><em>Strict</em> (\(p^{\max}=1.0\)): workspace bounds and collision.</li>
+<li><em>Moderate</em> (0.1–0.3): docking velocity, angular rate and fuel.</li>
+<li><em>Soft</em> (≤0.1): line of sight and jerk.</li>
+</ul>
+
+<h2>4 Experiments (summary)</h2>
+<p><strong>Platforms.</strong> A 3-DoF air-bearing Floating Platform with 8 thrusters, and a 6U CubeSat with 8 oblique binary thrusters.</p>
+<p><strong>Setup.</strong> Training uses Isaac Lab and skrl PPO with 5 seeds per condition. Baselines are PPO, CaT, CaT with curriculum, and CaT-PEGrad.</p>
+
+<h3>4.1 Simulation Results (summary)</h3>
+<p><strong>Floating Platform.</strong></p>
+<ul>
+<li>SCoCaT reaches TCR 100% at 98.8% compliance, versus CaT's 0.4% TCR at 99.4%.</li>
+<li>On declared success, SCoCaT scores 0.906±0.066, while PPO and CaT both score 0.</li>
+<li>PPO passes through the goal at speed and has 70× the docking-velocity violations.</li>
+</ul>
+<p><strong>CubeSat.</strong></p>
+<ul>
+<li>CaT enters the corridor in only 3.7% of episodes.</li>
+<li>SCoCaT reaches 0.613 declared success at 0.945 compliance.</li>
+<li>PPO reaches 0.931 declared success at 0.839 compliance.</li>
+<li>SCoCaT's seed results are bimodal.</li>
+</ul>
+<p><strong>Ablations.</strong></p>
+<ul>
+<li>Reward density does not gate SCoCaT.</li>
+<li>The binary signal fails under sparse reward, while the continuous signal recovers.</li>
+<li>Adding success as a reward bonus breaks constraint enforcement.</li>
+</ul>
+
+<figure data-fig="2"><img src="fig2.png" alt="Figure 2: Sim-to-real docking evaluation (Section 4.1). Left: Hardware setup and target interface. Right: SCoCaT simulation result for the Floating Platform showing average corridor occupancy." loading="lazy"></figure>
+
+<table>
+<caption>Table 1: Sim-to-real results on the floating platform (4 runs per method, zero-shot)</caption>
+<tr><th>Method</th><th>d_f (cm)</th><th>Hold (ts)</th><th>SR</th><th>LoS</th><th>AngVel</th><th>Actions</th><th>v_G (m/s)</th><th>ω_G (rad/s)</th></tr>
+<tr><td>PPO</td><td>2.4±2.1</td><td>41.8±12.3</td><td>4/4</td><td>0.855±0.174</td><td>0.592±0.045</td><td>0.012±0.019</td><td>0.022±0.002</td><td>0.111±0.006</td></tr>
+<tr><td>CaT</td><td>4.0±2.2</td><td>11.5±3.7</td><td>0/4</td><td>0.121±0.136</td><td>0.628±0.160</td><td>0.000±0.000</td><td>0.012†</td><td>0.039†</td></tr>
+<tr><td>SCoCaT</td><td>1.0±0.9</td><td>23.0±9.4</td><td>3/4</td><td>0.153±0.151</td><td>0.682±0.092</td><td>0.000±0.000</td><td>0.024±0.001</td><td>0.142±0.020</td></tr>
+</table>
+<p>† Only one run entered the corridor; single-trial value.</p>
+<p>The authors note that the hardware result of 3/4 versus 0/4 (Fisher exact p = 0.14) demonstrates transfer but is not a powered comparison. They attribute the angular-velocity gap to the 5 Hz binary thrusters.</p>
+
+<h2>5 Conclusion (summary)</h2>
+<p>SCoCaT resolves feasibility collapse by decoupling the success critic from CaT's survival weighting. It is the only method that meets the declared criterion on the Floating Platform, and it partially breaks collapse on the CubeSat.</p>
+
+<h2>6 Limitations (summary)</h2>
+<ul>
+<li>The scalarization uses fixed equal weights.</li>
+<li>Only a PPO instantiation is evaluated.</li>
+<li>An angular-velocity sim-to-real gap remains.</li>
+<li>On the CubeSat, compliance is 2.6 points lower than CaT's (line of sight), and seed results are bimodal.</li>
+<li>Observation noise is not randomized.</li>
+<li>The hardware study uses only n = 4 runs per method.</li>
+<li>Coverage of embodiments and task families is limited.</li>
+</ul>
+
+<h2>Appendix A: Proofs (summary)</h2>
+<p><strong>Proposition 1.</strong> Hovering yields \(R/(1-\gamma)\). Entering at step \(k\) yields \(R(1-\gamma^k)/(1-\gamma)\), which is strictly smaller (Eqs. 9–10).</p>
+<p><strong>Proposition 1b.</strong></p>
+\[R&gt;\kappa r_\mathcal{G},\quad \kappa=\frac{(1-\bar\delta)(1-\gamma)}{(1-\gamma)+\gamma\bar\delta}\tag{11}\]
+<p><strong>Proposition 2.</strong></p>
+\[J_{\mathrm{SCoCaT}}(\pi')-J_{\mathrm{SCoCaT}}(\pi^\star)=\frac{\gamma^k(1-R)}{1-\gamma}&gt;0\tag{15}\]
+<p>With a finite horizon the condition becomes</p>
+\[R&lt;\frac{1-\gamma^T}{1-\gamma^{H-k}}\tag{16}\]
+
+<h2>Appendix B: Reward Bonus vs. Two-Critic (summary)</h2>
+<p>Adding \(\lambda_b I_{\mathrm{succ}}\) to the post-CaT reward changes the critic's fixed point to \(V^{aug}=V_r^\delta+\lambda_b\tilde V_s^\delta\), where the success term is damped by CaT terminations. The bonus then competes with the survival penalty. In the dense-reward setting this raises docking-velocity violations 37× and LoS violations 13×. The two-critic design leaves \(A_r\), and therefore the CaT penalty, unchanged.</p>
+
+<h2>Appendix C: Training Details (summary)</h2>
+<ul>
+<li><strong>Initialization:</strong> randomized attitude; goal placed within 2 m of the origin.</li>
+<li><strong>Networks:</strong> [64, 64] ELU layers for the policy and both critics.</li>
+<li><strong>Optimization:</strong> γ = 0.99, λ = 0.95, learning rate 5e-4 with KL-adaptive scheduling, 4,096 environments, reward scale 0.1.</li>
+<li><strong>Constraint sensitivity (Table 2):</strong> fuel violations fall from 63% to 3% as \(p^{\max}\) rises. LoS stays above 84% at all levels, i.e. it is geometry-limited.</li>
+</ul>
+
+<table>
+<caption>Table 3: Active CaT constraints</caption>
+<tr><th>Constraint</th><th>FP threshold</th><th>CS threshold</th><th>p_max FP</th><th>p_max CS</th></tr>
+<tr><td>Out-of-bounds</td><td>‖p‖ &gt; 8 m</td><td>‖p‖ &gt; 8 m</td><td>1.0</td><td>1.0</td></tr>
+<tr><td>Collision</td><td>F &gt; 0.1 N</td><td>–</td><td>1.0</td><td>–</td></tr>
+<tr><td>Docking velocity</td><td>‖v‖ &gt; 0.05 m/s</td><td>‖v‖ &gt; 0.1 m/s</td><td>0.3</td><td>0.3</td></tr>
+<tr><td>Angular velocity</td><td>|ω| &gt; 0.1 rad/s</td><td>|ω| &gt; 0.3 rad/s</td><td>0.2</td><td>0.1</td></tr>
+<tr><td>Fuel</td><td>‖u‖₁ &gt; 5.0</td><td>‖u‖₁ &gt; 6.0</td><td>0.1</td><td>0.1</td></tr>
+<tr><td>Line of sight</td><td>angle &gt; 30°</td><td>angle &gt; 30°</td><td>0.015</td><td>0.015</td></tr>
+</table>
+
+<table>
+<caption>Table 7: Floating Platform declared success (5 seeds, dense reward)</caption>
+<tr><th>Method</th><th>TCR</th><th>Hold</th><th>Decl.</th><th>Compl.</th></tr>
+<tr><td>PPO</td><td>0.498±0.488</td><td>0.000</td><td>0.000</td><td>0.803±0.011</td></tr>
+<tr><td>CaT</td><td>0.004±0.008</td><td>0.000</td><td>0.000</td><td>0.994</td></tr>
+<tr><td>SCoCaT</td><td>1.000±0.001</td><td>0.906±0.066</td><td>0.906±0.066</td><td>0.988±0.002</td></tr>
+</table>
+
+<h2>Appendix D–F (summary)</h2>
+<p><strong>D: Floating Platform ablation (Tables 8–9).</strong> These tables cover all reward and signal variants. CaT-PEGrad projects the reward gradient orthogonally to the success gradient (Eqs. 22–25). It improves TCR over CaT but underperforms SCoCaT.</p>
+<p><strong>E: CubeSat results (Tables 10–11):</strong></p>
+<ul>
+<li>PPO: Decl. 0.931, Compl. 0.839.</li>
+<li>CaT: Decl. 0, Compl. 0.971.</li>
+<li>SCoCaT (binary): Decl. 0.613, Compl. 0.945.</li>
+<li>SCoCaT (continuous): Decl. 0.450, Compl. 0.941.</li>
+</ul>
+<p><strong>F: Obstacle avoidance (Tables 12–13).</strong> SCoCaT reaches SR 0.770 with zero collisions, versus CaT's SR of 0.027.</p>
+
+<h2>References</h2>
+<ol class="refs">
+<li>W. Fehse. Automated Rendezvous and Docking of Spacecraft. Cambridge University Press, 2003.</li>
+<li>K. Dunlap et al. Run Time Assured Reinforcement Learning for Safe Satellite Docking. JAIS, 2023.</li>
+<li>K. Hovell and S. Ulrich. Deep Reinforcement Learning for Spacecraft Proximity Operations Guidance. JSR, 2021.</li>
+<li>C. Buckner and R. Lampariello. Tube-Based MPC for the Approach Maneuver of a Spacecraft to a Free-Tumbling Target Satellite. ACC, 2018.</li>
+<li>J. Breeden and D. Panagou. Guaranteed Safe Spacecraft Docking With Control Barrier Functions. IEEE L-CSS, 2022.</li>
+<li>C. E. Oestreich, R. Linares, R. Gondhalekar. Autonomous 6-DoF Spacecraft Docking with Rotating Targets via RL. JAIS, 2021.</li>
+<li>E. Chane-Sane et al. CaT: Constraints as Terminations for Legged Locomotion RL. arXiv:2403.18765, 2024.</li>
+<li>G. Dulac-Arnold et al. An empirical investigation of the challenges of real-world RL. arXiv:2003.11881.</li>
+<li>J. Skalse et al. Defining and Characterizing Reward Hacking. arXiv:2209.13085.</li>
+<li>E. Altman. Constrained Markov Decision Processes. Routledge, 2021.</li>
+<li>J. Achiam et al. Constrained Policy Optimization. arXiv:1705.10528.</li>
+<li>A. Stooke, J. Achiam, P. Abbeel. Responsive Safety in RL by PID Lagrangian Methods. arXiv:2007.03964.</li>
+<li>Y. Zhang, Q. Vuong, K. Ross. First Order Constrained Optimization in Policy Space. NeurIPS, 2020.</li>
+<li>H. Sun et al. Constrained MDPs can be solved by early-termination with recurrent models. NeurIPS Workshop, 2022.</li>
+<li>J. Roy et al. Direct Behavior Specification via Constrained RL. arXiv:2112.12228.</li>
+<li>I. Dadiotis et al. Dynamic object goal pushing with mobile manipulators through model-free constrained RL. arXiv:2502.01546.</li>
+<li>A. Sootla et al. Sauté RL. arXiv:2202.06558.</li>
+<li>D. Kim et al. Conflict-averse gradient aggregation for constrained multi-objective RL. ICLR, 2025.</li>
+<li>S. Peri et al. Non-conflicting energy minimization in RL based robot control. CoRL, PMLR 305, 2025.</li>
+<li>Z. Yang et al. Model-Based RL and NN-Based Policy Compression for Spacecraft Rendezvous. IEEE TII, 2023.</li>
+<li>Q. Hu et al. Learning-Based 6-DOF Control for Autonomous Proximity Operations Under Motion Constraints. IEEE TAES, 2021.</li>
+<li>R. Cheng et al. End-to-End Safe RL through Barrier Functions. AAAI, 2019.</li>
+<li>M. C. Wijayatunga et al. Meta-RL for Robust and Non-greedy CBFs in Spacecraft Proximity Operations. arXiv:2602.07335.</li>
+<li>M. El-Hariry et al. DRIFT. IROS, 2024.</li>
+<li>M. El-Hariry et al. RoboRAN. arXiv:2505.14526.</li>
+<li>K. Dunlap et al. Demonstrating RL and RTA for Spacecraft Inspection Using UAVs. arXiv:2405.06770.</li>
+<li>J. Schulman et al. High-Dimensional Continuous Control Using GAE. arXiv:1506.02438.</li>
+<li>J. Schulman et al. Proximal Policy Optimization Algorithms. arXiv:1707.06347.</li>
+<li>NVIDIA et al. Isaac Lab. arXiv:2511.04831.</li>
+<li>A. Serrano-Muñoz et al. skrl. JMLR 24(254), 2023.</li>
+</ol>
+</body></html>

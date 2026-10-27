@@ -19,6 +19,11 @@ FIRST_PAGE = os.path.join(HERE, "first_page.json")  # from specific_scripts/extr
 OPENALEX = os.path.join(HERE, "openalex.json")  # from specific_scripts/fetch_corl2026_openalex.py
 GITHUB = os.path.join(HERE, "github.json")  # from specific_scripts/corl2026_github.py
 AFFILIATIONS = os.path.join(HERE, "affiliations.json")  # from specific_scripts/corl2026_affiliations.py
+PRESENTATION = {"Oral": "🎤 Oral", "Spotlight": "✨ Spotlight", "Poster": "🖼️ Poster"}  # last word of venue
+SUMMARIES = os.path.join(HERE, "summaries.json")  # from serve.py (Summarize button)
+RATINGS = os.path.join(HERE, "ratings.json")  # from serve.py (star ratings)
+HTML_DIRS = {"claude": os.path.join(HERE, "htmls_claude"),  # from serve.py (Make HTML with Claude / python)
+             "python": os.path.join(HERE, "htmls_python")}
 ROBOTS = os.path.join(HERE, "robots.json")  # from specific_scripts/corl2026_robots.py
 TOP_COMPANIES, TOP_UNIVERSITIES, TOP_RESEARCHERS, TOP_ROBOTS, TOP_KEYWORDS = 20, 50, 50, 50, 50
 
@@ -39,7 +44,9 @@ HTML = r"""<!doctype html>
   nav b { margin-right: 12px; }
   nav button { padding: 6px 14px; border: 1px solid #bbb; border-radius: 6px; background: #f6f6f6; cursor: pointer; }
   nav button.active { background: #2b6cb0; color: #fff; border-color: #2b6cb0; }
+  nav .stats { margin-left: 16px; color: #666; font-size: 13px; }
   nav .count { margin-left: auto; color: #666; }
+  nav #clear { background: #fff; }
   .view { display: none; flex: 1; min-height: 0; overflow: auto; }
   #filters { flex: none; display: flex; flex-wrap: wrap; align-items: center; gap: 8px;
              padding: 8px 16px; border-bottom: 1px solid #ddd; background: #f8fafc; }
@@ -62,6 +69,16 @@ HTML = r"""<!doctype html>
   #q { width: min(320px, 100%); padding: 5px 8px; border: 1px solid #bbb; border-radius: 6px; }
   svg { width: 14px; height: 14px; vertical-align: -2px; fill: currentColor; }
   summary a.gh { color: #24292f; margin-left: 6px; }
+  .sumbox { margin: 8px 0; }
+  .sumbox button { padding: 3px 10px; border: 1px solid #bbb; border-radius: 6px; background: #fff; cursor: pointer; }
+  .htmlrow { display: flex; gap: 16px; flex-wrap: wrap; align-items: center; margin: 0 0 8px; }
+  .htmlbox button { padding: 3px 10px; border: 1px solid #bbb; border-radius: 6px; background: #fff; cursor: pointer; }
+  .sumbox .erase { margin-top: 6px; color: #b42318; }
+  .sumbox details > div { white-space: pre-wrap; background: #f6f8fb; border-left: 3px solid #2b6cb0;
+                          padding: 8px 12px; margin-top: 4px; max-width: 900px; }
+  summary .stars { margin-left: 8px; color: #e0a100; font-size: 15px; letter-spacing: 1px; cursor: pointer; }
+  summary .stars span:hover { color: #b47f00; }
+  summary .sumflag { margin-left: 6px; font-weight: normal; font-size: 12px; color: #777; }
   summary .badges { font-weight: normal; color: #777; font-size: 12px; margin-left: 6px; }
   .view.active { display: block; }
   a { color: #2b6cb0; }
@@ -97,18 +114,38 @@ HTML = r"""<!doctype html>
 <body>
 <nav>
   <b>CoRL 2026</b>
-  <button data-view="table">Table</button>
   <button data-view="papers">Papers</button>
+  <button data-view="table">Table</button>
+  <span class="stats"></span>
   <span class="count"></span>
+  <button id="clear" title="Clear every filter, search and sort">↺ Reset filters</button>
 </nav>
 <div id="filters">
   <input type="search" id="q" placeholder="🔍 search titles, authors, abstracts, keywords…">
+  <details class="facet" data-key="t"><summary>🎤 Oral / Spotlight / Poster</summary><div class="panel"></div></details>
   <details class="facet" data-key="p"><summary>🏷️ Primary keyword</summary><div class="panel"></div></details>
   <details class="facet" data-key="s"><summary>🔖 Secondary keyword</summary><div class="panel"></div></details>
   <details class="facet" data-key="b"><summary>🤖 Robots</summary><div class="panel"></div></details>
   <details class="facet" data-key="c"><summary>🏢 Companies</summary><div class="panel"></div></details>
   <details class="facet" data-key="u"><summary>🎓 Universities</summary><div class="panel"></div></details>
   <details class="facet" data-key="r"><summary>🧑‍🔬 Researchers</summary><div class="panel"></div></details>
+  <select id="rateHas" title="Whether you rated the paper">
+    <option value="">⭐ Rated: all</option>
+    <option value="y">⭐ with rating</option>
+    <option value="n">☆ without rating</option>
+  </select>
+  <select id="rateF" title="Your star rating (only rated papers pass)">
+    <option value="">⭐ Rating: all</option>
+    <option value="g1">⭐ above 1</option><option value="g2">⭐ above 2</option>
+    <option value="g3">⭐ above 3</option><option value="g4">⭐ above 4 (5 only)</option>
+    <option value="l5">⭐ below 5</option><option value="l4">⭐ below 4</option>
+    <option value="l3">⭐ below 3</option><option value="l2">⭐ below 2 (1 only)</option>
+  </select>
+  <select id="sumF" title="Papers with a Claude summary">
+    <option value="">📝 Summary: all</option>
+    <option value="y">📝 summarized</option>
+    <option value="n">⬜ not summarized</option>
+  </select>
   <select id="ghF" title="Papers whose PDF links a GitHub repo">
     <option value="">💻 GitHub: all</option>
     <option value="y">💻 GitHub</option>
@@ -124,14 +161,13 @@ HTML = r"""<!doctype html>
     <option value="cites">📈 Sort: citations</option>
     <option value="az">🔤 Sort: title A–Z</option>
   </select>
-  <button id="clear">✖️ Clear</button>
 </div>
 <div id="table" class="view"><table><colgroup></colgroup><thead><tr></tr></thead><tbody></tbody></table></div>
 <div id="papers" class="view"></div>
 <svg hidden><symbol id="gh" viewBox="0 0 16 16"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></symbol></svg>
 <script id="data" type="application/json">__DATA__</script>
 <script>
-const {columns, rows, firstPage, meta, facets} = JSON.parse(document.getElementById('data').textContent);
+const {columns, rows, firstPage, meta, facets, summaries, ratings, htmlv, here} = JSON.parse(document.getElementById('data').textContent);
 
 function cellContent(v) {
   if (/^https:\/\/github\.com\/\S+ /.test(v)) {  // several space-separated repos
@@ -140,7 +176,7 @@ function cellContent(v) {
     return f;
   }
   if (v.startsWith('pdfs/')) {  // local copy: open in Preview via OpenPDF.app (specific_scripts/install_openpdf_handler.sh)
-    const a = document.createElement('a'), path = new URL(v.split('/').map(encodeURIComponent).join('/'), location.href).pathname;
+    const a = document.createElement('a'), path = (here + '/' + v).split('/').map(encodeURIComponent).join('/');
     a.href = 'openpdf://' + path; a.textContent = '🖊️ ' + v; a.title = 'Open in Preview';
     const web = document.createElement('a');
     web.href = encodeURI(v); web.target = '_blank'; web.textContent = ' 🌐'; web.title = 'Open in browser';
@@ -156,7 +192,7 @@ function cellContent(v) {
 }
 
 // ---- view switching ----
-const buttons = document.querySelectorAll('nav button');
+const buttons = document.querySelectorAll('nav button[data-view]');
 function show(view) {
   buttons.forEach(b => b.classList.toggle('active', b.dataset.view === view));
   document.querySelectorAll('.view').forEach(v => v.classList.toggle('active', v.id === view));
@@ -218,6 +254,129 @@ function renderTable() {
   applyFilters();
 }
 
+// ---- Summarize button: POST /summarize/<id> to serve.py (holds the Claude API key), result in a dropdown ----
+if (location.protocol.startsWith('http'))  // pick up summaries / ratings made since index.html was built
+  [['summaries.json', summaries], ['ratings.json', ratings]].forEach(([f, o]) =>
+    fetch(f).then(r => r.ok ? r.json() : {}).then(s => { Object.assign(o, s); updateStats(); }).catch(() => {}));
+
+// ---- star rating on the summary line: click a star to rate, click the same star again to clear ----
+// Served (serve.py): saved to ratings.json. Opened as a file: kept in localStorage ("pending", 0 = cleared)
+// and pushed to the server the next time the page is opened through serve.py.
+const SERVED = location.protocol.startsWith('http');
+let pending = {};
+try { pending = JSON.parse(localStorage.getItem('corlRatings') || '{}'); } catch (e) {}
+const setRating = (pid, v) => { if (v) ratings[pid] = v; else delete ratings[pid]; };
+const refilter = () => { if (dets.length) applyFilters(); else updateStats(); };  // so the rating / summary filters apply at once
+Object.entries(pending).forEach(([pid, v]) => {
+  setRating(pid, v);
+  if (SERVED) fetch('rate/' + pid, {method: 'POST', body: String(v)}).then(r => {
+    if (r.ok) { delete pending[pid]; try { localStorage.setItem('corlRatings', JSON.stringify(pending)); } catch (e) {} }
+  });
+});
+function stars(pid) {
+  const span = document.createElement('span');
+  span.className = 'stars'; span.title = 'Your rating (click the same star again to clear)';
+  const paint = () => [...span.children].forEach((st, i) => st.textContent = i < (ratings[pid] || 0) ? '★' : '☆');
+  for (let n = 1; n <= 5; n++) {
+    const st = document.createElement('span');
+    st.onclick = async e => {
+      e.preventDefault();  // don't toggle the paper's dropdown
+      const prev = ratings[pid] || 0, v = prev === n ? 0 : n;
+      setRating(pid, v); paint(); refilter();
+      if (!SERVED) {
+        pending[pid] = v;
+        try { localStorage.setItem('corlRatings', JSON.stringify(pending)); } catch (e) {}
+        return;
+      }
+      const res = await fetch('rate/' + pid, {method: 'POST', body: String(v)}).catch(() => null);
+      if (!res || !res.ok) { span.title = '⚠️ rating not saved (is serve.py running?)'; setRating(pid, prev); paint(); refilter(); }
+    };
+    span.append(st);
+  }
+  paint();
+  return span;
+}
+// a summary is {text, cost, input_tokens, output_tokens} (older ones are a plain string)
+const sumText = x => typeof x === 'string' ? x : x.text;
+const sumTitle = x => '📝 Summary (Claude Opus' + (x.cost != null
+  ? ` · $${x.cost.toFixed(3)} · ${x.input_tokens.toLocaleString()} in / ${x.output_tokens.toLocaleString()} out tokens)` : ')');
+function summaryBox(pid, flag) {  // flag: the 📝 marker on the paper's summary line, shown while a summary exists
+  const box = document.createElement('div');
+  box.className = 'sumbox';
+  const needServer = () => location.protocol.startsWith('http') ? '' :
+    'run: uv run python htmls/corl2026/serve.py, then open http://127.0.0.1:8026';
+  const empty = () => {  // no summary yet: just the button
+    const btn = document.createElement('button');
+    btn.textContent = '📝 Summarize';
+    btn.onclick = async () => {
+      if (needServer()) return btn.textContent = '📝 Summarize (' + needServer() + ')';
+      btn.disabled = true; btn.textContent = '⏳ Summarizing with Claude… (~30 s)';
+      try {
+        const res = await fetch('summarize/' + pid, {method: 'POST'}), j = await res.json();
+        if (!res.ok) throw new Error(j.error);
+        summaries[pid] = j.summary; filled(true); refilter();
+      } catch (e) { btn.disabled = false; btn.textContent = '⚠️ ' + e.message + ' (retry)'; }
+    };
+    box.replaceChildren(btn);
+  };
+  const filled = open => {  // summary dropdown, "Erase summary" at its bottom
+    const sd = document.createElement('details'), ss = document.createElement('summary'),
+          body = document.createElement('div'), erase = document.createElement('button');
+    ss.textContent = sumTitle(summaries[pid]); body.textContent = sumText(summaries[pid]); sd.open = open;
+    const cost = summaries[pid].cost;
+    flag.hidden = false; flag.title = 'Has a Claude summary';
+    flag.textContent = '📝' + (cost != null ? ` $${cost.toFixed(3)}` : '');
+    erase.className = 'erase'; erase.textContent = '🗑️ Erase summary';
+    erase.onclick = async () => {
+      if (needServer()) return erase.textContent = '🗑️ Erase summary (' + needServer() + ')';
+      if (!confirm('Erase the summary of this paper?')) return;
+      const res = await fetch('summarize/' + pid, {method: 'DELETE'});
+      if (!res.ok) return erase.textContent = '⚠️ erase failed (retry)';
+      delete summaries[pid]; flag.hidden = true; empty(); refilter();
+    };
+    sd.append(ss, body, erase); box.replaceChildren(sd);
+  };
+  summaries[pid] ? filled(false) : empty();
+  return box;
+}
+
+// ---- HTML versions: POST /html_<kind>/<id> to serve.py, then a link that opens it in a new tab ----
+const HTML_KINDS = {
+  claude: {make: '🌐 Make HTML with Claude', open: '🌐 Open HTML (Claude)', busy: '⏳ Converting the whole paper with Claude… (several minutes)'},
+  python: {make: '🐍 Make HTML with python', open: '🐍 Open HTML (python)', busy: '⏳ Converting with python… (~20 s)'},
+};
+function htmlBox(pid, kind) {
+  const box = document.createElement('span'), k = HTML_KINDS[kind];
+  box.className = 'htmlbox';
+  const link = () => {
+    const a = document.createElement('a'), v = htmlv[kind][pid];
+    a.href = v.path.split('/').map(encodeURIComponent).join('/'); a.target = '_blank';
+    a.textContent = k.open + (v.cost != null ? ` ($${v.cost.toFixed(2)})` : '');
+    box.replaceChildren(a);
+  };
+  if (htmlv[kind][pid]) { link(); return box; }
+  const btn = document.createElement('button');
+  btn.textContent = k.make;
+  btn.onclick = async () => {
+    if (!location.protocol.startsWith('http'))
+      return btn.textContent = k.make + ' (run: uv run python htmls/corl2026/serve.py, then open http://127.0.0.1:8026)';
+    btn.disabled = true; btn.textContent = k.busy;
+    try {
+      const res = await fetch(`html_${kind}/${pid}`, {method: 'POST'}), j = await res.json();
+      if (!res.ok) throw new Error(j.error);
+      htmlv[kind][pid] = j; link(); updateStats();
+    } catch (e) { btn.disabled = false; btn.textContent = '⚠️ ' + e.message + ' (retry)'; }
+  };
+  box.append(btn);
+  return box;
+}
+function htmlBoxes(pid) {
+  const row = document.createElement('div');
+  row.className = 'htmlrow';
+  row.append(htmlBox(pid, 'claude'), htmlBox(pid, 'python'));
+  return row;
+}
+
 // ---- papers view (native <details> dropdowns) ----
 const titleIdx = columns.indexOf('title'), idIdx = columns.indexOf('id'), ghIdx = columns.indexOf('💻 github');
 const kwIdx = ['primary_keyword', 'secondary_keyword', 'free_keyword_1', 'free_keyword_2']
@@ -238,7 +397,10 @@ dets = rows.map((r, ri) => {
     a.onclick = e => { e.preventDefault(); open(url, '_blank'); };
     s.append(a);
   }
-  const m = meta[ri], b = [];
+  const sumFlag = document.createElement('span');
+  sumFlag.className = 'sumflag'; sumFlag.textContent = '📝'; sumFlag.hidden = true;
+  s.append(stars(r[idIdx].split('id=').pop()), sumFlag);
+  const m = meta[ri], b = [...m.t];
   if (m.cites) b.push(`📈 ${m.cites}`);
   if (m.h != null) b.push(`🏅 h ${m.h}`);
   if (m.b.length) b.push('🤖 ' + m.b.join(', '));
@@ -251,7 +413,7 @@ dets = rows.map((r, ri) => {
     dt.textContent = c; dd.appendChild(cellContent(r[i]));
     dl.append(dt, dd);
   });
-  d.append(s, dl);
+  d.append(s, summaryBox(r[idIdx].split('id=').pop(), sumFlag), htmlBoxes(r[idIdx].split('id=').pop()), dl);
   const fig = (firstPage[r[idIdx].split('id=').pop()] || {}).figure;
   if (fig) { const img = document.createElement('img'); img.src = fig; img.loading = 'lazy'; d.append(img); }
   const figs = (firstPage[r[idIdx].split('id=').pop()] || {}).figures || [];
@@ -277,7 +439,7 @@ dets = rows.map((r, ri) => {
 });
 
 // ---- filters ----
-const picked = {p: new Set(), s: new Set(), b: new Set(), c: new Set(), u: new Set(), r: new Set()};
+const picked = {t: new Set(), p: new Set(), s: new Set(), b: new Set(), c: new Set(), u: new Set(), r: new Set()};
 document.querySelectorAll('.facet').forEach(fd => {
   const key = fd.dataset.key, panel = fd.querySelector('.panel'), label = fd.querySelector('summary');
   const base = label.textContent;
@@ -301,7 +463,8 @@ document.querySelectorAll('.facet').forEach(fd => {
   fd.ontoggle = () => fd.open && document.querySelectorAll('.facet').forEach(o => o !== fd && (o.open = false));
 });
 addEventListener('click', e => { if (!e.target.closest('.facet')) document.querySelectorAll('.facet').forEach(f => f.open = false); });
-['q', 'minH', 'minC', 'sort', 'ghF'].forEach(id => document.getElementById(id).oninput = applyFilters);
+const FIELDS = ['q', 'minH', 'minC', 'sort', 'ghF', 'sumF', 'rateHas', 'rateF'];
+FIELDS.forEach(id => document.getElementById(id).oninput = applyFilters);
 const haystack = rows.map(r => r.join(' ').toLowerCase());  // every column, incl. companies/universities
 document.getElementById('clear').onclick = () => {
   Object.values(picked).forEach(p => p.clear());
@@ -309,9 +472,25 @@ document.getElementById('clear').onclick = () => {
     fd.classList.remove('on'); fd.querySelectorAll('input[type=checkbox]').forEach(cb => cb.checked = false);
     const l = fd.querySelector('summary'); l.textContent = l.textContent.replace(/ \(\d+\)$/, '');
   });
-  ['q', 'minH', 'minC', 'sort', 'ghF'].forEach(id => document.getElementById(id).value = '');
+  FIELDS.forEach(id => document.getElementById(id).value = '');
   applyFilters();
 };
+
+// ---- remember the last filters (this browser only; file:// and http://127.0.0.1:8026 keep separate copies) ----
+function restoreFilters() {
+  let saved;
+  try { saved = JSON.parse(localStorage.getItem('corlFilters')); } catch (e) {}
+  if (!saved) return;
+  FIELDS.forEach(id => { if (saved.fields?.[id] != null) document.getElementById(id).value = saved.fields[id]; });
+  document.querySelectorAll('.facet').forEach(fd => fd.querySelectorAll('input[type=checkbox]').forEach(cb => {
+    if ((saved.picked?.[fd.dataset.key] || []).includes(cb.value)) { cb.checked = true; cb.onchange(); }
+  }));
+}
+function saveFilters() {
+  const fields = Object.fromEntries(FIELDS.map(id => [id, document.getElementById(id).value]));
+  const pk = Object.fromEntries(Object.entries(picked).map(([k, v]) => [k, [...v]]));
+  try { localStorage.setItem('corlFilters', JSON.stringify({fields, picked: pk})); } catch (e) {}
+}
 
 function applyFilters() {
   if (!dets.length) return;  // first renderTable() runs before the papers view exists
@@ -320,17 +499,40 @@ function applyFilters() {
   const hit = (key, ri) => !picked[key].size || meta[ri][key].some(x => picked[key].has(x));
   const terms = document.getElementById('q').value.toLowerCase().split(/\s+/).filter(Boolean);  // all must match
   const ghSel = document.getElementById('ghF').value, gh = i => !ghSel || (ghSel === 'y') === !!rows[i][ghIdx];
-  let idx = rows.map((_, i) => i).filter(i => gh(i) &&
+  const sumSel = document.getElementById('sumF').value,  // live: summaries changes as you summarize / erase
+        sm = i => !sumSel || (sumSel === 'y') === !!summaries[rows[i][idIdx].split('id=').pop()];
+  const hasSel = document.getElementById('rateHas').value, rateSel = document.getElementById('rateF').value, rt = i => {
+    const v = ratings[rows[i][idIdx].split('id=').pop()] || 0, n = +rateSel.slice(1);
+    return (!hasSel || (hasSel === 'y') === v > 0) && (!rateSel || v > 0 && (rateSel[0] === 'g' ? v > n : v < n));
+  };
+  let idx = rows.map((_, i) => i).filter(i => gh(i) && sm(i) && rt(i) &&
     terms.every(t => haystack[i].includes(t)) &&
-    hit('p', i) && hit('s', i) && hit('b', i) && hit('c', i) && hit('u', i) && hit('r', i) && (meta[i].h || 0) >= minH && (meta[i].cites || 0) >= minC);
+    hit('t', i) && hit('p', i) && hit('s', i) && hit('b', i) && hit('c', i) && hit('u', i) && hit('r', i) && (meta[i].h || 0) >= minH && (meta[i].cites || 0) >= minC);
   if (sort === 'az') idx.sort((a, b) => rows[a][titleIdx].localeCompare(rows[b][titleIdx], undefined, {sensitivity: 'base'}));
   else if (sort) idx.sort((a, b) => (meta[b][sort] || 0) - (meta[a][sort] || 0));
   table.querySelector('tbody').replaceChildren(...idx.map(i => trs[i]));
   document.getElementById('papers').replaceChildren(...idx.map(i => dets[i]));
   document.querySelector('.count').textContent = idx.length === rows.length
     ? `📄 ${rows.length} papers` : `📄 ${idx.length} / ${rows.length} papers`;
+  saveFilters();
+  updateStats();
 }
 
+// ---- top-bar statistics over all papers (not just the filtered ones) ----
+function updateStats() {
+  const costOf = o => Object.values(o).reduce((t, x) => t + (x.cost || 0), 0);
+  const rated = Object.values(ratings), avg = rated.length ? rated.reduce((a, b) => a + b, 0) / rated.length : 0;
+  const spent = costOf(summaries) + costOf(htmlv.claude);
+  document.querySelector('nav .stats').textContent = [
+    `📝 ${Object.keys(summaries).length} summaries`,
+    `🌐 ${Object.keys(htmlv.claude).length} HTML (Claude)`,
+    `🐍 ${Object.keys(htmlv.python).length} HTML (python)`,
+    `⭐ ${rated.length} rated` + (rated.length ? ` (avg ${avg.toFixed(1)})` : ''),
+    `💲 $${spent.toFixed(2)} Claude spend`,
+  ].join('  ·  ');
+}
+
+restoreFilters();
 renderTable();
 show('papers');
 </script>
@@ -352,6 +554,7 @@ def openalex_meta(rows, columns):
     pdf_aff = json.load(open(AFFILIATIONS))["papers"] if os.path.exists(AFFILIATIONS) else {}
     authors = oa["authors"]
     id_col = columns.index("id")
+    venue_col = columns.index("venue")
     kw_cols = {k: columns.index(c) for k, c in [("p", "primary_keyword"), ("s", "secondary_keyword")] if c in columns}
     meta = []
     for r in rows:
@@ -366,6 +569,7 @@ def openalex_meta(rows, columns):
                                                  for c, rx in COMPANY_RES.items() if rx.search(n)}),
             "u": sorted({re.sub(r"^The ", "", n) for n in  # "The University of Tokyo" == "University of Tokyo"
                          set(aff["universities"]) | {n for n, t in insts if t == "education"}}),
+            "t": [PRESENTATION.get(r[venue_col].split()[-1], r[venue_col])] if r[venue_col] else [],
             "b": robots.get(pid, []),
             **{k: [r[i]] if r[i] else [] for k, i in kw_cols.items()},
             "r": sorted({a["id"] for a in w["authors"] if a["id"] in authors}),
@@ -386,8 +590,18 @@ def openalex_meta(rows, columns):
     top_ids = {a["id"] for a in researchers}
     for m in meta:
         m["r"] = [a for a in m["r"] if a in top_ids]
-    return meta, {"c": top("c", TOP_COMPANIES), "u": top("u", TOP_UNIVERSITIES), "r": researchers, "b": top("b", TOP_ROBOTS),
+    return meta, {"c": top("c", TOP_COMPANIES), "u": top("u", TOP_UNIVERSITIES), "r": researchers, "b": top("b", TOP_ROBOTS), "t": top("t", 3),
                   **{k: top(k, TOP_KEYWORDS) for k in kw_cols}}
+
+
+def html_versions(kind):
+    """paper id -> {path, cost / seconds, ...} for every htmls_<kind>/<id>_<title>/index.html."""
+    out = {}
+    for idx in glob.glob(os.path.join(HTML_DIRS[kind], "*", "index.html")):
+        meta = os.path.join(os.path.dirname(idx), "meta.json")
+        pid = os.path.basename(os.path.dirname(idx)).split("_", 1)[0]
+        out[pid] = {"path": os.path.relpath(idx, HERE), **(json.load(open(meta)) if os.path.exists(meta) else {})}
+    return out
 
 
 def main():
@@ -415,7 +629,10 @@ def main():
     columns += ["📈 citations", "🏅 max author h-index"]
     for r, m in zip(rows, meta):
         r += ["" if m["cites"] is None else str(m["cites"]), "" if m["h"] is None else str(m["h"])]
-    data = json.dumps({"columns": columns, "rows": rows, "firstPage": first_page, "meta": meta, "facets": facets}, ensure_ascii=False).replace("</", "<\\/")
+    data = json.dumps({"columns": columns, "rows": rows, "firstPage": first_page, "meta": meta, "facets": facets,
+                       "summaries": json.load(open(SUMMARIES)) if os.path.exists(SUMMARIES) else {},
+                       "ratings": json.load(open(RATINGS)) if os.path.exists(RATINGS) else {},
+                       "htmlv": {k: html_versions(k) for k in HTML_DIRS}, "here": HERE}, ensure_ascii=False).replace("</", "<\\/")
     out = os.path.join(HERE, "index.html")
     with open(out, "w") as f:
         f.write(HTML.replace("__DATA__", data))

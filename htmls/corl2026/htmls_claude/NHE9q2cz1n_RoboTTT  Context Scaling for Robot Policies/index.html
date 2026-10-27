@@ -1,0 +1,289 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RoboTTT: Context Scaling for Robot Policies</title>
+<script>window.MathJax = {tex: {inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']], tags: 'ams'}};</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js"></script>
+<style>
+  body { font: 17px/1.6 Georgia, "Times New Roman", serif; max-width: 860px; margin: 0 auto; padding: 24px 20px 80px; color: #222; }
+  h1 { font-size: 1.7em; line-height: 1.25; } h2 { margin-top: 1.8em; } .src { font: 13px system-ui, sans-serif; color: #666; }
+  figure { margin: 1.5em 0; text-align: center; } figure img { max-width: 100%; }
+  figcaption { font-size: 0.9em; color: #444; text-align: left; margin-top: 6px; }
+  table { border-collapse: collapse; margin: 1em auto; font-size: 0.85em; } td, th { border: 1px solid #ccc; padding: 3px 6px; }
+  pre { background: #f6f8fa; padding: 10px; overflow-x: auto; font-size: 0.85em; } .refs { font-size: 0.85em; }
+</style></head><body>
+<p class="src">HTML version made by Claude (claude-opus-5-5) from <a href="../../pdfs/NHE9q2cz1n_RoboTTT%20%20Context%20Scaling%20for%20Robot%20Policies.pdf">the PDF</a>; check the PDF for exact wording and figures.</p>
+<p class="note">Note: The paper is marked "© 2026 NVIDIA. All rights reserved," so I can't reproduce its full text verbatim. Below is a faithful structured HTML version instead. Section prose is condensed and paraphrased. The title, authors, equations, tables, numerical results and figure placements are preserved. Figure captions are shortened.</p>
+
+<h1>RoboTTT: Context Scaling for Robot Policies</h1>
+<p>Yunfan Jiang<sup>1,2</sup>, Yevgen Chebotar<sup>1</sup>, Ruijie Zheng<sup>1</sup>, Fengyuan Hu<sup>1</sup>, Yunhao Ge<sup>1</sup>, Jimmy Wu<sup>1</sup>, Tianyuan Dai<sup>1,3</sup>, Scott Reed<sup>1</sup>, Li Fei-Fei<sup>2,†</sup>, Yuke Zhu<sup>1,3,†</sup>, Linxi "Jim" Fan<sup>1,†</sup></p>
+<p><sup>1</sup>NVIDIA <sup>2</sup>Stanford University <sup>3</sup>The University of Texas at Austin <sup>†</sup>Equal advising</p>
+<p>research.nvidia.com/labs/gear/robottt</p>
+
+<figure data-fig="1"><img src="fig1.png" alt="Figure 1: RoboTTT, a long-context visuomotor policy that integrates Test-Time Training (TTT) into robot foundation models, with context scaled to 8K timesteps; it shows one-shot in-context imitation from human videos and on-the-fly policy improvement." loading="lazy"></figure>
+
+<h2>Abstract</h2>
+<p>Current robot foundation models use single-step or short-history context. RoboTTT (Test-Time-Training Robot Policies) is a model and training recipe that scales visuomotor context to 8K timesteps without increasing inference latency. At that length it enables:</p>
+<ul>
+<li>one-shot in-context imitation from human videos;</li>
+<li>on-the-fly policy improvement;</li>
+<li>robustness to perturbations;</li>
+<li>stronger multi-stage, long-horizon performance.</li>
+</ul>
+<p>RoboTTT inserts TTT layers into VLA policies. Their fast weights are updated by gradient descent at both training and inference time. Training combines sequence action forcing with truncated backpropagation through time. On real-robot tasks, RoboTTT improves overall performance by 87% over a single-step baseline. It is the only method to fully complete a five-minute, ten-stage assembly task. The 8K-context model outperforms the 1K-context model by 62%, which the authors present as evidence that context length is a new scaling axis.</p>
+<p><em>Keywords: Long-Context Policies, Test-Time Training, Robot Foundation Models</em></p>
+
+<h2>1. Introduction</h2>
+<p>Context length has become a key scaling axis for LLMs, but robot policies mostly remain short-context. Long visuomotor context matters for one-shot imitation, self-improvement from deployment history, and long-horizon tasks.</p>
+<p>RoboTTT-8K reports the following results:</p>
+<ul>
+<li>6/10 one-shot imitation successes, while baselines fail entirely;</li>
+<li>36% gain from on-the-fly improvement;</li>
+<li>83% success under perturbation, versus 53% for the best short-context baseline;</li>
+<li>87% overall gain over the single-step baseline;</li>
+<li>63% higher completion than the same model pretrained at 1K context, and 57% above the best short-context baseline.</li>
+</ul>
+<p>Fast weights address three challenges:</p>
+<ul>
+<li><strong>Capacity:</strong> an MLP state holds more than the vector state of an RNN.</li>
+<li><strong>Selective retention:</strong> updating at test time keeps salient features and discards redundant ones.</li>
+<li><strong>Constant cost:</strong> inference cost does not grow with history length.</li>
+</ul>
+<p>The paper also introduces DAgger Distillation and uses TBPTT to scale training context.</p>
+
+<h2>2. Preliminaries</h2>
+<p><strong>Test-Time Training Mechanism.</strong> Fast weights \(W\) parameterize a small network \(f_W:\mathbb{R}^d\to\mathbb{R}^d\). At each step they are first updated:</p>
+\[ W_t \leftarrow W_{t-1} - \eta \nabla_W \mathcal{L}_{\mathrm{FW}}\left(f_{W_{t-1}}(K_t), V_t\right) \tag{1} \]
+<p>Here \(\mathcal{L}_{\mathrm{FW}}(\hat v,v)=\|\hat v-v\|^2\) and \(\eta\) is a learnable learning rate. The updated weights are then applied:</p>
+\[ O_t = f_{W_t}(Q_t) \tag{2} \]
+<p>The projections \(\theta_Q,\theta_K,\theta_V\) and the initialization \(W_0\) are learned with the outer task loss.</p>
+<p><strong>Robot Sequence Models.</strong> A trajectory is \(\xi=\{(o_t,q_t,A_t)\}_{t=1}^T\). The policy \(\pi(A_t\mid\xi_{&lt;t},o_t,q_t)\) conditions on history, and the goal is to scale \(|\xi_{&lt;t}|\).</p>
+
+<h2>3. Method: Test-Time-Training Robot Policies</h2>
+<p>This section covers the architecture, the sequence training recipe, long-context conditioning (one-shot video imitation and DAgger Distillation), and implementation details.</p>
+
+<figure data-fig="2"><img src="fig2.png" alt="Figure 2: RoboTTT model architecture, training, and inference. TTT layers follow attention in the DiT action head; attention operates within each timestep, TTT across timesteps. Training uses sequence action forcing; inference propagates fast weights from learned \(W_0\)." loading="lazy"></figure>
+
+<h3>3.1. Model Architecture</h3>
+<p>RoboTTT is built on GR00T N1.7. TTT layers are added after the self- and cross-attention layers in the DiT action head. The DiT input is the sequence \([R_1,\Phi_1,q_1,\tilde A_1,\dots,R_T,\Phi_T,q_T,\tilde A_T]\), where \(R_t\) are \(N=16\) learned register tokens. Attention operates per timestep. The outputs \(X=[R_1,q_1,\tilde A_1,\dots]\) are then concatenated over time and passed through the TTT layers. VL tokens bypass TTT for efficiency.</p>
+<figure data-fig="3"><img src="fig3.png" alt="Figure 3: Computation flow with tanh gating. The TTT output is weighted by the learned gate \(\tanh(\alpha)\) before being added to the attention output." loading="lazy"></figure>
+<p><strong>Gating.</strong> The gate \(\alpha\in\mathbb{R}^d\) is initialized to 0.001, so TTT contributes little at the start of training:</p>
+\[ O = \tanh(\alpha)\odot O_{\mathrm{TTT}} + O_{\mathrm{attn}} \tag{3} \]
+
+<h3>3.2. RoboTTT Sequence Training</h3>
+<p>Fast weights are updated within each training sequence. \(W_0\) is meta-learned through gradients of gradients. The sequence loss is:</p>
+\[ \mathcal{L}_{\mathrm{fm}}(\xi;W_0)=\frac{1}{T}\sum_{t=1}^{T}\ell_t\left((l,o_t,q_t,A_t);W_{t-1}\right) \tag{4} \]
+<p><strong>Sequence Action Forcing.</strong> The noise level is sampled independently for each action chunk. Sharing one level across the whole sequence made training unstable, echoing Diffusion Forcing.</p>
+\[ \mathcal{L}_{\mathrm{fm}}(\xi;W_0)=\frac{1}{T}\sum_{t=1}^{T}\ell_t(\xi_t;W_{t-1})=\frac{1}{T}\sum_{t=1}^{T}\mathbb{E}_{\tau_t,\epsilon}\left[\left\|v_\theta(\Phi_t,A_t^{\tau_t},q_t;W_{t-1})-(A_t-\epsilon)\right\|^2\right] \tag{5} \]
+<p>Each noise level is drawn as \(\tau_t=s(1-u)\), with \(u\sim\mathrm{Beta}(1.5,1)\) and \(s=0.999\).</p>
+<figure data-fig="4"><img src="fig4.png" alt="Figure 4: TBPTT. Gradients are truncated at segment boundaries; fast weights carry over, so TTT continues over the entire sequence." loading="lazy"></figure>
+<p><strong>TBPTT.</strong> The sequence is split into segments, and gradients are detached at segment boundaries while fast weights carry over. Memory therefore scales with segment length rather than total length. \(W_0\) still receives gradients through the first segment.</p>
+<p><strong>Inference.</strong> Each rollout starts from \(W_0\). Fast weights are updated on each observation and propagated forward, with \(k\)-step denoising per action chunk.</p>
+
+<figure data-fig="5"><img src="fig5.png" alt="Figure 5: Evaluation tasks on a YAM bimanual setup: Pup Go Car (~2 min), Circuit (~1 min; target via language or one-shot human video), Gear Bot (ten stages, ~5 min)." loading="lazy"></figure>
+
+<h3>3.3. Effective Learning from Context</h3>
+<p>Masking the flow-matching loss on some timesteps turns them into pure context: they update the fast weights without serving as imitation targets.</p>
+<p><strong>Imitation from In-Context Video Demonstrations.</strong> A human video \(\xi^{\mathrm{video}}\) with masked loss is paired with a robot trajectory \(\xi^{\mathrm{robot}}\) of the same task. At test time, a single video of an unseen configuration is enough for one-shot imitation.</p>
+<figure data-fig="6"><img src="fig6.png" alt="Figure 6: DAgger Distillation. All executed actions update fast weights; the flow-matching loss is computed only on human corrections." loading="lazy"></figure>
+<p><strong>DAgger Distillation.</strong> In a DAgger rollout \(\xi^{\mathrm{DAgger}}\), each chunk is either a robot action \(A^{\mathrm{R}}_t\) or a human correction \(A^{\mathrm{H}}_t\). Failures serve as context and corrections as targets, which distills the failure-to-correction mapping into the fast weights. The authors frame this as Algorithm Distillation applied to robotics. At test time, the model's own corrections enter its history in the same way.</p>
+
+<figure data-fig="7"><img src="fig7.png" alt="Figure 7: Main evaluation: task completion scores on three assembly tasks (rubric-based, percent; higher is better)." loading="lazy"></figure>
+
+<h3>3.4. Implementation Details</h3>
+<p>A TTT layer is added to each of the 16 DiT layers, and each fast model is a two-layer MLP. Pretraining uses robot data plus egocentric human data, with context grown up to 8K, for 30K steps on 16 GB200 GPUs. Post-training runs at 1K context for 20K steps.</p>
+
+<h2>4. Experiments</h2>
+<p><strong>Settings.</strong> Three tasks were run with four RGB cameras, using 8, 6 and 5 hours of data respectively. Circuit has 80 configurations: 20 for training and 60 for testing.</p>
+<p>Baselines:</p>
+<ul>
+<li>GR00T N1.7 (single-step context);</li>
+<li>GR00T N1.7 Hist. (one history frame);</li>
+<li>GDN (Gated DeltaNet in place of TTT).</li>
+</ul>
+<p>Each policy gets 20 trials per task (10 for Gear Bot).</p>
+<p><strong>Main results.</strong> RoboTTT averages 79% task completion, versus 42% for GR00T N1.7 and 56% for GDN. Qualitatively it tracks task progress, recovers strategically, and is more precise in fine-grained stages.</p>
+<figure data-fig="8"><img src="fig8.png" alt="Figure 8: Closed-loop performance scales with pretraining context length (128 to 8K). RoboTTT improves steadily and surpasses the best short-context baseline from 1K onward; GDN does not benefit. Evaluations predate the DAgger training used for Pup Go Car." loading="lazy"></figure>
+<table>
+<caption>Table 1: Main evaluation: fully successful trials on three assembly tasks.</caption>
+<tr><th>Method</th><th>Pup Go Car</th><th>Circuit</th><th>Gear Bot</th></tr>
+<tr><td>RoboTTT</td><td>9 / 20</td><td>13 / 20</td><td>2 / 10</td></tr>
+<tr><td>GR00T N1.7</td><td>3 / 20</td><td>3 / 20</td><td>0 / 10</td></tr>
+<tr><td>GR00T N1.7 Hist.</td><td>0 / 20</td><td>8 / 20</td><td>0 / 10</td></tr>
+<tr><td>GDN</td><td>3 / 20</td><td>8 / 20</td><td>0 / 10</td></tr>
+</table>
+<p><strong>History alone.</strong> On Pup Go Car, GR00T N1.7 Hist. scores 39.5% versus 57% without history. GDN improves over GR00T N1.7 on Circuit and Gear Bot only. The authors attribute RoboTTT's advantage to its nonlinear, gradient-based update rule.</p>
+<p><strong>Context scaling.</strong> RoboTTT reaches 71.5% at 8K, compared with 43.9% at 1K and 45.6% for the best short-context baseline. GDN shows no such trend. Below 1K context, rollouts exceed the trained window.</p>
+<figure data-fig="9"><img src="fig9.png" alt="Figure 9: One-shot imitation from an in-context human video: a human demonstrates an unseen configuration, the scene is reset, and RoboTTT reproduces the assembly with an identical prompt." loading="lazy"></figure>
+<table>
+<caption>Table 2: One-shot imitation on Circuit.</caption>
+<tr><th></th><th>Task Completion Score</th><th>Number of Successful Rollouts</th></tr>
+<tr><td>RoboTTT</td><td>65%</td><td>6 / 10</td></tr>
+<tr><td>GDN</td><td>33%</td><td>0 / 10</td></tr>
+</table>
+<table>
+<caption>Table 3: Robustness to external perturbations (successful recoveries out of 20).</caption>
+<tr><th>Method</th><th>Roof Perturbation</th><th>Tire Perturbation</th></tr>
+<tr><td>RoboTTT</td><td>15 / 20</td><td>18 / 20</td></tr>
+<tr><td>GR00T N1.7</td><td>10 / 20</td><td>11 / 20</td></tr>
+<tr><td>GR00T N1.7 Hist.</td><td>3 / 20</td><td>5 / 20</td></tr>
+<tr><td>GDN</td><td>13 / 20</td><td>18 / 20</td></tr>
+</table>
+<figure data-fig="10"><img src="fig10.png" alt="Figure 10: DAgger Distillation results on Pup Go Car after fine-tuning on 100 pooled DAgger trajectories." loading="lazy"></figure>
+<figure data-fig="11"><figcaption>Figure 11: On-the-fly recovery learned through DAgger Distillation: RoboTTT misses the roof screw twice, re-adjusts, and succeeds.</figcaption></figure>
+<p><strong>DAgger.</strong> Standard DAgger improves the base policies by 9% on average (13% for the sequence models). DAgger Distillation improves them by 33% on average: 36% for RoboTTT and 29% for GDN. Fine-tuning GR00T N1.7 on full trajectories gives the same result as corrections only (57% in both cases), so the robot's failed actions are useful as context rather than as targets.</p>
+<figure data-fig="12"><img src="fig12.png" alt="Figure 12: Ablation results on Pup Go Car: sequence action forcing, MLP vs. linear fast model, and incremental state/action/register tokens; GR00T N1.7 with register tokens included." loading="lazy"></figure>
+<p><strong>Ablations.</strong></p>
+<ul>
+<li>Removing sequence action forcing severely hurts performance.</li>
+<li>A linear fast model is 27% worse than the MLP.</li>
+<li>Adding action tokens gives a 23% gain, and register tokens a further 18%.</li>
+<li>Register tokens do not help GR00T N1.7 without TTT.</li>
+</ul>
+
+<h2>5. Related Work</h2>
+<p><strong>Long-Context Policies.</strong> Most VLAs and WAMs condition on one to a few frames. Other approaches use keyframe or language memory, or autoregressive full-history models whose latency grows with context. RoboTTT can be seen as an RNN whose state is fast weights, and it targets the spurious correlations that history can introduce.</p>
+<p><strong>Test-Time Training.</strong> Prior TTT work spans language, video, vision and 3D. Earlier robotics papers that use the term "test-time training" fine-tune the whole model rather than using fast weights. The closest work is VITA, which applies fast weights to value functions.</p>
+<p><strong>Robot Foundation Models.</strong> These include autoregressive and diffusion/flow VLAs. RoboTTT is presented as a plug-in module, instantiated here on GR00T N1.7 and scaled to 8K timesteps (about five minutes at 30 Hz).</p>
+
+<h2>6. Limitations and Conclusion</h2>
+<p>Limitations:</p>
+<ul>
+<li>Longer training context increases training cost.</li>
+<li>Robotics-specific TTT objectives remain unexplored.</li>
+<li>Not all failure modes are handled; combining RoboTTT with RL is a natural next step.</li>
+</ul>
+<p>The authors conclude that context length is a new scaling axis for robot foundation models.</p>
+
+<h2>Acknowledgments</h2>
+<p>The authors thank collaborators, the compute support staff, the robot operators, and the NVIDIA GEAR Team and Stanford Vision and Learning Lab.</p>
+
+<h2>References</h2>
+<ol class="refs">
+<li>Alayrac et al. Flamingo. arXiv:2204.14198, 2022.</li>
+<li>Bai, Gao, Shou. Evolve-VLA. arXiv:2512.14666, 2025.</li>
+<li>Behrouz, Zhong, Mirrokni. Titans. arXiv:2501.00663, 2024.</li>
+<li>Behrouz et al. It's all connected. arXiv:2504.13173, 2025.</li>
+<li>Black et al. π0. arXiv:2410.24164, 2024.</li>
+<li>Bousmalis et al. RoboCat. TMLR, 2024.</li>
+<li>Brohan et al. RT-1. RSS, 2022.</li>
+<li>Brohan et al. RT-2. CoRL, 2023.</li>
+<li>Brown et al. Language models are few-shot learners. arXiv:2005.14165, 2020.</li>
+<li>Chen et al. Diffusion forcing. arXiv:2407.01392, 2024.</li>
+<li>Chen et al. TTT3R. arXiv:2509.26645, 2026.</li>
+<li>Dai et al. RoboMME. arXiv:2603.04639, 2026.</li>
+<li>Dalal et al. One-minute video generation with test-time training. CVPR, 2025.</li>
+<li>Darcet et al. Vision transformers need registers. ICLR, 2024.</li>
+<li>de Haan, Jayaraman, Levine. Causal confusion in imitation learning. NeurIPS, 2019.</li>
+<li>Ding et al. LongRoPE. ICML, 2024.</li>
+<li>Driess et al. Knowledge insulating VLA models. NeurIPS, 2026.</li>
+<li>Duan et al. One-shot imitation learning. NeurIPS, 2017.</li>
+<li>Fang et al. MolmoAct2. arXiv:2605.02881, 2026.</li>
+<li>Feng et al. In-place test-time training. ICLR, 2026.</li>
+<li>Finn, Abbeel, Levine. MAML. arXiv:1703.03400, 2017.</li>
+<li>Fu et al. In-context imitation learning via next-token prediction. arXiv:2408.15980, 2024.</li>
+<li>Gao et al. Gated memory policy. arXiv:2604.18933, 2026.</li>
+<li>Han et al. ViT³. arXiv:2512.01643, 2025.</li>
+<li>Hendrycks, Gimpel. GELUs. arXiv:1606.08415, 2016.</li>
+<li>Hochreiter, Schmidhuber. Long short-term memory. Neural Comput., 1997.</li>
+<li>Hsieh et al. RULER. arXiv:2404.06654, 2024.</li>
+<li>Hu et al. MiniCPM. arXiv:2404.06395, 2024.</li>
+<li>Physical Intelligence et al. π0.5. arXiv:2504.16054, 2025.</li>
+<li>Jaegle et al. Perceiver. arXiv:2103.03206, 2021.</li>
+<li>Jang et al. ContextVLA. arXiv:2510.04246, 2025.</li>
+<li>Jiang et al. VIMA. arXiv:2210.03094, 2022.</li>
+<li>Jordan et al. Muon, 2024.</li>
+<li>Kaplan et al. Scaling laws for neural language models. arXiv:2001.08361, 2020.</li>
+<li>Karami, Pascanu, Mirrokni. Lattice. arXiv:2504.05646, 2025.</li>
+<li>Kim et al. OpenVLA. CoRL, 2024.</li>
+<li>Kim et al. Cosmos policy. arXiv:2601.16163, 2026.</li>
+<li>Kumar et al. RMA. arXiv:2107.04034, 2021.</li>
+<li>Laskin et al. In-context RL with algorithm distillation. ICLR, 2023.</li>
+<li>Li et al. Causal world modeling for robot control. arXiv:2601.21998, 2026.</li>
+<li>Li et al. Unified video action model. arXiv:2503.00200, 2025.</li>
+<li>Li et al. TNT. arXiv:2511.07343, 2025.</li>
+<li>Lim et al. Parallelizing non-linear sequential models over the sequence length. ICLR, 2024.</li>
+<li>Lin et al. OneTwoVLA. arXiv:2505.11917, 2025.</li>
+<li>Liu et al. On-the-fly VLA adaptation via test-time RL. arXiv:2601.06748, 2026.</li>
+<li>Liu et al. Lost in the middle. TACL, 2024.</li>
+<li>Liu et al. RDT-1B. ICLR, 2025.</li>
+<li>Loshchilov, Hutter. Decoupled weight decay regularization. ICLR, 2017.</li>
+<li>Mandlekar et al. What matters in learning from offline human demonstrations. CoRL, 2021.</li>
+<li>Mark et al. BPP. arXiv:2602.15010, 2026.</li>
+<li>NVIDIA et al. GR00T N1. arXiv:2503.14734, 2025.</li>
+<li>Peebles, Xie. Scalable diffusion models with transformers. arXiv:2212.09748, 2022.</li>
+<li>Peng et al. YaRN. ICLR, 2024.</li>
+<li>Pertsch et al. FAST. arXiv:2501.09747, 2025.</li>
+<li>Qi et al. In-hand object rotation via rapid motor adaptation. CoRL, 2023.</li>
+<li>Reed et al. A generalist agent. TMLR, 2022.</li>
+<li>Ross, Gordon, Bagnell. A reduction of imitation learning... AISTATS, 2011.</li>
+<li>Schlag, Irie, Schmidhuber. Linear transformers are secretly fast weight programmers. ICML, 2021.</li>
+<li>Shi et al. Eagle. ICLR, 2025.</li>
+<li>Shukor et al. SmolVLA. arXiv:2506.01844, 2025.</li>
+<li>Sridhar et al. MemER. arXiv:2510.20328, 2025.</li>
+<li>Su et al. RoFormer. arXiv:2104.09864, 2021.</li>
+<li>Sun et al. Test-time training with self-supervision... ICML, 2020.</li>
+<li>Sun et al. Learning to (learn at test time). arXiv:2407.04620, 2024.</li>
+<li>Tandon et al. End-to-end test-time training for long context. arXiv:2512.23675, 2025.</li>
+<li>Adaptive Agent Team. Human-timescale adaptation... arXiv:2301.07608, 2023.</li>
+<li>Octo Model Team. Octo. 2024.</li>
+<li>Torne et al. Past-token prediction. arXiv:2505.09561, 2025.</li>
+<li>Torne et al. MEM. arXiv:2603.03596, 2026.</li>
+<li>Wen et al. Fighting copycat agents. arXiv:2010.14876, 2020.</li>
+<li>Xiao et al. Attention sinks. ICLR, 2024.</li>
+<li>Yang et al. Magma. arXiv:2502.13130, 2025.</li>
+<li>Yang, Zhang. FLA library, 2024.</li>
+<li>Yang, Kautz, Hatamizadeh. Gated delta networks. ICLR, 2024.</li>
+<li>Ye et al. World action models are zero-shot policies. arXiv:2602.15922, 2026.</li>
+<li>Yuan et al. Fast-WAM. arXiv:2603.16666, 2026.</li>
+<li>Yuksekgonul et al. Learning to discover at test time. arXiv:2601.16175, 2026.</li>
+<li>Zhang et al. Test-time training done right. arXiv:2505.23884, 2025.</li>
+<li>Zhao, Jones. Fast-weight product key memory. arXiv:2601.00671, 2026.</li>
+<li>Zheng et al. TraceVLA. ICLR, 2025.</li>
+<li>Zheng et al. EgoScale. arXiv:2602.16710, 2026.</li>
+<li>Zhu et al. TTT-Parkour. arXiv:2602.02331, 2026.</li>
+<li>Ziakas, Russo. VITA. ICLR, 2026.</li>
+</ol>
+
+<h2>A. Model Architecture, Training, and Deployment Details</h2>
+<h3>A.1. Model Architecture</h3>
+<p>The base model is GR00T N1.7 (Eagle VLM plus DiT). The DiT has 538M parameters; each TTT layer adds about 10M, for roughly 690M in total. Each fast model is a two-layer GeLU MLP updated by plain gradient descent. The inner learning rate is learned on top of a base rate of 0.1. Positional embeddings use RoPE with \(\theta_{\mathrm{rope}}=10000\).</p>
+<h3>A.2. Training</h3>
+<p>Pretraining tunes only the new sequence layers, while post-training fine-tunes all parameters. Settings:</p>
+<ul>
+<li><strong>Hardware:</strong> 16 GB200 GPUs for pretraining, 8 for post-training.</li>
+<li><strong>Batch size:</strong> 4 per device (global 64) for context ≤4K; 1 per device (global 16) above 4K; 1 per device for post-training at 1K context.</li>
+<li><strong>Optimizer:</strong> AdamW with weight decay \(1\times10^{-5}\).</li>
+<li><strong>Schedules:</strong> WSD with peak \(2\times10^{-5}\) for pretraining; cosine with peak \(5\times10^{-5}\) for post-training.</li>
+</ul>
+<figure data-fig="A.1"><figcaption>Figure A.1: Trajectory length distribution of the pretraining mixture (&lt;512: 3.1%, 512–1K: 12.5%, 1K–2K: 25.9%, 2K–4K: 41.4%, &gt;4K: 17.1%).</figcaption></figure>
+<h3>A.3. Deployment</h3>
+<p>Models run on the YAM robot with four RealSense D405 cameras streaming 480p RGB. Inference uses an RTX 5090 at 30 Hz.</p>
+
+<h2>B. Task Definition and Experiment Details</h2>
+<h3>B.1. Task Definition</h3>
+<p><strong>Pup Go Car.</strong> The robot assembles the roof and first wheel, which involves drilling, handoffs and a car flip. Rubric milestones and scores:</p>
+<ul>
+<li>roof picked up: 0.05; roof placed: 0.1; roof screw inserted: 0.25;</li>
+<li>drill picked up: 0.3; drill contacts screw: 0.35; roof screw tightened: 0.45;</li>
+<li>drill handed to right hand: 0.5; car flipped and stabilized: 0.55;</li>
+<li>tire picked up: 0.6; tire inserted: 0.75;</li>
+<li>drill picked up again: 0.8; drill aligned with wheel screw: 0.85; wheel tightened: 0.9;</li>
+<li>drill handed to left hand: 1.0.</li>
+</ul>
+<p>At most two attempts are allowed for wheel assembly.</p>
+<figure data-fig="A.2"><figcaption>Figure A.2: The "Pup Go Car" task.</figcaption></figure>
+<figure data-fig="A.3"><figcaption>Figure A.3: The "Gear Bot" task.</figcaption></figure>
+<p><strong>Gear Bot.</strong> Each of the following earns +0.1: each of two chassis flips, each gear or wheel installation, installing the head, and using the remote successfully.</p>
+<p><strong>Circuit.</strong> Two or three components are assembled in a specified order (about 80 configurations). Points per item:</p>
+<ul>
+<li>two pieces, no switch: 0.5 per component;</li>
+<li>two pieces with switch: 0.33 per component, plus 0.33 for turning it on;</li>
+<li>three pieces, no switch: 0.33 per component;</li>
+<li>three pieces with switch: 0.25 per component, plus 0.25 for turning it on.</li>
+</ul>
+<p>A wrong assembly order earns no credit.</p>
+<figure data-fig="A.4"><figcaption>Figure A.4: The "Circuit" task.</figcaption></figure>
+<h3>B.2. Experiment Details</h3>
+<p><strong>Baselines.</strong> The GR00T baselines use the official implementation. GDN layers come from FLA, with placement, gating and parameter count matched to RoboTTT.</p>
+<p><strong>Evaluation.</strong> Initial object placements are recorded and reproduced for every method. Pup Go Car and Circuit get 20 rollouts each. Gear Bot and one-shot Circuit get 10 each because of their longer evaluation time.</p>
+</body></html>

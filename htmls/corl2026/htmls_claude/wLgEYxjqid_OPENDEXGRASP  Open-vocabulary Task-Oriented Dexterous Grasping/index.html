@@ -1,0 +1,367 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>OPENDEXGRASP: Open-vocabulary Task-Oriented Dexterous Grasping</title>
+<script>window.MathJax = {tex: {inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']], tags: 'ams'}};</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js"></script>
+<style>
+  body { font: 17px/1.6 Georgia, "Times New Roman", serif; max-width: 860px; margin: 0 auto; padding: 24px 20px 80px; color: #222; }
+  h1 { font-size: 1.7em; line-height: 1.25; } h2 { margin-top: 1.8em; } .src { font: 13px system-ui, sans-serif; color: #666; }
+  figure { margin: 1.5em 0; text-align: center; } figure img { max-width: 100%; }
+  figcaption { font-size: 0.9em; color: #444; text-align: left; margin-top: 6px; }
+  table { border-collapse: collapse; margin: 1em auto; font-size: 0.85em; } td, th { border: 1px solid #ccc; padding: 3px 6px; }
+  pre { background: #f6f8fa; padding: 10px; overflow-x: auto; font-size: 0.85em; } .refs { font-size: 0.85em; }
+</style></head><body>
+<p class="src">HTML version made by Claude (claude-opus-5-5) from <a href="../../pdfs/wLgEYxjqid_OPENDEXGRASP%20%20Open-vocabulary%20Task-Oriented%20Dexterous%20Grasping.pdf">the PDF</a>; check the PDF for exact wording and figures.</p>
+<h1>OPENDEXGRASP: Open-vocabulary Task-Oriented Dexterous Grasping</h1>
+<p><em>Note: I can't reproduce the full paper text verbatim, so this HTML version keeps the paper's structure, figures, equations, and tables, with the prose condensed into summaries.</em></p>
+<p>Jiyao Zhang<sup>1,2,3∗</sup>, Junhan Wang<sup>1,3∗</sup>, Tianyu Wang<sup>1,4∗</sup>, Zeyuan Chen<sup>1,4</sup>, Anthony Bolton<sup>1,3</sup>, Yitong Peng<sup>1</sup>, Hao Dong<sup>1,2,3†</sup></p>
+<p><sup>1</sup> CFCS, School of CS, PKU, China; <sup>2</sup> National Key Laboratory for Multimedia Information Processing, School of CS, PKU, China; <sup>3</sup> PrimeBot; <sup>4</sup> State Key Laboratory of General Artificial Intelligence, BIGAI. <sup>∗</sup>Equal contribution; <sup>†</sup>Corresponding author</p>
+
+<figure data-fig="1"><img src="fig1.png" alt="Figure 1: Overview of OPENDEXGRASP. OPENDEXGRASP learns from OpenDexVerse through the Coverage-to-Alignment (C2A) Recipe, coupling large-scale semantic-geometric coverage with high-quality embodied functional alignment. As shown by the real-world demonstrations on the right, OPENDEXGRASP supports open-vocabulary language instructions, grounds task-oriented object functions, and generates dexterous grasping poses for functional manipulation." loading="lazy"></figure>
+
+<h2>Abstract</h2>
+<p><strong>Summary:</strong> The paper addresses open-vocabulary task-oriented dexterous grasp generation. In this setting, a robot must infer functional intent from free-form language, ground that intent in multi-view images and object geometry, and output an executable high-DoF grasp. The authors introduce two components:</p>
+<ul>
+<li><strong>OpenDexVerse:</strong> a dual-source dataset organized by the Coverage-to-Alignment (C2A) Recipe. OpenDex-Scale is built from automatic synthesis plus VLM annotation. OpenDex-Align is built from teleoperation plus category-level transfer.</li>
+<li><strong>OPENDEXGRASP:</strong> a model that learns a shared perception-action latent supervised by both affordance grounding and grasp generation. This lets it generate grasps directly, without a separate affordance-to-pose stage.</li>
+</ul>
+<p>Experiments in simulation and on a real robot show gains in functional alignment, physical feasibility, generalization, and real-world success. Project page: https://opendexgrasp.github.io/.</p>
+<p><strong>Keywords:</strong> Robotics, Dexterous Hand, Task-Oriented Grasping</p>
+<p>10th Conference on Robot Learning (CoRL 2026), Austin TX, USA.</p>
+
+<h2>1 Introduction</h2>
+<p><strong>Summary:</strong> Existing dexterous grasp synthesis produces stable grasps, but functional manipulation requires grasps that preserve the intended use. Examples include holding a kettle by its handle when pouring, or leaving a spray bottle's trigger accessible.</p>
+<p>The key insight is that affordance and grasp pose are two supervision views of one task-conditioned perception-action distribution, rather than stages in a cascade. Following this idea, the authors build OpenDexVerse with the C2A Recipe and propose OPENDEXGRASP. The model fuses vision-language, geometry, and action tokens inside a flow-matching action model, and adds an auxiliary point-level affordance head.</p>
+<p>Contributions:</p>
+<ul>
+<li>A formulation of the open-vocabulary task-oriented dexterous grasping problem, together with the OpenDexVerse dataset.</li>
+<li>OPENDEXGRASP, a model with a shared perception-action latent space.</li>
+<li>The C2A Recipe, evaluated in simulation and on a real dexterous hand.</li>
+</ul>
+
+<h2>2 Related Work</h2>
+<p><strong>Dexterous grasp generation.</strong> Geometry-driven methods [1, 2, 6–10, 29, 30] improve feasibility and diversity, but they target stable holding. Language-conditioned methods [15, 16] often rely on closed task spaces or couple language and contact only weakly.</p>
+<p><strong>Open-vocabulary affordance and part reasoning.</strong> Affordance grounding [17–21, 31, 32] and task-oriented pipelines [12, 13] produce interpretable intermediate outputs. However, they can become hard bottlenecks at inference time. OPENDEXGRASP uses affordance only as training supervision [18].</p>
+<p><strong>Functional dexterous grasping and execution-aware evaluation.</strong> Related lines include demonstration-based methods [23, 24], reinforcement learning [30, 33, 34], contact maps [6], and part priors [14]. OPENDEXGRASP is complementary to these approaches.</p>
+
+<h2>3 Problem Formulation</h2>
+<p>Each example is \((u, I, P, a, m)\):</p>
+<ul>
+<li>\(u\) is the instruction.</li>
+<li>\(I=\{I_v\}_{v=1}^V\) are the multi-view RGB images.</li>
+<li>\(P\in\mathbb{R}^{N\times C}\) is the object point cloud.</li>
+<li>\(a=[p, r_{6D}, q]\in\mathbb{R}^D\) is the grasp pose.</li>
+<li>\(m\in[0,1]^N\) is an optional affordance label.</li>
+</ul>
+<p>The goal is to model \(p_\theta(a\mid u,I,P)\). Affordance and action are treated as two observations of a shared latent state:</p>
+\[p_\theta(m, a \mid u, I, P) = \int p_\theta(m \mid z, u, P)\, p_\theta(a \mid z, u, P)\, p_\theta(z \mid u, I, P)\, dz.\]
+
+<figure data-fig="2"><img src="fig2.png" alt="Figure 2: OpenDexVerse construction pipeline. Starting from category-aligned real scanned objects, OpenDex-Scale builds large-scale functional coverage through automatic grasp synthesis and vision-language annotation, while OpenDex-Align builds high-quality alignment through teleoperation and dense-correspondence transfer. Together, they instantiate the Coverage-to-Alignment (C2A) Recipe for training OPENDEXGRASP." loading="lazy"></figure>
+
+<table>
+<caption>Table 1: OpenDexVerse training data.</caption>
+<tr><th>Subset</th><th>Source</th><th>#Categories</th><th>#Instances</th><th>#Grasps</th><th>#Functional Poses</th><th>Functional Ratio</th></tr>
+<tr><td>OpenDex-Scale</td><td>Automatic synthesis + VLM annotation</td><td>105</td><td>1.11k</td><td>1.24M</td><td>557.18k</td><td>44.93%</td></tr>
+<tr><td>OpenDex-Align</td><td>Teleoperation + Category transfer</td><td>95</td><td>2.77k</td><td>27.42k</td><td>18.65k</td><td>68.02%</td></tr>
+</table>
+
+<h2>4 OpenDexVerse and C2A Recipe</h2>
+<h3>4.1 OpenDexVerse Construction</h3>
+<p><strong>Object source.</strong> Objects come from Omni6DPose [36], which provides real scanned instances in category-level coordinate frames.</p>
+<p><strong>OpenDex-Scale.</strong> Grasps are synthesized with the BODex pipeline. Each grasp is rendered from three views and annotated by a VLM, which labels it functional or non-functional and writes a task description.</p>
+<p><strong>OpenDex-Align.</strong> One representative instance per category-size pair is teleoperated. The resulting grasps are then transferred to other instances via dense correspondences, following [37].</p>
+<figure data-fig="3"><img src="fig3.png" alt="Figure 3: Examples from OpenDex-Scale and OpenDex-Align." loading="lazy"></figure>
+
+<h3>4.2 C2A Details</h3>
+<p><strong>Summary:</strong> Training has two stages that use the same architecture and objectives:</p>
+<ol>
+<li>A coverage stage that pretrains on OpenDex-Scale.</li>
+<li>An alignment stage that continues training on OpenDex-Align.</li>
+</ol>
+<figure data-fig="4"><img src="fig4.png" alt="Figure 4: Architecture of OPENDEXGRASP. Multi-view images and language provide open-vocabulary semantic tokens, while the point cloud provides geometry tokens. A generative action expert fuses semantic, geometry, and action tokens to directly produce task-oriented dexterous grasps. The affordance head supervises the same latent representation as auxiliary functional grounding, improving interpretability without introducing a separate affordance-to-grasp inference stage." loading="lazy"></figure>
+<p>Inference uses Euler integration from Gaussian noise:</p>
+\[a_{k+1} = a_k + \Delta t\, F_\theta(a_k, t_k, z_P, \{H_\ell\}),\quad \Delta t = \tfrac{1}{K}.\]
+
+<h2>5 Method</h2>
+<h3>5.1 Overview</h3>
+<p>A flow-matching [38] velocity field \(F_\theta(x_t, t, z_P, \{H_\ell\}_{\ell=1}^L)\) is conditioned on two inputs: VLM hidden states \(\{H_\ell\}\) and a point-cloud token \(z_P=E_P(P)\).</p>
+<h3>5.2 Open-Vocabulary Semantic-Geometric Latent</h3>
+<p>The images and instruction are passed through a pretrained VLM, producing hidden states \(H_\ell\in\mathbb{R}^{B\times S\times d_{vl}}\). The point cloud \(P=\{(x_i,c_i)\}_{i=1}^N\) is encoded hierarchically into a global token \(z_P\in\mathbb{R}^{B\times 1\times d}\).</p>
+<h3>5.3 Flow-Matching Dexterous Action Generation</h3>
+<p>The noisy action is \(x_t=(1-t)\epsilon+ta\), with target velocity \(v^\star=a-\epsilon\). The token sequence is \(S_t=[z_P,z_F,z_A]\). The model is trained with:</p>
+\[\mathcal{L}_{act}=\mathbb{E}_{a,\epsilon,t}\|F_\theta(x_t,t,z_P,\{H_\ell\})-(a-\epsilon)\|_2^2.\]
+<h3>5.4 Auxiliary Affordance Grounding</h3>
+\[\mathcal{L}_{aff}=\mathcal{L}_{focal}(\hat m,m)+\lambda_{dice}\mathcal{L}_{dice}(\hat m,m),\qquad \mathcal{L}=\mathcal{L}_{act}+\lambda_{aff}\mathcal{L}_{aff},\ \lambda_{aff}=0.3.\]
+
+<h2>6 Experiments</h2>
+<h3>6.1 Experimental Setup</h3>
+<p><strong>Metrics:</strong></p>
+<ul>
+<li>SIV (cm³): solid intersection volume.</li>
+<li>PD (cm): penetration depth.</li>
+<li>SD (cm): simulation displacement.</li>
+<li>SR (%): success rate.</li>
+<li>Style Diversity.</li>
+<li>Perceptual Score (0–10), rated by GPT-5 [39] and humans.</li>
+</ul>
+<p><strong>Evaluation:</strong> functional and non-functional grasps, each tested on seen and unseen splits.</p>
+<p><strong>Baseline:</strong> DexGraspNet 2.0⋆, augmented with CLIP [26] features and trained on the same data.</p>
+
+<h3>6.2 Main Results</h3>
+<table>
+<caption>Table 2: Simulation results on seen and unseen splits.</caption>
+<tr><th rowspan="2"></th><th rowspan="2">Method</th><th colspan="7">Seen</th><th colspan="7">Unseen</th></tr>
+<tr><th>SIV↓</th><th>PD↓</th><th>SD↓</th><th>SR(%)↑</th><th>Style Div.↑</th><th>GPT-5</th><th>Human</th><th>SIV↓</th><th>PD↓</th><th>SD↓</th><th>SR(%)↑</th><th>Style Div.↑</th><th>GPT-5</th><th>Human</th></tr>
+<tr><td rowspan="2">Functional</td><td>DexGraspNet 2.0⋆</td><td>5.12</td><td>1.04</td><td>1.51</td><td>50.88</td><td>0.95</td><td>6.48</td><td>6.10</td><td>6.86</td><td>1.62</td><td>4.29</td><td>43.22</td><td>0.81</td><td>5.87</td><td>5.37</td></tr>
+<tr><td>OpenDexGrasp (Ours)</td><td>1.28</td><td>0.39</td><td>1.37</td><td>68.07</td><td>1.39</td><td>7.43</td><td>7.85</td><td>1.39</td><td>0.48</td><td>1.80</td><td>62.96</td><td>1.41</td><td>6.98</td><td>6.62</td></tr>
+<tr><td rowspan="2">Non-Functional</td><td>DexGraspNet 2.0⋆</td><td>4.98</td><td>0.87</td><td>2.53</td><td>63.27</td><td>1.14</td><td>-</td><td>-</td><td>5.16</td><td>0.99</td><td>3.87</td><td>54.49</td><td>1.03</td><td>-</td><td>-</td></tr>
+<tr><td>OpenDexGrasp (Ours)</td><td>1.33</td><td>0.42</td><td>0.94</td><td>75.46</td><td>1.55</td><td>-</td><td>-</td><td>1.30</td><td>0.44</td><td>2.29</td><td>66.73</td><td>1.25</td><td>-</td><td>-</td></tr>
+</table>
+<p>OPENDEXGRASP achieves lower SIV, PD, and SD, with a smaller drop on the unseen split. It also shows higher diversity and better perceptual scores.</p>
+<figure data-fig="5"><img src="fig5.png" alt="Figure 5: Qualitative comparison of predicted grasp poses between OPENDEXGRASP and the adapted DexGraspNet 2.0 baseline. OPENDEXGRASP produces task-consistent dexterous grasps that better align with functional object regions while maintaining plausible hand-object contact." loading="lazy"></figure>
+
+<h3>6.3 Ablation Study</h3>
+<table>
+<caption>Table 3: Ablation results (weighted averages over all four simulation splits; Perceptual Score over functional splits only).</caption>
+<tr><th>Method</th><th>SIV↓</th><th>PD↓</th><th>SD↓</th><th>SR(%)↑</th><th>Style Div.↑</th><th>GPT-5</th><th>Human</th></tr>
+<tr><td>OPENDEXGRASP</td><td>1.31</td><td>0.41</td><td>1.20</td><td>71.65</td><td>1.47</td><td>7.37</td><td>7.68</td></tr>
+<tr><td>- w/o affordance grounding</td><td>1.37</td><td>0.39</td><td>1.33</td><td>67.49</td><td>1.26</td><td>6.82</td><td>6.63</td></tr>
+<tr><td>- w/o OpenDex-Align alignment</td><td>1.58</td><td>0.53</td><td>1.44</td><td>69.38</td><td>1.52</td><td>5.96</td><td>6.04</td></tr>
+<tr><td>- reduced OpenDex-Scale scale</td><td>2.03</td><td>0.85</td><td>9.76</td><td>60.52</td><td>1.06</td><td>6.51</td><td>6.79</td></tr>
+<tr><td>- w/o pretrained VLM</td><td>5.15</td><td>0.98</td><td>2.32</td><td>57.26</td><td>1.05</td><td>6.22</td><td>6.16</td></tr>
+</table>
+<p>Each component contributes:</p>
+<ul>
+<li>Reducing OpenDex-Scale sharply increases SD.</li>
+<li>Removing alignment lowers naturalness.</li>
+<li>Removing affordance grounding lowers SR and perceptual scores.</li>
+<li>Replacing Qwen [40] with CLIP degrades performance broadly.</li>
+</ul>
+
+<h3>6.4 Real-World Experiments</h3>
+<table>
+<caption>Table 4: Real-world results.</caption>
+<tr><th>Metric</th><th>Method</th><th>Rice Paddle</th><th>Dustpan</th><th>Bouquet</th><th>Pitcher</th><th>Small Bucket</th><th>Bottle</th><th>Umbrella</th><th>Shampoo</th><th>Hammer</th><th>Brush</th><th>Avg.</th></tr>
+<tr><td rowspan="2">Success Rate</td><td>DexGraspNet 2.0⋆</td><td>40%</td><td>60%</td><td>40%</td><td>50%</td><td>50%</td><td>70%</td><td>80%</td><td>60%</td><td>80%</td><td>60%</td><td>59.0%</td></tr>
+<tr><td>Ours</td><td>60%</td><td>70%</td><td>50%</td><td>80%</td><td>50%</td><td>100%</td><td>90%</td><td>60%</td><td>90%</td><td>70%</td><td>72.0%</td></tr>
+<tr><td rowspan="2">GPT-5 Score</td><td>DexGraspNet 2.0⋆</td><td>6.2</td><td>7.1</td><td>5.5</td><td>6.7</td><td>7.4</td><td>7.6</td><td>6.8</td><td>6.4</td><td>7.0</td><td>6.1</td><td>6.7</td></tr>
+<tr><td>Ours</td><td>8.1</td><td>7.2</td><td>6.3</td><td>7.5</td><td>7.3</td><td>8.6</td><td>7.2</td><td>6.7</td><td>8.3</td><td>7.4</td><td>7.5</td></tr>
+<tr><td rowspan="2">Human Score</td><td>DexGraspNet 2.0⋆</td><td>6.5</td><td>6.9</td><td>4.8</td><td>6.1</td><td>7.9</td><td>8.0</td><td>5.9</td><td>4.8</td><td>7.6</td><td>6.8</td><td>6.5</td></tr>
+<tr><td>Ours</td><td>7.7</td><td>7.9</td><td>7.1</td><td>8.0</td><td>7.1</td><td>9.3</td><td>7.6</td><td>6.8</td><td>8.1</td><td>7.6</td><td>7.7</td></tr>
+</table>
+<p>The first five objects (Rice Paddle, Dustpan, Bouquet, Pitcher, Small Bucket) are unseen categories; the last five are seen categories.</p>
+
+<h2>7 Conclusion</h2>
+<p>OPENDEXGRASP jointly grounds affordances and generates grasps from instructions, images, and geometry, trained on OpenDexVerse with the C2A Recipe. It improves task alignment, physical plausibility, generalization, and execution success.</p>
+<h2>8 Limitation</h2>
+<ul>
+<li>Performance depends on the underlying VLM, so part-grounding errors can affect grasps.</li>
+<li>Actions are open-loop, with no tactile feedback or closed-loop correction.</li>
+<li>OpenDex-Align is still modest in size relative to the diversity of household tools.</li>
+</ul>
+<h2>Acknowledgments</h2>
+<p>The authors thank Zhewei Gui and Zimu Han. Funding: Beijing Natural Science Foundation (26L080330) and National Natural Science Foundation of China (62376006).</p>
+
+<h2>References</h2>
+<ol class="refs">
+<li>R. Wang et al. DexGraspNet: A large-scale robotic dexterous grasp dataset for general objects based on simulation. ICRA, 2023.</li>
+<li>J. Zhang et al. DexGraspNet 2.0: Learning generative dexterous grasping in large-scale synthetic cluttered scenes. CoRL, 2024.</li>
+<li>S. Liu et al. ContactGen: Generative contact modeling for grasp generation. ICCV, 2023.</li>
+<li>H. Jiang et al. Hand-object contact consistency reasoning for human grasps generation. ICCV, 2021.</li>
+<li>J. Chen, Y. Ke, H. Wang. BODex: Scalable and efficient robotic dexterous grasp synthesis using bilevel optimization. ICRA, 2025.</li>
+<li>P. Li et al. GenDexGrasp: Generalizable dexterous grasping. ICRA, 2023.</li>
+<li>F. Zhao, D. Tsetserukou, Q. Liu. GrainGrasp. arXiv:2405.09310, 2024.</li>
+<li>J. Lu et al. UGG: Unified generative grasping. arXiv:2311.16917, 2023.</li>
+<li>Z. Weng et al. DexDiffuser. arXiv:2402.02989, 2024.</li>
+<li>G.-H. Xu et al. Dexterous grasp transformer. CVPR, 2024.</li>
+<li>T. Wu et al. Learning score-based grasping primitive for human-assisting dexterous grasping. NeurIPS, 2023.</li>
+<li>C. Tang et al. GraspGPT. RA-L, 2023.</li>
+<li>J. Chen et al. Task-oriented dexterous hand pose synthesis using differentiable grasp wrench boundary estimator. arXiv:2309.13586, 2023.</li>
+<li>J. Jian et al. G-DexGrasp. ICCV, 2025.</li>
+<li>Y.-L. Wei et al. Grasp as you say. NeurIPS, 2024.</li>
+<li>K. Li et al. SemGrasp. arXiv:2404.03590, 2024.</li>
+<li>T. Nguyen et al. Open-vocabulary affordance detection in 3D point clouds. IROS, 2023.</li>
+<li>T. Nguyen et al. Language-conditioned affordance-pose detection in 3D point clouds. ICRA, 2024.</li>
+<li>S. Deng et al. 3D AffordanceNet. CVPR, 2021.</li>
+<li>Y. Li et al. LASO. CVPR, 2024.</li>
+<li>M. Liu et al. PartSLIP. CVPR, 2023.</li>
+<li>J. Zhang et al. Embodied3DBench. arXiv:2605.29074, 2026.</li>
+<li>C. Wang et al. DexCap. RSS, 2024.</li>
+<li>Y. Qin et al. DexMV. ECCV, 2022.</li>
+<li>M. Tucker, R. Ellis. On the relations between seen objects and components of potential actions. JEP:HPP, 1998.</li>
+<li>A. Radford et al. Learning transferable visual models from natural language supervision. ICML, 2021.</li>
+<li>K. Black et al. π0: A vision-language-action flow model for general robot control. arXiv:2410.24164, 2024.</li>
+<li>C. Chi et al. Diffusion policy. RSS, 2023.</li>
+<li>J. Zhang et al. CADGrasp. NeurIPS, 2025.</li>
+<li>Y. Xu et al. UniDexGrasp. CVPR, 2023.</li>
+<li>M. Pan et al. OmniManip. CVPR, 2025.</li>
+<li>A. Kirillov et al. Segment anything. ICCV, 2023.</li>
+<li>W. Wan et al. UniDexGrasp++. ICCV, 2023.</li>
+<li>Z. Chen et al. ClutterDexGrasp. CoRL, 2025.</li>
+<li>Y. Zhou et al. On the continuity of rotation representations in neural networks. CVPR, 2019.</li>
+<li>J. Zhang et al. Omni6DPose. ECCV, 2024.</li>
+<li>L. Yang et al. OakInk. CVPR, 2022.</li>
+<li>Y. Lipman et al. Flow matching for generative modeling. ICLR, 2023.</li>
+<li>OpenAI. GPT-5 system card. 2025.</li>
+<li>Qwen Team. Qwen3-VL technical report. arXiv:2511.21631, 2025.</li>
+<li>C. R. Qi et al. PointNet++. NeurIPS, 2017.</li>
+</ol>
+
+<h2>Appendix</h2>
+<h2>A Method Details</h2>
+<h3>A.1 Implementation Details</h3>
+<p><strong>Architecture:</strong></p>
+<ul>
+<li>Overall design: π0-style [27].</li>
+<li>VLM backbone: Qwen3-VL-4B-Instruct, run with FlashAttention-2 in bf16.</li>
+<li>Point-cloud encoder: PointNet++ [41], using metric-scale coordinates.</li>
+<li>Action head: a flow-matching DiT with adaLN. Even blocks cross-attend to Qwen hidden states; odd blocks use causal self-attention over \([z_P,z_F,z_A]\).</li>
+</ul>
+<p>The action loss is:</p>
+\[\mathcal{L}_{act}=\mathbb{E}_{a_0,a_1,t}\left[\|F_\theta(a_t,t,z_P,\{H_\ell\})-(a_1-a_0)\|_2^2\right].\]
+<p><strong>Affordance branch:</strong> the global token cross-attends to Qwen states. The result is fused into PointNet++ feature-propagation stages and decoded with a sigmoid head.</p>
+<p><strong>Training:</strong> Accelerate with DeepSpeed ZeRO-2, the AdamW optimizer, and a cosine learning-rate schedule.</p>
+<table>
+<caption>Table 5: Numerical hyperparameters used in OPENDEXGRASP.</caption>
+<tr><th>Hyperparameter</th><th>Value</th></tr>
+<tr><td>Input views</td><td>3</td></tr>
+<tr><td>Point-cloud points</td><td>2048</td></tr>
+<tr><td>Action dimension</td><td>31</td></tr>
+<tr><td>Wrist translation / rotation / joint dimensions</td><td>3 / 6 / 22</td></tr>
+<tr><td>PointNet++ stage-1 samples</td><td>512</td></tr>
+<tr><td>PointNet++ stage-1 radii</td><td>[0.1, 0.2, 0.4]</td></tr>
+<tr><td>PointNet++ stage-1 neighborhood sizes</td><td>[32, 64, 128]</td></tr>
+<tr><td>PointNet++ stage-2 samples</td><td>128</td></tr>
+<tr><td>PointNet++ stage-2 radii</td><td>[0.4, 0.8]</td></tr>
+<tr><td>PointNet++ stage-2 neighborhood sizes</td><td>[64, 128]</td></tr>
+<tr><td>Global point-token dimension</td><td>1024</td></tr>
+<tr><td>DiT blocks</td><td>18</td></tr>
+<tr><td>DiT hidden size</td><td>1024</td></tr>
+<tr><td>DiT attention heads</td><td>16</td></tr>
+<tr><td>DiT dropout</td><td>0.1</td></tr>
+<tr><td>Future query tokens</td><td>8</td></tr>
+<tr><td>Action horizon</td><td>1</td></tr>
+<tr><td>Qwen hidden states for DiT conditioning</td><td>18</td></tr>
+<tr><td>Flow-matching time distribution</td><td>Beta(2.0, 1.0)</td></tr>
+<tr><td>Euler integration steps</td><td>32</td></tr>
+<tr><td>Affordance fusion dimension</td><td>1024</td></tr>
+<tr><td>Point embedding dimension</td><td>512</td></tr>
+<tr><td>Focal loss α / γ</td><td>0.5 / 2.0</td></tr>
+<tr><td>Dice loss weight \(\lambda_{dice}\)</td><td>1.0</td></tr>
+<tr><td>Affordance loss weight \(\lambda_{aff}\)</td><td>0.3</td></tr>
+<tr><td>AdamW betas (β1, β2)</td><td>[0.9, 0.999]</td></tr>
+<tr><td>AdamW epsilon</td><td>\(10^{-8}\)</td></tr>
+<tr><td>Weight decay</td><td>\(10^{-4}\)</td></tr>
+<tr><td>Base learning rate</td><td>\(3\times10^{-5}\)</td></tr>
+<tr><td>Qwen-VL interface learning rate</td><td>\(5\times10^{-7}\)</td></tr>
+<tr><td>PointNet++ learning rate</td><td>\(3\times10^{-5}\)</td></tr>
+<tr><td>Action-head learning rate</td><td>\(3\times10^{-5}\)</td></tr>
+<tr><td>Affordance-decoder learning rate</td><td>\(3\times10^{-5}\)</td></tr>
+<tr><td>Optimization steps</td><td>2M</td></tr>
+<tr><td>Warmup steps</td><td>1k</td></tr>
+<tr><td>Minimum learning rate</td><td>\(3\times10^{-7}\)</td></tr>
+<tr><td>Per-GPU batch size</td><td>16</td></tr>
+<tr><td>Gradient accumulation</td><td>1</td></tr>
+<tr><td>Gradient clipping norm</td><td>1.0</td></tr>
+<tr><td>Initial frozen-stage duration</td><td>1k steps</td></tr>
+</table>
+
+<h2>B OpenDexVerse Construction</h2>
+<h3>B.1 Object Asset Selection</h3>
+<p>Omni6DPose contains 153 categories and 4,302 instances. Filtering for graspability leaves 105 categories. These are split by size variance:</p>
+<ul>
+<li>3-class categories: 31 (small / medium / large).</li>
+<li>2-class categories: 18 (small / large).</li>
+<li>1-class categories: 56 (labeled "all").</li>
+</ul>
+<p>This yields 185 category-size pairs, all used for OpenDex-Scale synthesis. A subset of 95 categories (159 pairs) is used for teleoperation, with one representative instance per pair. Grasps are then transferred within each size class.</p>
+<h3>B.2 Relationship Between Columns in Table 1</h3>
+<p>The OpenDex-Align counts are derived as follows:</p>
+<ul>
+<li>Teleoperation: 159 pairs × 10 grasps = 1,590 grasps.</li>
+<li>Transfer: an 8-step OakInk-style pipeline expands these to 25,835 transferred grasps.</li>
+<li>Total: 1,590 + 25,835 = 27,425 grasps.</li>
+</ul>
+<p>The 8 transfer steps:</p>
+<ol>
+<li>SDF preprocessing.</li>
+<li>Category-specific DeepSDF training.</li>
+<li>Shape reconstruction.</li>
+<li>Latent interpolation between source and target shapes.</li>
+<li>Contact extraction on the source object.</li>
+<li>Contact transfer through the interpolated shapes.</li>
+<li>Gradient-based pose refinement.</li>
+<li>SAPIEN simulation for 300 steps to resolve residual penetration.</li>
+</ol>
+<h3>B.3 Text Description Generation</h3>
+<p><strong>Inputs:</strong> GPT receives six images (palm, back, and finger views of the grasp, plus front, side, and top object-only views) together with per-link contact data.</p>
+<p><strong>Outputs:</strong> JSON containing a functional flag, five grasp-focused descriptions, and five task-focused instructions. Responses are validated and retried with exponential backoff on failure.</p>
+<p>The full annotation prompt is given in the original paper. It specifies the goal, the inputs, interpretation rules, constraints, diversity and length requirements, the functional-classification criteria, and the output format:</p>
+<pre>{"functional": true, "descriptions": ["...", "...", "...", "...", "..."], "instructions": ["...", "...", "...", "...", "..."]}</pre>
+<h3>B.4 Data Visualization</h3>
+<figure data-fig="6"><img src="fig6.png" alt="Figure 6: Visualization of OpenDex-Scale grasps. Representative dexterous grasp poses automatically synthesized with the BODex pipeline across diverse object categories and sizes. The broad coverage of geometries, grasp modes, and contact configurations provides the large-scale semantic-geometric support of OpenDexVerse." loading="lazy"></figure>
+<figure data-fig="7"><img src="fig7.png" alt="Figure 7: Visualization of OpenDex-Align grasps. Representative task-oriented dexterous grasps collected through human teleoperation and expanded via dense-correspondence transfer. The natural hand articulation and functional contact placement provide the high-quality embodied alignment signal of OpenDexVerse." loading="lazy"></figure>
+
+<h2>C Detailed Experimental Setup</h2>
+<h3>C.1 Train/Test Split</h3>
+<table>
+<caption>Table 6: Test set composition across functional and non-functional grasping tasks with seen and unseen object categories.</caption>
+<tr><th>Test Split</th><th># Cat.</th><th># Inst.</th><th>Object Categories</th></tr>
+<tr><td>Functional - Seen</td><td>25</td><td>75</td><td>bottle, dish, bowl, facial cream, brush, camera, hair dryer, can, hammer, hand cream, remote control, knife, rubik cube, lipstick, scissor, mouse, shampoo, mug, shoe, table tennis bat, tape measure, umbrella, teapot, toothbrush, toothpaste</td></tr>
+<tr><td>Functional - Unseen</td><td>5</td><td>15</td><td>spoon, cup, dumbbell, spanner, whistle</td></tr>
+<tr><td>Non-functional - Seen</td><td>46</td><td>138</td><td>banana, bread, ball, cake, belt, calculator, book, candy, box, carrot, corn, flower pot, glasses case, donut, hamburger, egg, handbag, egg tart, hot dog, keyboard, onion, lemon, orange, mango, peach, mangosteen, pear, medicine bottle, pie, pitaya, soap, pizza, sweet potato, pomegranate, timer, power strip, tissue, sausage, tomato, toy boat, toy train, toy bus, toy truck, toy car, toy motorcycle, toy plane</td></tr>
+<tr><td>Non-functional - Unseen</td><td>5</td><td>15</td><td>toy animals, chili, chicken leg, wallet, frisbee</td></tr>
+<tr><td>Total</td><td>81</td><td>243</td><td></td></tr>
+</table>
+<h3>C.2 Metric Calculation</h3>
+<ul>
+<li><strong>PD:</strong> maximum penetration depth of hand vertices into the object.</li>
+<li><strong>SIV:</strong> volumetric hand-object intersection, computed by voxelizing both meshes at 1 mm³.</li>
+<li><strong>SR:</strong> MuJoCo rollout for 2 s with object mass 0.1 kg and friction 1.0; a grasp succeeds if the object moves less than 0.2 m. Each sample uses 10 stochastic trials.</li>
+<li><strong>SD:</strong> object center-of-mass displacement, computed over successful grasps only.</li>
+</ul>
+\[\mathrm{SR}=\frac{1}{10N}\sum_{i=1}^{N}\sum_{j=1}^{10}s_{i,j}\times100\%\]
+\[d_{i,a,b}=\tfrac{1}{3}\left(\|t_{i,a}-t_{i,b}\|_2+\|\mathrm{Log}(R_{i,a}^\top R_{i,b})\|_2+\|q_{i,a}-q_{i,b}\|_2\right)\]
+\[\mathrm{StyleDiversity}_i=\frac{1}{\binom{10}{2}}\sum_{1\le a&lt;b\le10}d_{i,a,b}\]
+<p><strong>Perceptual scores:</strong> GPT-5 rates grasps on a 0–10 scale. For human ratings, 20 participants each score 30 sampled result groups on the same scale.</p>
+<h3>C.3 Baseline Details</h3>
+<p>DexGraspNet 2.0⋆ keeps the original ResUNet14 backbone. A CLIP sentence embedding is concatenated with each point feature to produce language-conditioned graspness and seed selection. The diffusion-based wrist-pose generator and joint-angle MLP are both conditioned on the fused feature.</p>
+<h3>C.4 Real Robot Setup</h3>
+<p><strong>Hardware:</strong> a Sharpa Wave Hand mounted on a Franka Emika Panda arm, with an Intel RealSense D435 camera for object pose estimation.</p>
+<p><strong>Protocol:</strong></p>
+<ul>
+<li>Predictions that collide with or are occluded by the table are discarded until 10 valid poses are collected per object.</li>
+<li>After reaching the predicted grasp, each joint is closed a further 0.05 rad as a squeezing refinement.</li>
+<li>Each pose is executed once. Success means the object is grasped and lifted.</li>
+</ul>
+<figure data-fig="8"><img src="fig8.png" alt="Figure 8: Real-world experiment setting. The Sharpa Wave Hand is mounted on a Franka Emika Panda robotic arm, with an Intel RealSense D435 camera used for object pose estimation before grasp execution." loading="lazy"></figure>
+
+<h2>D Additional Experiments</h2>
+<h3>D.1 Ablation Study: w/o Pose Generation Module</h3>
+<p>This variant follows the GenDexGrasp-style affordance-then-optimization approach. It uses Adam to optimize a 28-D hand configuration for up to 300 steps, minimizing five energy terms:</p>
+<ul>
+<li>Penetration.</li>
+<li>Affordance attraction.</li>
+<li>Coverage of high-affordance regions.</li>
+<li>Joint limits.</li>
+<li>Self-penetration.</li>
+</ul>
+<table>
+<caption>Table 7: Ablation comparing our direct pose generation against an affordance-then-optimization baseline that shares the same predicted affordance.</caption>
+<tr><th>Method</th><th>SIV↓</th><th>PD↓</th><th>SD↓</th><th>SR(%)↑</th><th>Style Div.↑</th><th>GPT-5</th><th>Human</th><th>Time (s)↓</th></tr>
+<tr><td>Affordance + Optimization</td><td>3.22</td><td>0.73</td><td>8.87</td><td>49.15</td><td>0.83</td><td>5.57</td><td>5.10</td><td>2.84</td></tr>
+<tr><td>OPENDEXGRASP</td><td>1.31</td><td>0.41</td><td>1.20</td><td>71.65</td><td>1.47</td><td>7.37</td><td>7.68</td><td>0.93</td></tr>
+</table>
+<h3>D.2 Affordance Prediction Results</h3>
+<p>The predicted affordance maps highlight functional regions, and the directly generated grasps agree with them. The optimization baseline often produces penetrating or functionally misaligned grasps.</p>
+<figure data-fig="9"><img src="fig9.png" alt="Figure 9: Instruction-conditioned grasp prediction comparison. For each input object and a distinct language instruction, OPENDEXGRASP directly generates a grasp pose and affordance map over the object surface, while the affordance-then-optimization baseline optimizes a grasp from the affordance map. Our grasps remain physically plausible and aligned with the instruction-conditioned affordance, whereas the optimization baseline often produces penetrating or functionally misaligned configurations." loading="lazy"></figure>
+<h3>D.3 Real Robot Manipulation Visualization</h3>
+<p>Additional keyframes from ten real-world robot experiments are shown in Fig. 10.</p>
+<figure data-fig="10"><img src="fig10.png" alt="Figure 10: Keyframes from ten real-world robot experiments. Each sequence shows task-conditioned dexterous grasp execution, including reaching, grasping, and lifting." loading="lazy"></figure>
+
+<h2>E Failure Case Analysis</h2>
+<figure data-fig="11"><img src="fig11.png" alt="Figure 11: Representative failure cases. From left to right: shampoo, frisbee, keyboard, and flower pot." loading="lazy"></figure>
+<p><strong>Thin-geometry and weak part-semantics failures.</strong> The keyboard, frisbee, and flower pot have thin plates, rims, or dense surfaces with no clear functional part. Small pose errors cause finger penetration, and the model falls back on a generic stable-contact prior.</p>
+<p><strong>Fine-grained functional grounding failures.</strong> For the shampoo bottle, the grasp lands near the correct region, but the fingertips miss the small actuation area. The authors attribute this to limited fine-grained instruction data in OpenDex-Align.</p>
+<p><strong>Overall.</strong> Remaining failures concentrate on high-precision contact reasoning. The authors suggest stronger geometry-aware collision handling for thin objects, and denser demonstrations or explicit part-level grounding for localized functional interactions.</p>
+</body></html>

@@ -1,0 +1,289 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Driving, Fast or Slow? Neuro-Symbolic Guidance for Motion Prediction in Multi-Modal Ground Mobility</title>
+<script>window.MathJax = {tex: {inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']], tags: 'ams'}};</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js"></script>
+<style>
+  body { font: 17px/1.6 Georgia, "Times New Roman", serif; max-width: 860px; margin: 0 auto; padding: 24px 20px 80px; color: #222; }
+  h1 { font-size: 1.7em; line-height: 1.25; } h2 { margin-top: 1.8em; } .src { font: 13px system-ui, sans-serif; color: #666; }
+  figure { margin: 1.5em 0; text-align: center; } figure img { max-width: 100%; }
+  figcaption { font-size: 0.9em; color: #444; text-align: left; margin-top: 6px; }
+  table { border-collapse: collapse; margin: 1em auto; font-size: 0.85em; } td, th { border: 1px solid #ccc; padding: 3px 6px; }
+  pre { background: #f6f8fa; padding: 10px; overflow-x: auto; font-size: 0.85em; } .refs { font-size: 0.85em; }
+</style></head><body>
+<p class="src">HTML version made by Claude (claude-opus-5-5) from <a href="../../pdfs/fHzDEYENPF_Driving%2C%20Fast%20or%20Slow%20%20Neuro-Symbolic%20Guidance%20for%20Motion%20Prediction%20in%20Multi-Modal%20Ground.pdf">the PDF</a>; check the PDF for exact wording and figures.</p>
+I can't reproduce the full paper verbatim, since that would mean copying a long copyrighted work in its entirety. Below is a faithful structural HTML rendering instead. It keeps the original title, authors, section hierarchy, equations, tables, figure placeholders, and references, with the prose condensed into summaries.
+
+<h1>Driving, Fast or Slow? Neuro-Symbolic Guidance for Motion Prediction in Multi-Modal Ground Mobility</h1>
+<p>Simon Kohaut<sup>1</sup>, Felix Divo<sup>1</sup>, Julius Hahnewald<sup>1</sup>, Benedict Flade<sup>2</sup>, Julian Eggert<sup>2</sup>, Kristian Kersting<sup>1,3,4,5</sup>, Devendra Singh Dhami<sup>6</sup></p>
+<p><sup>1</sup>Artificial Intelligence and Machine Learning Lab, TU Darmstadt; <sup>2</sup>Honda Research Institute; <sup>3</sup>Hessian Center for AI (hessian.AI); <sup>4</sup>Centre for Cognitive Science; <sup>5</sup>German Center for AI (DFKI); <sup>6</sup>Uncertainty in Artificial Intelligence Lab, TU Eindhoven</p>
+<p><em>10th Conference on Robot Learning (CoRL 2026), Austin TX, USA.</em></p>
+
+<h2>Abstract</h2>
+<p>[Summary] The paper proposes Trajectory Compliance-Shaping (TraCS), a neuro-symbolic add-on for black-box motion prediction backbones. An agentic LLM pipeline turns natural-language traffic regulations into probabilistic first-order logic. A reactive streaming inference engine maintains compliance landscapes as the scene evolves. A learned neural confidence rating attenuates the compliance signal where it is unreliable. On Argoverse 2, TraCS consistently improves state-of-the-art backbones.</p>
+
+<h2>1 Introduction</h2>
+<p>[Summary] Modern motion forecasters learn trajectory distributions from data, but they ignore explicit regulatory and social constraints, which differ by agent class and context. Traffic is presented as a structured testbed for translating natural-language norms into executable reasoning.</p>
+<p>The contributions are:</p>
+<ol>
+<li>TraCS, a plug-and-play neuro-symbolic guidance system.</li>
+<li>Hybrid probabilistic spatial relations over states and state transitions, used as a reasoning vocabulary.</li>
+<li>The use of LLMs and reactive reasoning to reweight backbone predictions.</li>
+<li>A reference implementation, available at <a href="https://www.github.com/simon-kohaut/TraCS">github.com/simon-kohaut/TraCS</a>.</li>
+</ol>
+
+<h2>2 Related Work</h2>
+<p><strong>Motion Prediction in Ground Mobility.</strong> [Summary] This part covers filtering-based methods and learned forecasters (QCNet, HPNet, DeMo, Polaris), as well as LLM-based trajectory prediction. NeSyMoF-style neuro-symbolic forecasters require joint training. TraCS, by contrast, reweights frozen pre-trained predictors.</p>
+<p><strong>Neuro-Symbolic Representation and Reasoning.</strong> [Summary] This part reviews probabilistic logic programming (ProbLog, Bayesian Logic Programs), differentiable systems (DeepProbLog, NeurASP, Scallop, SLASH), ASP, and reactive inference, which TraCS uses for exact inference.</p>
+
+<figure data-fig="1"><img src="fig1.png" alt="Figure 1: Probabilistic motion prediction with TraCS. TraCS encodes natural-language descriptions of compliant road behavior via an agentic coding pipeline into probabilistic first-order logic programs. Based on TraCS' inferred level of compliance and contextual alignment, the backbone's set of predictions is reweighted to respect the environment's agreed-upon motion constraints." loading="lazy"></figure>
+
+<p><strong>Agentic Program Synthesis.</strong> [Summary] LLMs can generate ASP programs. Because one-shot generation is brittle, TraCS uses tool-based syntax verification combined with LLM-judge semantic feedback.</p>
+
+<h2>3 Trajectory Compliance-Shaping for Motion Predictions</h2>
+
+<h3>3.1 Transitional Statistical Spatial Relations</h3>
+<p>[Summary] TraCS extends StaR Maps, whose spatial relations \(r(\mathbf{x},F)\) are evaluated over \(N\) sampled geometries \(\mathcal{F}=\{F^{(n)}\}\) to estimate distribution parameters \(\widehat{\boldsymbol\theta}_{r,\mathbf{x}}(\mathcal{F})=(\widehat{\mu_r},\widehat{\sigma_r^2})\). The extension adds derivatives \(\dot{\mathbf{x}}\) and a time step \(\delta t\):</p>
+\[ s_{r_{\delta t},\mathcal{F}}:\mathbb{R}^D\times\mathbb{R}^D\to\mathbb{R}^e,\ (\mathbf{x},\dot{\mathbf{x}})\mapsto \widehat{\boldsymbol\theta}_{r_{\delta t},\mathbf{x},\dot{\mathbf{x}}}(\mathcal{F}). \tag{1}\]
+
+<h3>3.2 Agentic Traffic Regulation Modeling</h3>
+<p>[Summary] Three roles iterate until both the judge and the verifier are satisfied:</p>
+<ul>
+<li>A coder agent writes a Resin program.</li>
+<li>A judge agent checks semantic faithfulness.</li>
+<li>The Resin compiler checks well-formedness.</li>
+</ul>
+
+<h3>3.3 Neuro-Symbolic Trajectory Scoring</h3>
+<p>Pointwise compliance is computed by weighted model counting:</p>
+\[ P(C\mid\mathbf{x},\dot{\mathbf{x}},\delta t,\mathcal{R})=\sum_{j\in\mathcal{J}}\prod_{a\in\mathcal{A}}P(a=j(a)\mid\mathbf{x},\dot{\mathbf{x}},\delta t,\mathcal{R}). \tag{2}\]
+<p>Trajectory scores are the normalized geometric mean of the pointwise scores:</p>
+\[ p^{\text{symbolic}}_k\propto\exp\left(\frac1N\sum_{n=1}^N\log P(C\mid\mathbf{x},\dot{\mathbf{x}},\delta t,\mathcal{R})\right). \tag{3}\]
+<p>Fusion uses a log-linear opinion pool centered on the uniform distribution:</p>
+\[ p^{\text{fused}}_k\propto\exp\left(\log p^{\text{neural}}_k+w\cdot\left(\log p^{\text{symbolic}}_k-\log\tfrac16\right)\right). \tag{4}\]
+
+<h3>3.4 Model Alignment and Trust Gating</h3>
+\[ \hat w=\sigma\big(\mathrm{MLP}_{\text{trust}}([\mathbf{x}^{\text{feat}};\mathrm{MLP}_{\text{emb}}(\mathbf{x}^{\text{emb}})])\big). \tag{5}\]
+\[ w^\star=\arg\min_{w\in[0,1]}\sum_{k=1}^6 p^{\text{fused}}_k(w)\cdot\mathrm{ADE}(\boldsymbol\tau_k,\boldsymbol\tau^\star). \tag{6}\]
+\[ \mathcal{L}(\hat w,w^\star)=-w^\star\log\hat w-(1-w^\star)\log(1-\hat w). \tag{7}\]
+<p>[Summary] A binary gate \(w_{\text{gate}}=\mathbb{1}[\hat w\ge\theta]\) is applied, with \(\theta\) chosen per backbone to minimize validation bMinADE<sub>1</sub>.</p>
+
+<h2>4 Experiments</h2>
+<p>[Summary] Evaluation is on the Argoverse 2 test split (n=24,984, K=6, 6 s horizon) with the DeMo, Polaris, and QCNet backbones, averaged over 10 seeds. Compiling a program takes about 21.04 s and 5998 tokens on average. Inference runs at 1.86±0.29 Hz and fusion at 6060 Hz.</p>
+
+<table>
+<caption>Table 1: Effect of TraCS-gated fusion on Argoverse 2 Brier-style metrics (lower is better).</caption>
+<tr><th>Backbone</th><th>Mode</th><th>bMinADE6 Base</th><th>+TraCS</th><th>bMinADE1 Base</th><th>+TraCS</th><th>bMinFDE1 Base</th><th>+TraCS</th></tr>
+<tr><td>DeMo</td><td>Overall</td><td>1.3185</td><td>1.3172 (−0.1%)</td><td>2.1900</td><td>2.1842 (−0.3%)</td><td>4.5940</td><td>4.5887 (−0.1%)</td></tr>
+<tr><td></td><td>Bus</td><td>1.5107</td><td>1.5073 (−0.2%)</td><td>2.5072</td><td>2.4661 (−1.6%)</td><td>4.8436</td><td>4.7718 (−1.5%)</td></tr>
+<tr><td></td><td>Cyclist</td><td>1.3356</td><td>1.3305 (−0.4%)</td><td>1.9574</td><td>1.9493 (−0.4%)</td><td>3.7022</td><td>3.7014 (±0.0%)</td></tr>
+<tr><td></td><td>Motorcyclist</td><td>1.5473</td><td>1.5450 (−0.1%)</td><td>2.6472</td><td>2.6258 (−0.8%)</td><td>5.3926</td><td>5.3562 (−0.7%)</td></tr>
+<tr><td></td><td>Pedestrian</td><td>1.0041</td><td>1.0016 (−0.2%)</td><td>1.2375</td><td>1.2121 (−2.1%)</td><td>1.9985</td><td>1.9690 (−1.5%)</td></tr>
+<tr><td></td><td>Vehicle</td><td>1.3318</td><td>1.3307 (−0.1%)</td><td>2.2468</td><td>2.2440 (−0.1%)</td><td>4.7807</td><td>4.7800 (±0.0%)</td></tr>
+<tr><td>Polaris</td><td>Overall</td><td>1.2713</td><td>1.2696 (−0.1%)</td><td>2.1131</td><td>2.1075 (−0.3%)</td><td>4.4036</td><td>4.4043 (±0.0%)</td></tr>
+<tr><td></td><td>Bus</td><td>1.4685</td><td>1.4680 (±0.0%)</td><td>2.4212</td><td>2.4074 (−0.6%)</td><td>4.6466</td><td>4.6806 (+0.7%)</td></tr>
+<tr><td></td><td>Cyclist</td><td>1.2977</td><td>1.2957 (−0.2%)</td><td>1.8204</td><td>1.8187 (−0.1%)</td><td>3.3874</td><td>3.3959 (+0.3%)</td></tr>
+<tr><td></td><td>Motorcyclist</td><td>1.4241</td><td>1.4172 (−0.5%)</td><td>2.3567</td><td>2.3432 (−0.6%)</td><td>4.7648</td><td>4.7657 (±0.0%)</td></tr>
+<tr><td></td><td>Pedestrian</td><td>0.9565</td><td>0.9534 (−0.3%)</td><td>1.1383</td><td>1.1218 (−1.4%)</td><td>1.8903</td><td>1.8736 (−0.9%)</td></tr>
+<tr><td></td><td>Vehicle</td><td>1.2846</td><td>1.2830 (−0.1%)</td><td>2.1740</td><td>2.1695 (−0.2%)</td><td>4.5890</td><td>4.5895 (±0.0%)</td></tr>
+<tr><td>QCNet</td><td>Overall</td><td>1.2477</td><td>1.2476 (±0.0%)</td><td>2.0693</td><td>2.0643 (−0.2%)</td><td>4.6856</td><td>4.6765 (−0.2%)</td></tr>
+<tr><td></td><td>Bus</td><td>1.4119</td><td>1.4147 (+0.2%)</td><td>2.3010</td><td>2.2628 (−1.7%)</td><td>4.7257</td><td>4.6768 (−1.0%)</td></tr>
+<tr><td></td><td>Cyclist</td><td>1.2634</td><td>1.2657 (+0.2%)</td><td>1.7129</td><td>1.7020 (−0.6%)</td><td>3.4995</td><td>3.4858 (−0.4%)</td></tr>
+<tr><td></td><td>Motorcyclist</td><td>1.3736</td><td>1.3747 (+0.1%)</td><td>2.2972</td><td>2.2786 (−0.8%)</td><td>5.2616</td><td>5.2346 (−0.5%)</td></tr>
+<tr><td></td><td>Pedestrian</td><td>0.9522</td><td>0.9522 (±0.0%)</td><td>1.0634</td><td>1.0586 (−0.5%)</td><td>1.8676</td><td>1.8621 (−0.3%)</td></tr>
+<tr><td></td><td>Vehicle</td><td>1.2612</td><td>1.2610 (±0.0%)</td><td>2.1367</td><td>2.1332 (−0.2%)</td><td>4.9029</td><td>4.8953 (−0.2%)</td></tr>
+</table>
+
+<figure data-fig="2"><img src="fig2.png" alt="Figure 2: Agentic traffic modeling. Across open-weight and foundation models, not all are able to produce the correct syntax and semantics." loading="lazy"></figure>
+
+<h3>4.1 Agentic Codification for TraCS</h3>
+<p>[Summary] Codification quality is compared across LLMs (Figure 2, Table 4). The experiments use the conjunction of all encoded programs.</p>
+
+<h3>4.2 Motion Forecasting on TraCS</h3>
+<p>[Summary] Every backbone and modality cell improves on bMinADE<sub>1</sub>. The overall gains are −0.0039, −0.0061, and −0.0047 (Holm-corrected p ≤ 2.0×10<sup>−4</sup>). Class-balanced gains are −0.0145, −0.0100, and −0.0173. Polaris shows small bMinFDE<sub>1</sub> regressions for buses and cyclists. Point metrics stay within ±0.3%.</p>
+
+<figure data-fig="3"><img src="fig3.png" alt="Figure 3: TraCS as a tail-risk treatment: Smoothed (LOWESS) conditional mean of Δ bMinADE1 (↓ is better) per scenario as a function of backbone-error percentile, for each backbone. Filled regions encode the sign of the smoothed mean: green where fusion improves, red where it regresses. The shape is consistent across backbones; a flat plateau through the lower 60–70% of scenarios and a dip in the upper decile, where the backbone is least reliable." loading="lazy"></figure>
+
+<h3>4.3 TraCS-based Tail-Risk Mitigation</h3>
+<p>[Summary] Gains concentrate in the worst decile of scenarios (−0.044, −0.054, −0.088), which is 8.9–18.7× the population mean (interaction p ≤ 1.2×10<sup>−3</sup>).</p>
+
+<figure data-fig="4"><img src="fig4.png" alt="Figure 4: TraCS shaping a backbone prediction: Here, a bus proceeds straight through a four-way intersection (red ground-truth trajectory). While the backbone (here, DeMo) has no clear preference on any of its proposal trajectories, TraCS correctly recognizes unlikely or incompliant behavior and shifts the probability mass towards the correct proposal, promoting τ4 from being the lowest to being the highest rated one. Note that the color scale differs between pointwise and per-trajectory scores." loading="lazy"></figure>
+
+<h3>4.4 Impact per Mode of Mobility</h3>
+<p>[Summary] When the gate fires, under-represented classes (buses, cyclists, pedestrians) show left-skewed improvement distributions. Vehicles remain centered near zero.</p>
+
+<figure data-fig="5"><img src="fig5.png" alt="Figure 5: TraCS improves prediction calibration across modes of mobility: We show kernel density estimates of the difference between bMinADE1 after applying TraCS. Mass left of zero is improvement (green), mass right of zero is regression (red); n denotes the sample size for which TraCS was applied (wgate = 1). Focal agents that are more clearly constrained by the employed logic exhibit more left-skewed distributions, while others concentrate tightly around zero, indicating that TraCS's gated fusion correctly leaves predictions intact where TraCS provides no information gain." loading="lazy"></figure>
+
+<h3>4.5 Ablation Studies</h3>
+<p>[Summary] Always fusing hurts, and shuffled scores hurt. A latent-free gate performs about on par with the full gate but transfers poorly across backbones.</p>
+
+<table>
+<caption>Table 2: Mean ΔbMinADE<sub>1</sub> against the unmodified backbone (lower is better).</caption>
+<tr><th>Gate policy</th><th>DeMo</th><th>Polaris</th><th>QCNet</th></tr>
+<tr><td>Always fuse</td><td>+0.0312</td><td>+0.0842</td><td>+0.0088</td></tr>
+<tr><td>Shuffled TraCS</td><td>+0.0149</td><td>+0.0252</td><td>+0.0035</td></tr>
+<tr><td>Latent-free gate</td><td>−0.0038</td><td>−0.0051</td><td>−0.0056</td></tr>
+<tr><td><strong>TraCS (ours)</strong></td><td>−0.0039</td><td>−0.0061</td><td>−0.0047</td></tr>
+<tr><td>Oracle gate</td><td>−0.0808</td><td>−0.1199</td><td>−0.0425</td></tr>
+</table>
+
+<table>
+<caption>Table 3: Mean ΔbMinADE<sub>1</sub> × 10<sup>−3</sup> for zero-shot latent-free gate transfer (lower is better).</caption>
+<tr><th>Train \ Eval</th><th>DeMo</th><th>Polaris</th><th>QCNet</th></tr>
+<tr><td>DeMo</td><td>−3.8 ±1.7</td><td>+0.2 ±4.3</td><td>−1.4 ±1.3</td></tr>
+<tr><td>Polaris</td><td>−3.2 ±1.4</td><td>−5.1 ±1.8</td><td>−0.7 ±0.7</td></tr>
+<tr><td>QCNet</td><td>+7.9 ±4.4</td><td>+29.2 ±16.4</td><td>−5.6 ±2.0</td></tr>
+</table>
+
+<h2>5 Conclusion</h2>
+<p><strong>Summary.</strong> [Summary] TraCS is a plug-and-play compliance module that combines LLM-generated logic with hybrid probabilistic atoms and a learned trust gate. It yields consistent gains, especially at the tail of the error distribution, and the paradigm may extend to broader human–AI normative settings.</p>
+<p><strong>Limitations and Future Work.</strong> [Summary] Rule probabilities are not learned from data. Agents are treated as conditionally independent. Future work includes end-to-end differentiable integration and modeling of inter-agent interactions.</p>
+
+<h2>Acknowledgements</h2>
+<p>[Summary] The authors acknowledge funding from HRI-EU, DFG SPP 2422 (KIWi-SP), TAILOR (EU Horizon 2020, GA No 952215), EXC-3057, and TU Eindhoven. Argoverse 2 data © Argo AI LLC, CC BY-NC-SA 4.0.</p>
+
+<h2>References</h2>
+<ol class="refs">
+<li>Z. Zhou et al. Query-centric trajectory prediction. CVPR 2023.</li>
+<li>X. Tang et al. HPNet: Dynamic trajectory forecasting with historical prediction attention. CVPR 2024.</li>
+<li>B. Zhang et al. Relative position matters: Trajectory prediction and planning with polar representation. ICRA 2026.</li>
+<li>B. Wilson et al. Argoverse 2. NeurIPS Datasets and Benchmarks 2021.</li>
+<li>S. Ettinger et al. The Waymo open motion dataset. ICCV 2021.</li>
+<li>I. P. Gomes and D. F. Wolf. Review of deep learning for interaction-aware trajectory prediction. Neurocomputing 2025.</li>
+<li>J. Shi et al. Motion forecasting for autonomous vehicles: a survey. IJMLC 2026.</li>
+<li>Y. Wang et al. FEND. CVPR 2023.</li>
+<li>D. Steinmann et al. Navigating shortcuts, spurious correlations, and confounders. CoRR 2024.</li>
+<li>S. Kohaut et al. Reactive knowledge representation and asynchronous reasoning. CoRR 2026.</li>
+<li>S. Thrun, W. Burgard, D. Fox. Probabilistic Robotics. MIT Press 2005.</li>
+<li>R. E. Kalman. A new approach to linear filtering and prediction problems. 1960.</li>
+<li>A. J. Davison et al. MonoSLAM. TPAMI 2007.</li>
+<li>R. Martinez-Cantin, J. A. Castellanos. Unscented SLAM. IROS 2005.</li>
+<li>P. Del Moral. Nonlinear filtering: Interacting particle resolution. 1997.</li>
+<li>B. Vo, W. Ma. The Gaussian mixture PHD filter. IEEE TSP 2006.</li>
+<li>J. Chen et al. The semantic PHD filter. RAS 2022.</li>
+<li>D. Nitti et al. A particle filter for hybrid relational domains. IROS 2013.</li>
+<li>S. Kohaut et al. The constitutional filter. IROS 2025.</li>
+<li>A. Vaswani et al. Attention is all you need. NeurIPS 2017.</li>
+<li>A. Gu, T. Dao. Mamba. CoRR 2023.</li>
+<li>B. Zhang et al. DeMo. NeurIPS 2024.</li>
+<li>M.-F. Chang et al. Argoverse. CVPR 2019.</li>
+<li>J. Lambert, J. Hays. Trust, but verify. NeurIPS D&amp;B 2021.</li>
+<li>K. Chen et al. WOMD-LiDAR. ICRA 2024.</li>
+<li>X. Liu et al. ReasonPlan. CoRL 2025.</li>
+<li>I. Bae et al. Can language beat numerical regression? CVPR 2024.</li>
+<li>W. Wongso et al. TrajDLM. CoRR 2026.</li>
+<li>L. Li et al. TrajPrism. CoRR 2026.</li>
+<li>A. Doula et al. NeSyMoF. IROS 2024.</li>
+<li>A. Colmerauer. An introduction to Prolog III. CACM 1990.</li>
+<li>K. Kersting, L. De Raedt. Bayesian logic programming. 2007.</li>
+<li>L. De Raedt et al. ProbLog. IJCAI 2007.</li>
+<li>D. Fierens et al. Inference and learning in probabilistic logic programs. TPLP 2015.</li>
+<li>R. Manhaeve et al. DeepProbLog. NeurIPS 2018.</li>
+<li>Z. Yang et al. NeurASP. IJCAI 2020.</li>
+<li>Z. Li et al. Scallop. PLDI 2023.</li>
+<li>A. Skryagin et al. Scalable neural-probabilistic ASP. JAIR 2023.</li>
+<li>N. Shah. Review of Baral, Knowledge representation, reasoning and declarative problem solving. JFP 2004.</li>
+<li>M. Gebser et al. Multi-shot ASP solving with clingo. TPLP 2019.</li>
+<li>A. Skryagin et al. Answer set networks. CoRR 2024.</li>
+<li>D. Bagaev et al. RxInfer. JOSS 2023.</li>
+<li>A. Ishay et al. Leveraging LLMs to generate answer set programs. KR 2023.</li>
+<li>E. Coppolillo et al. LLASP. KR 2024.</li>
+<li>M. Rabinovich et al. Abstract syntax networks. ACL 2017.</li>
+<li>S. Szeider. Bridging language models and symbolic solvers via MCP. SAT 2025.</li>
+<li>L. Zheng et al. Judging LLM-as-a-judge. NeurIPS 2023.</li>
+<li>R. Kartmann, T. Asfour. Learning spatial object relations from human demonstrations. Frontiers 2023.</li>
+<li>B. Flade et al. StaR Maps. ITSC 2024.</li>
+<li>D. P. Kingma, J. Ba. Adam. ICLR 2015.</li>
+</ol>
+
+<h2>A Declarative Traffic Modeling</h2>
+
+<h3>A.1 Transitional and Hybrid Probabilistic Spatial Relations</h3>
+<p>[Summary] Feature geometries are \(F=(M,f)\), where \(M=(\mathcal{V},\mathcal{E},\rho)\) is a tagged graph map and \(f\) is a feature type.</p>
+\[ \mathrm{intersects}_{\delta t}(\mathbf{x},\dot{\mathbf{x}},(M,f)):=\begin{cases}1&\text{if }\{\mathbf{x}+\lambda\dot{\mathbf{x}}\mid\lambda\in[0,\delta t]\}\cap\mathcal{A}(M_f)\neq\emptyset\\0&\text{else}\end{cases} \tag{8}\]
+\[ \mathrm{crosses}_{\delta t}(\mathbf{x},\dot{\mathbf{x}},(M,f)):=\begin{cases}1&\text{if }\exists m\in\mathrm{Comp}(M_g):\ \xi\cap\mathcal{A}(m)\neq\emptyset\wedge\xi\neq\xi\cap\mathcal{A}(m)\neq\mathcal{A}(m)\wedge\dim(\xi\cap\mathcal{A}(m))=\dim(\mathcal{A}(m))-1\\0&\text{else}\end{cases} \tag{9}\]
+\[ \mathrm{enters}_{\delta t}:=\mathbb{1}[\mathbf{x}\notin\mathcal{A}(M_f)\wedge\mathbf{x}'\in\mathcal{A}(M_f)] \tag{10}\]
+\[ \mathrm{exits}_{\delta t}:=\mathbb{1}[\mathbf{x}\in\mathcal{A}(M_f)\wedge\mathbf{x}'\notin\mathcal{A}(M_f)] \tag{11}\]
+\[ \mathrm{approaches}_{\delta t}:=\mathbb{1}\big[\min_{\mathbf{v}\in\mathcal{V}_f}\|\mathbf{x}-\mathbf{v}\|_2>\min_{\mathbf{v}\in\mathcal{V}_f}\|\mathbf{x}'-\mathbf{v}\|_2\big] \tag{12}\]
+\[ \mathrm{follows}_{\delta t}(\mathbf{x},\dot{\mathbf{x}},(M,f)):=\min\left(0,\frac{(\mathrm{next}(\mathbf{v}')-\mathbf{v}')^T\dot{\mathbf{x}}}{\|\mathrm{next}(\mathbf{v}')-\mathbf{v}'\|_2\cdot\|\dot{\mathbf{x}}\|_2}\right) \tag{13}\]
+\[ \mathrm{opposes}_{\delta t}(\mathbf{x},\dot{\mathbf{x}},(M,f)):=\mathrm{follows}_{\delta t}(\mathbf{x},-\dot{\mathbf{x}},(M,f)) \tag{14}\]
+
+<h3>A.2 Agentic Coding Pipeline</h3>
+<p>[Summary] The coder and judge system prompts list the available feature types, the predicates (over, distance, approaches, enters, exits, intersects, crosses, follows, opposes, faces), and agent state values. They explain how to express conjunction, disjunction, negation, and implication in Resin, and require a final <code>landscape if ...</code> clause. The judge is told to accept reasonable approximations and returns a JSON object with a verdict and a critique. The original prompt texts are in the paper.</p>
+<p>The generated programs cover seven rules:</p>
+<ol>
+<li>A.2.1 Pedestrians: speed of at most 5 km/h, and on the road only within 5 m of a crossing.</li>
+<li>A.2.2 Cyclists: at most 25 km/h, and must use a bike lane within 5 m unless at an intersection.</li>
+<li>A.2.3 Motorcyclists: must stay on the drivable area, at most 50 km/h.</li>
+<li>A.2.4 Buses: yaw rate of at most 0.4 rad/s, acceleration of at most 5.0 (km/h)/s, and must use a bus lane within 5 m unless at an intersection.</li>
+<li>A.2.5 Lanes: lane exclusivity except at intersections.</li>
+<li>A.2.6 Vehicles: keep more than 5 m apart, and no acceleration toward a vehicle closer than 2 m.</li>
+<li>A.2.7 Safety distances: more than 3 m from vehicles, motorcyclists, and buses.</li>
+</ol>
+<p>The full Resin listings are in the original appendix.</p>
+
+<table>
+<caption>Table 4: Per-model performance characteristics shown in Figure 2 (higher is better).</caption>
+<tr><th>Model</th><th>Final</th><th>1st Attempt</th><th>Syntax</th><th>Semantic</th><th>Recov. Rate</th><th>Iter. Bu. Left</th><th>Judge–Human Agreement</th><th>Final Corr. Rate</th></tr>
+<tr><td>Qwen3 27B</td><td>0.857</td><td>0.286</td><td>1.000</td><td>0.207</td><td>0.800</td><td>0.651</td><td>0.517</td><td>1.000</td></tr>
+<tr><td>Claude Opus 4.7</td><td>1.000</td><td>1.000</td><td>1.000</td><td>1.000</td><td>–</td><td>1.000</td><td>1.000</td><td>1.000</td></tr>
+<tr><td>Gemini 3.1 Pro</td><td>1.000</td><td>0.857</td><td>0.875</td><td>0.875</td><td>1.000</td><td>0.984</td><td>1.000</td><td>1.000</td></tr>
+<tr><td>Gemma 4 31B</td><td>1.000</td><td>0.857</td><td>1.000</td><td>0.875</td><td>1.000</td><td>0.984</td><td>0.750</td><td>0.857</td></tr>
+<tr><td>GPT-5.5</td><td>1.000</td><td>1.000</td><td>1.000</td><td>1.000</td><td>–</td><td>1.000</td><td>1.000</td><td>1.000</td></tr>
+</table>
+
+<h2>B Machine Learning Setup</h2>
+
+<h3>B.1 Dataset and splits</h3>
+<p>[Summary] The trust network is trained on the AV2 val split (n=24,988), divided 90/10 into a training fold (22,490) and an internal validation fold (2,498). All results are reported on the test split (24,984). Nothing is tuned on test.</p>
+
+<h3>B.2 Inputs and features</h3>
+<p>[Summary] Each scenario is represented by a 299-dimensional input combining hand-crafted scoring statistics and the backbone latent (Table 5).</p>
+
+<h3>B.3 Architecture</h3>
+\[ \hat w=\sigma\big(\mathrm{MLP}_{\text{trust}}([\mathbf{x}^{\text{feat}};\mathrm{MLP}_{\text{emb}}(\mathbf{x}^{\text{emb}})])\big) \tag{15}\]
+\[ \mathrm{MLP}_{\text{emb}}:\mathbb{R}^{256}\xrightarrow{\text{BN}}\xrightarrow{\text{Linear}_{256\to32}}\xrightarrow{\text{ReLU}}\xrightarrow{\text{Dropout}_{0.5}}\mathbb{R}^{32} \tag{16}\]
+\[ \mathrm{MLP}_{\text{trust}}:\mathbb{R}^{d'}\xrightarrow{\text{BN}}\xrightarrow{\text{Linear}_{\to128}}\xrightarrow{\text{ReLU,Dropout}_{0.3}}\xrightarrow{\text{Linear}_{128\to64}}\xrightarrow{\text{ReLU,Dropout}_{0.2}}\xrightarrow{\text{Linear}_{64\to1}}\xrightarrow{\sigma(\cdot)}[0,1] \tag{17}\]
+<p>[Summary] The network has about 50k parameters. Heavy dropout on the embedding branch prevents overfitting.</p>
+
+<table>
+<caption>Table 5: Per-scenario input features to the gating network.</caption>
+<tr><th>Feature group</th><th>Dim</th><th>Description</th></tr>
+<tr><td>Raw backbone scores</td><td>6</td><td>\(p^{bb}_k\) for each candidate</td></tr>
+<tr><td>Sorted backbone scores</td><td>6</td><td>Descending order</td></tr>
+<tr><td>Backbone entropy</td><td>1</td><td>\(H(p^{bb})\) in bits</td></tr>
+<tr><td>Raw TraCS scores</td><td>6</td><td>\(p^{tr}_k\)</td></tr>
+<tr><td>Sorted TraCS scores</td><td>6</td><td>Descending order</td></tr>
+<tr><td>TraCS entropy</td><td>1</td><td>\(H(p^{tr})\)</td></tr>
+<tr><td>Spearman correlation</td><td>1</td><td>Rank correlation</td></tr>
+<tr><td>KL divergences</td><td>2</td><td>Both directions</td></tr>
+<tr><td>Entropy difference</td><td>1</td><td>\(H(p^{tr})-H(p^{bb})\)</td></tr>
+<tr><td>Top-2 score margins</td><td>2</td><td>Backbone and TraCS</td></tr>
+<tr><td>Cross-classifier top scores</td><td>2</td><td>Score at the other's argmax</td></tr>
+<tr><td>Cross-classifier top ranks</td><td>2</td><td>Rank of the other's argmax</td></tr>
+<tr><td>Predicted endpoint displacement</td><td>2</td><td>Mean and std of endpoint norm</td></tr>
+<tr><td>Focal-agent class</td><td>5</td><td>One-hot</td></tr>
+<tr><td><em>Subtotal</em></td><td>43</td><td></td></tr>
+<tr><td>Focal-agent latent</td><td>128</td><td>Focal agent embedding</td></tr>
+<tr><td>Scene-averaged latent</td><td>128</td><td>Average non-focal agent embedding</td></tr>
+<tr><td>Scene-averaged map embedding</td><td>128</td><td>Only QCNet</td></tr>
+<tr><td><em>Subtotal</em></td><td>256</td><td>384 for QCNet</td></tr>
+<tr><td><strong>Total input dimension</strong></td><td>D = 299</td><td></td></tr>
+</table>
+
+<h3>B.4 Supervision target</h3>
+\[ w^\star=\arg\min_{w\in[0,1]}\sum_{k=1}^6 p^{\text{fused}}_k(w)\cdot\mathrm{ADE}_k \tag{18}\]
+<p>[Summary] The target is found by grid search over 1000 values. The resulting targets are strongly bimodal at 0 and 1.</p>
+
+<h3>B.5 Training</h3>
+\[ \mathcal{L}(\hat w,w^\star)=-w^\star\log\hat w-(1-w^\star)\log(1-\hat w) \tag{19}\]
+<p>[Summary] Training uses Adam with lr 10<sup>−3</sup>, weight decay 10<sup>−4</sup>, and batch size 256. The learning rate is halved on plateau (patience 15). Early stopping uses patience 30.</p>
+
+<figure data-fig="6"><img src="fig6.png" alt="Figure 6: Training curves. Training and validation BCE loss for the gating network trained against each of the three backbones; the dashed vertical line marks the best-validation epoch at which model weights are restored. All three runs converge to a stable plateau within ≈50 epochs." loading="lazy"></figure>
+
+<figure data-fig="7"><img src="fig7.png" alt="Figure 7: Gating-threshold sweep on the test split. Change in overall and class-balanced Brier-minADE1 as a function of the binary gate threshold θ for each of the three backbones. Ungated fusion (θ=0) is harmful on average; gating drives the change into the green region across a broad plateau, indicating that the selected operating point is robust to the precise choice of θ." loading="lazy"></figure>
+
+<h3>B.6 Inference and gating</h3>
+\[ w_{\text{gate}}(\hat w;\theta)=\begin{cases}1,&\hat w\ge\theta,\\0,&\hat w<\theta,\end{cases} \tag{20}\]
+<p>[Summary] The binary gate outperforms a continuous gate. The threshold θ is swept over {0, 0.05, …, 0.95} on the validation fold, and a broad optimal plateau appears at θ∈[0.5, 0.7]. A single fixed θ per backbone is used at test time.</p>
+</body></html>
