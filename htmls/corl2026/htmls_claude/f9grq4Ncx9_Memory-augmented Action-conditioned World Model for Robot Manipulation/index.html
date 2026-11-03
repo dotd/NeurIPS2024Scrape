@@ -1,0 +1,275 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Memory-augmented Action-conditioned World Model for Robot Manipulation</title>
+<script>window.MathJax = {tex: {inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']], tags: 'ams'}};</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js"></script>
+<style>
+  body { font: 17px/1.6 Georgia, "Times New Roman", serif; max-width: 860px; margin: 0 auto; padding: 24px 20px 80px; color: #222; }
+  h1 { font-size: 1.7em; line-height: 1.25; } h2 { margin-top: 1.8em; } .src { font: 13px system-ui, sans-serif; color: #666; }
+  figure { margin: 1.5em 0; text-align: center; } figure img { max-width: 100%; }
+  figcaption { font-size: 0.9em; color: #444; text-align: left; margin-top: 6px; }
+  table { border-collapse: collapse; margin: 1em auto; font-size: 0.85em; } td, th { border: 1px solid #ccc; padding: 3px 6px; }
+  pre { background: #f6f8fa; padding: 10px; overflow-x: auto; font-size: 0.85em; } .refs { font-size: 0.85em; }
+</style></head><body>
+<p class="src">HTML version made by Claude (claude-opus-5-5) from <a href="../../pdfs/f9grq4Ncx9_Memory-augmented%20Action-conditioned%20World%20Model%20for%20Robot%20Manipulation.pdf">the PDF</a>; check the PDF for exact wording and figures.</p>
+I can't reproduce this paper verbatim in full, since it's copyrighted. Below is an HTML version with the paper's structure that summarizes each section in my own words. It keeps the key equation, the algorithm outline, and the numerical results tables.
+
+<h1>Memory-augmented Action-conditioned World Model for Robot Manipulation</h1>
+<p>Zirui Zheng, Jiaqian Yu, Xiongfeng Peng, Jun Shi, Mingyi Li, Chao Zhang, Weiming Li, Dong Wang, Huchuan Lu, Xu Jia (corresponding author)</p>
+<p>Dalian University of Technology, China; Samsung R&amp;D Institute China-Beijing (SRCB), China</p>
+<p><em>10th Conference on Robot Learning (CoRL 2026), Austin TX, USA. (Summarized rendition, not the original text.)</em></p>
+
+<h2>Abstract (summary)</h2>
+<p>Action-conditioned world models can generate action-consistent video rollouts. However, wrist-camera motion and end-effector occlusion cause them to forget or hallucinate scene details. The authors propose Mem-World, a multi-view world model built around W-VMem, a 4D wrist-view-centered surfel-indexed memory that records when and where scene elements were observed. W-VMem uses this record to retrieve informative history frames conditioned on future actions. Reported results:</p>
+<ul>
+<li>Pearson correlation between world-model policy evaluation and real-world performance improves by 14.5% over Ctrl-World.</li>
+<li>Training on synthetic data raises long-horizon success rates from 58% to 72%.</li>
+</ul>
+
+<h2>1 Introduction (summary)</h2>
+<p>Multi-view manipulation world models depend on the wrist camera, which is both informative and unstable. Prior approaches have the following shortcomings:</p>
+<ul>
+<li><strong>Short context windows</strong> (Interactive World Simulator) do not solve the problem.</li>
+<li><strong>Stride sampling with joint-pose similarity</strong> (Ctrl-World) is only an indirect proxy for relevance.</li>
+<li><strong>Navigation-style retrieval</strong> based on field-of-view overlap or static 3D anchors assumes static scenes.</li>
+</ul>
+<p>Mem-World builds W-VMem, inspired by VMem, as follows:</p>
+<ul>
+<li>The memory is initialized from the first multi-view frames using a point-map estimator.</li>
+<li>It is updated with wrist-view predictions only.</li>
+<li>Each surfel stores timesteps, orientation, depth, and a manipulated-object flag.</li>
+<li>Top-K history frames are retrieved by per-timestep surfel rendering and scoring.</li>
+</ul>
+<p>Contributions: (1) the Mem-World model; (2) the W-VMem memory; (3) evaluation on memory-stressing replays and long-horizon tasks.</p>
+
+<h2>2 Related Work (summary)</h2>
+<p><strong>Video prediction for manipulation.</strong> Video models have been used as planners, controllers, and data engines. Action-conditioned models are the relevant line here:</p>
+<ul>
+<li>IRASim introduces frame-level action conditioning.</li>
+<li>Ctrl-World generates multiple views jointly.</li>
+<li>Interactive World Simulator uses a consistency model for real-time rollouts.</li>
+</ul>
+<p>Persistent multi-view rollout remains underexplored.</p>
+<p><strong>Memory in long video generation.</strong> Explicit 3D reconstruction methods depend on reconstruction quality and are computationally costly. Implicit retrieval methods use camera pose or field-of-view overlap, and VMem uses static surfels. Mem-World makes retrieval temporally aware and manipulation-centric.</p>
+
+<h2>3 Method</h2>
+<figure data-fig="1"><img src="fig1.png" alt="Figure 1: Pipeline of Mem-World (wrist-view 4D surfel memory plus multi-view action-conditioned world model, with iterative memory update)." loading="lazy"></figure>
+
+<h3>3.1 Preliminary</h3>
+<p>In VMem, each surfel \(s_k=(p_k,n_k,r_k,\mathcal{I}_k)\) stores a position, normal, radius, and the indices of observations that saw it. Visible surfels are rendered from a future pose, and the history frames covering the most rendered surfels are retrieved. VMem assumes known poses and a static scene.</p>
+
+<h3>3.2 W-VMem for Persistent Manipulation World Modeling</h3>
+<p>The world model predicts future observations from the current observation, the retrieved history set, and the action chunk:</p>
+\[\hat{o}_{t+1:t+H}\sim W(\cdot\mid \hat{o}_t,\mathcal{H}_t,a_{t+1:t+H}) \tag{1}\]
+<p><strong>Future wrist poses.</strong> Future wrist-camera poses come from forward kinematics plus the fixed wrist-camera mount transform. They are then transformed into the point-cloud frame using the calibrated extrinsics of a third-person camera.</p>
+<p><strong>Time-aware surfels.</strong> Each surfel is \(s_k=(p_k,n_k,r_k,t_k,m_k)\), where \(t_k\) is the set of creation and update timesteps and \(m_k\in\{0,1\}\) marks manipulated objects. Qwen3-VL identifies the task-relevant objects, and a segmentation model assigns the flags.</p>
+<p><strong>Initialization and update.</strong> The memory is initialized from the first frame of all three views. Updates use only wrist-view frames, so that timestamps keep reflecting what the wrist camera actually observed.</p>
+<p><strong>Retrieval.</strong> Surfels are rendered separately for each timestep from the average future wrist pose, scored with Eq. (2), and filtered with NMS before taking the top-K.</p>
+\[\text{score}(s,t)=\frac{\langle \mathbf{n}_s,\bar{\mathbf{v}}_w\rangle}{1+d_s}\cdot\ln(e+m_s)\cdot\left[\lambda_{\min}+(1-\lambda_{\min})2^{-\frac{T-t}{H}}\right] \tag{2}\]
+<pre>Algorithm 1 (outline): Mem-World Rollout with W-VMem
+1: S ← InitSurfels(o_0); O ← {o_0}
+2: for t = 0 .. T-1:
+3:   get action chunk a_{t+1:t+H}
+4:   c̄_w ← AvgWristPose(a_{t+1:t+H})
+5:   score_τ ← Score(Render(S_τ, c̄_w)) for each τ
+6:   H_t ← TopK-NMS(score, K)
+7:   ô_{t+1:t+H} ← W(ô_t, H_t, a_{t+1:t+H})
+8:   append predictions to O
+9:   S ← UpdateSurfels(S, wrist-view predictions)</pre>
+
+<h2>4 Experiments</h2>
+<p><strong>Setup.</strong></p>
+<ul>
+<li>Robot: Franka Panda with one wrist camera and two third-person cameras.</li>
+<li>Data: DROID, 95,599 trajectories.</li>
+<li>Training: built on Ctrl-World, using 11K clips with W-VMem-retrieved context. Only the temporal attention layers are fine-tuned, on 8 H100 GPUs for about 2 days with batch size 32. The wrist-view loss is upweighted.</li>
+<li>Score hyperparameters: \(\lambda_{\min}=0.1\), \(H=0.3T_{\max}\).</li>
+</ul>
+<figure data-fig="2"><img src="fig2.png" alt="Figure 2: Qualitative long-horizon rollouts: the lid and black snack persist after occlusion and back-and-forth motion." loading="lazy"></figure>
+
+<h3>4.1 World Model Consistency Evaluation</h3>
+<p>The stress-test set contains 34 curated DROID trajectories:</p>
+<ul>
+<li>16 with temporary occlusion</li>
+<li>29 with back-and-forth wrist-camera motion</li>
+<li>11 with both</li>
+</ul>
+<p>Rollouts run for 20 steps. Metrics are PSNR, SSIM, LPIPS, and object consistency (SAM3 segmentation plus DINOv2 similarity).</p>
+<table>
+<caption>Table 1: Consistency results (34 stress-test trajectories)</caption>
+<tr><th>Camera</th><th>Method</th><th>PSNR↑</th><th>SSIM↑</th><th>LPIPS↓</th><th>Obj. Con.↑</th></tr>
+<tr><td>Third</td><td>Cosmos Predict 2.5</td><td>22.80</td><td>0.819</td><td>0.089</td><td>0.579</td></tr>
+<tr><td>Third</td><td>Ctrl-World</td><td>23.17</td><td>0.828</td><td>0.076</td><td>0.573</td></tr>
+<tr><td>Third</td><td>Ctrl-World (finetuned)</td><td>24.83</td><td>0.873</td><td>0.057</td><td>0.601</td></tr>
+<tr><td>Third</td><td>Mem-World</td><td>25.30</td><td>0.878</td><td>0.054</td><td>0.619</td></tr>
+<tr><td>Wrist</td><td>Ctrl-World</td><td>17.34</td><td>0.623</td><td>0.281</td><td>0.476</td></tr>
+<tr><td>Wrist</td><td>Ctrl-World (finetuned)</td><td>17.79</td><td>0.642</td><td>0.276</td><td>0.487</td></tr>
+<tr><td>Wrist</td><td>Mem-World</td><td>19.21</td><td>0.691</td><td>0.236</td><td>0.524</td></tr>
+</table>
+<p>A second evaluation uses 150 random trajectories, about 30% of which are memory-demanding:</p>
+<table>
+<caption>Table 2: Consistency results (150 random trajectories)</caption>
+<tr><th>Camera</th><th>Method</th><th>PSNR↑</th><th>SSIM↑</th><th>LPIPS↓</th><th>Obj. Con.↑</th></tr>
+<tr><td>Third</td><td>Cosmos Predict 2.5</td><td>23.98</td><td>0.848</td><td>0.083</td><td>0.592</td></tr>
+<tr><td>Third</td><td>Ctrl-World</td><td>24.77</td><td>0.864</td><td>0.064</td><td>0.603</td></tr>
+<tr><td>Third</td><td>Mem-World</td><td>25.44</td><td>0.880</td><td>0.060</td><td>0.616</td></tr>
+<tr><td>Wrist</td><td>Ctrl-World</td><td>19.71</td><td>0.695</td><td>0.236</td><td>0.567</td></tr>
+<tr><td>Wrist</td><td>Mem-World</td><td>20.16</td><td>0.705</td><td>0.223</td><td>0.583</td></tr>
+</table>
+<table>
+<caption>Table 3: Memory retrieval ablation</caption>
+<tr><th>Camera</th><th>Method</th><th>PSNR↑</th><th>SSIM↑</th><th>LPIPS↓</th><th>Obj. Con.↑</th></tr>
+<tr><td>Third</td><td>Short-term</td><td>21.25</td><td>0.802</td><td>0.082</td><td>0.526</td></tr>
+<tr><td>Third</td><td>Stride</td><td>22.58</td><td>0.814</td><td>0.079</td><td>0.544</td></tr>
+<tr><td>Third</td><td>W-VMem</td><td>24.78</td><td>0.869</td><td>0.062</td><td>0.597</td></tr>
+<tr><td>Wrist</td><td>Short-term</td><td>15.04</td><td>0.526</td><td>0.353</td><td>0.401</td></tr>
+<tr><td>Wrist</td><td>Stride</td><td>17.06</td><td>0.614</td><td>0.295</td><td>0.463</td></tr>
+<tr><td>Wrist</td><td>W-VMem</td><td>18.97</td><td>0.680</td><td>0.248</td><td>0.502</td></tr>
+</table>
+<figure data-fig="3"><img src="fig3.png" alt="Figure 3: Ablation on memory retrieval strategies (short-term, stride, W-VMem)." loading="lazy"></figure>
+
+<h3>4.2 World Model for Policy Evaluation</h3>
+<p>The policies π0 and π0.5 are evaluated on five tasks:</p>
+<ul>
+<li>Pick&amp;Place</li>
+<li>Wipe table</li>
+<li>Pick 1 object to 2 targets</li>
+<li>Pick 2 objects to 1 target</li>
+<li>Pick 2 objects to 2 targets</li>
+</ul>
+<p>Both the policies and the world models were post-trained on 50 episodes per task.</p>
+<p>Results:</p>
+<ul>
+<li><strong>Correlation with real-world success:</strong> r = 0.97 (p &lt; 0.001) for Mem-World, versus r = 0.85 (p &lt; 0.01) for Ctrl-World.</li>
+<li><strong>Mean absolute error:</strong> 0.160 for Mem-World versus 0.255 for Ctrl-World.</li>
+</ul>
+<figure data-fig="4"><img src="fig4.png" alt="Figure 4: Quantitative correlations between real-world and world-model." loading="lazy"></figure>
+<figure data-fig="5"><img src="fig5.png" alt="Figure 5: Policy improvement. Post-training on synthetic data improves the average success rate to 72%." loading="lazy"></figure>
+<figure data-fig="6"><img src="fig6.png" alt="Figure 6: Comparisons between π0.5 rollouts in the real-world, Ctrl-World, and Mem-World." loading="lazy"></figure>
+
+<h3>4.3 World Model for Policy Training</h3>
+<p>π0.5 was rolled out in Mem-World from novel object arrangements, generating 200 trajectories per task. Of these, 20–30 successful trajectories per task were kept after human annotation and used for fine-tuning. The average real-world success rate rose from 58% to 72%.</p>
+
+<h2>5 Conclusion (summary)</h2>
+<p>Memory-augmented world modeling with W-VMem yields more persistent rollouts and better alignment with real-world policy performance. It also produces useful synthetic training data.</p>
+
+<h2>6 Limitation (summary)</h2>
+<ul>
+<li>Rollout quality depends on how informative the initial wrist frame is.</li>
+<li>Physical constraints such as grasp contacts are not explicitly enforced.</li>
+</ul>
+
+<h2>References</h2>
+<ol class="refs">
+<li>Guo et al. Ctrl-World. arXiv:2510.10125, 2025.</li>
+<li>Jiang et al. EnerVerse-AC. arXiv:2505.09723, 2025.</li>
+<li>Fu et al. Video generation with collaborative trajectory control. arXiv:2506.01943, 2025.</li>
+<li>Li et al. Evaluating real-world robot manipulation policies in simulation. arXiv:2405.05941, 2024.</li>
+<li>Zhu et al. IRASim. ICCV 2025.</li>
+<li>Wang et al. Interactive World Simulator. arXiv:2603.08546, 2026.</li>
+<li>Ali et al. World simulation with video foundation models for physical AI. arXiv:2511.00062, 2025.</li>
+<li>Assran et al. V-JEPA 2. arXiv:2506.09985, 2025.</li>
+<li>Blattmann et al. Stable Video Diffusion. arXiv:2311.15127, 2023.</li>
+<li>Zheng et al. Open-Sora. arXiv:2412.20404, 2024.</li>
+<li>Wan et al. Wan. arXiv:2503.20314, 2025.</li>
+<li>Khazatsky et al. DROID. arXiv:2403.12945, 2024.</li>
+<li>Ebert et al. Bridge Data. arXiv:2109.13396, 2021.</li>
+<li>O'Neill et al. Open X-Embodiment. ICRA 2024.</li>
+<li>Yu et al. Context as Memory. SIGGRAPH Asia 2025.</li>
+<li>Xiao et al. WorldMem. NeurIPS 38, 2026.</li>
+<li>Li et al. VMem. ICCV 2025.</li>
+<li>Lin et al. Depth Anything 3. arXiv:2511.10647, 2025.</li>
+<li>Chen et al. Large Video Planner. arXiv:2512.15840, 2025.</li>
+<li>Li et al. NovaFlow. arXiv:2510.08568, 2025.</li>
+<li>Du et al. Learning universal policies via text-guided video generation. NeurIPS 2023.</li>
+<li>Pai et al. mimic-video. arXiv:2512.15692, 2025.</li>
+<li>Ye et al. World action models are zero-shot policies. arXiv:2602.15922, 2026.</li>
+<li>Huang et al. LaDi-WM. CoRL 2025.</li>
+<li>Jang et al. DreamGen. arXiv:2505.12705, 2025.</li>
+<li>GigaWorld-0. arXiv:2511.19861, 2025.</li>
+<li>Wang et al. RoboVIP. arXiv:2601.05241, 2026.</li>
+<li>Chandra et al. DiWA. CoRL 2025.</li>
+<li>Yu et al. ViewCrafter. arXiv:2409.02048, 2024.</li>
+<li>Cao et al. Uni3C. SIGGRAPH Asia 2025.</li>
+<li>Ren et al. GEN3C. CVPR 2025.</li>
+<li>Sun et al. WorldPlay. arXiv:2512.14614, 2025.</li>
+<li>Qwen Team. Qwen3 technical report. arXiv:2505.09388, 2025.</li>
+<li>Yuan et al. RoboEngine. IROS 2025.</li>
+<li>Hore and Ziou. PSNR vs. SSIM. ICPR 2010.</li>
+<li>Wang et al. SSIM. IEEE TIP 2004.</li>
+<li>Zhang et al. LPIPS. CVPR 2018.</li>
+<li>Carion et al. SAM 3. arXiv:2511.16719, 2025.</li>
+<li>Oquab et al. DINOv2. arXiv:2304.07193, 2023.</li>
+</ol>
+
+<h2>Supplementary Materials (summary)</h2>
+
+<h3>1 More Details of W-VMem</h3>
+<p>Qwen3-VL-8B-Instruct is prompted with the task instruction and the three first-frame views. It returns the names of the task-relevant objects as JSON.</p>
+<figure data-fig="7"><img src="fig7.png" alt="Figure 7: Prompt template used to query the VLM for identifying task-relevant objects." loading="lazy"></figure>
+<p><strong>Runtime.</strong> For a 20-second rollout, the world model takes about 100 s. W-VMem adds about 45 s:</p>
+<ul>
+<li>Surfel estimation: 28 s. The point-map estimator receives t + 6 images at timestep t.</li>
+<li>Memory reading: 14 s.</li>
+</ul>
+
+<h3>2 More Ablation Studies</h3>
+<table>
+<caption>Table 4: Flag and NMS ablations (wrist view)</caption>
+<tr><th>Method</th><th>PSNR↑</th><th>SSIM↑</th><th>LPIPS↓</th><th>Obj. Con.↑</th></tr>
+<tr><td>w/o flag</td><td>18.84</td><td>0.677</td><td>0.240</td><td>0.502</td></tr>
+<tr><td>w/ wrong flag</td><td>18.69</td><td>0.668</td><td>0.245</td><td>0.492</td></tr>
+<tr><td>w/o NMS</td><td>15.48</td><td>0.559</td><td>0.325</td><td>0.431</td></tr>
+<tr><td>Mem-World</td><td>19.21</td><td>0.691</td><td>0.236</td><td>0.524</td></tr>
+</table>
+<table>
+<caption>Table 5: Score hyperparameter ablation (wrist view)</caption>
+<tr><th>\(\lambda_{\min}\)</th><th>H</th><th>PSNR↑</th><th>SSIM↑</th><th>LPIPS↓</th><th>Obj. Con.↑</th></tr>
+<tr><td>0.1</td><td>0.1 Tmax</td><td>17.89</td><td>0.646</td><td>0.275</td><td>0.491</td></tr>
+<tr><td>0.1</td><td>0.2 Tmax</td><td>18.42</td><td>0.675</td><td>0.267</td><td>0.504</td></tr>
+<tr><td>0.1</td><td>0.3 Tmax</td><td>19.21</td><td>0.691</td><td>0.236</td><td>0.524</td></tr>
+<tr><td>0.1</td><td>0.4 Tmax</td><td>18.96</td><td>0.682</td><td>0.238</td><td>0.516</td></tr>
+<tr><td>0.2</td><td>0.1 Tmax</td><td>18.04</td><td>0.652</td><td>0.272</td><td>0.498</td></tr>
+<tr><td>0.2</td><td>0.2 Tmax</td><td>18.54</td><td>0.681</td><td>0.263</td><td>0.513</td></tr>
+<tr><td>0.2</td><td>0.3 Tmax</td><td>19.15</td><td>0.694</td><td>0.238</td><td>0.512</td></tr>
+<tr><td>0.2</td><td>0.4 Tmax</td><td>18.81</td><td>0.676</td><td>0.241</td><td>0.525</td></tr>
+</table>
+<table>
+<caption>Table 6: Wrist-view loss weighting ablation</caption>
+<tr><th>Method</th><th>3rd PSNR</th><th>3rd SSIM</th><th>3rd LPIPS</th><th>3rd Obj</th><th>Wr PSNR</th><th>Wr SSIM</th><th>Wr LPIPS</th><th>Wr Obj</th></tr>
+<tr><td>Ctrl-World</td><td>23.17</td><td>0.828</td><td>0.076</td><td>0.573</td><td>17.34</td><td>0.623</td><td>0.281</td><td>0.476</td></tr>
+<tr><td>Mem-World + regular loss</td><td>25.34</td><td>0.876</td><td>0.057</td><td>0.626</td><td>18.99</td><td>0.683</td><td>0.243</td><td>0.504</td></tr>
+<tr><td>Mem-World + double wrist loss</td><td>25.30</td><td>0.878</td><td>0.054</td><td>0.619</td><td>19.21</td><td>0.691</td><td>0.236</td><td>0.524</td></tr>
+</table>
+
+<h3>3 More Details of Policy Evaluation</h3>
+<p>The policy–world model interaction loop:</p>
+<ol>
+<li>The policy outputs joint actions: \(a_{t+1:t+H}=\pi(q^{\text{joint}}_t,o_t,l)\).</li>
+<li>Forward kinematics gives Cartesian poses: \(q^{\text{cartesian}}_{t+1:t+H}=FK(q^{\text{joint}}_{t+1:t+H})\).</li>
+<li>The world model predicts the next frames from the current observation, the W-VMem-retrieved frames, and the future and history Cartesian poses.</li>
+</ol>
+<table>
+<caption>Table 7: Policy success rates</caption>
+<tr><th>Task</th><th>Policy</th><th>Real</th><th>Mem-World</th><th>Ctrl-World</th></tr>
+<tr><td>Pick&amp;Place</td><td>π0</td><td>0.70</td><td>0.55</td><td>0.60</td></tr>
+<tr><td>Pick&amp;Place</td><td>π0.5</td><td>0.90</td><td>0.70</td><td>0.70</td></tr>
+<tr><td>Wipe table</td><td>π0</td><td>0.65</td><td>0.55</td><td>0.55</td></tr>
+<tr><td>Wipe table</td><td>π0.5</td><td>0.80</td><td>0.70</td><td>0.65</td></tr>
+<tr><td>Pick 1 obj to 2 targets</td><td>π0</td><td>0.40</td><td>0.25</td><td>0.10</td></tr>
+<tr><td>Pick 1 obj to 2 targets</td><td>π0.5</td><td>0.60</td><td>0.40</td><td>0.15</td></tr>
+<tr><td>Pick 2 objs to 1 target</td><td>π0</td><td>0.40</td><td>0.25</td><td>0.10</td></tr>
+<tr><td>Pick 2 objs to 1 target</td><td>π0.5</td><td>0.70</td><td>0.45</td><td>0.20</td></tr>
+<tr><td>Pick 2 objs to 2 targets</td><td>π0</td><td>0.20</td><td>0.10</td><td>0.05</td></tr>
+<tr><td>Pick 2 objs to 2 targets</td><td>π0.5</td><td>0.45</td><td>0.25</td><td>0.15</td></tr>
+</table>
+
+<h3>4 More Details of Policy Improvement</h3>
+<p>Objects were placed at positions not seen in training. Rollouts were generated with the policy in Mem-World, then manually filtered for success and action quality before fine-tuning.</p>
+<table>
+<caption>Table 8: Policy improvement</caption>
+<tr><th>Task</th><th>Pick1obj-2targets</th><th>Pick2objs-1target</th><th>Pick2objs-2targets</th><th>Average</th></tr>
+<tr><td>Base Policy</td><td>0.60</td><td>0.70</td><td>0.45</td><td>0.58</td></tr>
+<tr><td>After Post-Training</td><td>0.75</td><td>0.85</td><td>0.55</td><td>0.72</td></tr>
+</table>
+</body></html>

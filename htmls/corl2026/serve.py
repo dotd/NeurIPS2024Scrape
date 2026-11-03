@@ -3,10 +3,11 @@
 The API key stays here (secrets/claude_api/claude_api.txt), never in index.html. Summaries are cached in
 summaries.json next to this file; build.py embeds them so they also show when index.html is opened as a file.
 
-    uv run python htmls/corl2026/serve.py      # then open http://127.0.0.1:8026
+    uv run python htmls/corl2026/serve.py      # then open http://127.0.0.1:8026/Corl2026/
 """
 
 import base64
+import csv
 import glob
 import http.server
 import json
@@ -27,6 +28,7 @@ KEY_FILE = os.path.join(ROOT, "secrets", "claude_api", "claude_api.txt")
 SUMMARIES = os.path.join(HERE, "summaries.json")
 RATINGS = os.path.join(HERE, "ratings.json")  # your 1-5 star ratings
 PORT = 8026
+PREFIX = "/Corl2026"  # the browser lives at http://127.0.0.1:8026/Corl2026/
 MODEL = "claude-opus-5-5"
 PRICE_IN, PRICE_OUT = 4 / 1e6, 20 / 1e6  # $ per token, Opus 5.5
 MAX_PDF_BYTES = 23 * 1024 * 1024  # 32 MB request limit after base64 (+33%); bigger PDFs go as extracted text
@@ -40,6 +42,15 @@ Robots and setup: the robots (exact models), sensors, simulators, tasks and data
 Results: the main quantitative findings versus baselines, with numbers.
 Add paragraphs (e.g. ablations, limitations, takeaways) when the paper warrants it."""
 
+LINKS = os.path.join(HERE, "links.json")  # paper id -> {url (None if not found), cost, searches}
+WEB_SEARCH_PRICE = 10 / 1000  # $ per web search
+LINK_PROMPT = """Find a publicly accessible copy of this paper that is not on openreview.net.
+Prefer its arXiv abstract page (https://arxiv.org/abs/...); otherwise the project page or another open copy.
+Make sure it is this exact paper (same title and authors), not a related one.
+Title: {title}
+Authors: {authors}
+End your answer with one line: "URL: <the url>", or "URL: NONE" if there is no such copy."""
+
 HTML_DIR = os.path.join(HERE, "htmls_claude")  # htmls_claude/<pdf name>/index.html + figN.png + meta.json
 HTML_PY_DIR = os.path.join(HERE, "htmls_python")  # htmls_python/<pdf name>/index.html + img/ + meta.json
 PDF_TO_HTML = os.path.join(ROOT, "specific_scripts", "pdf_to_html.py")
@@ -51,6 +62,15 @@ Write all math as LaTeX: inline \\( ... \\), display \\[ ... \\] (keep equation 
 For each figure, at the place it appears, output exactly:
 <figure data-fig="N"><figcaption>Figure N: the full caption</figcaption></figure>
 where N is the figure number. Do not describe the image. Put the references in an <ol class="refs">."""
+CONDENSE_PROMPT = """Below is the inner HTML of a paper's web version. Rewrite it with about 50% less text.
+Condense the prose of every section: keep the claims, method, numbers and conclusions, cut repetition and filler.
+Keep every heading, the title, authors and affiliations, and the section order unchanged.
+Tokens like ⟦K12⟧ stand for figures, tables, equations and references: copy each one exactly, in its place.
+Every token that sits on its own (not inside a sentence) must be kept. A token inside a sentence may only be
+dropped if you drop that whole sentence.
+Output only the condensed inner HTML, with no markdown and no code fences."""
+KEEP_RE = re.compile(r'<figure\b.*?</figure>|<table\b.*?</table>|<pre\b.*?</pre>|<ol class="refs">.*?</ol>'
+                     r"|\\\[.*?\\\]|\\\(.*?\\\)", re.S)
 HTML_TEMPLATE = """<!doctype html>
 <html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{title}</title>
@@ -88,28 +108,70 @@ def ask(pdf, prompt, max_tokens, effort):
     else:
         with pymupdf.open(pdf) as d:
             doc = {"type": "text", "text": "\n".join(p.get_text() for p in d)}
+    return ask_content([doc, {"type": "text", "text": prompt}], max_tokens, effort)
+
+
+def ask_content(content, max_tokens, effort):
+    """Send one user message to Claude; returns {text, cost, input_tokens, output_tokens}."""
     with client.beta.messages.stream(
         model=MODEL, max_tokens=max_tokens,
         output_config={"effort": effort},
         betas=["server-side-fallback-2026-07-01"],
         extra_body={"fallbacks": "default"},  # re-run on a fallback model if a safety classifier declines
-        messages=[{"role": "user", "content": [doc, {"type": "text", "text": prompt}]}],
+        messages=[{"role": "user", "content": content}],
     ) as stream:
         msg = stream.get_final_message()
     if msg.stop_reason == "refusal":
         raise RuntimeError("Claude declined this paper")
     if msg.stop_reason == "max_tokens":
         raise RuntimeError("Claude's output was cut off (paper too long)")
-    u = msg.usage
+    return {"text": "".join(b.text for b in msg.content if b.type == "text").strip(), **usage(msg.usage)}
+
+
+def usage(u):
+    """{cost, input_tokens, output_tokens} of one response."""
     # ponytail: priced at Opus rates even if a refusal fallback model answered (rare); thinking is in output_tokens
     tokens_in = u.input_tokens + (u.cache_creation_input_tokens or 0) + (u.cache_read_input_tokens or 0)
-    return {"text": "".join(b.text for b in msg.content if b.type == "text").strip(),
-            "cost": round(tokens_in * PRICE_IN + u.output_tokens * PRICE_OUT, 4),
+    return {"cost": round(tokens_in * PRICE_IN + u.output_tokens * PRICE_OUT, 4),
             "input_tokens": tokens_in, "output_tokens": u.output_tokens}
 
 
 def summarize(pdf):
     return ask(pdf, PROMPT, 16000, "medium")
+
+
+def find_link(pid):
+    """Claude + web search for a non-OpenReview copy of the paper (arXiv preferred). Returns {url or None, cost, searches}."""
+    with open(build.CSV, newline="") as f:
+        row = next((r for r in csv.DictReader(f, delimiter="\t", quoting=csv.QUOTE_NONE)
+                    if r["id"].split("id=")[-1] == pid), None)
+    if not row:
+        raise RuntimeError("paper not in the CSV")
+    messages = [{"role": "user", "content": LINK_PROMPT.format(title=row["title"], authors=row["authors"])}]
+    cost = searches = 0
+    for _ in range(4):  # a long server-side search loop stops with pause_turn; send it back to continue
+        with client.beta.messages.stream(
+            model=MODEL, max_tokens=16000,
+            output_config={"effort": "low"},
+            betas=["server-side-fallback-2026-07-01"],
+            extra_body={"fallbacks": "default"},
+            tools=[{"type": "web_search_20260209", "name": "web_search", "max_uses": 5}],
+            messages=messages,
+        ) as stream:
+            msg = stream.get_final_message()
+        n = (msg.usage.server_tool_use.web_search_requests or 0) if msg.usage.server_tool_use else 0
+        searches += n
+        cost += usage(msg.usage)["cost"] + n * WEB_SEARCH_PRICE
+        if msg.stop_reason != "pause_turn":
+            break
+        messages.append({"role": "assistant", "content": msg.content})
+    if msg.stop_reason == "refusal":
+        raise RuntimeError("Claude declined this paper")
+    text = "".join(b.text for b in msg.content if b.type == "text")
+    found = re.findall(r"URL:\s*(\S+)", text)
+    url = found[-1].strip("`<>*.,;)\"'") if found else ""
+    ok = re.match(r"https?://", url) and "openreview.net" not in url  # the answer comes from web pages: check it
+    return {"url": url if ok else None, "cost": round(cost, 4), "searches": searches}
 
 
 def html_version(pid, pdf):
@@ -143,6 +205,64 @@ def html_version(pid, pdf):
     return {"path": os.path.relpath(os.path.join(out, "index.html"), HERE), **meta}
 
 
+def condense(page):
+    """Claude HTML version -> condensed.html beside it (+ condensed.json): prose ~50% shorter.
+
+    Figures, tables, algorithms, references and math are swapped for ⟦Kn⟧ tokens before Claude sees the
+    page and put back after, so they come through byte for byte. Returns {path, cost, ...}."""
+    html = open(page).read()
+    m = re.search(r'(<p class="src">.*?</p>\n)(.*)(\n</body>)', html, re.S)
+    if not m:
+        raise RuntimeError("unexpected HTML layout")
+    kept = []
+
+    def keep(k):
+        kept.append(k.group(0))
+        return f"⟦K{len(kept) - 1}⟧"
+
+    body = KEEP_RE.sub(keep, m.group(2))
+    r = ask_content(CONDENSE_PROMPT + "\n\n" + body, 128000, "low")
+    out = re.sub(r"^```(?:html)?\s*|\s*```$", "", r["text"])
+    out = re.sub(r"<script\b.*?</script>", "", out, flags=re.S | re.I)
+    missing = [i for i, k in enumerate(kept) if not k.startswith("\\(") and f"⟦K{i}⟧" not in out]
+    if missing:  # inline math may go with a cut sentence; nothing else may
+        raise RuntimeError(f"Claude dropped {len(missing)} figures / tables / equations; retry")
+    out = re.sub(r"⟦K(\d+)⟧", lambda t: kept[int(t.group(1))] if int(t.group(1)) < len(kept) else "", out)
+    src = m.group(1).replace("HTML version made by Claude", "Condensed HTML version (text ~50% shorter; "
+                             '<a href="index.html">full version</a>) made by Claude')
+    path = os.path.join(os.path.dirname(page), "condensed.html")
+    with open(path, "w") as f:
+        f.write(html[:m.start()] + src + out + html[m.start(3):])
+    meta = {"cost": r["cost"], "input_tokens": r["input_tokens"], "output_tokens": r["output_tokens"],
+            "chars_before": len(re.sub(r"<[^>]+>", "", body)), "chars_after": len(re.sub(r"<[^>]+>", "", out))}
+    json.dump(meta, open(os.path.join(os.path.dirname(page), "condensed.json"), "w"))
+    with lock:
+        build.main()
+    return {"path": os.path.relpath(path, HERE), **meta}
+
+
+def condense_button(page):
+    """Snippet added to a served Claude HTML page: the Condense button, or the link once condensed."""
+    pid = os.path.basename(os.path.dirname(page)).split("_", 1)[0]
+    meta = os.path.join(os.path.dirname(page), "condensed.json")
+    inner = (f'<a href="condensed.html">✂️ Open condensed version (${json.load(open(meta))["cost"]:.2f})</a>'
+             if os.path.exists(meta) else "<button>✂️ Condense</button>")
+    return f"""<div id="condense" style="position:fixed;top:10px;right:12px;font:13px system-ui,sans-serif;
+background:#fff;padding:4px 8px;border:1px solid #ccc;border-radius:6px">{inner}</div>
+<script>
+const cb = document.querySelector('#condense button');
+if (cb) cb.onclick = async () => {{
+  cb.disabled = true; cb.textContent = '⏳ Condensing with Claude… (a few minutes)';
+  try {{
+    const r = await fetch('../../condense/{pid}', {{method: 'POST'}}), j = await r.json();  // page is htmls_claude/<dir>/
+    if (!r.ok) throw new Error(j.error);
+    cb.outerHTML = `<a href="condensed.html">✂️ Open condensed version ($${{j.cost.toFixed(2)}})</a>`;
+  }} catch (e) {{ cb.disabled = false; cb.textContent = '⚠️ ' + e.message + ' (retry)'; }}
+}};
+</script>
+"""
+
+
 def html_python(pdf):
     """No-LLM conversion (specific_scripts/pdf_to_html.py); a subprocess, as MuPDF isn't thread-safe. Returns {path, ...}."""
     out = os.path.join(HTML_PY_DIR, os.path.splitext(os.path.basename(pdf))[0])
@@ -171,6 +291,59 @@ class Handler(http.server.SimpleHTTPRequestHandler):
     def __init__(self, *a, **kw):
         super().__init__(*a, directory=HERE, **kw)
 
+    def parse_request(self):
+        """Everything lives under PREFIX/ (other sites can sit beside it); strip it so the handlers see paths in HERE."""
+        if not super().parse_request():
+            return False
+        if self.path.startswith(PREFIX + "/"):
+            self.path = self.path[len(PREFIX):]
+            return True
+        if self.path.split("?")[0] in ("/", PREFIX):  # the page's links are relative, so it needs the trailing slash
+            self.send_response(301)
+            self.send_header("Location", PREFIX + "/")
+            self.send_header("Content-Length", "0")
+            self.end_headers()
+        else:
+            self.send_error(404)
+        return False
+
+    def do_GET(self):
+        """Claude HTML pages get the Condense button; byte ranges, so movies seek (and play at all in Safari)."""
+        c = re.fullmatch(r"/htmls_claude/([^/]+)/index\.html", urllib.parse.unquote(self.path.split("?")[0]))
+        page = c and os.path.join(HTML_DIR, c.group(1), "index.html")
+        if page and c.group(1) not in {".", ".."} and os.path.isfile(page):
+            body = open(page).read().replace("</body>", condense_button(page) + "</body>", 1).encode()
+            self.send_response(200)
+            self.send_header("Content-Type", "text/html; charset=utf-8")
+            self.send_header("Content-Length", str(len(body)))
+            self.end_headers()
+            return self.wfile.write(body)
+        rng = re.fullmatch(r"bytes=(\d+)-(\d*)", self.headers.get("Range", ""))
+        path = self.translate_path(self.path)
+        if not rng or not os.path.isfile(path):
+            return super().do_GET()
+        size = os.path.getsize(path)
+        start, end = int(rng.group(1)), min(int(rng.group(2) or size - 1), size - 1)
+        if start > end:
+            self.send_response(416)
+            self.send_header("Content-Range", f"bytes */{size}")
+            return self.end_headers()
+        self.send_response(206)
+        self.send_header("Content-Type", self.guess_type(path))
+        self.send_header("Content-Range", f"bytes {start}-{end}/{size}")
+        self.send_header("Content-Length", str(end - start + 1))
+        self.send_header("Accept-Ranges", "bytes")
+        self.end_headers()
+        try:
+            with open(path, "rb") as f:
+                f.seek(start)
+                left = end - start + 1
+                while left > 0 and (chunk := f.read(min(1 << 20, left))):
+                    self.wfile.write(chunk)
+                    left -= len(chunk)
+        except (BrokenPipeError, ConnectionResetError):  # the browser drops the rest of "bytes=0-" once it seeks
+            pass
+
     def do_POST(self):
         r = re.fullmatch(r"/rate/([A-Za-z0-9_-]+)", self.path)
         if r:  # body: "1".."5", or "0" to clear
@@ -179,6 +352,23 @@ class Handler(http.server.SimpleHTTPRequestHandler):
                 return self.reply(400, {"error": "rating must be 0-5"})
             save(r.group(1), int(v) or None, RATINGS)
             return self.reply(200, {})
+        c = re.fullmatch(r"/condense/([A-Za-z0-9_-]+)", self.path)
+        if c:
+            pages = glob.glob(os.path.join(HTML_DIR, f"{c.group(1)}_*", "index.html"))
+            if not pages:
+                return self.reply(404, {"error": "make the Claude HTML version first"})
+            try:
+                return self.reply(200, condense(pages[0]))
+            except (anthropic.APIError, RuntimeError) as e:
+                return self.reply(502, {"error": str(e)})
+        k = re.fullmatch(r"/find_link/([A-Za-z0-9_-]+)", self.path)
+        if k:
+            try:
+                link = find_link(k.group(1))
+            except (anthropic.APIError, RuntimeError) as e:
+                return self.reply(502, {"error": str(e)})
+            save(k.group(1), link, LINKS)
+            return self.reply(200, link)
         h = re.fullmatch(r"/html_(claude|python)/([A-Za-z0-9_-]+)", self.path)
         if h:
             pdfs = glob.glob(os.path.join(HERE, "pdfs", f"{h.group(2)}_*.pdf"))
@@ -221,5 +411,5 @@ class Handler(http.server.SimpleHTTPRequestHandler):
 
 
 if __name__ == "__main__":
-    print(f"http://127.0.0.1:{PORT}")
+    print(f"http://127.0.0.1:{PORT}{PREFIX}/")
     http.server.ThreadingHTTPServer(("127.0.0.1", PORT), Handler).serve_forever()

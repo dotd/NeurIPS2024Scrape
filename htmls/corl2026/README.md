@@ -11,7 +11,7 @@ on-demand Claude summaries.
 open htmls/corl2026/index.html
 
 # browse + Summarize button
-uv run python htmls/corl2026/serve.py      # then open http://127.0.0.1:8026
+uv run python htmls/corl2026/serve.py      # then open http://127.0.0.1:8026/Corl2026/
 ```
 
 To open local PDFs in Preview, so you can highlight them, install the link handler once:
@@ -24,10 +24,13 @@ specific_scripts/install_openpdf_handler.sh
 
 **Views.** Use **Papers** (the default) or **Table**.
 - In Papers, each paper is a dropdown. Its summary line shows the title, `[keywords]`, the GitHub
-  icon, then badges: presentation type, 📈 citations, 🏅 max author h-index, 🤖 robots and
-  🏢 companies.
+  icon, then badges: presentation type, 📈 citations, 🏅 max author h-index, 🤖 robots,
+  🧠 backbones and 🏢 companies.
 - Opening a paper shows:
   - the Summarize button or summary;
+  - the HTML-version and 🔗 Find link to paper buttons;
+  - a nested **🎬 Movie / Movies (N)** dropdown (594 papers). The players are created only when it is
+    opened and load just the first frame until you press play; closing it pauses them;
   - every field;
   - the first figure;
   - a nested **All figures (N)** dropdown, a collage sized to fit the screen.
@@ -49,6 +52,7 @@ a recorded cost). On the right are the shown / total count and ↺ Reset filters
 | 🎤 Oral / Spotlight / Poster | Presentation type, taken from the `venue` field (21 oral, 72 spotlight, 594 poster). |
 | 🏷️ Primary / 🔖 Secondary keyword | The author-chosen CoRL topic (22 fixed topics each). |
 | 🤖 Robots | The top 50 robot platforms detected in the PDF text. |
+| 🧠 Backbones | Known models the paper mentions at least twice before References: vision encoders (ViT, DINO, CLIP, SigLIP, …), LLMs / VLMs (Qwen, Gemma, PaliGemma, …), VLAs (π0, OpenVLA, GR00T, Octo, …) and policy families (Diffusion Policy, ACT, …). |
 | 🏢 Companies | The top 20 companies in the affiliations. |
 | 🎓 Universities | The top 50 universities in the affiliations. |
 | 🧑‍🔬 Researchers | The 50 authors with the highest OpenAlex h-index. |
@@ -60,7 +64,7 @@ a recorded cost). On the right are the shown / total count and ↺ Reset filters
 | Sort | Default, author h-index, citations, or title A–Z. |
 
 The page remembers your last filters, search and sort, and restores them when you reopen it. This is
-per browser: the file page and http://127.0.0.1:8026 each keep their own copy. **↺ Reset filters** at the
+per browser: the file page and http://127.0.0.1:8026/Corl2026/ each keep their own copy. **↺ Reset filters** at the
 right end of the top bar clears everything.
 
 **Local PDF links.**
@@ -71,7 +75,7 @@ right end of the top bar clears everything.
 **Rating.** The ☆☆☆☆☆ on each paper's summary line is your 1–5 rating. Click a star to rate, click the
 same star again to clear it. Through `serve.py` ratings are saved to `ratings.json` and baked into
 `index.html`. On the page opened as a file they are kept in the browser (localStorage) and sent to the
-server the next time you open http://127.0.0.1:8026.
+server the next time you open http://127.0.0.1:8026/Corl2026/.
 
 **Summaries.**
 - **📝 Summarize** sends the PDF to Claude Opus (`claude-opus-5-5`). It needs `serve.py` running
@@ -97,6 +101,10 @@ server the next time you open http://127.0.0.1:8026.
   copied next to the page. It takes several minutes and needs `serve.py`. Once it exists, the button
   becomes **🌐 Open HTML version ($cost)**, which opens the page in a new tab. Claude can make
   transcription mistakes; the page links back to the PDF.
+- **🔗 Find link to paper** (next to the HTML buttons) asks Claude Opus with web search for a public copy of the
+  paper that is not on OpenReview, preferring the arXiv abstract page. It needs `serve.py` and takes about
+  30 s (about $0.10). The link replaces the button and is saved to `links.json`. If nothing is found, the button says so
+  and can be retried. Claude checks title and authors, but a wrong match is possible.
 - The API key is read by the server from `secrets/claude_api/claude_api.txt` and never goes into
   the HTML.
 
@@ -106,17 +114,20 @@ server the next time you open http://127.0.0.1:8026.
 |---|---|---|
 | `index.html` | The page. Self-contained: all data is embedded as JSON. | `build.py` |
 | `build.py` | Builds `index.html` from the CSV and the JSON files below. | — |
-| `serve.py` | Local server (127.0.0.1:8026). Serves the page and handles `POST`/`DELETE /summarize/<id>`, `POST /rate/<id>` and `POST /html_claude/<id>` / `POST /html_python/<id>`. Rebuilds after each change. | — |
+| `serve.py` | Local server at http://127.0.0.1:8026/Corl2026/ (`/` redirects there; other paths are free for more sites). Serves the page (with HTTP Range, for the movies) and handles `POST`/`DELETE /summarize/<id>`, `POST /rate/<id>` and `POST /html_claude/<id>` / `POST /html_python/<id>`. Rebuilds after each change. | — |
 | `first_page.json` | Title, abstract and figure paths per paper. | `specific_scripts/extract_first_page.py` |
 | `affiliations.json` | Companies and universities per paper, from the PDF header and footnotes, matched with ROR. | `specific_scripts/corl2026_affiliations.py` |
 | `openalex.json` | Paper citations, plus author ids and h-index. | `specific_scripts/fetch_corl2026_openalex.py` |
 | `github.json` | GitHub repos mentioned before References. | `specific_scripts/corl2026_github.py` |
 | `robots.json` | Robots mentioned at least twice before References. | `specific_scripts/corl2026_robots.py` |
+| `backbones.json` | Backbone models mentioned at least twice before References. | `specific_scripts/corl2026_backbones.py` |
 | `ratings.json` | Your 1–5 star ratings. | `serve.py` |
 | `summaries.json` | Claude summaries, empty until you press Summarize. | `serve.py` |
+| `links.json` | Non-OpenReview links (`url`, or `null` when none was found), with cost and number of searches. | `serve.py` |
 | `htmls_claude/<id>_<title>/` | Claude HTML versions: `index.html`, `figN.png`, `meta.json` (cost, tokens). | `serve.py` |
 | `htmls_python/<id>_<title>/` | Python HTML versions: `index.html`, `img/`, `meta.json` (seconds, pages). | `serve.py` → `specific_scripts/pdf_to_html.py` |
 | `pdfs/` | The paper PDFs (gitignored). | `OpenreviewScrape/pdf_downloader_CoRL_2026.py` |
+| `movies/paper_movies/` | Paper movies `<id>_<title>[_N].<ext>` (~55 GB, gitignored). Only their paths go into `index.html`; `serve.py` streams them with byte ranges so seeking works. | `specific_scripts/corl2026_sort_movies.py` |
 | `figs/` | Main figure `<id>.png` and all figures `<id>/fig<N>.png` (~2.5 GB, gitignored). | `extract_first_page.py` |
 
 The paper list itself is `ConferenceTables/robot-learning_org_CoRL_2026_Conference.csv`.
@@ -132,6 +143,7 @@ uv run python specific_scripts/corl2026_affiliations.py        # affiliations.js
 uv run python specific_scripts/fetch_corl2026_openalex.py      # openalex.json (calls api.openalex.org)
 uv run python specific_scripts/corl2026_github.py              # github.json
 uv run python specific_scripts/corl2026_robots.py              # robots.json
+uv run python specific_scripts/corl2026_backbones.py           # backbones.json
 uv run python htmls/corl2026/build.py                          # index.html
 ```
 
@@ -162,6 +174,12 @@ Every step can be re-run on its own. After any step, re-run `build.py` to update
     work are ignored.
   - Simulated robots (e.g. the Panda in LIBERO) still count.
   - Robots not on the list are missed. To add one, add a pattern and re-run the script.
+- **Backbones.**
+  - About 40 hand-written model-name patterns (`BACKBONES` in `corl2026_backbones.py`), with the same
+    two-mentions-before-References rule as robots.
+  - A model compared against as a baseline counts too, so the filter means "uses or compares with".
+    π0 / π0.5 matches ~220 papers for that reason.
+  - Models not on the list are missed. To add one, add a pattern and re-run the script.
 - **GitHub.**
   - `github.com/owner/repo` links in the PDF text and link annotations before References.
   - The first repo is usually the paper's own; others may be baselines.

@@ -1,0 +1,156 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>What Are We Actually Benchmarking in Robot Manipulation?</title>
+<script>window.MathJax = {tex: {inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']], tags: 'ams'}};</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js"></script>
+<style>
+  body { font: 17px/1.6 Georgia, "Times New Roman", serif; max-width: 860px; margin: 0 auto; padding: 24px 20px 80px; color: #222; }
+  h1 { font-size: 1.7em; line-height: 1.25; } h2 { margin-top: 1.8em; } .src { font: 13px system-ui, sans-serif; color: #666; }
+  figure { margin: 1.5em 0; text-align: center; } figure img { max-width: 100%; }
+  figcaption { font-size: 0.9em; color: #444; text-align: left; margin-top: 6px; }
+  table { border-collapse: collapse; margin: 1em auto; font-size: 0.85em; } td, th { border: 1px solid #ccc; padding: 3px 6px; }
+  pre { background: #f6f8fa; padding: 10px; overflow-x: auto; font-size: 0.85em; } .refs { font-size: 0.85em; }
+</style></head><body>
+<p class="src">HTML version made by Claude (claude-opus-5-5) from <a href="../../pdfs/RdvH11pAfJ_What%20Are%20We%20Actually%20Benchmarking%20in%20Robot%20Manipulation.pdf">the PDF</a>; check the PDF for exact wording and figures.</p>
+<p><em>Note: I can't reproduce this paper verbatim in full, since that would copy a long copyrighted work. Below is a faithful structured HTML <strong>summary</strong> that follows the paper's organization, with section headings, key results, the main equations, and figure placeholders with condensed captions. For the exact text, see the authors' release at https://ripl.github.io/manipulation_benchmark_audit/.</em></p>
+
+<h1>What Are We Actually Benchmarking in Robot Manipulation?</h1>
+<p>Tianchong Jiang<sup>1</sup>, Xiangshan Tan<sup>1,∗</sup>, Samuel Wheeler<sup>3,∗</sup>, Luzhe Sun<sup>1,∗</sup>, Tewodros W. Ayalew<sup>2,∗</sup>, Matthew Walter<sup>1</sup><br>
+<sup>1</sup>Toyota Technological Institute at Chicago; <sup>2</sup>University of Chicago; <sup>3</sup>Argonne National Laboratory. <sup>∗</sup>Equal contribution.</p>
+
+<h2>Abstract (summary)</h2>
+<p>Benchmark scores measure success under one fixed setup but are treated as evidence of general manipulation capability. The authors identify four failure modes: shortcut solvability, lack of statistical significance, creeping overfitting, and data-source dependence. They propose one diagnostic for each and audit LIBERO, CALVIN, SimplerEnv, RoboCasa, and RoboTwin 2.0. LIBERO, CALVIN, and SimplerEnv fail multiple diagnostics, while RoboCasa and RoboTwin 2.0 fail fewer. On LIBERO, a 0.09B probe with no language encoder scores near SOTA, and most reported gains are not provably significant. On CALVIN, randomizing block poses within the training range lowers performance for every tested policy.</p>
+
+<h2>1 Introduction (summary)</h2>
+<p>In March 2026, 79 arXiv papers reported LIBERO results. A benchmark is "meaningful" when a high score is evidence of general manipulation capability. The ideal validation, which would compare benchmark rankings against rankings on real-world tasks, is impractical. Cross-benchmark rank agreement is also uninformative, because authors select and tune for the benchmarks they report.</p>
+<figure data-fig="1"><img src="fig1.png" alt="Figure 1: Preview of the four diagnostics: (a) shortcut solvability on LIBERO; (b) only 18.3% of LIBERO SOTA claims provably significant; (c) CALVIN pose resampling lowers ATC; (d) SimplerEnv score cannot separate generalization from train–test proximity." loading="lazy"></figure>
+<p>Contributions: (1) four failure modes and their diagnostics; (2) an audit of five benchmarks; (3) released protocols, code, and rollout results.</p>
+
+<h2>2 Related Work (summary)</h2>
+<h3>2.1 Benchmark Audits in CV and NLP</h3>
+<p>Each failure mode has precedent in other fields:</p>
+<ul>
+<li>VQA language priors and the PASCAL "horse" watermark (shortcut solvability).</li>
+<li>Friedman/Nemenyi tests on VOC and the metric-learning reality check (statistical significance).</li>
+<li>Dataset bias, ImageNet-v2, and ImageNet-C (creeping overfitting).</li>
+<li>CIFAR near-duplicates and QA train–test overlap (data-source dependence).</li>
+</ul>
+<h3>2.2 Manipulation Benchmarks and Prior Audits</h3>
+<p>The paper defines tasks, task distributions, samples, and test sets. LIBERO-Pro and LIBERO-Plus perturb inputs outside the training distribution. In contrast, this paper's creeping-overfitting diagnostic keeps inputs inside the training distribution, so a drop cannot be blamed on weak generalization.</p>
+<figure data-fig="2"><img src="fig2.png" alt="Figure 2: Cumulative counts of arXiv papers reporting results on CALVIN, LIBERO, SimplerEnv, RoboCasa, and RoboTwin 2.0 (methodology in Appendix D)." loading="lazy"></figure>
+
+<h2>3 Shortcut Solvability (summary)</h2>
+<p>The probe has about 90M parameters: a DINOv2 encoder with an MLP head. It uses no language encoder, no robotics pretraining, and no expressive action head. Instructions are replaced by per-task embeddings looked up by index.</p>
+<table>
+<tr><th>Benchmark</th><th>Suite</th><th>DINO+MLP</th><th>Foundation VLA</th><th>Best reported</th></tr>
+<tr><td>LIBERO</td><td>Spatial / Object / Goal / Long</td><td>99.0 / 100.0 / 98.8 / 92.4%</td><td>OpenVLA 84.7 / 88.4 / 79.2 / 53.7%</td><td>99.8 / 100.0 / 99.5 / 98.8%</td></tr>
+<tr><td>CALVIN (ATC)</td><td>D→D / ABC→D / ABCD→D</td><td>3.123 / 3.242 / 3.872</td><td>2.83 / 2.48 / 4.09</td><td>4.52 / 4.78 / 4.80</td></tr>
+<tr><td>SimplerEnv</td><td>WidowX</td><td>0.0%</td><td>X-VLA 95.8%</td><td>97.9%</td></tr>
+<tr><td>RoboTwin 2.0</td><td>Clean / Randomized</td><td>60.4 / 59.4%</td><td>72.8 / 72.8%</td><td>95.8 / 96.1%</td></tr>
+<tr><td>RoboCasa</td><td>RSS24</td><td>18.8%</td><td>GR00T-N1 49.6%</td><td>79.2%</td></tr>
+</table>
+<p>Findings:</p>
+<ul>
+<li>LIBERO is shortcut-solvable.</li>
+<li>CALVIN is partially shortcut-solvable: the probe matches widely used policies but not the best.</li>
+<li>The other three benchmarks show no shortcut.</li>
+</ul>
+<p>The authors' claim is limited: a high LIBERO score is not, by itself, evidence of capability. They use a driving-test analogy, where passing by memorizing the answer key does not show driving ability.</p>
+
+<h2>4 Statistical Significance (summary)</h2>
+<p>For paired evaluations, the authors use a one-sided task-stratified paired Wald test:</p>
+\[ Z=\frac{TS(\hat\mu_B-\hat\mu_A)}{\sqrt{\frac{S}{S-1}\sum_{t=1}^T (s_t-d_t^2/S)}} \]
+<p>From top-line scores alone, they derive two sharp thresholds:</p>
+<ul>
+<li>A rejection-feasibility threshold \(\delta_\exists\): below it, no compatible outcome table can reject the null.</li>
+<li>A rejection-guarantee threshold \(\delta_\forall\): above it, every compatible table rejects.</li>
+</ul>
+<p>Gaps between the two thresholds are "inconclusive." Provably significant shares of SOTA claims:</p>
+<ul>
+<li>LIBERO: 18.3%</li>
+<li>SimplerEnv: 19.7%</li>
+<li>CALVIN: 43.9%</li>
+<li>RoboCasa: 53.3%</li>
+<li>RoboTwin 2.0: 73.7%</li>
+</ul>
+<figure data-fig="3"><img src="fig3.png" alt="Figure 3: Classification of reported previous-best-to-new comparisons per benchmark into no improvement, provably not significant, inconclusive, and provably significant (5% level)." loading="lazy"></figure>
+
+<h2>5 Creeping Overfitting (summary)</h2>
+<figure data-fig="4"><img src="fig4.png" alt="Figure 4: SimplerEnv stack task under three in-distribution changes (reverse language, stacked supports, random pose + arm) and resulting success rates." loading="lazy"></figure>
+<p><strong>Distribution overfitting.</strong> On CALVIN ABC→D, resampling block poses within the training range lowered performance for all three tested policies:</p>
+<table>
+<tr><th>Policy</th><th>ATC drop</th><th>5/5 chain-success drop</th></tr>
+<tr><td>X-VLA</td><td>1.03</td><td>25.0 pp</td></tr>
+<tr><td>GR-1</td><td>0.75</td><td>13.5 pp</td></tr>
+<tr><td>RoboFlamingo</td><td>0.50</td><td>6.4 pp</td></tr>
+</table>
+<p>On SimplerEnv, lower-scoring policies dropped most under reversed language. Higher-scoring policies dropped sharply under stacked supports, which is consistent with difficulty recovering depth from a single fixed camera.</p>
+<p><strong>Sample overfitting.</strong> Redrawing the test set produced only small changes:</p>
+<ul>
+<li>LIBERO: success moved by less than 1 pp.</li>
+<li>CALVIN: ATC moved by at most 0.11.</li>
+</ul>
+<p>The authors found no evidence of sample overfitting.</p>
+
+<h2>6 Data-Source Dependence (summary)</h2>
+<p>SimplerEnv trains on real BridgeData V2 but tests in simulation, and it does not restrict additional training data. To test this, the authors trained per-task 22M policies on 120 scripted simulated demonstrations collected next to the official test. These policies scored 94.8% (91/96), versus 95.8% for X-VLA. The score alone therefore cannot distinguish crossing the real-to-sim gap from removing it.</p>
+
+<h2>7 Discussion (summary)</h2>
+<p>All four failure modes share a root cause: a fixed-distribution average is used as a proxy for broad capability. The authors recommend two design goals for future benchmarks:</p>
+<ol>
+<li>Broad object and scene variation in the test distribution.</li>
+<li>Protocols that state significance thresholds, use test sets large enough to detect claimed gains, and require per-sample outcomes.</li>
+</ol>
+<p>The audited benchmarks remain useful for everyday development. IRT-based adaptive evaluation is a possible future direction.</p>
+
+<h2>8 Limitations (summary)</h2>
+<p>The diagnostics substitute for an impractical ideal test. Only a few policies could be reproduced, because few papers release both weights and evaluation code.</p>
+
+<h2>9 Conclusion (summary)</h2>
+<p>The most-reported benchmarks fail the most diagnostics. Code and per-rollout outcomes are available at https://github.com/ripl/ManipulationBenchmarkAudit.</p>
+
+<h2>Appendix (summary)</h2>
+<figure data-fig="5"><img src="fig5.png" alt="Figure 5: Example rendered observations from LIBERO, CALVIN, SimplerEnv, RoboCasa, and RoboTwin 2.0." loading="lazy"></figure>
+<h3>A Experiment Details</h3>
+<p><strong>A.1 Diagnostic coverage.</strong></p>
+<ul>
+<li>Shortcut solvability and statistical significance: applied to all five benchmarks.</li>
+<li>Distribution overfitting: CALVIN and SimplerEnv only.</li>
+<li>Sample overfitting: LIBERO and CALVIN only.</li>
+<li>Data-source dependence: SimplerEnv only.</li>
+</ul>
+<p><strong>A.2 Shortcut solvability details.</strong></p>
+<ul>
+<li>Checkpoints were selected on the test suite, which the benchmarks permit. Final-checkpoint means were 95.1% versus 97.6% for the best checkpoint on LIBERO.</li>
+<li>RoboTwin 2.0 per-task results are reported in Table 5.</li>
+<li>The SimplerEnv probe, which uses SigLIP text embeddings, scored 0%.</li>
+</ul>
+<p><strong>A.3 Creeping overfitting details.</strong> All comparisons use a matched local calibration rerun. Confidence intervals are Newcombe–Wilson or Wald intervals, reported in Tables 7–10.</p>
+<p><strong>A.4 Data-source dependence details.</strong> Scripted demonstrations were collected with small jitter around each grid point. Successes by task were 24/24, 23/24, 21/24, and 23/24.</p>
+<h3>B Bitwise Nondeterminism</h3>
+<p>Closed-loop rollouts amplify tiny numerical differences across CPU and GPU hardware. The paper therefore adopts protocol-level and statistical reproducibility as its standard rather than bitwise determinism.</p>
+<figure data-fig="6"><img src="fig6.png" alt="Figure 6: Propagation of a CPU-hardware difference in a LIBERO-Goal rollout from simulator state (step 0) to images (54), actions (58), and reward/done (88)." loading="lazy"></figure>
+<h3>C Top-Line Cutoffs for Bounded-Score Wald Tests</h3>
+<p>The appendix derives the exact lower envelope \(Q_{lo}=r-r^2/S\) (with \(L=qS+r\)) and the exact upper envelope \(Q_{hi}\), computed by dynamic programming over per-task maxima. Together these give a sharp paired classification. The paired cutoffs remain conservative for independently sampled evaluations. Non-integer reported totals are rounded half-to-even.</p>
+<h3>D Citation Tracker Methodology</h3>
+<p>Candidate papers were drawn from multiple bibliographic sources, deduplicated, and classified by usage, using first arXiv dates. The snapshot is dated 2026-05-21. Papers reporting results versus papers releasing public weights:</p>
+<table>
+<tr><th>Benchmark</th><th>Papers reporting results</th><th>Papers with public weights</th></tr>
+<tr><td>LIBERO</td><td>361</td><td>82</td></tr>
+<tr><td>CALVIN</td><td>166</td><td>41</td></tr>
+<tr><td>SimplerEnv</td><td>187</td><td>69</td></tr>
+<tr><td>RoboCasa</td><td>78</td><td>15</td></tr>
+<tr><td>RoboTwin 2.0</td><td>105</td><td>16</td></tr>
+</table>
+
+<h2>References</h2>
+<p>The paper cites 67 references. Key ones:</p>
+<ol class="refs">
+<li>Torralba &amp; Efros, Unbiased look at dataset bias, CVPR 2011.</li>
+<li>Liu et al., LIBERO, NeurIPS 2023.</li>
+<li>Mees et al., CALVIN, RA-L 2022.</li>
+<li>Li et al., Evaluating real-world robot manipulation policies in simulation (SimplerEnv), CoRL 2025.</li>
+<li>Nasiriany et al., RoboCasa, RSS 2024.</li>
+<li>Chen et al., RoboTwin 2.0, arXiv:2506.18088, 2025.</li>
+</ol>
+</body></html>

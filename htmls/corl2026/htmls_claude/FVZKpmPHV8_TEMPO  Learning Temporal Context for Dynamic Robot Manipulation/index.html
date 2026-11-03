@@ -1,0 +1,201 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TEMPO: Learning Temporal Context for Dynamic Robot Manipulation</title>
+<script>window.MathJax = {tex: {inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']], tags: 'ams'}};</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js"></script>
+<style>
+  body { font: 17px/1.6 Georgia, "Times New Roman", serif; max-width: 860px; margin: 0 auto; padding: 24px 20px 80px; color: #222; }
+  h1 { font-size: 1.7em; line-height: 1.25; } h2 { margin-top: 1.8em; } .src { font: 13px system-ui, sans-serif; color: #666; }
+  figure { margin: 1.5em 0; text-align: center; } figure img { max-width: 100%; }
+  figcaption { font-size: 0.9em; color: #444; text-align: left; margin-top: 6px; }
+  table { border-collapse: collapse; margin: 1em auto; font-size: 0.85em; } td, th { border: 1px solid #ccc; padding: 3px 6px; }
+  pre { background: #f6f8fa; padding: 10px; overflow-x: auto; font-size: 0.85em; } .refs { font-size: 0.85em; }
+</style></head><body>
+<p class="src">HTML version made by Claude (claude-opus-5-5) from <a href="../../pdfs/FVZKpmPHV8_TEMPO%20%20Learning%20Temporal%20Context%20for%20Dynamic%20Robot%20Manipulation.pdf">the PDF</a>; check the PDF for exact wording and figures.</p>
+I can't reproduce the full paper verbatim, since that would mean copying a long copyrighted work in its entirety. Below is a faithful HTML rendering of its structure instead. It includes the title, authors, and section hierarchy, paraphrased summaries of each section's content, the equations, every data table, all figure placeholders with condensed captions, and the reference list.
+
+<h1>TEMPO: Learning Temporal Context for Dynamic Robot Manipulation</h1>
+<p>Zhenyang Feng<sup>*</sup>, Jimin Heo<sup>*</sup>, Erik B. Sudderth, Unnat Jain<br>University of California, Irvine<br>{dfeng8, heoj4, sudderth, unnatj}@uci.edu</p>
+<p><sup>*</sup>Equal contribution.</p>
+
+<h2>Abstract (summary)</h2>
+<p>Pretrained VLAs excel at quasi-static manipulation but struggle with dynamic tasks because they condition on a single observation. The authors identify two representational failures. The first is <em>motion ambiguity</em>: a single frame carries no scene dynamics. The second is <em>state aliasing</em>: visually similar frames at different task phases require different actions. They argue that neither scale nor latency fixes these failures. TEMPO adds two temporal inputs to a frozen-backbone VLA: a motion summary from a frozen video foundation model and a compact proprioceptive history. Across four dynamic tasks, it raises Bottle Handover success from 44% to 74% and is the only method that resolves state aliasing. The authors also release TEMPO-Bench, which contains over 50k annotated frames. Project: https://tempo-robot.github.io/</p>
+<p><strong>Keywords:</strong> VLA Models; Dynamic manipulation; Representation Learning</p>
+
+<h2>1 Introduction</h2>
+<p>Single-frame VLAs implicitly assume objects are at rest. Moving targets require anticipating future states, and reducing latency alone cannot supply motion information. A second failure arises in multi-stage tasks: near-identical frames from different phases demand opposite actions. Both failures stem from the Markovian assumption.</p>
+<figure data-fig="1"><img src="fig1.png" alt="Figure 1: TEMPO makes a pretrained VLA motion-aware. Four dynamic tasks; a standard VLA cannot perceive scene evolution or disambiguate task phases, while TEMPO adds TEMPOMOT (motion representation) and TEMPOACT (proprioceptive history) to complete all four tasks." loading="lazy"></figure>
+<p>TEMPO consists of TEMPO<sub>MOT</sub>, a motion code from a frozen video foundation model, and TEMPO<sub>ACT</sub>, a compact proprioceptive summary. Together they add about 2M parameters (0.08%) on top of an asynchronous backbone (VLASH). TEMPO is evaluated on Bottle Handover, Drop Catch, Flick Catch, and Wine Pour. The contributions are: (1) formalizing the two failure modes; (2) the two plug-and-play inputs; and (3) the TEMPO-Bench release.</p>
+<figure data-fig="2"><img src="fig2.png" alt="Figure 2: Robot joint action (blue) does not track the human hand (red). In a Drop Catch rollout, the VLASH baseline oscillates while TEMPO tracks the hand." loading="lazy"></figure>
+
+<h2>2 Related Work</h2>
+<p><strong>Dynamic Tasks for Robotics.</strong> Task-specific systems for table tennis, tossing, and catching do not transfer to other tasks. Generalist VLAs do transfer, but they lack temporal context for dynamic scenes.</p>
+<p><strong>Asynchronous Inference for Dynamic Tasks.</strong> SmolVLA, RTC, VLASH, Leave No Observation Behind, DynamicVLA, and F2F-AP address <em>when</em> an action is applied. TEMPO is orthogonal: it addresses <em>what</em> the policy is conditioned on.</p>
+<p><strong>Visual and Visuomotor Representations.</strong> Prior pretrained representations (R3M, MVP, HPT, affordances, UVT, AnchorAlign) all condition on a single frame.</p>
+
+<h2>3 Motion Ambiguity and State Aliasing</h2>
+<p><strong>Motion ambiguity.</strong> A policy \(\pi(o_t)\) sees where objects are but not where they are going. Probes on the baselines give \(R^2 \le 0.03\) on Flick Catch and \(\le 0.09\) on Wine Pour.</p>
+<p><strong>State aliasing.</strong> Reaching and release-and-retract phases look alike, so baselines hesitate. On the untrimmed tasks, both baselines fail every rollout. To obtain nonzero baseline numbers, the release-and-retract phase was trimmed.</p>
+<table>
+<tr><th>Method</th><th>Flick Catch</th><th>Wine Pour</th></tr>
+<tr><td>RTC [4]</td><td>0%</td><td>0%</td></tr>
+<tr><td>VLASH [5]</td><td>0%</td><td>0%</td></tr>
+<tr><td>TEMPO (Ours)</td><td>68%</td><td>97.6%</td></tr>
+</table>
+<p>Table 1: Success on untrimmed Flick Catch and Wine Pour.</p>
+<p><strong>What the two failures require.</strong> Perceiving scene motion requires a signal built from recent observations. Telling task phases apart requires a signal built from the robot's own recent actions.</p>
+
+<h2>4 Temporal Encoding for Motion-aware Policy (TEMPO)</h2>
+<h3>4.1 TEMPO<sub>MOT</sub>: Captures Object and Scene Dynamics</h3>
+<p>A cache \(\mathcal{F}_t=\{\mathbf{f}_\tau\}_{\tau=t-W+1}^{t-1}\) holds features from the preceding \(W-1\) frames, and the current frame cross-attends to it:</p>
+\[\mathbf{m}_t = \phi(o_{t-W+1:t}) = \mathrm{CrossAttn}(\mathbf{f}_t, \mathcal{F}_t) \tag{1}\]
+<p>The encoder \(\phi\) is a frozen video foundation model; SAM 2.1-Tiny is the default.</p>
+<table>
+<tr><th>Motion encoder \(\phi\)</th><th>Handover</th></tr>
+<tr><td>SAM 2.1-Tiny [32] (default)</td><td>74%</td></tr>
+<tr><td>Reducio [33]</td><td>76%</td></tr>
+<tr><td>VidTwin [34]</td><td>60%</td></tr>
+<tr><td>VideoLaVIT [35]</td><td>52%</td></tr>
+</table>
+<p>Table 2: Swapping the motion encoder keeps Bottle Handover success above the VLASH baseline (38%).</p>
+<figure data-fig="3"><img src="fig3.png" alt="Figure 3: TEMPO architecture. TEMPOMOT cross-attends current patch features against a streaming cache to produce \(\mathbf{m}_t\). TEMPOACT mean-pools proprioceptive history into \(K\) buckets to produce \(\mathbf{c}_t\). Both are projected into the VLM prefix, and \(\mathbf{c}_t\) also conditions the action expert via an AdaRMS residual." loading="lazy"></figure>
+<h3>4.2 TEMPO<sub>ACT</sub>: Resolves State Aliasing</h3>
+\[\mathbf{c}_t = (\bar q_t^{(1)},\dots,\bar q_t^{(K)}),\quad \bar q_t^{(k)}=\frac{1}{L}\sum_{\tau\in B_k} q_\tau \in \mathbb{R}^{d_q},\quad q_\tau := 0 \text{ for } \tau < \text{episode start} \tag{2}\]
+<p>The settings are \(K=10\) and \(L=30\), with pad flags for buckets that fall before the episode start. The number of tokens is fixed regardless of the history horizon.</p>
+<h3>4.3 Plug-and-Play Temporal Integration</h3>
+<p>\(\mathbf{m}_t\) and \(\mathbf{c}_t\) are projected and appended to the VLM prefix. \(\mathbf{c}_t\) is also flattened and passed through an MLP to produce an AdaRMS residual. The conditioning path is zero-initialized, and the flow-matching loss is unchanged.</p>
+<h3>4.4 Real-Time Deployment via Parallel Encoding</h3>
+<p>The motion encoder runs in a background thread (about 11 ms per frame). The policy pays only about 1.5 ms of overhead.</p>
+<table>
+<tr><th>Method</th><th>Median</th></tr>
+<tr><td>VLASH [5]</td><td>33.8 ms</td></tr>
+<tr><td>RTC [4]</td><td>127.7 ms</td></tr>
+<tr><td>TEMPO (Ours)</td><td>35.3 ms</td></tr>
+</table>
+<p>Table 3: Inference latency comparison across methods.</p>
+
+<h2>5 Experiments</h2>
+<table>
+<tr><th>Method</th><th>Bottle Handover</th><th>Drop Catch</th><th>Flick Catch</th><th>Wine Pour</th><th>Average</th></tr>
+<tr><td>RTC [4]</td><td>44%</td><td>80%</td><td>48%</td><td>80.8%</td><td>63.2%</td></tr>
+<tr><td>VLASH [5]</td><td>38%</td><td>38%</td><td>20%</td><td>94.0%</td><td>47.5%</td></tr>
+<tr><td>TEMPO (Ours)</td><td>74%</td><td>66%</td><td>66%</td><td>98.1%</td><td>76.0%</td></tr>
+<tr><td>TEMPO+UVT [30]</td><td>88%</td><td>88%</td><td>76%</td><td>96.7%</td><td>87.2%</td></tr>
+</table>
+<p>Table 4: Success rates over 50 real-world rollouts per task. Wine Pour reports the percentage of mass retained.</p>
+<h3>5.1 Experimental Setup</h3>
+<p>The tasks are designed to expose the two ambiguities. The baselines are RTC and VLASH. Results are reported on trimmed Flick Catch and Wine Pour. Shared task properties: (P1) the target is moving; (P2) the relevant target shifts during the episode; (P3) tasks have sequential subtasks; (P4) the policy faces state ambiguity. The four tasks are:</p>
+<ul>
+<li>Bottle Handover (P1)</li>
+<li>Drop Catch (P1, P3)</li>
+<li>Flick Catch (P1–P4)</li>
+<li>Wine Pour (P1–P4; beads stand in for wine, and success is measured by mass retained)</li>
+</ul>
+<figure data-fig="4"><img src="fig4.png" alt="Figure 4: Task Setup. We benchmark all models across four comprehensive dynamic tasks." loading="lazy"></figure>
+<figure data-fig="5"><img src="fig5.png" alt="Figure 5: Failure-mode breakdown on Bottle Handover. Each episode is categorized as Success, Near Catch, Gripper Miss, or Complete Miss." loading="lazy"></figure>
+<h3>5.2 Experimental Results</h3>
+<p>Compared with the baselines, TEMPO gains +36% on Bottle Handover, +4.1% on Wine Pour, and +46% on Flick Catch. On Bottle Handover, Complete Misses drop from 18 (VLASH) and 24 (RTC) to 10, and successes rise to 37 of 50.</p>
+<table>
+<tr><th>VLA backbone</th><th>Base</th><th>+ TEMPO</th></tr>
+<tr><td>\(\pi_{0.5}\) [2]</td><td>26%</td><td>56%</td></tr>
+<tr><td>RTC [4]</td><td>44%</td><td>80%</td></tr>
+<tr><td>VLASH [5]</td><td>38%</td><td>74%</td></tr>
+</table>
+<p>Table 5: TEMPO is plug-and-play across VLA backbones.</p>
+<p>Combining TEMPO with UVT, which changes the output target, yields the best overall results.</p>
+
+<h2>6 Analysis and Ablations</h2>
+<table>
+<tr><th>Task</th><th>RTC [4]</th><th>VLASH [5]</th><th>TEMPO</th></tr>
+<tr><td>Bottle Handover</td><td>0.46</td><td>0.43</td><td>0.52</td></tr>
+<tr><td>Drop Catch</td><td>0.31</td><td>0.28</td><td>0.33</td></tr>
+<tr><td>Flick Catch</td><td>−0.07</td><td>0.03</td><td>0.57</td></tr>
+<tr><td>Wine Pour</td><td>0.06</td><td>0.09</td><td>0.44</td></tr>
+<tr><td>Average</td><td>0.19</td><td>0.21</td><td>0.47</td></tr>
+</table>
+<p>Table 7: MLP motion probing of the trained VLA hidden state (\(R^2\)).</p>
+<table>
+<tr><th>Configuration</th><th>Handover</th></tr>
+<tr><td>TEMPO<sub>ACT</sub> only</td><td>52%</td></tr>
+<tr><td>TEMPO<sub>MOT</sub> only</td><td>56%</td></tr>
+<tr><td>TEMPO (full)</td><td>74%</td></tr>
+</table>
+<p>Table 6: Both temporal signals contribute to the task.</p>
+<p>Each signal is useful on its own, and the two together perform best. Probing on TEMPO-Bench shows that TEMPO's hidden states encode object velocity where the baselines' hidden states do not.</p>
+
+<h2>7 Conclusion</h2>
+<p>The gap between pretrained VLAs and dynamic manipulation is primarily representational. Two separable signals with near-zero overhead resolve the two failures, and the untrimmed-task results show that timing is not the bottleneck.</p>
+
+<h2>Acknowledgments</h2>
+<p>The authors thank the CoRL reviewers and AC, and Basavasagar Patil.</p>
+
+<h2>References</h2>
+<ol class="refs">
+<li>Black et al. π0: A vision-language-action flow model for general robot control. arXiv:2410.24164, 2024.</li>
+<li>Physical Intelligence et al. π0.5: a vision-language-action model with open-world generalization. arXiv:2504.16054, 2025.</li>
+<li>Kim et al. OpenVLA: An open-source vision-language-action model. CoRL, 2024.</li>
+<li>Black, Galliker, Levine. Real-time execution of action chunking flow policies. NeurIPS 38, 2026.</li>
+<li>Tang et al. VLASH: Real-time VLAs via future-state-aware asynchronous inference. arXiv:2512.01031, 2025.</li>
+<li>Li et al. MVBench. CVPR, 2024.</li>
+<li>Zhou et al. VLM4D. ICCV, 2025.</li>
+<li>D'Ambrosio et al. Robotic table tennis: A case study into a high speed learning system. RSS, 2023.</li>
+<li>D'Ambrosio et al. Achieving human level competitive robot table tennis. ICRA, 2025.</li>
+<li>Zeng et al. TossingBot. IEEE T-RO, 2020.</li>
+<li>Ha, Song. FlingBot. CoRL, 2022.</li>
+<li>Zhang et al. Catch it! ICRA, 2025.</li>
+<li>Huang et al. Dynamic handover: Throw and catch with bimanual hands. CoRL, 2023.</li>
+<li>Brohan et al. RT-1. RSS, 2023.</li>
+<li>Driess et al. PaLM-E. ICML, 2023.</li>
+<li>Zitkovich et al. RT-2. CoRL, 2023.</li>
+<li>Octo Model Team. Octo. RSS, 2024.</li>
+<li>Chi et al. Diffusion policy. IJRR, 2025.</li>
+<li>Zhao et al. Learning fine-grained bimanual manipulation with low-cost hardware. RSS, 2023.</li>
+<li>Shukor et al. SmolVLA. arXiv:2506.01844, 2025.</li>
+<li>Sendai et al. Leave no observation behind. arXiv:2509.23224, 2025.</li>
+<li>Xie et al. DynamicVLA. arXiv:2601.22153, 2026.</li>
+<li>Wei et al. F2F-AP. arXiv:2604.02408, 2026.</li>
+<li>Nair et al. R3M. CoRL, 2022.</li>
+<li>Radosavovic et al. Real-world robot learning with masked visual pre-training. CoRL, 2022.</li>
+<li>Radosavovic et al. Robot learning with sensorimotor pre-training. CoRL, 2023.</li>
+<li>Dasari et al. An unbiased look at datasets for visuo-motor pre-training. CoRL, 2023.</li>
+<li>Bahl et al. Affordances from human videos as a versatile representation for robotics. CVPR, 2023.</li>
+<li>Wang et al. Scaling proprioceptive-visual learning with heterogeneous pre-trained transformers. NeurIPS, 2024.</li>
+<li>Feng, Jain. Unified visuomotor targets. IROS, 2026.</li>
+<li>Dalal et al. Generalizable VLA finetuning via representation anchoring and language-action alignment. arXiv:2607.13429, 2026.</li>
+<li>Ravi et al. SAM 2. ICLR, 2025.</li>
+<li>Tian et al. Reducio! ICCV, 2025.</li>
+<li>Wang et al. VidTwin. CVPR, 2025.</li>
+<li>Jin et al. Video-LaVIT. ICML, 2024.</li>
+<li>Zhao et al. The first to know. ECCV, 2024.</li>
+<li>Lu et al. Probing a vision-language-action model for symbolic states. ICAD, 2025.</li>
+<li>I2RT Robotics. YAM Ultra 6-DoF robotic arm, 2024.</li>
+</ol>
+
+<h2>Appendix</h2>
+<h2>A Additional Failure Mode Analysis</h2>
+<p>On the untrimmed tasks, both baselines oscillate between reaching and retracting. The data were therefore trimmed for the Table 4 comparison. On the untrimmed tasks, TEMPO reaches 68% and 97.6%, which the authors attribute to TEMPO<sub>ACT</sub>.</p>
+<figure data-fig="A1"><figcaption>Figure A1: VLASH rollout on the untrimmed Flick Catch task. The gripper hovers near the plate without committing to grasp or retract. RTC fails similarly.</figcaption></figure>
+<h2>B Experimental Setup Details</h2>
+<h3>B.1 Hardware Platform</h3>
+<p>The platform uses two I2RT YAM Ultra arms with 7 DoF each, mounted 61 cm apart on a 183 × 75 × 71 cm table. There are three cameras (one third-person, two wrist-mounted) streaming 224p at 30 Hz, and policies run at 30 Hz.</p>
+<h3>B.2 Evaluation Protocol</h3>
+<p>In Drop Catch, the ball is released from 33–46 cm. In Flick Catch, 5–6 balls sit on an 80 × 20 × 21.6 cm shelf. The human operator performs each trial with eyes closed while wearing headphones.</p>
+<h3>B.3 Training Details</h3>
+<p>Each policy is trained on 8 RTX PRO 6000 Blackwell GPUs for about 2 hours with batch size 128. Per-iteration times are 0.49 s (VLASH), 0.46 s (RTC), and 0.50 s (TEMPO). RTC was reimplemented from its paper.</p>
+<h2>C Per-Task Failure Mode Breakdown</h2>
+<figure data-fig="A2"><figcaption>Figure A2: Failure-mode breakdown on Flick Catch. VLASH fails mostly at hand-tracking (37) and RTC mostly at ball catching (19). TEMPO cuts both failure modes (to 9 and 4).</figcaption></figure>
+<figure data-fig="A3"><figcaption>Figure A3: Failure-mode breakdown on Drop Catch. RTC scores highest. VLASH's dominant failure is premature movement (23), which TEMPO reduces to 6.</figcaption></figure>
+<h2>D Input Ablation</h2>
+<figure data-fig="A4"><figcaption>Figure A4: Both TEMPO<sub>MOT</sub> and TEMPO<sub>ACT</sub> are necessary. Freezing MOT hurts most at 2.7 s (MSE 0.019→0.059); freezing ACT hurts most at 5.3 s (0.091 vs. 0.051, full model 0.020).</figcaption></figure>
+<h2>E Motion Encoder Selection</h2>
+<figure data-fig="A5"><figcaption>Figure A5: Linear probe of candidate initializations for TEMPO<sub>MOT</sub>, showing per-task velocity \(R^2\).</figcaption></figure>
+<table>
+<tr><th>Initialization for TEMPO<sub>MOT</sub></th><th>Bottle Handover</th><th>Drop Catch</th><th>Flick Catch</th><th>Wine Pour</th><th>Average</th></tr>
+<tr><td>Object Position</td><td>0.24</td><td>0.03</td><td>0.03</td><td>0.02</td><td>0.08</td></tr>
+<tr><td>VideoLaVIT [35]</td><td>0.45</td><td>0.25</td><td>0.28</td><td>0.36</td><td>0.34</td></tr>
+<tr><td>Reducio [33]</td><td>0.50</td><td>0.36</td><td>0.38</td><td>0.32</td><td>0.39</td></tr>
+<tr><td>SAM 2 [32]</td><td>0.58</td><td>0.37</td><td>0.50</td><td>0.39</td><td>0.46</td></tr>
+<tr><td>VidTwin [34]</td><td>0.59</td><td>0.44</td><td>0.43</td><td>0.45</td><td>0.48</td></tr>
+</table>
+<p>Every learned encoder far exceeds the position-only baseline. SAM 2.1-Tiny is chosen for its near-top motion correlation combined with streaming speed.</p>
+</body></html>

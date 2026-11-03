@@ -22,9 +22,12 @@ AFFILIATIONS = os.path.join(HERE, "affiliations.json")  # from specific_scripts/
 PRESENTATION = {"Oral": "🎤 Oral", "Spotlight": "✨ Spotlight", "Poster": "🖼️ Poster"}  # last word of venue
 SUMMARIES = os.path.join(HERE, "summaries.json")  # from serve.py (Summarize button)
 RATINGS = os.path.join(HERE, "ratings.json")  # from serve.py (star ratings)
+LINKS = os.path.join(HERE, "links.json")  # from serve.py (Find link to paper)
 HTML_DIRS = {"claude": os.path.join(HERE, "htmls_claude"),  # from serve.py (Make HTML with Claude / python)
              "python": os.path.join(HERE, "htmls_python")}
 ROBOTS = os.path.join(HERE, "robots.json")  # from specific_scripts/corl2026_robots.py
+BACKBONES = os.path.join(HERE, "backbones.json")  # from specific_scripts/corl2026_backbones.py
+MOVIES = os.path.join(HERE, "movies", "paper_movies")  # <id>_<title>[_N].<ext>, from specific_scripts/corl2026_sort_movies.py
 TOP_COMPANIES, TOP_UNIVERSITIES, TOP_RESEARCHERS, TOP_ROBOTS, TOP_KEYWORDS = 20, 50, 50, 50, 50
 
 csv.field_size_limit(sys.maxsize)
@@ -108,6 +111,8 @@ HTML = r"""<!doctype html>
   .collage a { display: block; }
   .collage img { display: block; width: 100%; height: auto; margin: 0; max-width: none; border: 1px solid #ddd; }
   details details summary { font-weight: normal; color: #2b6cb0; margin-left: 18px; }
+  .movies { display: flex; flex-wrap: wrap; gap: 8px; margin: 8px 0 4px 18px; }
+  .movies video, .movies img { width: min(100%, 640px); background: #000; }
   details > img { display: block; max-width: min(100%, 900px); margin: 8px 0 4px 18px; }
 </style>
 </head>
@@ -126,6 +131,7 @@ HTML = r"""<!doctype html>
   <details class="facet" data-key="p"><summary>🏷️ Primary keyword</summary><div class="panel"></div></details>
   <details class="facet" data-key="s"><summary>🔖 Secondary keyword</summary><div class="panel"></div></details>
   <details class="facet" data-key="b"><summary>🤖 Robots</summary><div class="panel"></div></details>
+  <details class="facet" data-key="m"><summary>🧠 Backbones</summary><div class="panel"></div></details>
   <details class="facet" data-key="c"><summary>🏢 Companies</summary><div class="panel"></div></details>
   <details class="facet" data-key="u"><summary>🎓 Universities</summary><div class="panel"></div></details>
   <details class="facet" data-key="r"><summary>🧑‍🔬 Researchers</summary><div class="panel"></div></details>
@@ -167,7 +173,7 @@ HTML = r"""<!doctype html>
 <svg hidden><symbol id="gh" viewBox="0 0 16 16"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></symbol></svg>
 <script id="data" type="application/json">__DATA__</script>
 <script>
-const {columns, rows, firstPage, meta, facets, summaries, ratings, htmlv, here} = JSON.parse(document.getElementById('data').textContent);
+const {columns, rows, firstPage, meta, facets, summaries, ratings, links, htmlv, movies, here} = JSON.parse(document.getElementById('data').textContent);
 
 function cellContent(v) {
   if (/^https:\/\/github\.com\/\S+ /.test(v)) {  // several space-separated repos
@@ -256,7 +262,7 @@ function renderTable() {
 
 // ---- Summarize button: POST /summarize/<id> to serve.py (holds the Claude API key), result in a dropdown ----
 if (location.protocol.startsWith('http'))  // pick up summaries / ratings made since index.html was built
-  [['summaries.json', summaries], ['ratings.json', ratings]].forEach(([f, o]) =>
+  [['summaries.json', summaries], ['ratings.json', ratings], ['links.json', links]].forEach(([f, o]) =>
     fetch(f).then(r => r.ok ? r.json() : {}).then(s => { Object.assign(o, s); updateStats(); }).catch(() => {}));
 
 // ---- star rating on the summary line: click a star to rate, click the same star again to clear ----
@@ -304,7 +310,7 @@ function summaryBox(pid, flag) {  // flag: the 📝 marker on the paper's summar
   const box = document.createElement('div');
   box.className = 'sumbox';
   const needServer = () => location.protocol.startsWith('http') ? '' :
-    'run: uv run python htmls/corl2026/serve.py, then open http://127.0.0.1:8026';
+    'run: uv run python htmls/corl2026/serve.py, then open http://127.0.0.1:8026/Corl2026/';
   const empty = () => {  // no summary yet: just the button
     const btn = document.createElement('button');
     btn.textContent = '📝 Summarize';
@@ -344,6 +350,7 @@ function summaryBox(pid, flag) {  // flag: the 📝 marker on the paper's summar
 const HTML_KINDS = {
   claude: {make: '🌐 Make HTML with Claude', open: '🌐 Open HTML (Claude)', busy: '⏳ Converting the whole paper with Claude… (several minutes)'},
   python: {make: '🐍 Make HTML with python', open: '🐍 Open HTML (python)', busy: '⏳ Converting with python… (~20 s)'},
+  claude2: {open: '✂️ Open HTML Claude #2'},  // made by the Condense button on the Claude HTML page
 };
 function htmlBox(pid, kind) {
   const box = document.createElement('span'), k = HTML_KINDS[kind];
@@ -355,11 +362,12 @@ function htmlBox(pid, kind) {
     box.replaceChildren(a);
   };
   if (htmlv[kind][pid]) { link(); return box; }
+  if (!k.make) return box;
   const btn = document.createElement('button');
   btn.textContent = k.make;
   btn.onclick = async () => {
     if (!location.protocol.startsWith('http'))
-      return btn.textContent = k.make + ' (run: uv run python htmls/corl2026/serve.py, then open http://127.0.0.1:8026)';
+      return btn.textContent = k.make + ' (run: uv run python htmls/corl2026/serve.py, then open http://127.0.0.1:8026/Corl2026/)';
     btn.disabled = true; btn.textContent = k.busy;
     try {
       const res = await fetch(`html_${kind}/${pid}`, {method: 'POST'}), j = await res.json();
@@ -370,10 +378,38 @@ function htmlBox(pid, kind) {
   box.append(btn);
   return box;
 }
+// ---- Find link to paper: POST /find_link/<id>, Claude + web search for a non-OpenReview copy (arXiv preferred) ----
+function linkBox(pid) {
+  const box = document.createElement('span');
+  box.className = 'htmlbox';
+  const link = () => {
+    const a = document.createElement('a'), v = links[pid];
+    a.href = v.url; a.target = '_blank'; a.textContent = '🔗 ' + v.url.replace(/^https?:\/\//, '');
+    a.title = `Found by Claude ($${v.cost.toFixed(3)}, ${v.searches} web searches)`;
+    box.replaceChildren(a);
+  };
+  if (links[pid]?.url) { link(); return box; }
+  const btn = document.createElement('button');
+  btn.textContent = links[pid] ? '🔗 Find link to paper (none found last time)' : '🔗 Find link to paper';
+  btn.onclick = async () => {
+    if (!location.protocol.startsWith('http'))
+      return btn.textContent = '🔗 Find link to paper (run: uv run python htmls/corl2026/serve.py, then open http://127.0.0.1:8026/Corl2026/)';
+    btn.disabled = true; btn.textContent = '⏳ Searching the web with Claude… (~30 s)';
+    try {
+      const res = await fetch('find_link/' + pid, {method: 'POST'}), j = await res.json();
+      if (!res.ok) throw new Error(j.error);
+      links[pid] = j; updateStats();
+      if (j.url) return link();
+      btn.disabled = false; btn.textContent = '🔗 No public copy found (retry)';
+    } catch (e) { btn.disabled = false; btn.textContent = '⚠️ ' + e.message + ' (retry)'; }
+  };
+  box.append(btn);
+  return box;
+}
 function htmlBoxes(pid) {
   const row = document.createElement('div');
   row.className = 'htmlrow';
-  row.append(htmlBox(pid, 'claude'), htmlBox(pid, 'python'));
+  row.append(htmlBox(pid, 'claude'), htmlBox(pid, 'claude2'), htmlBox(pid, 'python'), linkBox(pid));
   return row;
 }
 
@@ -404,6 +440,7 @@ dets = rows.map((r, ri) => {
   if (m.cites) b.push(`📈 ${m.cites}`);
   if (m.h != null) b.push(`🏅 h ${m.h}`);
   if (m.b.length) b.push('🤖 ' + m.b.join(', '));
+  if (m.m.length) b.push('🧠 ' + m.m.join(', '));
   if (m.c.length) b.push('🏢 ' + m.c.join(', '));
   if (b.length) { const e = document.createElement('span'); e.className = 'badges'; e.textContent = b.join('  ·  '); s.append(e); }
   const dl = document.createElement('dl');
@@ -435,11 +472,30 @@ dets = rows.map((r, ri) => {
     };
     d.append(all);
   }
+  const movs = movies[r[idIdx].split('id=').pop()] || [];
+  if (movs.length) {
+    const mv = document.createElement('details'), ms = document.createElement('summary');
+    ms.textContent = movs.length > 1 ? `🎬 Movies (${movs.length})` : '🎬 Movie';
+    const box = document.createElement('div'); box.className = 'movies';
+    mv.append(ms, box);
+    mv.ontoggle = () => {  // players made on first open; preload="metadata" fetches only the first frame until played
+      if (!mv.open) return box.querySelectorAll('video').forEach(v => v.pause());
+      if (box.childElementCount) return;
+      box.append(...movs.map(p => {
+        const src = p.split('/').map(encodeURIComponent).join('/');
+        const v = document.createElement(p.endsWith('.gif') ? 'img' : 'video');
+        v.src = src; v.title = p.split('/').pop();
+        if (v.tagName === 'VIDEO') { v.controls = true; v.preload = 'metadata'; }
+        return v;
+      }));
+    };
+    dl.before(mv);  // right after the HTML / link buttons, before the fields
+  }
   return d;
 });
 
 // ---- filters ----
-const picked = {t: new Set(), p: new Set(), s: new Set(), b: new Set(), c: new Set(), u: new Set(), r: new Set()};
+const picked = {t: new Set(), p: new Set(), s: new Set(), b: new Set(), m: new Set(), c: new Set(), u: new Set(), r: new Set()};
 document.querySelectorAll('.facet').forEach(fd => {
   const key = fd.dataset.key, panel = fd.querySelector('.panel'), label = fd.querySelector('summary');
   const base = label.textContent;
@@ -476,7 +532,7 @@ document.getElementById('clear').onclick = () => {
   applyFilters();
 };
 
-// ---- remember the last filters (this browser only; file:// and http://127.0.0.1:8026 keep separate copies) ----
+// ---- remember the last filters (this browser only; file:// and http://127.0.0.1:8026/Corl2026/ keep separate copies) ----
 function restoreFilters() {
   let saved;
   try { saved = JSON.parse(localStorage.getItem('corlFilters')); } catch (e) {}
@@ -507,7 +563,7 @@ function applyFilters() {
   };
   let idx = rows.map((_, i) => i).filter(i => gh(i) && sm(i) && rt(i) &&
     terms.every(t => haystack[i].includes(t)) &&
-    hit('t', i) && hit('p', i) && hit('s', i) && hit('b', i) && hit('c', i) && hit('u', i) && hit('r', i) && (meta[i].h || 0) >= minH && (meta[i].cites || 0) >= minC);
+    hit('t', i) && hit('p', i) && hit('s', i) && hit('b', i) && hit('m', i) && hit('c', i) && hit('u', i) && hit('r', i) && (meta[i].h || 0) >= minH && (meta[i].cites || 0) >= minC);
   if (sort === 'az') idx.sort((a, b) => rows[a][titleIdx].localeCompare(rows[b][titleIdx], undefined, {sensitivity: 'base'}));
   else if (sort) idx.sort((a, b) => (meta[b][sort] || 0) - (meta[a][sort] || 0));
   table.querySelector('tbody').replaceChildren(...idx.map(i => trs[i]));
@@ -522,11 +578,12 @@ function applyFilters() {
 function updateStats() {
   const costOf = o => Object.values(o).reduce((t, x) => t + (x.cost || 0), 0);
   const rated = Object.values(ratings), avg = rated.length ? rated.reduce((a, b) => a + b, 0) / rated.length : 0;
-  const spent = costOf(summaries) + costOf(htmlv.claude);
+  const spent = costOf(summaries) + costOf(htmlv.claude) + costOf(htmlv.claude2) + costOf(links);
   document.querySelector('nav .stats').textContent = [
     `📝 ${Object.keys(summaries).length} summaries`,
     `🌐 ${Object.keys(htmlv.claude).length} HTML (Claude)`,
     `🐍 ${Object.keys(htmlv.python).length} HTML (python)`,
+    `🔗 ${Object.values(links).filter(v => v.url).length} links`,
     `⭐ ${rated.length} rated` + (rated.length ? ` (avg ${avg.toFixed(1)})` : ''),
     `💲 $${spent.toFixed(2)} Claude spend`,
   ].join('  ·  ');
@@ -551,6 +608,7 @@ def openalex_meta(rows, columns):
     from corl2026_affiliations import COMPANY_RES
     oa = json.load(open(OPENALEX)) if os.path.exists(OPENALEX) else {"works": {}, "authors": {}}
     robots = json.load(open(ROBOTS)) if os.path.exists(ROBOTS) else {}
+    backbones = json.load(open(BACKBONES)) if os.path.exists(BACKBONES) else {}
     pdf_aff = json.load(open(AFFILIATIONS))["papers"] if os.path.exists(AFFILIATIONS) else {}
     authors = oa["authors"]
     id_col = columns.index("id")
@@ -571,6 +629,7 @@ def openalex_meta(rows, columns):
                          set(aff["universities"]) | {n for n, t in insts if t == "education"}}),
             "t": [PRESENTATION.get(r[venue_col].split()[-1], r[venue_col])] if r[venue_col] else [],
             "b": robots.get(pid, []),
+            "m": backbones.get(pid, []),
             **{k: [r[i]] if r[i] else [] for k, i in kw_cols.items()},
             "r": sorted({a["id"] for a in w["authors"] if a["id"] in authors}),
             "cites": w["cites"],
@@ -590,7 +649,7 @@ def openalex_meta(rows, columns):
     top_ids = {a["id"] for a in researchers}
     for m in meta:
         m["r"] = [a for a in m["r"] if a in top_ids]
-    return meta, {"c": top("c", TOP_COMPANIES), "u": top("u", TOP_UNIVERSITIES), "r": researchers, "b": top("b", TOP_ROBOTS), "t": top("t", 3),
+    return meta, {"c": top("c", TOP_COMPANIES), "u": top("u", TOP_UNIVERSITIES), "r": researchers, "b": top("b", TOP_ROBOTS), "m": top("m", TOP_ROBOTS), "t": top("t", 3),
                   **{k: top(k, TOP_KEYWORDS) for k in kw_cols}}
 
 
@@ -601,6 +660,27 @@ def html_versions(kind):
         meta = os.path.join(os.path.dirname(idx), "meta.json")
         pid = os.path.basename(os.path.dirname(idx)).split("_", 1)[0]
         out[pid] = {"path": os.path.relpath(idx, HERE), **(json.load(open(meta)) if os.path.exists(meta) else {})}
+    return out
+
+
+def paper_movies():
+    """paper id -> movie paths relative to HERE, the main one first, then _2, _3, …"""
+    def n(p):
+        m = re.search(r"_(\d+)\.\w+$", p)
+        return int(m.group(1)) if m else 1
+    out = collections.defaultdict(list)
+    for p in sorted(glob.glob(os.path.join(MOVIES, "*")), key=lambda p: (os.path.basename(p).split("_", 1)[0], n(p))):
+        out[os.path.basename(p).split("_", 1)[0]].append(os.path.relpath(p, HERE))
+    return out
+
+
+def condensed_versions():
+    """paper id -> {path, cost, ...} for every htmls_claude/<id>_<title>/condensed.html (serve.py's Condense button)."""
+    out = {}
+    for page in glob.glob(os.path.join(HTML_DIRS["claude"], "*", "condensed.html")):
+        meta = os.path.join(os.path.dirname(page), "condensed.json")
+        pid = os.path.basename(os.path.dirname(page)).split("_", 1)[0]
+        out[pid] = {"path": os.path.relpath(page, HERE), **(json.load(open(meta)) if os.path.exists(meta) else {})}
     return out
 
 
@@ -622,7 +702,7 @@ def main():
     rows = [[r[i] for i in keep] for r in rows]
     first_page = json.load(open(FIRST_PAGE)) if os.path.exists(FIRST_PAGE) else {}
     meta, facets = openalex_meta(rows, columns)
-    for name, key in [("🤖 robots", "b"), ("🏢 companies", "c"), ("🎓 universities", "u")]:
+    for name, key in [("🤖 robots", "b"), ("🧠 backbones", "m"), ("🏢 companies", "c"), ("🎓 universities", "u")]:
         columns.append(name)
         for r, m in zip(rows, meta):
             r.append("; ".join(m[key]))
@@ -632,7 +712,8 @@ def main():
     data = json.dumps({"columns": columns, "rows": rows, "firstPage": first_page, "meta": meta, "facets": facets,
                        "summaries": json.load(open(SUMMARIES)) if os.path.exists(SUMMARIES) else {},
                        "ratings": json.load(open(RATINGS)) if os.path.exists(RATINGS) else {},
-                       "htmlv": {k: html_versions(k) for k in HTML_DIRS}, "here": HERE}, ensure_ascii=False).replace("</", "<\\/")
+                       "links": json.load(open(LINKS)) if os.path.exists(LINKS) else {},
+                       "htmlv": {**{k: html_versions(k) for k in HTML_DIRS}, "claude2": condensed_versions()}, "movies": paper_movies(), "here": HERE}, ensure_ascii=False).replace("</", "<\\/")
     out = os.path.join(HERE, "index.html")
     with open(out, "w") as f:
         f.write(HTML.replace("__DATA__", data))

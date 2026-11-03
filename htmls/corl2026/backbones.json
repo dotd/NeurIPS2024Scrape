@@ -1,0 +1,1903 @@
+{
+ "022K2ZIPR6": [
+  "ResNet"
+ ],
+ "03qRtmw4qx": [
+  "\u03c00 / \u03c00.5",
+  "UniVLA"
+ ],
+ "03zMMFkTXk": [
+  "ACT (Action Chunking Transformer)"
+ ],
+ "05nE8s5e7I": [
+  "\u03c00 / \u03c00.5",
+  "SmolVLA"
+ ],
+ "0DopZPPLvw": [
+  "ViT"
+ ],
+ "0HLj8l0bB4": [
+  "Qwen (Qwen-VL / Qwen2.5-VL)",
+  "GPT-4 / GPT-4o / GPT-5"
+ ],
+ "0HnCTHL4fw": [
+  "PaliGemma",
+  "Gemma",
+  "\u03c00 / \u03c00.5"
+ ],
+ "0cK9Wf9Eeq": [
+  "GPT-4 / GPT-4o / GPT-5",
+  "Claude",
+  "GR00T"
+ ],
+ "0jY75QYDMn": [
+  "\u03c00 / \u03c00.5",
+  "GR00T"
+ ],
+ "0o1c1Xxn1m": [
+  "SAM / SAM 2"
+ ],
+ "0ua1KHFIUD": [
+  "DINO / DINOv2 / DINOv3",
+  "SigLIP"
+ ],
+ "0w0ylGezd5": [
+  "Cosmos"
+ ],
+ "14GtmKGuCf": [
+  "\u03c00 / \u03c00.5",
+  "OpenVLA / OpenVLA-OFT",
+  "GR00T"
+ ],
+ "19iADsbO9A": [
+  "\u03c00 / \u03c00.5"
+ ],
+ "1HqdYVWaXi": [
+  "ViT",
+  "DINO / DINOv2 / DINOv3",
+  "CLIP",
+  "SigLIP"
+ ],
+ "1u6oriJJcU": [
+  "\u03c00 / \u03c00.5",
+  "GR00T"
+ ],
+ "1uKIsrjCvt": [
+  "ResNet",
+  "ViT",
+  "DINO / DINOv2 / DINOv3"
+ ],
+ "1zWj66605w": [
+  "SAM / SAM 2"
+ ],
+ "1zYrrwoISV": [
+  "\u03c00 / \u03c00.5"
+ ],
+ "2AOAVWqGC6": [
+  "DINO / DINOv2 / DINOv3"
+ ],
+ "2LNbCnzTQk": [
+  "GPT-4 / GPT-4o / GPT-5",
+  "Claude",
+  "RT-1 / RT-2 / RT-X"
+ ],
+ "2NBZAh51If": [
+  "\u03c00 / \u03c00.5"
+ ],
+ "2Z8xQxrlsY": [
+  "Diffusion Policy"
+ ],
+ "2Z9666X2B7": [
+  "Qwen (Qwen-VL / Qwen2.5-VL)",
+  "Gemini"
+ ],
+ "2nityiXWGJ": [
+  "Wan (video model)"
+ ],
+ "2vsTg6WU2p": [
+  "\u03c00 / \u03c00.5"
+ ],
+ "2vx7I6aRPS": [
+  "\u03c00 / \u03c00.5"
+ ],
+ "3KzmpJQUpy": [
+  "\u03c00 / \u03c00.5"
+ ],
+ "3M39Fmw8Mx": [
+  "\u03c00 / \u03c00.5",
+  "RDT"
+ ],
+ "3hsq75Gmr9": [
+  "SAM / SAM 2",
+  "PointNet / PointNet++"
+ ],
+ "3jf63cW3cJ": [
+  "\u03c00 / \u03c00.5"
+ ],
+ "40CsfPl2cq": [
+  "ResNet",
+  "U-Net",
+  "Diffusion Policy"
+ ],
+ "42z4ov9nRQ": [
+  "\u03c00 / \u03c00.5"
+ ],
+ "4M7C3PsA78": [
+  "Qwen (Qwen-VL / Qwen2.5-VL)",
+  "GPT-4 / GPT-4o / GPT-5"
+ ],
+ "4ar3F6Obiq": [
+  "ResNet",
+  "\u03c00 / \u03c00.5"
+ ],
+ "4dqRAd2sNp": [
+  "CLIP",
+  "PaliGemma",
+  "Florence-2",
+  "\u03c00 / \u03c00.5",
+  "SmolVLA"
+ ],
+ "59kpavSqlw": [
+  "Qwen (Qwen-VL / Qwen2.5-VL)",
+  "GPT-4 / GPT-4o / GPT-5",
+  "Gemini"
+ ],
+ "5TiiTY1fK3": [
+  "ViT",
+  "SigLIP",
+  "Gemma",
+  "Gemini",
+  "\u03c00 / \u03c00.5",
+  "Octo"
+ ],
+ "5XKFwWrW0v": [
+  "\u03c00 / \u03c00.5"
+ ],
+ "5cXsYqAjNs": [
+  "\u03c00 / \u03c00.5"
+ ],
+ "5m9zSorosa": [
+  "U-Net"
+ ],
+ "5oNzcK6SBR": [
+  "CLIP",
+  "SAM / SAM 2",
+  "GPT-4 / GPT-4o / GPT-5"
+ ],
+ "60tPXLIFyM": [
+  "Qwen (Qwen-VL / Qwen2.5-VL)",
+  "GPT-4 / GPT-4o / GPT-5",
+  "Gemini"
+ ],
+ "656PH9MVla": [
+  "SigLIP",
+  "Gemma",
+  "\u03c00 / \u03c00.5"
+ ],
+ "6BQ9NdqznS": [
+  "\u03c00 / \u03c00.5",
+  "OpenVLA / OpenVLA-OFT"
+ ],
+ "6EN09R3NGP": [
+  "Diffusion Policy"
+ ],
+ "6T2ebANGy5": [
+  "Cosmos"
+ ],
+ "6epaMjDFWZ": [
+  "DINO / DINOv2 / DINOv3",
+  "SAM / SAM 2",
+  "SmolVLA"
+ ],
+ "79jC3quhGp": [
+  "\u03c00 / \u03c00.5"
+ ],
+ "7BCkvvmpuj": [
+  "ViT",
+  "Depth Anything"
+ ],
+ "7BXJJYw05E": [
+  "GPT-4 / GPT-4o / GPT-5",
+  "Gemini"
+ ],
+ "7KV78k8rcv": [
+  "ViT",
+  "\u03c00 / \u03c00.5"
+ ],
+ "7cfCazwFp6": [
+  "OpenVLA / OpenVLA-OFT",
+  "GR00T"
+ ],
+ "7hdkIcfGRw": [
+  "\u03c00 / \u03c00.5",
+  "OpenVLA / OpenVLA-OFT",
+  "Cosmos"
+ ],
+ "7jMlaTLtAc": [
+  "Diffusion Policy"
+ ],
+ "7qMRpmvhZL": [
+  "\u03c00 / \u03c00.5",
+  "SmolVLA"
+ ],
+ "7vjPgJ7x2b": [
+  "ViT",
+  "V-JEPA"
+ ],
+ "7ymfgWpcWw": [
+  "ViT"
+ ],
+ "8FGH4qAdNB": [
+  "Qwen (Qwen-VL / Qwen2.5-VL)",
+  "\u03c00 / \u03c00.5",
+  "OpenVLA / OpenVLA-OFT",
+  "ACT (Action Chunking Transformer)"
+ ],
+ "8QEFjWSgyu": [
+  "CLIP",
+  "GPT-4 / GPT-4o / GPT-5"
+ ],
+ "8T3FxlYk9K": [
+  "ACT (Action Chunking Transformer)"
+ ],
+ "8TvqhVkrMd": [
+  "Qwen (Qwen-VL / Qwen2.5-VL)",
+  "\u03c00 / \u03c00.5",
+  "OpenVLA / OpenVLA-OFT",
+  "GR00T"
+ ],
+ "8YqfXYof0Y": [
+  "\u03c00 / \u03c00.5",
+  "OpenVLA / OpenVLA-OFT",
+  "Octo"
+ ],
+ "8gqhCYKrxR": [
+  "\u03c00 / \u03c00.5",
+  "GR00T"
+ ],
+ "8iFziu27Yy": [
+  "\u03c00 / \u03c00.5",
+  "ACT (Action Chunking Transformer)"
+ ],
+ "9I9DPyr2f9": [
+  "Qwen (Qwen-VL / Qwen2.5-VL)",
+  "Gemini"
+ ],
+ "9Jm97oFGuA": [
+  "\u03c00 / \u03c00.5",
+  "OpenVLA / OpenVLA-OFT",
+  "Octo",
+  "RT-1 / RT-2 / RT-X",
+  "GR00T"
+ ],
+ "9SnXCYklB0": [
+  "\u03c00 / \u03c00.5",
+  "RT-1 / RT-2 / RT-X",
+  "ACT (Action Chunking Transformer)"
+ ],
+ "9ih6YlxhI5": [
+  "\u03c00 / \u03c00.5",
+  "GR00T"
+ ],
+ "9kXz22fI7a": [
+  "Diffusion Policy"
+ ],
+ "9uM5JbXz4T": [
+  "Qwen (Qwen-VL / Qwen2.5-VL)",
+  "\u03c00 / \u03c00.5"
+ ],
+ "A1Wg3RqdsR": [
+  "Qwen (Qwen-VL / Qwen2.5-VL)",
+  "GPT-4 / GPT-4o / GPT-5"
+ ],
+ "A9AQjk3dAt": [
+  "Qwen (Qwen-VL / Qwen2.5-VL)",
+  "\u03c00 / \u03c00.5",
+  "GR00T"
+ ],
+ "A9tBpzFsWI": [
+  "Mamba"
+ ],
+ "AAn8ouEHwO": [
+  "\u03c00 / \u03c00.5"
+ ],
+ "AGM5ZQRjOT": [
+  "Diffusion Policy"
+ ],
+ "AIInkHZlvB": [
+  "\u03c00 / \u03c00.5",
+  "Diffusion Policy",
+  "ACT (Action Chunking Transformer)"
+ ],
+ "ALlLaCTHKQ": [
+  "ViT"
+ ],
+ "AO1shrWa8H": [
+  "CLIP",
+  "DP3 (3D Diffusion Policy)",
+  "ACT (Action Chunking Transformer)"
+ ],
+ "AY4totylcx": [
+  "OpenVLA / OpenVLA-OFT"
+ ],
+ "Afq9dTKP09": [
+  "ResNet",
+  "DINO / DINOv2 / DINOv3",
+  "Diffusion Policy",
+  "DP3 (3D Diffusion Policy)"
+ ],
+ "AhpH1nGaUp": [
+  "\u03c00 / \u03c00.5"
+ ],
+ "AilV1LyfXF": [
+  "Diffusion Policy",
+  "Wan (video model)",
+  "Cosmos"
+ ],
+ "Am3aGfOlLh": [
+  "Depth Anything",
+  "\u03c00 / \u03c00.5",
+  "GR00T"
+ ],
+ "AmQH2hU9Gs": [
+  "DreamerV3"
+ ],
+ "Av4ykyMvpX": [
+  "CLIP",
+  "SigLIP"
+ ],
+ "AztNrTzNOf": [
+  "CLIP"
+ ],
+ "BV0T1o1ZIL": [
+  "\u03c00 / \u03c00.5",
+  "GR00T"
+ ],
+ "BWHjoo36Dr": [
+  "ResNet",
+  "U-Net"
+ ],
+ "Br2rXixvyN": [
+  "\u03c00 / \u03c00.5",
+  "GR00T"
+ ],
+ "Bshs9HDDiu": [
+  "Gemini",
+  "GR00T",
+  "Wan (video model)"
+ ],
+ "BxW31Dilgn": [
+  "Gemini",
+  "\u03c00 / \u03c00.5"
+ ],
+ "C08KksTfEx": [
+  "DINO / DINOv2 / DINOv3"
+ ],
+ "C96z0RnFh8": [
+  "Gemini",
+  "\u03c00 / \u03c00.5"
+ ],
+ "CH33XUEIBO": [
+  "DreamerV3"
+ ],
+ "CtcahYuPBL": [
+  "CLIP",
+  "Octo",
+  "ACT (Action Chunking Transformer)"
+ ],
+ "DgA5zlu7Ck": [
+  "RT-1 / RT-2 / RT-X"
+ ],
+ "DpOVq6nE2d": [
+  "\u03c00 / \u03c00.5",
+  "GR00T",
+  "SmolVLA"
+ ],
+ "DwRC6la1Kr": [
+  "GR00T",
+  "ACT (Action Chunking Transformer)"
+ ],
+ "E5lvpA2Glx": [
+  "CLIP",
+  "\u03c00 / \u03c00.5",
+  "Cosmos"
+ ],
+ "EL8hXhrhFK": [
+  "CLIP"
+ ],
+ "EfJCm9am0o": [
+  "\u03c00 / \u03c00.5"
+ ],
+ "EfgCnZgmvN": [
+  "\u03c00 / \u03c00.5"
+ ],
+ "EfkPQTtjky": [
+  "DINO / DINOv2 / DINOv3"
+ ],
+ "El4EDBhqCG": [
+  "GPT-4 / GPT-4o / GPT-5",
+  "Gemini",
+  "Claude"
+ ],
+ "F4IB3mxHbO": [
+  "ViT"
+ ],
+ "F5KmQJCC8X": [
+  "Diffusion Policy",
+  "DP3 (3D Diffusion Policy)",
+  "ACT (Action Chunking Transformer)"
+ ],
+ "FFB8qNJwV2": [
+  "\u03c00 / \u03c00.5"
+ ],
+ "FGyOl5tNGl": [
+  "\u03c00 / \u03c00.5",
+  "RT-1 / RT-2 / RT-X",
+  "GR00T"
+ ],
+ "FKKr8jKS29": [
+  "CLIP",
+  "SAM / SAM 2",
+  "GPT-4 / GPT-4o / GPT-5",
+  "Prismatic"
+ ],
+ "FLxpmRskLG": [
+  "ACT (Action Chunking Transformer)"
+ ],
+ "FVZKpmPHV8": [
+  "SAM / SAM 2",
+  "\u03c00 / \u03c00.5"
+ ],
+ "FYlYM2c6Xc": [
+  "\u03c00 / \u03c00.5"
+ ],
+ "FsgXevFLkn": [
+  "Cosmos",
+  "DreamerV3"
+ ],
+ "FuxTpvfYnh": [
+  "CLIP",
+  "SigLIP",
+  "Depth Anything",
+  "U-Net"
+ ],
+ "G6vrRbO3NE": [
+  "ResNet",
+  "Qwen (Qwen-VL / Qwen2.5-VL)",
+  "Gemini"
+ ],
+ "GFxjqZVSND": [
+  "Llama",
+  "Qwen (Qwen-VL / Qwen2.5-VL)",
+  "GPT-4 / GPT-4o / GPT-5",
+  "Gemini"
+ ],
+ "GMAZdF34n5": [
+  "V-JEPA",
+  "Gemma",
+  "\u03c00 / \u03c00.5",
+  "OpenVLA / OpenVLA-OFT",
+  "UniVLA",
+  "Cosmos"
+ ],
+ "GRyPwVAxpq": [
+  "Gemma",
+  "GPT-4 / GPT-4o / GPT-5",
+  "Claude",
+  "\u03c00 / \u03c00.5",
+  "GR00T",
+  "Diffusion Policy"
+ ],
+ "GX5xey9ade": [
+  "Qwen (Qwen-VL / Qwen2.5-VL)"
+ ],
+ "GeENMbQXhi": [
+  "Qwen (Qwen-VL / Qwen2.5-VL)",
+  "\u03c00 / \u03c00.5",
+  "OpenVLA / OpenVLA-OFT",
+  "SmolVLA"
+ ],
+ "GeL3GdwSYo": [
+  "\u03c00 / \u03c00.5",
+  "OpenVLA / OpenVLA-OFT"
+ ],
+ "Gkka9VEhWb": [
+  "ViT",
+  "\u03c00 / \u03c00.5"
+ ],
+ "Gr9nFtFTjn": [
+  "U-Net",
+  "Diffusion Policy"
+ ],
+ "GseuCgLNtO": [
+  "\u03c00 / \u03c00.5",
+  "GR00T",
+  "ACT (Action Chunking Transformer)"
+ ],
+ "H5QWMBcNSU": [
+  "\u03c00 / \u03c00.5",
+  "RT-1 / RT-2 / RT-X"
+ ],
+ "HATezFmdN5": [
+  "CLIP"
+ ],
+ "HBHR1GxaS0": [
+  "ResNet",
+  "U-Net",
+  "\u03c00 / \u03c00.5",
+  "Diffusion Policy"
+ ],
+ "HT8whUVp22": [
+  "Gemini",
+  "\u03c00 / \u03c00.5"
+ ],
+ "HbuX1Fe8bl": [
+  "Diffusion Policy",
+  "ACT (Action Chunking Transformer)"
+ ],
+ "HeUmGQaw3M": [
+  "Gemma",
+  "Qwen (Qwen-VL / Qwen2.5-VL)"
+ ],
+ "Hi8mV09nOi": [
+  "SigLIP"
+ ],
+ "HmdwOezjlQ": [
+  "\u03c00 / \u03c00.5",
+  "OpenVLA / OpenVLA-OFT",
+  "Octo"
+ ],
+ "HvKifHMHcM": [
+  "\u03c00 / \u03c00.5",
+  "UniVLA"
+ ],
+ "Ih059VNeWq": [
+  "\u03c00 / \u03c00.5",
+  "GR00T"
+ ],
+ "IjnCc1OZnJ": [
+  "CLIP",
+  "\u03c00 / \u03c00.5",
+  "OpenVLA / OpenVLA-OFT",
+  "SmolVLA"
+ ],
+ "J5RZyNKq8z": [
+  "\u03c00 / \u03c00.5"
+ ],
+ "J8pJIDI6rM": [
+  "Diffusion Policy"
+ ],
+ "JKoP9L6myQ": [
+  "ResNet",
+  "DINO / DINOv2 / DINOv3",
+  "Prismatic",
+  "\u03c00 / \u03c00.5",
+  "SmolVLA",
+  "UniVLA"
+ ],
+ "JMcC5JoPKD": [
+  "\u03c00 / \u03c00.5"
+ ],
+ "JV472m0zgq": [
+  "Qwen (Qwen-VL / Qwen2.5-VL)"
+ ],
+ "JbpsGhdjs9": [
+  "SAM / SAM 2"
+ ],
+ "JiMWz6U93i": [
+  "ViT",
+  "DINO / DINOv2 / DINOv3",
+  "SigLIP",
+  "EfficientNet",
+  "Llama",
+  "Gemini"
+ ],
+ "Jq0aPlIS34": [
+  "DINO / DINOv2 / DINOv3",
+  "ACT (Action Chunking Transformer)"
+ ],
+ "JydY4anB01": [
+  "Qwen (Qwen-VL / Qwen2.5-VL)"
+ ],
+ "KHjJ1z5m4y": [
+  "DINO / DINOv2 / DINOv3",
+  "\u03c00 / \u03c00.5",
+  "Diffusion Policy",
+  "DP3 (3D Diffusion Policy)",
+  "ACT (Action Chunking Transformer)"
+ ],
+ "Kakzp9Lr9V": [
+  "DINO / DINOv2 / DINOv3"
+ ],
+ "KdaClHHEUt": [
+  "ViT",
+  "\u03c00 / \u03c00.5"
+ ],
+ "L9RkFeuKRc": [
+  "\u03c00 / \u03c00.5",
+  "GR00T",
+  "ACT (Action Chunking Transformer)",
+  "Cosmos"
+ ],
+ "LfugZN8AN2": [
+  "PaliGemma",
+  "\u03c00 / \u03c00.5",
+  "OpenVLA / OpenVLA-OFT"
+ ],
+ "LoGyKMEVVc": [
+  "ACT (Action Chunking Transformer)"
+ ],
+ "Lp94sPpAo0": [
+  "ResNet",
+  "\u03c00 / \u03c00.5",
+  "Diffusion Policy",
+  "ACT (Action Chunking Transformer)"
+ ],
+ "LqUR3gxKdH": [
+  "CLIP",
+  "Wan (video model)"
+ ],
+ "LwMNsyCnCk": [
+  "Qwen (Qwen-VL / Qwen2.5-VL)",
+  "Claude"
+ ],
+ "M8NqiSkMDr": [
+  "Diffusion Policy",
+  "ACT (Action Chunking Transformer)"
+ ],
+ "MQlY5j6pnd": [
+  "DINO / DINOv2 / DINOv3",
+  "Diffusion Policy"
+ ],
+ "MWj9u2VZPx": [
+  "SAM / SAM 2",
+  "\u03c00 / \u03c00.5"
+ ],
+ "MjpidVjNMS": [
+  "Prismatic"
+ ],
+ "Mnggg9cnbh": [
+  "SAM / SAM 2"
+ ],
+ "NCeeEHy8d5": [
+  "\u03c00 / \u03c00.5",
+  "OpenVLA / OpenVLA-OFT"
+ ],
+ "NHE9q2cz1n": [
+  "GR00T"
+ ],
+ "Nfz7oM0Vwz": [
+  "DINO / DINOv2 / DINOv3",
+  "\u03c00 / \u03c00.5",
+  "ACT (Action Chunking Transformer)"
+ ],
+ "NnFdATGR3L": [
+  "ResNet",
+  "Diffusion Policy",
+  "DP3 (3D Diffusion Policy)",
+  "ACT (Action Chunking Transformer)"
+ ],
+ "Nxn1pyNZpE": [
+  "Grounding DINO",
+  "SAM / SAM 2",
+  "Qwen (Qwen-VL / Qwen2.5-VL)",
+  "Gemini"
+ ],
+ "ODfnFGIIe3": [
+  "U-Net"
+ ],
+ "OIhLrULoIq": [
+  "\u03c00 / \u03c00.5"
+ ],
+ "ORKJlyLOHv": [
+  "Diffusion Policy",
+  "ACT (Action Chunking Transformer)"
+ ],
+ "OckqYiY2QM": [
+  "ViT",
+  "\u03c00 / \u03c00.5"
+ ],
+ "OnGdMFJg2i": [
+  "Diffusion Policy"
+ ],
+ "P1R9iBKyv4": [
+  "\u03c00 / \u03c00.5",
+  "OpenVLA / OpenVLA-OFT"
+ ],
+ "P8H2WZH2Tw": [
+  "ResNet",
+  "ViT",
+  "CLIP",
+  "R3M"
+ ],
+ "PAtsmTswIr": [
+  "\u03c00 / \u03c00.5",
+  "RT-1 / RT-2 / RT-X",
+  "Diffusion Policy",
+  "ACT (Action Chunking Transformer)"
+ ],
+ "PCVxUMrP6N": [
+  "ViT",
+  "CLIP",
+  "Diffusion Policy",
+  "ACT (Action Chunking Transformer)"
+ ],
+ "PEWWDUL10X": [
+  "CLIP",
+  "Gemini",
+  "\u03c00 / \u03c00.5",
+  "GR00T"
+ ],
+ "PL6UDcy9Eu": [
+  "DINO / DINOv2 / DINOv3",
+  "CLIP",
+  "Diffusion Policy"
+ ],
+ "PNSqN6Bng7": [
+  "OpenVLA / OpenVLA-OFT"
+ ],
+ "PniGejQAdF": [
+  "CLIP",
+  "Qwen (Qwen-VL / Qwen2.5-VL)",
+  "Gemini",
+  "\u03c00 / \u03c00.5",
+  "OpenVLA / OpenVLA-OFT",
+  "Octo",
+  "Wan (video model)",
+  "Cosmos"
+ ],
+ "Q4ehHMIPmb": [
+  "Llama",
+  "Qwen (Qwen-VL / Qwen2.5-VL)",
+  "GPT-4 / GPT-4o / GPT-5",
+  "Gemini",
+  "Claude",
+  "\u03c00 / \u03c00.5"
+ ],
+ "Q53ayGo2IE": [
+  "ViT",
+  "DINO / DINOv2 / DINOv3"
+ ],
+ "Q6xWLHyg6x": [
+  "ViT",
+  "LLaVA",
+  "Qwen (Qwen-VL / Qwen2.5-VL)",
+  "GPT-4 / GPT-4o / GPT-5",
+  "Gemini",
+  "\u03c00 / \u03c00.5",
+  "OpenVLA / OpenVLA-OFT",
+  "RT-1 / RT-2 / RT-X",
+  "GR00T",
+  "SmolVLA",
+  "Diffusion Policy",
+  "Cosmos"
+ ],
+ "QDJCwo9pmt": [
+  "Llama",
+  "Cosmos"
+ ],
+ "QFFjW11NYa": [
+  "\u03c00 / \u03c00.5",
+  "OpenVLA / OpenVLA-OFT"
+ ],
+ "QGzgVP8RnK": [
+  "ResNet",
+  "Diffusion Policy"
+ ],
+ "QHIz2k4E88": [
+  "ResNet",
+  "\u03c00 / \u03c00.5",
+  "OpenVLA / OpenVLA-OFT",
+  "Cosmos"
+ ],
+ "Qa1Uu7lc8n": [
+  "PointNet / PointNet++",
+  "\u03c00 / \u03c00.5"
+ ],
+ "QoUwcaTc3d": [
+  "\u03c00 / \u03c00.5",
+  "ACT (Action Chunking Transformer)"
+ ],
+ "QsmD0Pq7uP": [
+  "SAM / SAM 2"
+ ],
+ "Qu7v3GmYDU": [
+  "\u03c00 / \u03c00.5",
+  "OpenVLA / OpenVLA-OFT"
+ ],
+ "QwpnI3BlwT": [
+  "ViT",
+  "LLaVA",
+  "Qwen (Qwen-VL / Qwen2.5-VL)",
+  "\u03c00 / \u03c00.5",
+  "OpenVLA / OpenVLA-OFT",
+  "RT-1 / RT-2 / RT-X",
+  "GR00T",
+  "Cosmos"
+ ],
+ "RExYYVsLbT": [
+  "DINO / DINOv2 / DINOv3"
+ ],
+ "RYXo2ktK1M": [
+  "ResNet",
+  "\u03c00 / \u03c00.5"
+ ],
+ "RdvH11pAfJ": [
+  "DINO / DINOv2 / DINOv3",
+  "\u03c00 / \u03c00.5",
+  "OpenVLA / OpenVLA-OFT",
+  "CogACT"
+ ],
+ "RmP7m64fQ6": [
+  "DINO / DINOv2 / DINOv3",
+  "SAM / SAM 2",
+  "\u03c00 / \u03c00.5",
+  "OpenVLA / OpenVLA-OFT"
+ ],
+ "Rrnnh3mDaH": [
+  "ResNet",
+  "DINO / DINOv2 / DINOv3",
+  "Depth Anything"
+ ],
+ "RwGNm8fUxX": [
+  "CLIP"
+ ],
+ "S0rbnmOkit": [
+  "ACT (Action Chunking Transformer)"
+ ],
+ "SBGylS4zwM": [
+  "\u03c00 / \u03c00.5",
+  "OpenVLA / OpenVLA-OFT",
+  "RDT",
+  "SmolVLA",
+  "Diffusion Policy",
+  "ACT (Action Chunking Transformer)"
+ ],
+ "SMBnET3Mz9": [
+  "\u03c00 / \u03c00.5"
+ ],
+ "SN5sVBOZ8D": [
+  "SAM / SAM 2",
+  "\u03c00 / \u03c00.5",
+  "Octo",
+  "RT-1 / RT-2 / RT-X",
+  "Diffusion Policy",
+  "ACT (Action Chunking Transformer)"
+ ],
+ "ST0jumL7Ma": [
+  "DINO / DINOv2 / DINOv3",
+  "\u03c00 / \u03c00.5",
+  "OpenVLA / OpenVLA-OFT",
+  "Octo",
+  "RT-1 / RT-2 / RT-X",
+  "GR00T",
+  "CogACT"
+ ],
+ "Sal8Urvt1F": [
+  "SAM / SAM 2",
+  "Gemini"
+ ],
+ "Sh0dG0HwVK": [
+  "OpenVLA / OpenVLA-OFT",
+  "Diffusion Policy"
+ ],
+ "ShBMWDRPVu": [
+  "DINO / DINOv2 / DINOv3",
+  "Gemini",
+  "\u03c00 / \u03c00.5",
+  "Diffusion Policy"
+ ],
+ "SniDOKrnNY": [
+  "\u03c00 / \u03c00.5",
+  "OpenVLA / OpenVLA-OFT"
+ ],
+ "T3IOHvur0R": [
+  "Wan (video model)"
+ ],
+ "TH0fdttVB0": [
+  "GPT-4 / GPT-4o / GPT-5"
+ ],
+ "TTFZrb0Hw3": [
+  "PaliGemma",
+  "\u03c00 / \u03c00.5",
+  "GR00T"
+ ],
+ "TTJ3uxLcxL": [
+  "\u03c00 / \u03c00.5",
+  "OpenVLA / OpenVLA-OFT",
+  "Diffusion Policy",
+  "Mamba"
+ ],
+ "TZM6J864Lf": [
+  "Diffusion Policy"
+ ],
+ "Ti3oK55n1H": [
+  "ACT (Action Chunking Transformer)"
+ ],
+ "Tjg1ZvCdXU": [
+  "PaliGemma",
+  "\u03c00 / \u03c00.5",
+  "Diffusion Policy"
+ ],
+ "TlWfBm8jtZ": [
+  "Diffusion Policy"
+ ],
+ "TmKLynfHXr": [
+  "\u03c00 / \u03c00.5"
+ ],
+ "TscNG5Wcwn": [
+  "ViT",
+  "SmolVLA"
+ ],
+ "U3Nmrhun8B": [
+  "\u03c00 / \u03c00.5"
+ ],
+ "U5POjpnj6J": [
+  "OpenVLA / OpenVLA-OFT",
+  "Diffusion Policy"
+ ],
+ "U620dzd51N": [
+  "\u03c00 / \u03c00.5",
+  "OpenVLA / OpenVLA-OFT",
+  "SmolVLA",
+  "CogACT",
+  "ACT (Action Chunking Transformer)"
+ ],
+ "ULCeXiRzJD": [
+  "DP3 (3D Diffusion Policy)"
+ ],
+ "UMHg65UHcY": [
+  "PointNet / PointNet++",
+  "Qwen (Qwen-VL / Qwen2.5-VL)"
+ ],
+ "UVJPDRCmlf": [
+  "\u03c00 / \u03c00.5"
+ ],
+ "UZnHsKKAAB": [
+  "Gemini",
+  "Prismatic",
+  "\u03c00 / \u03c00.5"
+ ],
+ "Unsv9DsbfO": [
+  "\u03c00 / \u03c00.5",
+  "GR00T",
+  "Diffusion Policy"
+ ],
+ "VEsQVsxMMw": [
+  "CLIP",
+  "OpenVLA / OpenVLA-OFT",
+  "RT-1 / RT-2 / RT-X"
+ ],
+ "VY6U0drX88": [
+  "\u03c00 / \u03c00.5",
+  "OpenVLA / OpenVLA-OFT",
+  "Octo",
+  "GR00T",
+  "UniVLA"
+ ],
+ "Vv1WXMkSTD": [
+  "SmolVLA",
+  "ACT (Action Chunking Transformer)"
+ ],
+ "VxUazHdUwe": [
+  "\u03c00 / \u03c00.5",
+  "Cosmos"
+ ],
+ "WNZ4Dr57JS": [
+  "ViT",
+  "DINO / DINOv2 / DINOv3",
+  "SAM / SAM 2"
+ ],
+ "WaIPZtSrpq": [
+  "Qwen (Qwen-VL / Qwen2.5-VL)"
+ ],
+ "WeNTfF2Rks": [
+  "\u03c00 / \u03c00.5"
+ ],
+ "WvR13cRtRf": [
+  "\u03c00 / \u03c00.5"
+ ],
+ "X2mRYIgshj": [
+  "\u03c00 / \u03c00.5",
+  "RDT"
+ ],
+ "XKZ7YJEfr4": [
+  "ViT",
+  "DINO / DINOv2 / DINOv3",
+  "Grounding DINO",
+  "SAM / SAM 2",
+  "Octo"
+ ],
+ "Xgth4qBOmb": [
+  "ResNet",
+  "OpenVLA / OpenVLA-OFT",
+  "Wan (video model)"
+ ],
+ "XnIdgAtBX7": [
+  "\u03c00 / \u03c00.5",
+  "OpenVLA / OpenVLA-OFT",
+  "UniVLA"
+ ],
+ "Y55iJjxMsh": [
+  "Grounding DINO",
+  "SAM / SAM 2",
+  "\u03c00 / \u03c00.5",
+  "GR00T",
+  "Diffusion Policy"
+ ],
+ "Y6pog6YGIX": [
+  "DINO / DINOv2 / DINOv3"
+ ],
+ "YQoaLlpDD3": [
+  "DreamerV3"
+ ],
+ "YTw6LOO9C5": [
+  "CLIP",
+  "Qwen (Qwen-VL / Qwen2.5-VL)",
+  "\u03c00 / \u03c00.5",
+  "Octo",
+  "Diffusion Policy",
+  "ACT (Action Chunking Transformer)"
+ ],
+ "YrNlVJcApO": [
+  "\u03c00 / \u03c00.5",
+  "Cosmos"
+ ],
+ "Z04KxYWC6V": [
+  "\u03c00 / \u03c00.5",
+  "OpenVLA / OpenVLA-OFT"
+ ],
+ "Z35baC5jBe": [
+  "DP3 (3D Diffusion Policy)"
+ ],
+ "ZAdTLinUnd": [
+  "\u03c00 / \u03c00.5",
+  "OpenVLA / OpenVLA-OFT",
+  "Octo",
+  "RT-1 / RT-2 / RT-X",
+  "UniVLA"
+ ],
+ "ZDnuAR0GMn": [
+  "Qwen (Qwen-VL / Qwen2.5-VL)",
+  "Gemini",
+  "\u03c00 / \u03c00.5"
+ ],
+ "Zts11nHGLq": [
+  "DINO / DINOv2 / DINOv3",
+  "\u03c00 / \u03c00.5",
+  "Octo"
+ ],
+ "ZyLuLA1Tsy": [
+  "Llama",
+  "LLaVA",
+  "Qwen (Qwen-VL / Qwen2.5-VL)",
+  "OpenVLA / OpenVLA-OFT",
+  "GR00T"
+ ],
+ "aITDcHSCTW": [
+  "DINO / DINOv2 / DINOv3",
+  "CLIP",
+  "U-Net",
+  "\u03c00 / \u03c00.5",
+  "Cosmos"
+ ],
+ "aPosmVaV9y": [
+  "Qwen (Qwen-VL / Qwen2.5-VL)",
+  "Diffusion Policy"
+ ],
+ "aPppmSJzb5": [
+  "\u03c00 / \u03c00.5",
+  "GR00T",
+  "SmolVLA"
+ ],
+ "aRtb8NIgc3": [
+  "\u03c00 / \u03c00.5",
+  "GR00T",
+  "ACT (Action Chunking Transformer)"
+ ],
+ "aTDKKvOg7W": [
+  "Qwen (Qwen-VL / Qwen2.5-VL)",
+  "\u03c00 / \u03c00.5",
+  "RT-1 / RT-2 / RT-X",
+  "GR00T"
+ ],
+ "aq2hmhW0kU": [
+  "Diffusion Policy"
+ ],
+ "aspenN9eir": [
+  "\u03c00 / \u03c00.5",
+  "Cosmos"
+ ],
+ "b2gSINMX3R": [
+  "ViT"
+ ],
+ "bL51SsKShM": [
+  "Gemini",
+  "\u03c00 / \u03c00.5",
+  "GR00T",
+  "ACT (Action Chunking Transformer)"
+ ],
+ "bLQynefrlp": [
+  "ViT",
+  "DINO / DINOv2 / DINOv3",
+  "\u03c00 / \u03c00.5",
+  "DP3 (3D Diffusion Policy)",
+  "ACT (Action Chunking Transformer)"
+ ],
+ "bXQv3Kn5qL": [
+  "Qwen (Qwen-VL / Qwen2.5-VL)",
+  "Gemini"
+ ],
+ "bjPoaczBRX": [
+  "DINO / DINOv2 / DINOv3",
+  "CLIP"
+ ],
+ "bqXyS2gKba": [
+  "ViT"
+ ],
+ "c0ygOLwL7i": [
+  "Diffusion Policy"
+ ],
+ "c4Z0Y8gvnI": [
+  "SigLIP",
+  "\u03c00 / \u03c00.5",
+  "RT-1 / RT-2 / RT-X"
+ ],
+ "c7BvD59RpP": [
+  "DreamerV3"
+ ],
+ "cCI6zZIcEw": [
+  "\u03c00 / \u03c00.5",
+  "SmolVLA",
+  "ACT (Action Chunking Transformer)"
+ ],
+ "cQPnBRGgWM": [
+  "\u03c00 / \u03c00.5",
+  "Diffusion Policy",
+  "ACT (Action Chunking Transformer)"
+ ],
+ "cauTGdv8L0": [
+  "\u03c00 / \u03c00.5"
+ ],
+ "cfzFrOJmKA": [
+  "ViT",
+  "LLaVA",
+  "Gemini",
+  "\u03c00 / \u03c00.5",
+  "OpenVLA / OpenVLA-OFT",
+  "GR00T"
+ ],
+ "d0ltfevDaD": [
+  "ViT"
+ ],
+ "dFblf2sS7M": [
+  "SigLIP",
+  "SAM / SAM 2",
+  "Llama",
+  "OpenVLA / OpenVLA-OFT",
+  "Wan (video model)"
+ ],
+ "dKRgZYcdRV": [
+  "ResNet",
+  "DINO / DINOv2 / DINOv3",
+  "U-Net"
+ ],
+ "dPgz9Kssgo": [
+  "\u03c00 / \u03c00.5"
+ ],
+ "dSbtHPqFj9": [
+  "\u03c00 / \u03c00.5"
+ ],
+ "db6WHoqH91": [
+  "DINO / DINOv2 / DINOv3",
+  "Grounding DINO",
+  "SAM / SAM 2",
+  "Gemini",
+  "\u03c00 / \u03c00.5",
+  "RT-1 / RT-2 / RT-X",
+  "ACT (Action Chunking Transformer)",
+  "Stable Diffusion"
+ ],
+ "ddzWaOmWZE": [
+  "OpenVLA / OpenVLA-OFT",
+  "Diffusion Policy",
+  "ACT (Action Chunking Transformer)"
+ ],
+ "dhh4gmm3NK": [
+  "Gemini"
+ ],
+ "dngZLI0SlV": [
+  "DreamerV3"
+ ],
+ "drlpFld34L": [
+  "ResNet",
+  "DINO / DINOv2 / DINOv3",
+  "SAM / SAM 2"
+ ],
+ "dykg3Ed5Wy": [
+  "ACT (Action Chunking Transformer)"
+ ],
+ "e9OQ6xsma9": [
+  "GR00T"
+ ],
+ "e9ZYAwJqFR": [
+  "\u03c00 / \u03c00.5",
+  "OpenVLA / OpenVLA-OFT",
+  "SmolVLA"
+ ],
+ "eGZ6YMFVzU": [
+  "GPT-4 / GPT-4o / GPT-5",
+  "Gemini"
+ ],
+ "eIwbKQS5pz": [
+  "PointNet / PointNet++",
+  "DP3 (3D Diffusion Policy)"
+ ],
+ "eRpTR7EEC1": [
+  "Gemini",
+  "\u03c00 / \u03c00.5"
+ ],
+ "ecN9efL5zs": [
+  "ACT (Action Chunking Transformer)"
+ ],
+ "ey3y7lxWY1": [
+  "ResNet",
+  "ViT",
+  "CLIP",
+  "U-Net",
+  "Diffusion Policy",
+  "DP3 (3D Diffusion Policy)"
+ ],
+ "f3Dic5dJnz": [
+  "\u03c00 / \u03c00.5",
+  "ACT (Action Chunking Transformer)"
+ ],
+ "f5329HhijI": [
+  "Diffusion Policy"
+ ],
+ "f9grq4Ncx9": [
+  "\u03c00 / \u03c00.5",
+  "Cosmos"
+ ],
+ "fGWkovHMQE": [
+  "\u03c00 / \u03c00.5",
+  "Cosmos"
+ ],
+ "ffIOVlfRQN": [
+  "Mamba"
+ ],
+ "fuB1LcFk9g": [
+  "\u03c00 / \u03c00.5",
+  "OpenVLA / OpenVLA-OFT"
+ ],
+ "gO08puaqia": [
+  "U-Net"
+ ],
+ "gTazI5D0Fj": [
+  "\u03c00 / \u03c00.5",
+  "OpenVLA / OpenVLA-OFT",
+  "Octo",
+  "RT-1 / RT-2 / RT-X",
+  "Diffusion Policy",
+  "Cosmos"
+ ],
+ "gUSryIAaeN": [
+  "\u03c00 / \u03c00.5"
+ ],
+ "gbchkYm28k": [
+  "Grounding DINO",
+  "SAM / SAM 2"
+ ],
+ "ghx1d6PQUR": [
+  "ViT",
+  "Prismatic",
+  "\u03c00 / \u03c00.5",
+  "OpenVLA / OpenVLA-OFT",
+  "RT-1 / RT-2 / RT-X",
+  "UniVLA"
+ ],
+ "gk8bvFSZq3": [
+  "Diffusion Policy"
+ ],
+ "gn0kBXdK0G": [
+  "Qwen (Qwen-VL / Qwen2.5-VL)",
+  "GR00T",
+  "Cosmos"
+ ],
+ "gqmJ7SIK5Q": [
+  "GR00T"
+ ],
+ "h1yqzSoZ49": [
+  "DP3 (3D Diffusion Policy)"
+ ],
+ "h26AmTGnfu": [
+  "\u03c00 / \u03c00.5"
+ ],
+ "hCG12ifteJ": [
+  "Qwen (Qwen-VL / Qwen2.5-VL)",
+  "\u03c00 / \u03c00.5",
+  "RT-1 / RT-2 / RT-X"
+ ],
+ "hDNvcoKMXH": [
+  "PointNet / PointNet++",
+  "Diffusion Policy",
+  "DP3 (3D Diffusion Policy)"
+ ],
+ "hJv9yhbgxR": [
+  "\u03c00 / \u03c00.5"
+ ],
+ "hPz010j4EA": [
+  "LLaVA"
+ ],
+ "hSRtOgnkTM": [
+  "ResNet"
+ ],
+ "hSZ0lT7TCp": [
+  "\u03c00 / \u03c00.5"
+ ],
+ "hgRIVs5QZU": [
+  "\u03c00 / \u03c00.5",
+  "Wan (video model)"
+ ],
+ "hvArz6F8eA": [
+  "GPT-4 / GPT-4o / GPT-5",
+  "Gemini"
+ ],
+ "hwTNqrJmuQ": [
+  "Qwen (Qwen-VL / Qwen2.5-VL)",
+  "\u03c00 / \u03c00.5",
+  "Wan (video model)"
+ ],
+ "iOU9zkASbg": [
+  "\u03c00 / \u03c00.5"
+ ],
+ "iXJWieKME1": [
+  "Diffusion Policy"
+ ],
+ "iy5oCeLdEF": [
+  "DINO / DINOv2 / DINOv3",
+  "UniVLA"
+ ],
+ "j5QcZcRrda": [
+  "EfficientNet"
+ ],
+ "jQAOksG9Bd": [
+  "ResNet",
+  "ACT (Action Chunking Transformer)"
+ ],
+ "jeNVGuJQrb": [
+  "ViT",
+  "DINO / DINOv2 / DINOv3",
+  "CLIP",
+  "SigLIP",
+  "R3M",
+  "VC-1",
+  "LLaVA"
+ ],
+ "jlXzHOkSXq": [
+  "\u03c00 / \u03c00.5"
+ ],
+ "jnEHLRyWTZ": [
+  "\u03c00 / \u03c00.5"
+ ],
+ "k9EjTLL8bA": [
+  "\u03c00 / \u03c00.5",
+  "OpenVLA / OpenVLA-OFT"
+ ],
+ "kB0KO1Wife": [
+  "\u03c00 / \u03c00.5",
+  "OpenVLA / OpenVLA-OFT",
+  "Wan (video model)"
+ ],
+ "kBoTnjRw4s": [
+  "\u03c00 / \u03c00.5"
+ ],
+ "kCeFEyLOuW": [
+  "\u03c00 / \u03c00.5"
+ ],
+ "kGGI0115Rg": [
+  "DreamerV3"
+ ],
+ "kGLogzKtYq": [
+  "DINO / DINOv2 / DINOv3"
+ ],
+ "keuUzk1RSd": [
+  "\u03c00 / \u03c00.5",
+  "DP3 (3D Diffusion Policy)",
+  "ACT (Action Chunking Transformer)"
+ ],
+ "kpX1KOfNI5": [
+  "DINO / DINOv2 / DINOv3",
+  "Grounding DINO",
+  "SAM / SAM 2",
+  "PointNet / PointNet++",
+  "ACT (Action Chunking Transformer)"
+ ],
+ "l0bwpzWRKy": [
+  "SigLIP",
+  "\u03c00 / \u03c00.5",
+  "ACT (Action Chunking Transformer)"
+ ],
+ "lHDmYo4bzs": [
+  "\u03c00 / \u03c00.5",
+  "ACT (Action Chunking Transformer)"
+ ],
+ "loMfT7cfYl": [
+  "\u03c00 / \u03c00.5"
+ ],
+ "lorikYEkAx": [
+  "Diffusion Policy"
+ ],
+ "lsfM8TzuH2": [
+  "ViT",
+  "DINO / DINOv2 / DINOv3",
+  "SigLIP",
+  "V-JEPA",
+  "\u03c00 / \u03c00.5",
+  "Cosmos",
+  "DreamerV3"
+ ],
+ "m94Acp7Al5": [
+  "Mamba"
+ ],
+ "mG3eBTsBiG": [
+  "Qwen (Qwen-VL / Qwen2.5-VL)",
+  "\u03c00 / \u03c00.5"
+ ],
+ "mHCqiRUiHi": [
+  "ViT",
+  "SigLIP",
+  "LLaVA",
+  "Qwen (Qwen-VL / Qwen2.5-VL)",
+  "\u03c00 / \u03c00.5",
+  "OpenVLA / OpenVLA-OFT",
+  "RT-1 / RT-2 / RT-X",
+  "GR00T",
+  "RDT",
+  "SmolVLA",
+  "Diffusion Policy"
+ ],
+ "mg7X6SFE75": [
+  "\u03c00 / \u03c00.5"
+ ],
+ "mlF6DhhBNF": [
+  "Gemma",
+  "\u03c00 / \u03c00.5",
+  "Cosmos"
+ ],
+ "mw8BgE8ADo": [
+  "DINO / DINOv2 / DINOv3",
+  "\u03c00 / \u03c00.5",
+  "GR00T"
+ ],
+ "mwJwAQ0CXT": [
+  "\u03c00 / \u03c00.5"
+ ],
+ "mzGjyghofG": [
+  "SAM / SAM 2"
+ ],
+ "n31eEof0k3": [
+  "Llama",
+  "Qwen (Qwen-VL / Qwen2.5-VL)",
+  "GPT-4 / GPT-4o / GPT-5",
+  "Gemini",
+  "\u03c00 / \u03c00.5",
+  "GR00T"
+ ],
+ "nBDd4rVq5Q": [
+  "\u03c00 / \u03c00.5",
+  "Cosmos"
+ ],
+ "nIbnBCtz79": [
+  "DINO / DINOv2 / DINOv3",
+  "\u03c00 / \u03c00.5"
+ ],
+ "nXfwmrzXzz": [
+  "Qwen (Qwen-VL / Qwen2.5-VL)",
+  "\u03c00 / \u03c00.5"
+ ],
+ "nYkpEYmvbg": [
+  "Qwen (Qwen-VL / Qwen2.5-VL)"
+ ],
+ "ndhpQ86iXs": [
+  "\u03c00 / \u03c00.5"
+ ],
+ "nl8iBTm3Mt": [
+  "ResNet"
+ ],
+ "ntHuqgjrgs": [
+  "\u03c00 / \u03c00.5",
+  "OpenVLA / OpenVLA-OFT",
+  "UniVLA"
+ ],
+ "nzYChkCtvT": [
+  "DINO / DINOv2 / DINOv3"
+ ],
+ "o03EddNo6r": [
+  "ViT",
+  "CLIP",
+  "PointNet / PointNet++",
+  "\u03c00 / \u03c00.5"
+ ],
+ "o4lQTMHyTc": [
+  "SAM / SAM 2",
+  "Qwen (Qwen-VL / Qwen2.5-VL)",
+  "\u03c00 / \u03c00.5"
+ ],
+ "oKJnHTluoA": [
+  "\u03c00 / \u03c00.5",
+  "OpenVLA / OpenVLA-OFT",
+  "DP3 (3D Diffusion Policy)"
+ ],
+ "oX3ErTz3rv": [
+  "\u03c00 / \u03c00.5"
+ ],
+ "oias4zZRUn": [
+  "DINO / DINOv2 / DINOv3",
+  "CLIP",
+  "Gemini",
+  "Wan (video model)"
+ ],
+ "ojMvvFKk6t": [
+  "ViT",
+  "DINO / DINOv2 / DINOv3"
+ ],
+ "oq5Byppu7Q": [
+  "DreamerV3"
+ ],
+ "pENAQ22Jh1": [
+  "Qwen (Qwen-VL / Qwen2.5-VL)",
+  "Gemini",
+  "\u03c00 / \u03c00.5",
+  "ACT (Action Chunking Transformer)"
+ ],
+ "pLyDkcGbkT": [
+  "\u03c00 / \u03c00.5"
+ ],
+ "pPrwDHXw93": [
+  "SigLIP",
+  "Qwen (Qwen-VL / Qwen2.5-VL)",
+  "\u03c00 / \u03c00.5",
+  "OpenVLA / OpenVLA-OFT",
+  "RT-1 / RT-2 / RT-X"
+ ],
+ "pTqOGquuCh": [
+  "Grounding DINO"
+ ],
+ "psNqjklVOK": [
+  "DreamerV3"
+ ],
+ "qH1h7UkK0k": [
+  "DINO / DINOv2 / DINOv3",
+  "SigLIP",
+  "\u03c00 / \u03c00.5",
+  "OpenVLA / OpenVLA-OFT",
+  "GR00T",
+  "RDT",
+  "Diffusion Policy",
+  "ACT (Action Chunking Transformer)"
+ ],
+ "qHndjmxgs1": [
+  "ViT",
+  "DINO / DINOv2 / DINOv3",
+  "\u03c00 / \u03c00.5",
+  "RDT",
+  "DP3 (3D Diffusion Policy)",
+  "ACT (Action Chunking Transformer)"
+ ],
+ "qKU6lifnPU": [
+  "Qwen (Qwen-VL / Qwen2.5-VL)",
+  "\u03c00 / \u03c00.5",
+  "OpenVLA / OpenVLA-OFT",
+  "GR00T"
+ ],
+ "qQs6JndxfZ": [
+  "Gemma",
+  "Llama",
+  "Qwen (Qwen-VL / Qwen2.5-VL)",
+  "GPT-4 / GPT-4o / GPT-5",
+  "Claude"
+ ],
+ "qd6clCx6QY": [
+  "ViT",
+  "DINO / DINOv2 / DINOv3",
+  "CLIP",
+  "Gemma"
+ ],
+ "quVJ7qbQl6": [
+  "Gemini",
+  "\u03c00 / \u03c00.5",
+  "OpenVLA / OpenVLA-OFT",
+  "GR00T"
+ ],
+ "qvOl1xOUtn": [
+  "\u03c00 / \u03c00.5",
+  "Cosmos"
+ ],
+ "qx5mPYiXVi": [
+  "PaliGemma"
+ ],
+ "r2uaBmvWgH": [
+  "Qwen (Qwen-VL / Qwen2.5-VL)",
+  "Gemini"
+ ],
+ "r7ZN8cPEcj": [
+  "Qwen (Qwen-VL / Qwen2.5-VL)"
+ ],
+ "r8MOxo93Mv": [
+  "ViT",
+  "DP3 (3D Diffusion Policy)"
+ ],
+ "rIyIQWvpST": [
+  "ACT (Action Chunking Transformer)"
+ ],
+ "rQZHMVTYYy": [
+  "SmolVLA",
+  "ACT (Action Chunking Transformer)"
+ ],
+ "rTX0zr5FjT": [
+  "CLIP",
+  "U-Net",
+  "Diffusion Policy"
+ ],
+ "rYkaehgzzO": [
+  "GPT-4 / GPT-4o / GPT-5",
+  "OpenVLA / OpenVLA-OFT"
+ ],
+ "rcE4amkjBq": [
+  "ResNet",
+  "ViT",
+  "\u03c00 / \u03c00.5",
+  "Diffusion Policy"
+ ],
+ "rfRjWMFfvV": [
+  "DINO / DINOv2 / DINOv3",
+  "Diffusion Policy",
+  "ACT (Action Chunking Transformer)"
+ ],
+ "rnp2Bj4RUX": [
+  "SAM / SAM 2",
+  "GPT-4 / GPT-4o / GPT-5",
+  "Gemini"
+ ],
+ "sF3YZbbTNX": [
+  "SAM / SAM 2",
+  "Qwen (Qwen-VL / Qwen2.5-VL)",
+  "GPT-4 / GPT-4o / GPT-5",
+  "Gemini",
+  "Claude"
+ ],
+ "sIe2LX2HaF": [
+  "ACT (Action Chunking Transformer)"
+ ],
+ "sitHOFsi2x": [
+  "SAM / SAM 2"
+ ],
+ "suRtJLXVxI": [
+  "PointNet / PointNet++"
+ ],
+ "tAXtXe4Oqd": [
+  "SAM / SAM 2",
+  "\u03c00 / \u03c00.5",
+  "GR00T"
+ ],
+ "tQRHDxUApa": [
+  "\u03c00 / \u03c00.5",
+  "GR00T",
+  "Wan (video model)"
+ ],
+ "tegLlXBRCU": [
+  "\u03c00 / \u03c00.5",
+  "OpenVLA / OpenVLA-OFT"
+ ],
+ "tfC6LMD02z": [
+  "\u03c00 / \u03c00.5"
+ ],
+ "trTMmn2U1g": [
+  "Qwen (Qwen-VL / Qwen2.5-VL)"
+ ],
+ "tsWZwXGz5P": [
+  "\u03c00 / \u03c00.5"
+ ],
+ "u56Z5KqtkI": [
+  "ACT (Action Chunking Transformer)"
+ ],
+ "uHhNEb0OSW": [
+  "\u03c00 / \u03c00.5",
+  "GR00T"
+ ],
+ "uMgOYXmgn2": [
+  "Mamba"
+ ],
+ "uNi5VigrGr": [
+  "SmolVLA"
+ ],
+ "uhnmcdamCa": [
+  "Diffusion Policy"
+ ],
+ "uizBY3yrgz": [
+  "GPT-4 / GPT-4o / GPT-5",
+  "Gemini",
+  "Claude",
+  "\u03c00 / \u03c00.5"
+ ],
+ "ult1vxdeUb": [
+  "ResNet",
+  "ViT",
+  "DINO / DINOv2 / DINOv3",
+  "SigLIP",
+  "\u03c00 / \u03c00.5"
+ ],
+ "uoFfrJHHq8": [
+  "\u03c00 / \u03c00.5"
+ ],
+ "v24DO7JOuN": [
+  "DINO / DINOv2 / DINOv3"
+ ],
+ "vA3t8YK04w": [
+  "Diffusion Policy"
+ ],
+ "vG6UymddY4": [
+  "\u03c00 / \u03c00.5",
+  "Diffusion Policy",
+  "ACT (Action Chunking Transformer)"
+ ],
+ "vQmF2cR04D": [
+  "\u03c00 / \u03c00.5",
+  "GR00T"
+ ],
+ "w1x9MHo93E": [
+  "\u03c00 / \u03c00.5",
+  "ACT (Action Chunking Transformer)"
+ ],
+ "w2H90oEzfp": [
+  "DINO / DINOv2 / DINOv3"
+ ],
+ "w3g5PWur7i": [
+  "\u03c00 / \u03c00.5",
+  "OpenVLA / OpenVLA-OFT"
+ ],
+ "wALhOwQWnx": [
+  "Claude"
+ ],
+ "wBzyyPlFs6": [
+  "ViT"
+ ],
+ "wKRawikMuG": [
+  "\u03c00 / \u03c00.5",
+  "GR00T"
+ ],
+ "wLgEYxjqid": [
+  "CLIP",
+  "Qwen (Qwen-VL / Qwen2.5-VL)",
+  "GPT-4 / GPT-4o / GPT-5"
+ ],
+ "wMrKZ9eYBg": [
+  "DINO / DINOv2 / DINOv3",
+  "\u03c00 / \u03c00.5",
+  "Diffusion Policy"
+ ],
+ "wRLEgpRnVR": [
+  "CLIP",
+  "\u03c00 / \u03c00.5",
+  "OpenVLA / OpenVLA-OFT",
+  "Octo",
+  "UniVLA"
+ ],
+ "wXv81vB0Xt": [
+  "\u03c00 / \u03c00.5",
+  "Diffusion Policy"
+ ],
+ "wiovp2zRWA": [
+  "ACT (Action Chunking Transformer)"
+ ],
+ "wt25SMJmEq": [
+  "PointNet / PointNet++"
+ ],
+ "x05Rf7L7H4": [
+  "\u03c00 / \u03c00.5"
+ ],
+ "xEOer7gykg": [
+  "CLIP",
+  "\u03c00 / \u03c00.5"
+ ],
+ "xHjEeyHkhY": [
+  "SAM / SAM 2"
+ ],
+ "xMysKLF2hX": [
+  "ResNet",
+  "DINO / DINOv2 / DINOv3",
+  "Cosmos"
+ ],
+ "xOhVCWilYJ": [
+  "SAM / SAM 2",
+  "PaliGemma",
+  "Qwen (Qwen-VL / Qwen2.5-VL)",
+  "GPT-4 / GPT-4o / GPT-5",
+  "Gemini",
+  "\u03c00 / \u03c00.5"
+ ],
+ "xWoyO2BPcl": [
+  "LLaVA",
+  "Qwen (Qwen-VL / Qwen2.5-VL)",
+  "GPT-4 / GPT-4o / GPT-5",
+  "Gemini"
+ ],
+ "xXHKqL5u5P": [
+  "\u03c00 / \u03c00.5",
+  "Diffusion Policy"
+ ],
+ "xaGVjPTxtr": [
+  "Qwen (Qwen-VL / Qwen2.5-VL)",
+  "\u03c00 / \u03c00.5"
+ ],
+ "xc8asDq7QI": [
+  "\u03c00 / \u03c00.5"
+ ],
+ "xn8Hwa4hpq": [
+  "ACT (Action Chunking Transformer)"
+ ],
+ "xombt7ofur": [
+  "U-Net"
+ ],
+ "y5Z5ccS0Bv": [
+  "\u03c00 / \u03c00.5"
+ ],
+ "yMD1ykviND": [
+  "SAM / SAM 2",
+  "U-Net",
+  "Stable Diffusion"
+ ],
+ "yNHgrgATuY": [
+  "\u03c00 / \u03c00.5",
+  "OpenVLA / OpenVLA-OFT",
+  "Octo",
+  "RT-1 / RT-2 / RT-X",
+  "CogACT"
+ ],
+ "yaYM35u9Su": [
+  "DINO / DINOv2 / DINOv3"
+ ],
+ "yeAKwjw5Xa": [
+  "ViT",
+  "CLIP",
+  "V-JEPA",
+  "\u03c00 / \u03c00.5",
+  "Diffusion Policy",
+  "ACT (Action Chunking Transformer)"
+ ],
+ "z47bcul4Zk": [
+  "\u03c00 / \u03c00.5"
+ ],
+ "z5Mgc1GGjP": [
+  "Gemma",
+  "GPT-4 / GPT-4o / GPT-5",
+  "\u03c00 / \u03c00.5"
+ ],
+ "z5cgS0XgeK": [
+  "\u03c00 / \u03c00.5"
+ ],
+ "zDGliNPeBL": [
+  "ACT (Action Chunking Transformer)",
+  "DreamerV3"
+ ],
+ "zYpPmDICVV": [
+  "U-Net"
+ ],
+ "zhiG7XB56D": [
+  "Diffusion Policy",
+  "DP3 (3D Diffusion Policy)"
+ ],
+ "zr63f3tmyq": [
+  "OpenVLA / OpenVLA-OFT"
+ ],
+ "zsHXQqYhFn": [
+  "DINO / DINOv2 / DINOv3",
+  "CLIP",
+  "SigLIP",
+  "U-Net",
+  "\u03c00 / \u03c00.5",
+  "OpenVLA / OpenVLA-OFT",
+  "Stable Diffusion"
+ ]
+}
