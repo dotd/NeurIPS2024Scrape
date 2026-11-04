@@ -1,6 +1,6 @@
 """Find the robots each CoRL 2026 paper uses, by matching known platform names in the PDF text before References.
 
-Writes htmls/corl2026/robots.json: {paper_id: [robot names]}; htmls/corl2026/build.py turns the top 50 into a filter.
+Writes website/corl2026/robots.json: {paper_id: [robot names]}; website/corl2026/build.py turns the top 50 into a filter.
 
     uv run python specific_scripts/corl2026_robots.py
 """
@@ -14,7 +14,7 @@ import re
 import pymupdf
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-HERE = os.path.join(ROOT, "htmls", "corl2026")
+HERE = os.path.join(ROOT, "website", "corl2026")
 OUT = os.path.join(HERE, "robots.json")
 MIN_MENTIONS = 2  # ponytail: one passing mention is usually related work; robots used in experiments recur
 REFS_RE = re.compile(r"\n\s*(?:References|Bibliography)\s*\n")

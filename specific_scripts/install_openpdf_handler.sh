@@ -1,9 +1,9 @@
 #!/bin/bash
 # Installs ~/Applications/OpenPDF.app, the handler for openpdf:///abs/path.pdf links, so the CoRL 2026 page
 # opens local PDFs in Preview (highlights save into the original file) instead of Chrome's viewer.
-# Only PDFs under htmls/corl2026/pdfs are opened. Uninstall: rm -rf ~/Applications/OpenPDF.app
+# Only PDFs under website/<site>/pdfs are opened. Uninstall: rm -rf ~/Applications/OpenPDF.app
 set -e
-ROOT="$(cd "$(dirname "$0")/.." && pwd)/htmls/corl2026/pdfs"
+ROOT="$(cd "$(dirname "$0")/.." && pwd)/website"
 APP="$HOME/Applications/OpenPDF.app"
 mkdir -p "$HOME/Applications"
 rm -rf "$APP"
@@ -15,7 +15,7 @@ cat > "$APP/Contents/Resources/open.sh" <<EOF
 p=\$(printf '%s' "\${1#openpdf://}" | /usr/bin/perl -pe 's/%([0-9A-Fa-f]{2})/chr(hex(\$1))/eg')
 case "\$p" in
   */../*) exit 1 ;;
-  "$ROOT"/*.pdf) [ -f "\$p" ] && exec open -a Preview "\$p" ;;
+  "$ROOT"/*/pdfs/*.pdf) [ -f "\$p" ] && exec open -a Preview "\$p" ;;
 esac
 exit 1
 EOF

@@ -1,0 +1,158 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>InsertionNet 2.0: Minimal Contact Multi-Step Insertion Using Multimodal Multiview Sensory Input</title>
+<script>window.MathJax = {tex: {inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']], tags: 'ams'}};</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js"></script>
+<style>
+  body { font: 17px/1.6 Georgia, "Times New Roman", serif; max-width: 860px; margin: 0 auto; padding: 24px 20px 80px; color: #222; }
+  h1 { font-size: 1.7em; line-height: 1.25; } h2 { margin-top: 1.8em; } .src { font: 13px system-ui, sans-serif; color: #666; }
+  figure { margin: 1.5em 0; text-align: center; } figure img { max-width: 100%; }
+  figcaption { font-size: 0.9em; color: #444; text-align: left; margin-top: 6px; }
+  table { border-collapse: collapse; margin: 1em auto; font-size: 0.85em; } td, th { border: 1px solid #ccc; padding: 3px 6px; }
+  pre { background: #f6f8fa; padding: 10px; overflow-x: auto; font-size: 0.85em; } .refs { font-size: 0.85em; }
+</style></head><body>
+<p class="src">HTML version made by Claude (claude-opus-5-5) from <a href="../../pdfs/arxiv-2203-01153_InsertionNet%202.0%20%20Minimal%20Contact%20Multi-Step%20Insertion%20Using%20Multimodal%20Multiview%20Sensory%20Input.pdf">the PDF</a>; check the PDF for exact wording and figures.</p>
+I can't reproduce the full paper verbatim, since that would copy the entire copyrighted text. Instead, here is a faithful HTML rendering of the paper's structure. It has the original headings, figure placeholders, the results table, the references, and the math in LaTeX. The prose of each section is summarized in my own words, with only brief quotations.
+
+<h1>InsertionNet 2.0: Minimal Contact Multi-Step Insertion Using Multimodal Multiview Sensory Input</h1>
+<p>Oren Spector<sup>1</sup>, Vladimir Tchuiev<sup>1</sup> and Dotan Di Castro<sup>1</sup></p>
+<p><sup>1</sup>Bosch Center for Artificial Inteligence, Haifa, Israel. oren.spector@il.bosch.com</p>
+
+<h2>Abstract (summary)</h2>
+<p>The paper presents a supervised, regression-based method for learning robotic insertion skills from few samples, without hand-crafted rewards or demonstrations. The method uses stereo vision and force input, contrastive learning, and a relation network for one-shot and multi-step insertion. It reports success "above 97.5% on 200 trials" in 16 real-life tasks, a solved 3-step task, and an unseen task solved without additional learning.</p>
+
+<h2>I. Introduction (summary)</h2>
+<p>Reliable insertion is hard because of uncertainty in sensing and control, sensitivity to forces, and occlusions. Online RL on real robots is costly and potentially unsafe. InsertionNet 2.0 extends InsertionNet [5] with the following contributions:</p>
+<ol>
+<li>Two cameras to resolve single-image ambiguity and extract depth.</li>
+<li>No need to touch the socket surface during insertion.</li>
+<li>A relation network enabling one-shot and multi-step insertion.</li>
+<li>Contrastive learning to reduce labeled-data requirements.</li>
+</ol>
+<figure data-fig="1"><img src="fig1.png" alt="Figure 1: System components: two RealSense D435 wrist cameras tilted at 45° relative to the gripper axis, focused between the end-effector fingers." loading="lazy"></figure>
+
+<h2>II. Related Work</h2>
+<h3>A. Contact-rich Manipulation</h3>
+<p>This subsection surveys sample-efficient RL approaches, including off-policy [1], [2], model-based [3], residual policies [9], LfD [10], and Sim2Real [11], [12], along with their limitations.</p>
+<h3>B. Contrastive Learning</h3>
+<p>This subsection covers representation learning with positive and negative pairs, including instance discrimination and the use of contrastive losses in RL [13].</p>
+<h3>C. One-Shot Learning</h3>
+<p>This subsection covers embedding approaches using a similarity \(\mathrm{sim}(f(x), f(y))\) [14], Siamese networks [15], and learned similarity functions [16].</p>
+
+<h2>III. Method</h2>
+<h3>A. The System's Components, Setup and Definitions</h3>
+<p>The platform is a UR5e 6DoF arm with stereo images \(\mathrm{Img}\in\mathbb{R}^{H\times W\times 6}\) and force/moment sensing \(F=(f_x,f_y,f_z)\in\mathbb{R}^3\), \(M=(m_x,m_y,m_z)\in\mathbb{R}^3\). The observation is \(O=(\mathrm{Img},F,M)\). F/T data are sampled at 500 Hz and commands are sent at 125 Hz. The gripper pose is \(L=[L_{\text{pos}},L_{\text{ang}}]\), and the action is \(\Delta=(\Delta x,\Delta y,\Delta z,\Delta\theta_x,\Delta\theta_y,\Delta\theta_z)\).</p>
+<h3>B. Multiview Multimodal Representation Learning</h3>
+<p>Force informs the robot near the hole, while vision helps when the peg and hole do not overlap. Two symmetric 45° cameras avoid occlusion and single-image ambiguity.</p>
+<figure data-fig="2"><img src="fig2.png" alt="Figure 2: Longitudinal section of the random data collection of Algorithm 1 around the peg, alternating low and high targets around \(L_{\text{final}}\)." loading="lazy"></figure>
+<h3>C. Data Collection and General Backward Learning</h3>
+<p>Starting from the inserted pose \(L_{\text{final}}\), high and low targets are sampled from normal distributions. Data are recorded along the trajectory with label \(\Delta_{\text{correction}} = L_{\text{final}} - T_{\text{random}}\).</p>
+<pre>
+Algorithm 1 (outline): Data Collection and General Backward Learning
+Inputs: r0 = 10 mm, θ0 = 10°, zmax = 50 mm, thresholds, Nτ, buffer D
+Init: insert plug, register L_final
+for i = 1..Nτ:
+  sample positions ~ N(X0, r0), angles ~ N(Θ0, θ0), z1 ~ U[z0, zmax]
+  T_high = (p0_X, z1, p0_Θ); T_low = (p1_X, z0, p1_Θ)
+  for each target: move with impedance control; periodically record
+     pose E, two camera images, F, M; push (Obs, L_final − E) into D
+return D
+</pre>
+<h3>D. Multi-Objective Regression Residual Policy Formulation</h3>
+<p>A shared ResNet18 \(\varphi\) is trained with \(\text{loss}=l_{\text{contrastive}}+l_{\text{Delta}}+l_{\text{Relation}}\). The three components are:</p>
+<ol>
+<li>An InfoNCE contrastive loss with a momentum encoder, \(\varphi'=m\varphi'+(1-m)\varphi\) with \(m=0.999\).</li>
+<li>A delta loss that predicts \(\Delta_{\text{correction}}\).</li>
+<li>A relation loss on image pairs with target \(\Delta_{\tau_k,j}=\Delta_{\tau_i,j}-\Delta_{\tau_i,k}\).</li>
+</ol>
+<h3>E. Main Policy and Residual Policy</h3>
+<p>The main policy approximates the hole location. The residual policy activates within radius \(R\) and outputs \(\Delta=(\Delta x,\Delta y,0,\Delta\theta_x,\Delta\theta_y,\Delta\theta_z)\), with \(z\) controlled separately.</p>
+<h3>F. Inference and Delta Policy vs. Relation Policy</h3>
+<p>The Delta policy is used by default. The Relation policy is used for one-shot and multi-step tasks.</p>
+<figure data-fig="3"><img src="fig3.png" alt="Figure 3: Architecture of the contrastive system." loading="lazy"></figure>
+<figure data-fig="4"><img src="fig4.png" alt="Figure 4: Delta Architecture for the Delta policy." loading="lazy"></figure>
+<figure data-fig="5"><img src="fig5.png" alt="Figure 5: Relation Architecture based on a dual-input image for the Relation policy." loading="lazy"></figure>
+<h3>G. Data Augmentation</h3>
+<p>The delta and relation losses use resize, crop, color jitter, translation, rotation, erase, and random convolution. The contrastive loss uses stronger crop, translation, and rotation plus erase. For force input, only the directions of the \(F\) and \(M\) vectors are used.</p>
+
+<h2>IV. Experiments</h2>
+<p>The experiments address four questions: scalability, robustness, transferability, and multi-step insertion.</p>
+<h3>A. Experimental Setup</h3>
+<p>Each plug uses 150 collected samples, expanded to 192,000 training samples<sup>3</sup>. Training takes 5–15 minutes on 2 RTX 2080 Ti GPUs. Test targets are sampled uniformly from \(B_{xy}\times B_\theta\times B_Z\). A trial succeeds if \(z-z_0&lt;1\) mm within 10 s, and each test runs 200 consecutive trials.</p>
+<p><sup>3</sup>This count includes augmentations and the sample pairs for the Relation policy.</p>
+<pre>
+Algorithm 2 (outline): Residual Policy
+Inputs: T, R, Img_F, ΔZ, z_final, π_Residual ∈ {π_Delta, π_Relation}
+NextPoint = T
+loop: move to NextPoint; measure CurrentPoint
+  if dist(CurrentPoint, T) &lt; R:
+     Δ = π_Residual(O, Img_F); δz = (0,0,R/ΔZ,0,0,0)
+     NextPoint = CurrentPoint + Δ + δz
+     if z &lt; z_final: finish
+</pre>
+<h3>B. Scalability for Different Insertion Setups</h3>
+<p>All 16 tasks reached at least 97.5% success. VGA improved from 78.5% to 100% and HDMI from 90.5% to 99.5%.</p>
+<figure data-fig="6"><img src="fig6.png" alt="Figure 6: Graph (left) of overall performance on the 16 tasks over 200 trials; table (right) comparing to InsertionNet 1.0 [5]." loading="lazy"></figure>
+<table>
+<tr><th>Plug name</th><th>Trials</th><th>2.0 Success</th><th>2.0 Time [s]</th><th>1.0 Success</th><th>1.0 Time [s]</th></tr>
+<tr><td>Ac 2pin</td><td>200</td><td>100.0%</td><td>0.23</td><td>100.0%</td><td>1.3</td></tr>
+<tr><td>Ac 3pin</td><td>200</td><td>100.0%</td><td>0.23</td><td>100.0%</td><td>1.8</td></tr>
+<tr><td>USB</td><td>200</td><td>100.0%</td><td>0.23</td><td>97.5%</td><td>3</td></tr>
+<tr><td>Triangular thread</td><td>200</td><td>99.5%</td><td>0.43</td><td>100.0%</td><td>2.7</td></tr>
+<tr><td>Cubical thread</td><td>200</td><td>100.0%</td><td>0.37</td><td>100.0%</td><td>2.2</td></tr>
+<tr><td>cylindrical thread</td><td>200</td><td>97.5%</td><td>0</td><td>100.0%</td><td>3.4</td></tr>
+<tr><td>Rectangle thread</td><td>200</td><td>100.0%</td><td>1.54</td><td>98.0%</td><td>2.4</td></tr>
+<tr><td>Half circle thread</td><td>200</td><td>100.0%</td><td>0.38</td><td>100.0%</td><td>2.6</td></tr>
+<tr><td>Usb-c</td><td>200</td><td>100.0%</td><td>0.39</td><td>91.5%</td><td>3.9</td></tr>
+<tr><td>Keys</td><td>200</td><td>100.0%</td><td>0.38</td><td>90.5%</td><td>3.3</td></tr>
+<tr><td>Powercord</td><td>200</td><td>98.0%</td><td>0.43</td><td>94.0%</td><td>4.1</td></tr>
+<tr><td>Vga</td><td>200</td><td>100.0%</td><td>0.39</td><td>78.5%</td><td>4.7</td></tr>
+<tr><td>Aux</td><td>200</td><td>100.0%</td><td>0.38</td><td>100.0%</td><td>2.2</td></tr>
+<tr><td>Dc12v</td><td>200</td><td>100.0%</td><td>0.42</td><td>95.0%</td><td>3</td></tr>
+<tr><td>Ethernet</td><td>200</td><td>100.0%</td><td>0.40</td><td>99.5%</td><td>2.3</td></tr>
+<tr><td>HDMI</td><td>200</td><td>99.5%</td><td>1.22</td><td>90.5%</td><td>5</td></tr>
+</table>
+<h3>C. Sample Efficiency</h3>
+<p>On the AC 2-pin task, success reaches 100% at about 40 samples. Completion time approaches 0 s at about 150 samples.</p>
+<h3>D. Utilizing Unlabeled Data and Contrastive Loss Impact</h3>
+<p>Adding 150 unlabeled images to 20 labeled samples raised Relation policy success from 20% to 100% and Delta policy success from 70% to 100%. The contrastive loss gave the Relation policy roughly 20% higher success, but made no noticeable difference for the Delta policy.</p>
+<h3>E. Robustness</h3>
+<p>The Delta policy scored 50/50 under grasp changes of up to 45°, illumination changes, obstacles, and board movement. This required 300 samples collected at three grasp angles. The Relation policy needed extra data to handle obstacles and large grasp changes.</p>
+<figure data-fig="7"><img src="fig7.png" alt="Figure 7: Robustness tests: obstacles (left), strong grasping errors (middle), illumination (right)." loading="lazy"></figure>
+<h3>F. Transferability</h3>
+<p>On the unseen red half-circle thread, the Relation policy scored 50/50 in a one-shot setting, while the Delta policy scored 0/50. With pretraining, the Delta policy needed only about 20 new samples.</p>
+<figure data-fig="8"><img src="fig8.png" alt="Figure 8: Multi-steps insertion task." loading="lazy"></figure>
+<figure data-fig="9"><figcaption>Figure 9: Success rate and time for completion with (dotted) and without (full) a pre-trained policy.</figcaption></figure>
+<h3>G. Multi-Step Insertion</h3>
+<p>The 3-step key task (insert, lock, turn back) was solved 50/50 using the Relation policy with pre-saved goal images for each step.</p>
+
+<h2>V. Discussion and Future Work (summary)</h2>
+<p>Success exceeded 97% across 16 tasks, with execution time limited by the hardware. Future work includes parallel manipulators, more complex multi-step tasks, and further study of unlabeled data.</p>
+
+<h2>References</h2>
+<ol class="refs">
+<li>M. Vecerik et al., "A practical approach to insertion with variable socket position using deep reinforcement learning," ICRA, 2019.</li>
+<li>M. A. Lee et al., "Guided uncertainty-aware policy optimization...," ICRA, 2020.</li>
+<li>J. Luo et al., "Deep reinforcement learning for robotic assembly of mixed deformable and rigid objects," IROS, 2018.</li>
+<li>M. A. Lee et al., "Making sense of vision and touch...," ICRA, 2019.</li>
+<li>O. Spector and D. Di Castro, "InsertionNet - a scalable solution for insertion," RA-L, 2021.</li>
+<li>J. Kober and J. Peters, "Learning motor primitives for robotics," ICRA, 2009.</li>
+<li>J. Xu et al., "Compare Contact Model-based Control and Contact Model-free Learning...," arXiv:1904.05240, 2019.</li>
+<li>G. Schoettler et al., "Deep reinforcement learning for industrial insertion tasks with visual inputs and natural rewards," IROS, 2020.</li>
+<li>T. Johannink et al., "Residual reinforcement learning for robot control," ICRA, 2019.</li>
+<li>T. Davchev et al., "Residual learning from demonstration...," arXiv, 2020.</li>
+<li>S. James et al., "Sim-to-real via sim-to-sim...," CVPR, 2019.</li>
+<li>O. Spector and M. Zacksenhouse, "Deep reinforcement learning for contact-rich skills using compliant movement primitives," arXiv:2008.13223, 2020.</li>
+<li>A. Srinivas, M. Laskin, P. Abbeel, "CURL...," arXiv:2004.04136, 2020.</li>
+<li>Y. Wang et al., "Generalizing from a few examples: A survey on few-shot learning," ACM CSUR, 2020.</li>
+<li>G. Koch et al., "Siamese neural networks for one-shot image recognition," ICML DL Workshop, 2015.</li>
+<li>F. Sung et al., "Learning to compare: Relation network for few-shot learning," CVPR, 2018.</li>
+<li>K. M. Lynch and F. C. Park, Modern Robotics, Cambridge University Press, 2017.</li>
+<li>T. Inoue et al., "Deep reinforcement learning for high precision assembly tasks," IROS, 2017.</li>
+<li>K. He et al., "Deep residual learning for image recognition," CVPR, 2016.</li>
+<li>T. Chen et al., "A simple framework for contrastive learning of visual representations," ICML, 2020.</li>
+<li>A. v. d. Oord et al., "Representation learning with contrastive predictive coding," arXiv:1807.03748, 2018.</li>
+<li>M. Laskin et al., "CURL...," ICML, 2020.</li>
+<li>E. Hoffer and N. Ailon, "Deep metric learning using triplet network," SIMBAD, 2015.</li>
+</ol>
+</body></html>

@@ -1,0 +1,622 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>My papers</title>
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font: 14px/1.4 system-ui, sans-serif; color: #222; background: #fff;
+         height: 100vh; display: flex; flex-direction: column; }
+  nav { flex: none; height: 48px; display: flex; align-items: center; gap: 8px; padding: 0 16px; border-bottom: 1px solid #ddd; }
+  nav b { margin-right: 12px; }
+  nav button { padding: 6px 14px; border: 1px solid #bbb; border-radius: 6px; background: #f6f6f6; cursor: pointer; }
+  nav button.active { background: #2b6cb0; color: #fff; border-color: #2b6cb0; }
+  nav .stats { margin-left: 16px; color: #666; font-size: 13px; }
+  nav .count { margin-left: auto; color: #666; }
+  nav #clear { background: #fff; }
+  .view { display: none; flex: 1; min-height: 0; overflow: auto; }
+  #filters { flex: none; display: flex; flex-wrap: wrap; align-items: center; gap: 8px;
+             padding: 8px 16px; border-bottom: 1px solid #ddd; background: #f8fafc; }
+  .facet { position: relative; border: 0; padding: 0; }
+  .facet > summary { list-style: none; font-weight: normal; padding: 5px 12px; border: 1px solid #bbb;
+                     border-radius: 6px; background: #fff; user-select: none; }
+  .facet > summary::-webkit-details-marker { display: none; }
+  .facet.on > summary { border-color: #2b6cb0; background: #e8f0fb; }
+  .facet .panel { position: absolute; z-index: 5; top: calc(100% + 4px); left: 0; width: max-content;
+                  min-width: 260px; max-width: min(460px, 90vw); max-height: 60vh; overflow: auto;
+                  background: #fff; border: 1px solid #bbb; border-radius: 6px; padding: 6px;
+                  box-shadow: 0 4px 16px rgba(0,0,0,.15); }
+  .facet .panel input[type=search] { width: 100%; margin-bottom: 4px; padding: 4px 6px; }
+  .facet label { display: flex; gap: 6px; align-items: baseline; padding: 2px 4px; cursor: pointer; }
+  .facet label:hover { background: #f0f4fa; }
+  .facet label small { margin-left: auto; padding-left: 12px; color: #777; white-space: nowrap; }
+  #filters select, #filters button, #filters input[type=number] { padding: 5px 8px; border: 1px solid #bbb;
+                                                                 border-radius: 6px; background: #fff; }
+  #filters input[type=number] { width: 70px; }
+  #q { width: min(320px, 100%); padding: 5px 8px; border: 1px solid #bbb; border-radius: 6px; }
+  svg { width: 14px; height: 14px; vertical-align: -2px; fill: currentColor; }
+  summary a.gh { color: #24292f; margin-left: 6px; }
+  .sumbox { margin: 8px 0; }
+  .sumbox button { padding: 3px 10px; border: 1px solid #bbb; border-radius: 6px; background: #fff; cursor: pointer; }
+  .htmlrow { display: flex; gap: 16px; flex-wrap: wrap; align-items: center; margin: 0 0 8px; }
+  .htmlbox button { padding: 3px 10px; border: 1px solid #bbb; border-radius: 6px; background: #fff; cursor: pointer; }
+  .sumbox .erase { margin-top: 6px; color: #b42318; }
+  .sumbox details > div { white-space: pre-wrap; background: #f6f8fb; border-left: 3px solid #2b6cb0;
+                          padding: 8px 12px; margin-top: 4px; max-width: 900px; }
+  summary .stars { margin-left: 8px; color: #e0a100; font-size: 15px; letter-spacing: 1px; cursor: pointer; }
+  summary .stars span:hover { color: #b47f00; }
+  summary .sumflag { margin-left: 6px; font-weight: normal; font-size: 12px; color: #777; }
+  summary .badges { font-weight: normal; color: #777; font-size: 12px; margin-left: 6px; }
+  .view.active { display: block; }
+  a { color: #2b6cb0; }
+
+  /* table view */
+  table { border-collapse: collapse; table-layout: fixed; }
+  th, td { border: 1px solid #ddd; padding: 4px 6px; vertical-align: top; overflow: hidden; }
+  th { position: sticky; top: 0; z-index: 1; background: #eef2f7; text-align: left;
+       white-space: nowrap; text-overflow: ellipsis; cursor: grab; user-select: none; }
+  th.drag-over { box-shadow: inset 3px 0 0 #2b6cb0; }
+  th .resize { position: absolute; top: 0; right: 0; width: 6px; height: 100%; cursor: col-resize; }
+  th .resize:hover { background: #2b6cb0; }
+  td div { max-height: 4.2em; overflow: hidden; overflow-wrap: anywhere; }  /* ~3 lines */
+  tr:nth-child(even) td { background: #fafafa; }
+
+  /* papers view */
+  #papers { padding: 8px 16px; }
+  details { border-bottom: 1px solid #eee; padding: 6px 0; }
+  summary { cursor: pointer; font-weight: 600; }
+  summary .kw { font-weight: normal; color: #555; }
+  dl { display: grid; grid-template-columns: 180px 1fr; gap: 4px 12px; margin: 8px 0 4px 18px; }
+  dt { color: #666; }
+  dd { margin: 0; overflow-wrap: anywhere; }
+  /* justified collage: row height follows the viewport, images grow by aspect ratio to fill each row */
+  .collage { display: flex; flex-wrap: wrap; gap: 6px; margin: 8px 0 4px 18px; }
+  .collage::after { content: ''; flex-grow: 999; }
+  .collage a { display: block; }
+  .collage img { display: block; width: 100%; height: auto; margin: 0; max-width: none; border: 1px solid #ddd; }
+  details details summary { font-weight: normal; color: #2b6cb0; margin-left: 18px; }
+  .movies { display: flex; flex-wrap: wrap; gap: 8px; margin: 8px 0 4px 18px; }
+  .movies video, .movies img { width: min(100%, 640px); background: #000; }
+  details > img { display: block; max-width: min(100%, 900px); margin: 8px 0 4px 18px; }
+</style>
+</head>
+<body>
+<nav>
+  <b>My papers</b>
+  <button data-view="papers">Papers</button>
+  <button data-view="table">Table</button>
+  <span class="stats"></span>
+  <span class="count"></span>
+  <button id="clear" title="Clear every filter, search and sort">↺ Reset filters</button>
+</nav>
+<div id="add" style="flex:none;display:flex;gap:8px;align-items:center;flex-wrap:wrap;padding:8px 16px;
+border-bottom:1px solid #ddd;background:#fffbea">
+  <b>➕ Add a paper</b>
+  <input id="addUrl" type="url" placeholder="arXiv / OpenReview / PDF link, or a project page (github.io) that links to the paper"
+         style="flex:1;min-width:240px;padding:5px 8px;border:1px solid #bbb;border-radius:6px">
+  <button id="addGo" style="padding:5px 12px;border:1px solid #bbb;border-radius:6px;background:#fff;cursor:pointer">Add link</button>
+  <span>or</span>
+  <label style="padding:5px 12px;border:1px solid #bbb;border-radius:6px;background:#fff;cursor:pointer">📄 Upload PDF
+    <input id="addFile" type="file" accept="application/pdf,.pdf" hidden></label>
+  <span id="addMsg" style="color:#666"></span>
+</div>
+<script>
+async function addPaper(opts, what) {
+  const msg = document.getElementById('addMsg');
+  if (!location.protocol.startsWith('http'))
+    return msg.textContent = 'run: uv run python website/serve.py, then open http://127.0.0.1:8026/Papers/';
+  msg.textContent = `⏳ Adding ${what}: downloading, extracting figures, robots, backbones, affiliations… (~30 s)`;
+  try {
+    const r = await fetch('add', {method: 'POST', ...opts}), j = await r.json();
+    if (!r.ok) throw new Error(j.error);
+    if (j.exists) {  // nothing added: say so and scroll to it, no Claude calls
+      const i = rows.findIndex(x => x[0] === j.id);
+      msg.textContent = 'ℹ️ Already in the list: ' + (i >= 0 ? rows[i][1] : j.id);
+      if (i >= 0 && dets[i].isConnected) dets[i].scrollIntoView();
+      return;
+    }
+    location.hash = 'claude:' + j.id; location.reload();  // show it now; Claude runs after the reload (below)
+  } catch (e) { msg.textContent = '⚠️ ' + e.message; }
+}
+// after an add the page reloads with #claude:<id>: show the paper, then press 📝 Summarize and the Claude HTML
+// button for it; the server finishes them even if the tab closes. Runs before the page script reads the #.
+if (location.hash.startsWith('#claude:')) (async () => {
+  const pid = decodeURIComponent(location.hash.slice(8)), msg = document.getElementById('addMsg');
+  history.replaceState(null, '', '#' + encodeURIComponent(pid));  // the page script scrolls to it, then clears it
+  msg.textContent = '⏳ Added. Claude is summarizing it and making the HTML version… (a few minutes)';
+  const errs = (await Promise.all(['summarize/', 'html_claude/'].map(p => fetch(p + pid, {method: 'POST'})
+    .then(async x => x.ok ? '' : (await x.json()).error).catch(e => e.message)))).filter(Boolean);
+  if (errs.length) alert('Added, but: ' + errs.join('; '));
+  location.hash = pid; location.reload();  // rebuilt with the summary and HTML link
+})();
+document.getElementById('addGo').onclick = () => {
+  const u = document.getElementById('addUrl').value.trim();
+  if (u) addPaper({headers: {'Content-Type': 'application/json'}, body: JSON.stringify({url: u})}, 'the link');
+};
+document.getElementById('addUrl').onkeydown = e => { if (e.key === 'Enter') document.getElementById('addGo').click(); };
+document.getElementById('addFile').onchange = e => {
+  const f = e.target.files[0];
+  if (f) addPaper({headers: {'Content-Type': 'application/pdf', 'X-Filename': encodeURIComponent(f.name)}, body: f}, f.name);
+};
+</script>
+<div id="filters">
+  <input type="search" id="q" placeholder="🔍 search titles, authors, abstracts, keywords…">
+  <details class="facet" data-key="t"><summary>🎤 Oral / Spotlight / Poster</summary><div class="panel"></div></details>
+  <details class="facet" data-key="p"><summary>🏷️ Primary keyword</summary><div class="panel"></div></details>
+  <details class="facet" data-key="s"><summary>🔖 Secondary keyword</summary><div class="panel"></div></details>
+  <details class="facet" data-key="k"><summary>🏷️ Keywords</summary><div class="panel"></div></details>
+  <details class="facet" data-key="b"><summary>🤖 Robots</summary><div class="panel"></div></details>
+  <details class="facet" data-key="m"><summary>🧠 Backbones</summary><div class="panel"></div></details>
+  <details class="facet" data-key="c"><summary>🏢 Companies</summary><div class="panel"></div></details>
+  <details class="facet" data-key="u"><summary>🎓 Universities</summary><div class="panel"></div></details>
+  <details class="facet" data-key="r"><summary>🧑‍🔬 Researchers</summary><div class="panel"></div></details>
+  <select id="rateHas" title="Whether you rated the paper">
+    <option value="">⭐ Rated: all</option>
+    <option value="y">⭐ with rating</option>
+    <option value="n">☆ without rating</option>
+  </select>
+  <select id="rateF" title="Your star rating (only rated papers pass)">
+    <option value="">⭐ Rating: all</option>
+    <option value="g1">⭐ above 1</option><option value="g2">⭐ above 2</option>
+    <option value="g3">⭐ above 3</option><option value="g4">⭐ above 4 (5 only)</option>
+    <option value="l5">⭐ below 5</option><option value="l4">⭐ below 4</option>
+    <option value="l3">⭐ below 3</option><option value="l2">⭐ below 2 (1 only)</option>
+  </select>
+  <select id="sumF" title="Papers with a Claude summary">
+    <option value="">📝 Summary: all</option>
+    <option value="y">📝 summarized</option>
+    <option value="n">⬜ not summarized</option>
+  </select>
+  <select id="ghF" title="Papers whose PDF links a GitHub repo">
+    <option value="">💻 GitHub: all</option>
+    <option value="y">💻 GitHub</option>
+    <option value="n">🚫 no GitHub</option>
+  </select>
+  <label title="Highest OpenAlex h-index among the paper's authors">🏅 min author h-index
+    <input type="number" id="minH" min="0" step="5" placeholder="0"></label>
+  <label title="OpenAlex citations of the paper itself">📈 min citations
+    <input type="number" id="minC" min="0" step="1" placeholder="0"></label>
+  <select id="sort">
+    <option value="">🔀 Sort: default</option>
+    <option value="h">🏅 Sort: author h-index</option>
+    <option value="cites">📈 Sort: citations</option>
+    <option value="az">🔤 Sort: title A–Z</option>
+  </select>
+</div>
+<div id="table" class="view"><table><colgroup></colgroup><thead><tr></tr></thead><tbody></tbody></table></div>
+<div id="papers" class="view"></div>
+<svg hidden><symbol id="gh" viewBox="0 0 16 16"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></symbol></svg>
+<script id="data" type="application/json">{"columns": ["id", "title", "authors", "abstract", "🏷️ keywords", "source", "pdf", "local_pdf", "💻 github", "🎬 youtube", "added", "🤖 robots", "🧠 backbones", "🏢 companies", "🎓 universities"], "rows": [["arxiv-2203-01153", "InsertionNet 2.0: Minimal Contact Multi-Step Insertion Using Multimodal Multiview Sensory Input", "Oren Spector, Vladimir Tchuiev, Dotan Di Castro", "We address the problem of devising the means for a robot to rapidly and safely learn insertion skills with just a few human interventions and without hand-crafted rewards or demonstrations. Our InsertionNet version 2.0 provides an improved technique to robustly cope with a wide range of use-cases featuring different shapes, colors, initial poses, etc. In particular, we present a regression-based method based on multimodal input from stereo perception and force, augmented with contrastive learning for the efficient learning of valuable features. In addition, we introduce a one-shot learning technique for insertion, which relies on a relation network scheme to better exploit the collected data and to support multi-step insertion tasks. Our method improves on the results obtained with the original InsertionNet, achieving an almost perfect score (above 97.5$\\%$ on 200 trials) in 16 real-life insertion tasks while minimizing the execution time and contact during insertion. We further demonstrate our method's ability to tackle a real-life 3-step insertion task and perfectly solve an unseen insertion task without learning.", "robot learning; multimodal learning; robotic insertion; contrastive learning; one-shot learning; force sensing", "https://arxiv.org/abs/2203.01153", "https://arxiv.org/pdf/2203.01153", "pdfs/arxiv-2203-01153_InsertionNet 2.0  Minimal Contact Multi-Step Insertion Using Multimodal Multiview Sensory Input.pdf", "", "", "2026-11-04 09:12", "Franka (Panda / FR3); UR5 / UR5e", "ResNet", "Bosch", ""], ["arxiv-2611-04492", "Hybrid Particle-Voxel Dynamics for Multimodal 3D World Simulation", "Jimmy Wang, Yifan Chou, Kaifeng Zhang, Yixuan Wang, Binghao Huang, Tao Yu, Saleh Nabi, Yunzhu Li", "Predicting how the world evolves in response to robot actions is central to policy learning, evaluation, and planning. However, many action-conditioned world models predict future observations in 2D image or video space without explicitly modeling the underlying 3D scene, making spatial consistency across viewpoints and over long-horizon interactions challenging. We introduce 3D World Simulator, an action-conditioned multimodal world modeling framework that jointly predicts appearance, geometry, and tactile observations from a unified 3D representation. Our approach combines a hybrid particle-voxel autoencoder that compresses point clouds into compact 3D voxel latents with an action-conditioned latent dynamics model that predicts their evolution. The shared 3D representation supports geometrically consistent rendering from arbitrary viewpoints and flexible integration of spatially aligned tactile signals. Our experiments demonstrate interactive, long-horizon, multimodal prediction at 50 Hz. We then show how our model enables scalable data generation for policy training and evaluation using tactile and multi-view visual observations, including wrist-mounted and novel camera views. Furthermore, we scale our method to large datasets containing diverse objects and demonstrate model-based planning with unseen objects and robot configurations. Together, these results highlight the potential of hybrid particle-voxel dynamics as a foundation for multimodal 3D world simulation.", "world models; multimodal learning; robot learning; tactile sensing; 3d representations; model-based planning", "https://jwang771.github.io/3dworldsimulator/", "https://arxiv.org/pdf/2611.04492", "pdfs/arxiv-2611-04492_Hybrid Particle-Voxel Dynamics for Multimodal 3D World Simulation.pdf", "https://github.com/jwang771/3d-world-simulator", "", "2026-11-04 09:09", "ALOHA / Mobile ALOHA", "ResNet; U-Net; π0 / π0.5; Diffusion Policy; ACT (Action Chunking Transformer); Cosmos", "NVIDIA", "Columbia University; University of California, Berkeley; University of Michigan"], ["arxiv-2610-39302", "Proving and Improving the Platonic Representation Hypothesis with JEPAs", "Randall Balestriero, Yann LeCun", "Whether models trained on different modalities converge to the same representation of the world is central to AI. The Platonic Representation Hypothesis (PRH) conjectures that they do as they scale, but without a proof it offers neither a guarantee nor a recipe. We turn the hypothesis into a theorem. First, we prove a \\emph{Platonic Representation Theorem}: Joint-Embedding Predictive Architectures (JEPAs) trained separately on any number of modalities learn the same representation up to one rotation whenever their positive pairs are two observations of one scene--\\emph{good views}--and their misalignment is bounded otherwise. Second, we show that next-token prediction is a JEPA with \\emph{bad views}, parts of a single document, which explains why language models align with vision only through scale. Third, we validate the theory from 145k captions to the texts of 940M web images, and uncover a scaling law of alignment that predicts unseen runs within seed noise. Good views need 42 times fewer training samples than next-token prediction on the same corpus to reach the same alignment, and a 109M-parameter text JEPA aligns with DINOv2 and CLIP's image encoders better than every language model we evaluated, up to 72B parameters, and than CLIP's text encoder: next-token prediction is a remarkably inefficient route to platonic representations. As a showcase, one rotation turns separately trained encoders into an image captioner (CIDEr .838 on COCO). Even that rotation needs no pair: on the latest pair-free benchmark, our text JEPA beats every zero-shot accuracy reported with language models up to 8B parameters, e.g., 64\\% against at most 56\\% top-5 on ImageNet-100. Positive views, and not scale alone, are thus the lever to build platonic representations.", "platonic representation hypothesis; joint-embedding predictive architectures; representation alignment; self-supervised learning; multimodal learning; scaling laws", "https://arxiv.org/abs/2610.39302", "https://arxiv.org/pdf/2610.39302", "pdfs/arxiv-2610-39302_Proving and Improving the Platonic Representation Hypothesis with JEPAs.pdf", "https://github.com/galilai-group/prh-proof", "https://www.youtube.com/watch?v=hFA57nwAc7s", "2026-11-03 16:27", "", "ViT; DINO / DINOv2 / DINOv3; CLIP; Llama; LLaVA; Qwen (Qwen-VL / Qwen2.5-VL)", "", "Brown University"]], "firstPage": {"arxiv-2610-39302": {"title": "arXiv:2610.39302v1  [cs.AI]  29 Oct 2026", "abstract": "", "figure": "figs/arxiv-2610-39302.png", "figure_page": 1, "figures": [{"n": 1, "page": 1, "src": "figs/arxiv-2610-39302/fig1.png", "w": 1377, "h": 859}, {"n": 2, "page": 4, "src": "figs/arxiv-2610-39302/fig2.png", "w": 1418, "h": 888}, {"n": 3, "page": 6, "src": "figs/arxiv-2610-39302/fig3.png", "w": 1424, "h": 650}, {"n": 4, "page": 6, "src": "figs/arxiv-2610-39302/fig4.png", "w": 692, "h": 825}, {"n": 5, "page": 8, "src": "figs/arxiv-2610-39302/fig5.png", "w": 1440, "h": 634}, {"n": 6, "page": 8, "src": "figs/arxiv-2610-39302/fig6.png", "w": 701, "h": 570}, {"n": 7, "page": 9, "src": "figs/arxiv-2610-39302/fig7.png", "w": 1418, "h": 1136}, {"n": 8, "page": 9, "src": "figs/arxiv-2610-39302/fig8.png", "w": 703, "h": 1028}, {"n": 9, "page": 10, "src": "figs/arxiv-2610-39302/fig9.png", "w": 1441, "h": 848}, {"n": 10, "page": 11, "src": "figs/arxiv-2610-39302/fig10.png", "w": 1441, "h": 580}, {"n": 11, "page": 12, "src": "figs/arxiv-2610-39302/fig11.png", "w": 700, "h": 879}, {"n": 12, "page": 26, "src": "figs/arxiv-2610-39302/fig12.png", "w": 1439, "h": 737}, {"n": 13, "page": 28, "src": "figs/arxiv-2610-39302/fig13.png", "w": 1440, "h": 1090}, {"n": 14, "page": 36, "src": "figs/arxiv-2610-39302/fig14.png", "w": 1224, "h": 804}, {"n": 15, "page": 37, "src": "figs/arxiv-2610-39302/fig15.png", "w": 536, "h": 1240}]}, "arxiv-2611-04492": {"title": "arXiv:2611.04492v1  [cs.RO]  3 Nov 2026", "abstract": "", "figure": "figs/arxiv-2611-04492.png", "figure_page": 1, "figures": [{"n": 1, "page": 1, "src": "figs/arxiv-2611-04492/fig1.png", "w": 1161, "h": 664}, {"n": 2, "page": 4, "src": "figs/arxiv-2611-04492/fig2.png", "w": 1134, "h": 912}, {"n": 3, "page": 6, "src": "figs/arxiv-2611-04492/fig3.png", "w": 1134, "h": 958}, {"n": 4, "page": 6, "src": "figs/arxiv-2611-04492/fig4.png", "w": 1134, "h": 538}, {"n": 5, "page": 7, "src": "figs/arxiv-2611-04492/fig5.png", "w": 1134, "h": 986}, {"n": 6, "page": 8, "src": "figs/arxiv-2611-04492/fig6.png", "w": 1134, "h": 826}, {"n": 7, "page": 9, "src": "figs/arxiv-2611-04492/fig7.png", "w": 1134, "h": 394}, {"n": 8, "page": 9, "src": "figs/arxiv-2611-04492/fig8.png", "w": 1134, "h": 921}, {"n": 9, "page": 20, "src": "figs/arxiv-2611-04492/fig9.png", "w": 1134, "h": 744}, {"n": 10, "page": 21, "src": "figs/arxiv-2611-04492/fig10.png", "w": 724, "h": 743}, {"n": 11, "page": 21, "src": "figs/arxiv-2611-04492/fig11.png", "w": 724, "h": 743}, {"n": 12, "page": 22, "src": "figs/arxiv-2611-04492/fig12.png", "w": 678, "h": 743}, {"n": 13, "page": 22, "src": "figs/arxiv-2611-04492/fig13.png", "w": 678, "h": 746}, {"n": 14, "page": 23, "src": "figs/arxiv-2611-04492/fig14.png", "w": 1134, "h": 743}, {"n": 16, "page": 25, "src": "figs/arxiv-2611-04492/fig16.png", "w": 1134, "h": 343}, {"n": 17, "page": 25, "src": "figs/arxiv-2611-04492/fig17.png", "w": 1134, "h": 556}, {"n": 18, "page": 25, "src": "figs/arxiv-2611-04492/fig18.png", "w": 1134, "h": 345}]}, "arxiv-2203-01153": {"title": "arXiv:2203.01153v1  [cs.RO]  2 Mar 2022", "abstract": "— We address the problem of devising the means for a robot to rapidly and safely learn insertion skills with just a few human interventions and without hand-crafted rewards or demonstrations. Our InsertionNet version 2.0 provides an improved technique to robustly cope with a wide range of use-cases featuring different shapes, colors, initial poses, etc. In particular, we present a regression-based method based on multimodal input from stereo perception and force, augmented with contrastive learning for the efﬁcient learning of valuable features. In addition, we introduce a one-shot learning technique for insertion, which relies on a relation network scheme to better exploit the collected data and to support multi-step insertion tasks. Our method improves on the results obtained with the original InsertionNet, achieving an almost perfect score (above 97.5% on 200 trials) in 16 real-life insertion tasks while minimizing the execution time and contact during insertion. We further demonstrate our method’s ability to tackle a real-life 3-step insertion task and perfectly solve an unseen insertion task without learning. arXiv:2203.01153v1  [cs.RO]  2 Mar 2022 I. INTRODUCTION Constructing a robot that reliably inserts diverse objects (e.g., plugs, engine gears) is a grand challenge in the design of manufacturing, inspection, and home-service robots. Minimizing action time, maximizing reliability, and minimizing contact between the grasped object and the target component is difﬁcult due to the inherent uncertainty concerning sensing, control, sensitivity to applied forces, and occlusions.", "figure": "figs/arxiv-2203-01153.png", "figure_page": 1, "figures": [{"n": 1, "page": 1, "src": "figs/arxiv-2203-01153/fig1.png", "w": 704, "h": 740}, {"n": 2, "page": 2, "src": "figs/arxiv-2203-01153/fig2.png", "w": 332, "h": 712}, {"n": 3, "page": 4, "src": "figs/arxiv-2203-01153/fig3.png", "w": 684, "h": 411}, {"n": 4, "page": 4, "src": "figs/arxiv-2203-01153/fig4.png", "w": 684, "h": 250}, {"n": 5, "page": 4, "src": "figs/arxiv-2203-01153/fig5.png", "w": 704, "h": 344}, {"n": 6, "page": 5, "src": "figs/arxiv-2203-01153/fig6.png", "w": 1434, "h": 559}, {"n": 7, "page": 6, "src": "figs/arxiv-2203-01153/fig7.png", "w": 704, "h": 304}, {"n": 8, "page": 6, "src": "figs/arxiv-2203-01153/fig8.png", "w": 642, "h": 299}]}}, "meta": [{"c": ["Bosch"], "u": [], "t": [], "b": ["Franka (Panda / FR3)", "UR5 / UR5e"], "m": ["ResNet"], "k": ["robot learning", "multimodal learning", "robotic insertion", "contrastive learning", "one-shot learning", "force sensing"], "r": [], "cites": null, "h": null}, {"c": ["NVIDIA"], "u": ["Columbia University", "University of California, Berkeley", "University of Michigan"], "t": [], "b": ["ALOHA / Mobile ALOHA"], "m": ["ResNet", "U-Net", "π0 / π0.5", "Diffusion Policy", "ACT (Action Chunking Transformer)", "Cosmos"], "k": ["world models", "multimodal learning", "robot learning", "tactile sensing", "3d representations", "model-based planning"], "r": [], "cites": null, "h": null}, {"c": [], "u": ["Brown University"], "t": [], "b": [], "m": ["ViT", "DINO / DINOv2 / DINOv3", "CLIP", "Llama", "LLaVA", "Qwen (Qwen-VL / Qwen2.5-VL)"], "k": ["platonic representation hypothesis", "joint-embedding predictive architectures", "representation alignment", "self-supervised learning", "multimodal learning", "scaling laws"], "r": [], "cites": null, "h": null}], "facets": {"c": [{"id": "Bosch", "name": "Bosch", "note": "1 📄"}, {"id": "NVIDIA", "name": "NVIDIA", "note": "1 📄"}], "u": [{"id": "Columbia University", "name": "Columbia University", "note": "1 📄"}, {"id": "University of California, Berkeley", "name": "University of California, Berkeley", "note": "1 📄"}, {"id": "University of Michigan", "name": "University of Michigan", "note": "1 📄"}, {"id": "Brown University", "name": "Brown University", "note": "1 📄"}], "r": [], "b": [{"id": "Franka (Panda / FR3)", "name": "Franka (Panda / FR3)", "note": "1 📄"}, {"id": "UR5 / UR5e", "name": "UR5 / UR5e", "note": "1 📄"}, {"id": "ALOHA / Mobile ALOHA", "name": "ALOHA / Mobile ALOHA", "note": "1 📄"}], "m": [{"id": "ResNet", "name": "ResNet", "note": "2 📄"}, {"id": "U-Net", "name": "U-Net", "note": "1 📄"}, {"id": "π0 / π0.5", "name": "π0 / π0.5", "note": "1 📄"}, {"id": "Diffusion Policy", "name": "Diffusion Policy", "note": "1 📄"}, {"id": "ACT (Action Chunking Transformer)", "name": "ACT (Action Chunking Transformer)", "note": "1 📄"}, {"id": "Cosmos", "name": "Cosmos", "note": "1 📄"}, {"id": "ViT", "name": "ViT", "note": "1 📄"}, {"id": "DINO / DINOv2 / DINOv3", "name": "DINO / DINOv2 / DINOv3", "note": "1 📄"}, {"id": "CLIP", "name": "CLIP", "note": "1 📄"}, {"id": "Llama", "name": "Llama", "note": "1 📄"}, {"id": "LLaVA", "name": "LLaVA", "note": "1 📄"}, {"id": "Qwen (Qwen-VL / Qwen2.5-VL)", "name": "Qwen (Qwen-VL / Qwen2.5-VL)", "note": "1 📄"}], "k": [{"id": "multimodal learning", "name": "multimodal learning", "note": "3 📄"}, {"id": "robot learning", "name": "robot learning", "note": "2 📄"}, {"id": "robotic insertion", "name": "robotic insertion", "note": "1 📄"}, {"id": "contrastive learning", "name": "contrastive learning", "note": "1 📄"}, {"id": "one-shot learning", "name": "one-shot learning", "note": "1 📄"}, {"id": "force sensing", "name": "force sensing", "note": "1 📄"}, {"id": "world models", "name": "world models", "note": "1 📄"}, {"id": "tactile sensing", "name": "tactile sensing", "note": "1 📄"}, {"id": "3d representations", "name": "3d representations", "note": "1 📄"}, {"id": "model-based planning", "name": "model-based planning", "note": "1 📄"}, {"id": "platonic representation hypothesis", "name": "platonic representation hypothesis", "note": "1 📄"}, {"id": "joint-embedding predictive architectures", "name": "joint-embedding predictive architectures", "note": "1 📄"}, {"id": "representation alignment", "name": "representation alignment", "note": "1 📄"}, {"id": "self-supervised learning", "name": "self-supervised learning", "note": "1 📄"}, {"id": "scaling laws", "name": "scaling laws", "note": "1 📄"}], "t": []}, "summaries": {"arxiv-2610-39302": {"text": "Gist: Despite the request framing, this is not a robotics paper. It is a representation-learning paper. It turns the Platonic Representation Hypothesis (PRH) into a theorem for Joint-Embedding Predictive Architectures (JEPAs). Encoders trained separately on different modalities learn the same embedding up to one rotation when their positive pairs are two observations of the same scene (\"good views\"). The paper also argues that next-token prediction is a \"bad-view\" JEPA, and shows empirically that a 109M-parameter text JEPA aligns with vision models better than language models up to 72B parameters.\n\nQuestion: The PRH, the claim that vision and language models converge to a shared representation as they scale, has so far been an empirical observation without a proof. The paper asks when models trained separately on different modalities provably learn the same representation. It also asks whether that answer gives a training recipe, rather than relying on scale alone.\n\nMethod: The world is modeled as a finite set of states, each modality renders it injectively, and the JEPA loss is a prediction term plus a rotation-invariant anti-collapse term. The predictor is the identity; the paper explicitly does not cover learned or action-conditioned predictors. The main results are:\n- Renderings only change coordinates, so if all modalities share one positive-pair distribution and the minimizers are unique up to rotation, every encoder recovers the same world embedding up to a rotation (Theorem 1).\n- With MSE plus whitening, the minimizer is the spectral embedding of the positive-pair graph, unique under an eigengap (Proposition 1).\n- If positives differ across modalities, a Davis–Kahan-style bound limits misalignment by the kernel mismatch divided by the eigengap (Theorem 2). On 300 synthetic worlds the measured error stays at or below 18% of the bound.\n- With per-observation nuisance (wording, viewpoint), any embedding direction spent on nuisance is lost for alignment (Theorem 3). Corruptions of a single observation spend directions on nuisance whenever they preserve it more than the world's k-th direction (Proposition 3).\n- Views and data together determine an induced world kernel (Theorem 4).\n- Next-token prediction is cast as a JEPA whose positives are a prefix and its continuation and whose anti-collapse term is the softmax log-partition, identified only up to an invertible linear map (Proposition 4).\n\nIn practice, good-view training uses LeJEPA/SIGReg (λ=0.02). Text views are drawn from different captions of the same image, each trimmed to a random span with 15% masking.\n\nRobots and setup: There are no robots, robot sensors, simulators or control tasks. The data are:\n- Flickr30k: 29k images with 5 captions each.\n- MSR-VTT video: 7k training clips with 20 captions each, the only setting where the image side gets good views (different frames).\n- COCO.\n- Recap-DataComp: each image's alt-text plus two LLaVA (LLaMA-3-8B) recaptions, scaled up to the texts of 940M images.\n- The PRH paper's WIT-1024 benchmark.\n\nThe models are a ViT-S/16 image JEPA and BERT text encoders of 11M–335M parameters trained from scratch, scored against frozen DINOv2/DINOv3, CLIP, MAE and I-JEPA. Baselines are Qwen2.5 (0.5–72B), Llama-3 8B/70B, Mistral-7B, Qwen3-8B, CLIP's text encoder and all-mpnet-base-v2. Metrics are mutual 10-NN, unbiased linear CKA, and retrieval R@1 through a single orthogonal map fitted on pairs.\n\nResults:\n- Flickr, separately trained image JEPA: the good-view text JEPA reaches mutual 10-NN .062 versus .047 (bad views) and .042 (next-token), and R@1 .044 versus .027 and .021.\n- Flickr, frozen DINOv2: R@1 is .246 versus .133 and .118.\n- Nuisance measurement: the scene explains a fraction .804 of the good-view embedding, against .655 and .608, matching the theory's predicted ordering.\n- Scale on WIT-1024: the 109M good-view JEPA trained on the texts of 940M images reaches .184 with DINOv2 ViT-B. This beats Qwen2.5-72B (.154), Llama-3-70B (.151) and CLIP's text encoder (.124). Its CKA is .507 versus .418, and with CLIP ViT-H it scores .230 versus .210.\n- Sample efficiency: on the same corpus, good views reach next-token's 900M-sample alignment with 21.6M samples (.109 vs .111), 42 times fewer.\n- Scaling law: an alignment law in the good-view fraction and samples seen predicted 85 unseen runs with RMSE .0093, versus .0096 seed-to-seed. It overestimates good-view runs at 320M samples.\n- Captioning: a captioner whose only part fitted on pairs is one orthonormal map (30k Flickr pairs) reaches COCO CIDEr .838 and MSR-VTT video CIDEr .246.\n- Pair-free alignment (Schnaus et al. protocol): ImageNet-100 top-5 is 64.4% versus 47.6% for Qwen3-8B rerun and 56% for the best they reported. CLIP's text encoder still gets 68.7%.\n\nAblations: Trimming captions into spans is the knob that matters. Using whole captions as views drops R@1 from .246 to .185. Masking, number of views, batch size, width and schedule move the mean by at most .016. Without gradient clipping, some runs collapse abruptly. On MSR-VTT, good views on both sides give mutual 10-NN .067, against .039 when neither side has them, with the text side contributing most.\n\nLimitations: The theory assumes a finite world, injective renderings, population optima and an identity predictor. Uniqueness up to rotation is not proven for SIGReg, and no experiment meets Theorem 1's hypotheses exactly. Good views require knowing which texts describe the same scene. On Recap, two of three texts come from a CLIP-based captioner; without it, good views reach only .060 on WIT versus .107. At the 940M scale, the SIGReg weight was chosen after seeing WIT results, and a seed at the other weight scored .121. There is minor benchmark overlap with the training data. The image side is mostly bad-view crops, and hyperparameters were tuned only for the good-view JEPA.\n\nTakeaway for a robotics researcher: Read it only if you care about JEPA theory or about aligning separately trained sensor or modality encoders. The transferable lesson is to define positives as multiple observations of the same state, such as different cameras or frames, rather than augmentations of one observation. The paper's world-model analysis is limited: it excludes action-conditioned predictors and notes that camera viewpoint, a nuisance for cross-modal alignment, is something an acting agent must track. Section 2 (theory) and Sections 3.2–3.3 (view ablations, video) are the most relevant; the LLM-scaling and captioning sections can be skimmed.", "cost": 0.5992, "input_tokens": 129320, "output_tokens": 4096}, "arxiv-2611-04492": {"text": "Gist: The paper presents \"3D World Simulator,\" an action-conditioned world model that predicts the future of a manipulation scene in a shared 3D latent space instead of in image space. A hybrid particle-voxel autoencoder compresses RGB-D point clouds, with optional tactile points, into a compact voxel latent. A latent dynamics model rolls that latent forward given robot actions, and the decoded output is a set of 3D Gaussian particles plus tactile particles. Because the output is explicitly 3D, the model can render consistent RGB-D from arbitrary viewpoints, including moving wrist cameras, and its tactile predictions stay geometrically aligned with contact surfaces. The authors use it for synthetic policy-training data, policy evaluation, and zero-shot MPC on unseen objects, and claim interactive rollout at 50 Hz.\n\nQuestion: Most action-conditioned world models, such as Cosmos, IWS and video diffusion models, operate in 2D pixel space. This makes multi-view consistency and long-horizon spatial coherence hard to maintain, and it makes contact-geometry relationships hard to represent. Existing 3D dynamics models like PGND, PointWorld and ParticleFormer have their own limits: they rely on point-tracking supervision or object-specific state representations, and they usually do not target photorealistic rendering for visuomotor policies. The paper asks whether a correspondence-free, scene-level 3D latent can provide geometry, appearance and touch in one interface while staying stable over long open-loop horizons.\n\nMethod: The autoencoder works in three steps.\n- The point cloud has 7 channels per point (xyz, RGB, tactile). It is voxelized and averaged per occupied cell.\n- Strided sparse 3D convolutions downsample it to a unit-normalized 8-channel latent grid: 32×16×32 for ALOHA and 32³ for Deform360.\n- A coarse-to-fine decoder upsamples with transposed convolutions, predicting occupancy at three resolutions. A lightweight MLP then turns each occupied voxel into continuous particles over two refinement stages. Each particle carries Gaussian parameters (color via degree-1 spherical harmonics, anisotropic scale, rotation, opacity).\n\nThe autoencoder is trained with four losses: per-level occupancy BCE, local bidirectional Chamfer plus color L1, rendered RGB-D loss (L1/SSIM/LPIPS plus depth L1), and a consistency loss between latents of two independent subsamples of the same cloud.\n\nThe dynamics model is a 3D U-Net. It takes 5 history latents and encodes each frame with shared 3D convolutions. At an 8×4×8 coarse grid it alternates spatial attention with causal temporal attention, and it injects action, timestamp and noise-level embeddings via an MLP. It directly regresses the next latent in one forward pass. For stability, training uses three measures: K-step autoregressive rollouts with a discounted L2 loss (γ=0.95), a curriculum on K, and history-latent noise with standard deviation up to 0.4.\n\nEach model trains in about 16 hours on a single RTX 5090. Wrist-camera rendering requires a separately fine-tuned decoder head. Separating robot, object and table, which is needed to compose the output with other Gaussian backgrounds or new kinematic robot models, also requires fine-tuning.\n\nRobots and setup: The main platform is an ALOHA bimanual robot with FlexiTac tactile sensors on each fingertip. Sensing comes from three static RealSense D455 stereo cameras (one top-down and two forward-facing) and two wrist-mounted RealSense D405s. Depth is computed with FoundationStereo, and tactile pad positions come from forward kinematics.\n\nThere are six tasks, each with about 200 teleoperated episodes (about 2 hours): Part Assembly, Cloth Folding, T Pushing, Box Packing, Rope Threading and Marker Insertion. Together they cover rigid, articulated and deformable objects.\n\nFor scaling, the model is trained on Deform360. That dataset contains 198 objects, 1,980 sequences, more than 215 hours of footage from 41 cameras, and bimanual tactile grippers. Training on it uses object points only, because the dataset provides only object-centric depth.\n\nBaselines:\n- 2D video models: Cosmos, Robot4DGen and IWS, adapted for multi-view and depth.\n- 3D particle models: PGND, PointWorld and ParticleFormer, supervised with CoTracker tracks.\n\nDownstream policies are ACT, Diffusion Policy, π0.5 (LoRA) and Cosmos Policy. Planning uses MPPI borrowed from PGND on an unseen single-arm ALOHA setup.\n\nResults: On ALOHA, metrics are averaged over 6 tasks and 200-step open-loop rollouts. The proposed model leads on every metric:\n\n| Metric | Ours | Best baseline |\n|---|---|---|\n| PSNR | 23.24 | 20.59 (Robot4DGen) |\n| LPIPS | 0.240 | 0.340 (Robot4DGen) |\n| Depth Abs Rel | 0.097 | 0.147 (Cosmos) |\n| δ<1.25 | 0.913 | 0.833 (Cosmos) |\n| Scene Chamfer | 7.72 | 10.43 (Robot4DGen) |\n| Object Chamfer | 11.52 | 15.97 (Robot4DGen) |\n| Tactile L1 | 0.081 | 0.128 (Robot4DGen) |\n\nThe 3D particle baselines do worse on geometry than the video models (Chamfer 13.78–17.11).\n\nOn Deform360, with 150-step rollouts, the picture is mixed:\n- Training objects: the model beats ParticleFormer on PSNR (18.6 vs 18.0), LPIPS (0.26 vs 0.30) and Chamfer (9.6 vs 10.5 mm).\n- Held-out objects: it keeps the geometry lead (12.1 vs 13.4 mm) but loses on appearance (PSNR 14.8 vs 15.6, LPIPS 0.43 vs 0.31). The authors attribute this to the baselines moving pre-fitted Gaussian splats, whereas this model generates appearance from scratch.\n\nPolicy training and evaluation: Each task uses 100 demos, and success rates are averaged over the four policy architectures. Values below are read approximately from a bar chart, since exact numbers are not tabulated:\n\n| Task | Real-data policies | Simulator-data policies |\n|---|---|---|\n| Part Assembly, visuo-tactile | ~0.8 | ~0.68 |\n| Part Assembly, vision-only (real) | ~0.17 | — |\n| Cloth Folding, front plus wrist views | ~0.95 | ~1.0 |\n| T Pushing, novel viewpoint | ~0.8 | ~0.68 |\n\nFor policy evaluation, checkpoints were each evaluated 20 times in the simulator and 20 times in the real world. Simulator and real success rates correlate at r = 0.958 (Part Assembly), 0.965 (Cloth Folding) and 0.859 (T Pushing).\n\nZero-shot MPC with the Deform360-trained model on four unseen objects reaches final Chamfer distances of 0.031 (cloth), 0.024 (rope), 0.035 (foam) and 0.047 (sloth). These results are presented without baseline comparisons.\n\nLimitations and caveats: The paper reports no ablations. It does not isolate the contributions of the particle stage, the consistency loss, history noise, the K-step curriculum or the tactile channel, beyond the tactile-versus-no-tactile policy comparison. The 50 Hz claim is not broken down by component.\n\nThe model is bounded to a fixed cropped workspace. Composition with backgrounds and new robots, as well as wrist views, depends on extra fine-tuning. Appearance generalization to unseen objects lags behind splat-based baselines.\n\nPolicy experiments rest on small samples (20 trials, wide Clopper-Pearson intervals), and the success rates are shown only graphically. It is not fully clear how the simulator demonstrations were produced. The particle baselines were trained on CoTracker pseudo-tracks, which may handicap them relative to their original setups.\n\nTakeaways: The paper is worth reading if you work on world models for policy evaluation or data generation, especially with wrist cameras, novel viewpoints or tactile sensing. Its main idea is a correspondence-free voxel latent decoded to Gaussians, which gives multi-view consistency and spatially grounded touch at interactive rates. That idea is simple, and the comparison against both 2D video and 3D particle families is fairly broad. Read it with skepticism about the lack of ablations and the small-sample policy results. Readers mainly interested in open-world generalization should note the weaker held-out appearance results.", "cost": 0.3555, "input_tokens": 68647, "output_tokens": 4045}, "arxiv-2203-01153": {"text": "Gist: InsertionNet 2.0 is a supervised residual policy for peg-in-hole style insertion. It regresses pose corrections from stereo wrist images plus force/torque direction, and it learns from about 150 self-collected samples per plug, with no RL, demonstrations or reward engineering. It extends the authors' earlier InsertionNet in four ways: two wrist cameras, data collected along free-space trajectories so the robot no longer has to touch the socket surface first, an auxiliary contrastive loss, and a relation-network head that enables one-shot transfer and simple multi-step tasks. It reports near-perfect success on 16 real connectors and threads.\n\nQuestion: Online RL and Sim2Real approaches to contact-rich insertion are expensive, risky for hardware, and limited by simulation fidelity. The original InsertionNet avoided these problems with backward-learned regression, but it used a single wrist camera. That camera could not resolve depth ambiguity, so the robot had to touch the socket before correcting. The paper asks three things: whether a multiview, multimodal regression approach can remove that contact requirement, whether it can cut sample needs using unlabeled data, and whether it can generalize to unseen plugs and multi-step sequences.\n\nMethod: Data collection uses \"general backward learning.\" A human first inserts the plug and the final pose L_final is registered. The robot then repeatedly moves under impedance control to random targets drawn from a normal distribution around L_final (r0 = 10 mm, θ0 = 10°). These alternate between a \"high\" target, up to 50 mm above the hole, and a \"low\" target at hole height. Along each trajectory it logs stereo images, force and moment, labeled with L_final minus the current pose. The authors report that uniform sampling put too many points far from the hole.\n\nMethod (network and policy): A single ResNet18 encoder is trained jointly on three losses.\n- An InfoNCE contrastive loss with a Polyak-averaged momentum encoder (m = 0.999), in the style of CURL, applied to the stacked 6-channel stereo image.\n- A \"Delta\" regression loss predicting the 6-DoF correction from images and force.\n- A \"Relation\" loss that takes two images of the same task and predicts the difference in their corrections.\n\nForce and moment are fed in as unit direction vectors only. The images get heavy augmentation, including random convolution, erasing and color jitter, applied consistently within each batch. At runtime, a coarse main policy from InsertionNet 1 brings the gripper near the hole. Within a radius R, the residual policy outputs (Δx, Δy, Δθx, Δθy, Δθz) while z is lowered at a fixed rate. The Delta head is used for standard tasks. The Relation head is conditioned on a stored goal image and is used for one-shot and multi-step tasks.\n\nRobots and setup: The robot is a UR5e arm with two Intel RealSense D435 wrist cameras, each tilted 45° and aimed between the fingers. Force/torque comes from the UR5e's built-in estimate, sampled at 500 Hz over RTDE, with commands sent at 125 Hz. There is no simulator; everything is on the real robot. The 16 tasks reuse the InsertionNet 1 set: AC 2-pin and 3-pin, AUX, DC12V, RJ45, HDMI, keys, power cord, USB, USB-C, VGA, and circle, half-circle, triangle, cube, cylinder and rectangle \"pulley\"/thread pieces. Each plug gets 150 collected samples, which are expanded via augmentation and pairing to about 192k training samples. Training takes 5–15 minutes on two RTX 2080 Ti GPUs.\n\nEvaluation: For each task, test start poses are sampled uniformly in a box around the hole, and 200 consecutive trials are run with the peg not fixed in the gripper, so misalignment accumulates. Success means reaching z − z0 < 1 mm within 10 s.\n\nResults: The Delta policy's worst success rate is 97.5%, on the cylindrical thread, and most tasks score 100%. The largest gains over InsertionNet 1.0 are:\n- VGA: 78.5% to 100%\n- HDMI: 90.5% to 99.5%\n- USB-C: 91.5% to 100%\n- Keys: 90.5% to 100%\n- Power cord: 94% to 98%\n\nA few tasks dropped slightly, for example triangular thread from 100% to 99.5% and cylindrical thread from 100% to 97.5%. Reported mean times are 0–1.54 s, versus 1.3–5 s for v1. However, v2 times subtract the mean reaching time, so the time comparison is not apples-to-apples. The v1 baseline also ran on a Franka Panda, and the authors themselves credit part of the gain to the UR5e's controller.\n\nAblations and sample efficiency: On AC 2-pin (50 trials per point), success reaches 100% at about 40 samples, and completion time approaches its minimum at about 150 samples. With 20 labeled plus 150 unlabeled samples, the contrastive term raised Relation-policy success from 20% to 100% and Delta-policy success from 70% to 100%. In a separate ablation on AC 2-pin, USB and yellow thread, contrastive loss made no noticeable difference for the Delta policy but gave the Relation policy roughly 20% higher success and lower time variance, mostly with small datasets.\n\nRobustness: The Delta policy was trained on 300 samples with grasp angles of 0° and ±15°. It went 50/50 under grasp errors up to 45°, room lights switched on and off, random obstacles, and the board being moved during execution. The Relation policy failed with obstacles unless extra data was collected, and it needed more data to handle large grasp changes.\n\nTransfer and multi-step: A model trained on 15 plugs was tested on the held-out red half-circle thread. Given only a goal image, the Relation policy went 50/50, while the Delta policy went 0/50. The Delta policy recovers with about 20 new samples, versus 150 from scratch. The multi-step task was inserting a key, turning the lock, and turning it back, using a pre-stored stereo goal image for each step and similarity-based step switching. It scored 50/50, even though the training data never visited the inserted or turned states.\n\nLimitations: There is no comparison against RL, LfD or other contemporary insertion methods, only against the authors' own prior system on a different robot. The \"minimal contact\" claim is not quantified with contact-force statistics. Policies are trained per plug and require a human-registered final pose. The test-region bounds B_xy, B_θ and B_z are not specified. Robustness, transfer and multi-step results rest on 50 trials each, with a single held-out object described as \"somewhat similar\" to the training set. Several reported effects, such as the stability gains and the robustness comparisons, are only qualitative.\n\nTakeaway: Read it if you want a practical, low-data, fast-to-train recipe for real-world tight-tolerance insertion. Useful details include the stereo wrist-camera placement, trajectory-wide backward data collection, direction-only force inputs, and a relation head for goal-image-conditioned transfer. Skim it if you need rigorous baselines or analysis of generalization limits.", "cost": 0.1628, "input_tokens": 23056, "output_tokens": 3530}}, "ratings": {}, "links": {}, "htmlv": {"claude": {"arxiv-2610-39302": {"path": "htmls_claude/arxiv-2610-39302_Proving and Improving the Platonic Representation Hypothesis with JEPAs/index.html", "cost": 0.716, "input_tokens": 129371, "output_tokens": 9926}, "arxiv-2203-01153": {"path": "htmls_claude/arxiv-2203-01153_InsertionNet 2.0  Minimal Contact Multi-Step Insertion Using Multimodal Multiview Sensory Input/index.html", "cost": 0.2192, "input_tokens": 23107, "output_tokens": 6338}, "arxiv-2611-04492": {"path": "htmls_claude/arxiv-2611-04492_Hybrid Particle-Voxel Dynamics for Multimodal 3D World Simulation/index.html", "cost": 0.9519, "input_tokens": 68698, "output_tokens": 33855}}, "python": {"arxiv-2610-39302": {"path": "htmls_python/arxiv-2610-39302_Proving and Improving the Platonic Representation Hypothesis with JEPAs/index.html", "method": "python", "seconds": 12.6, "pages": 37}}, "claude2": {}}, "movies": {}, "here": "/Users/dotan.dicastro/projects/NeurIPS2024Scrape/website/papers", "store": "papers"}</script>
+<script>
+const {columns, rows, firstPage, meta, facets, summaries, ratings, links, htmlv, movies, here, store} = JSON.parse(document.getElementById('data').textContent);
+
+function cellContent(v) {
+  if (/^https:\/\/github\.com\/\S+ /.test(v)) {  // several space-separated repos
+    const f = document.createDocumentFragment();
+    v.split(' ').forEach((u, i) => { if (i) f.append(document.createElement('br')); f.append(cellContent(u)); });
+    return f;
+  }
+  if (v.startsWith('pdfs/')) {  // local copy: open in Preview via OpenPDF.app (specific_scripts/install_openpdf_handler.sh)
+    const a = document.createElement('a'), path = (here + '/' + v).split('/').map(encodeURIComponent).join('/');
+    a.href = 'openpdf://' + path; a.textContent = '🖊️ ' + v; a.title = 'Open in Preview';
+    const web = document.createElement('a');
+    web.href = encodeURI(v); web.target = '_blank'; web.textContent = ' 🌐'; web.title = 'Open in browser';
+    const f = document.createDocumentFragment(); f.append(a, web);
+    return f;
+  }
+  if (/^https?:\/\//.test(v)) {
+    const a = document.createElement('a');
+    a.href = encodeURI(v); a.target = '_blank'; a.textContent = v;
+    return a;
+  }
+  return document.createTextNode(v);
+}
+
+// ---- view switching ----
+const buttons = document.querySelectorAll('nav button[data-view]');
+function show(view) {
+  buttons.forEach(b => b.classList.toggle('active', b.dataset.view === view));
+  document.querySelectorAll('.view').forEach(v => v.classList.toggle('active', v.id === view));
+}
+buttons.forEach(b => b.onclick = () => show(b.dataset.view));
+
+// ---- table view ----
+let order = columns.map((_, i) => i);
+const width = columns.map(c => ({title: 300, abstract: 500, authors: 220}[c] || 140));
+const table = document.querySelector('#table table');
+let dragFrom = null, trs = [], dets = [];
+
+function renderTable() {
+  table.querySelector('colgroup').replaceChildren(...order.map(i => {
+    const col = document.createElement('col'); col.style.width = width[i] + 'px'; return col;
+  }));
+  table.style.width = order.reduce((s, i) => s + width[i], 0) + 'px';
+
+  table.querySelector('thead tr').replaceChildren(...order.map((ci, pos) => {
+    const th = document.createElement('th');
+    th.textContent = columns[ci]; th.title = columns[ci]; th.draggable = true;
+    th.ondragstart = e => { dragFrom = pos; e.dataTransfer.effectAllowed = 'move'; };
+    th.ondragover = e => { e.preventDefault(); th.classList.add('drag-over'); };
+    th.ondragleave = () => th.classList.remove('drag-over');
+    th.ondrop = e => {
+      e.preventDefault();
+      if (dragFrom === null || dragFrom === pos) return renderTable();
+      order.splice(pos, 0, order.splice(dragFrom, 1)[0]);
+      dragFrom = null;
+      renderTable();
+    };
+    const handle = document.createElement('span');
+    handle.className = 'resize';
+    handle.onmousedown = e => {
+      e.preventDefault(); e.stopPropagation();  // preventDefault also blocks the column drag
+      const startX = e.clientX, startW = width[ci], col = table.querySelectorAll('col')[pos];
+      const others = table.offsetWidth - startW;
+      const move = ev => {
+        width[ci] = Math.max(40, startW + ev.clientX - startX);
+        col.style.width = width[ci] + 'px';
+        table.style.width = others + width[ci] + 'px';
+      };
+      const up = () => { removeEventListener('mousemove', move); removeEventListener('mouseup', up); };
+      addEventListener('mousemove', move); addEventListener('mouseup', up);
+    };
+    th.appendChild(handle);
+    return th;
+  }));
+
+  trs = rows.map(r => {
+    const tr = document.createElement('tr');
+    for (const ci of order) {
+      const td = document.createElement('td'), div = document.createElement('div');
+      div.appendChild(cellContent(r[ci])); td.title = r[ci];
+      td.appendChild(div); tr.appendChild(td);
+    }
+    return tr;
+  });
+  applyFilters();
+}
+
+// ---- Summarize button: POST /summarize/<id> to serve.py (holds the Claude API key), result in a dropdown ----
+if (location.protocol.startsWith('http'))  // pick up summaries / ratings made since index.html was built
+  [['summaries.json', summaries], ['ratings.json', ratings], ['links.json', links]].forEach(([f, o]) =>
+    fetch(f).then(r => r.ok ? r.json() : {}).then(s => { Object.assign(o, s); updateStats(); }).catch(() => {}));
+
+// ---- star rating on the summary line: click a star to rate, click the same star again to clear ----
+// Served (serve.py): saved to ratings.json. Opened as a file: kept in localStorage ("pending", 0 = cleared)
+// and pushed to the server the next time the page is opened through serve.py.
+const SERVED = location.protocol.startsWith('http');
+let pending = {};
+try { pending = JSON.parse(localStorage.getItem(store + 'Ratings') || '{}'); } catch (e) {}
+const setRating = (pid, v) => { if (v) ratings[pid] = v; else delete ratings[pid]; };
+const refilter = () => { if (dets.length) applyFilters(); else updateStats(); };  // so the rating / summary filters apply at once
+Object.entries(pending).forEach(([pid, v]) => {
+  setRating(pid, v);
+  if (SERVED) fetch('rate/' + pid, {method: 'POST', body: String(v)}).then(r => {
+    if (r.ok) { delete pending[pid]; try { localStorage.setItem(store + 'Ratings', JSON.stringify(pending)); } catch (e) {} }
+  });
+});
+function stars(pid) {
+  const span = document.createElement('span');
+  span.className = 'stars'; span.title = 'Your rating (click the same star again to clear)';
+  const paint = () => [...span.children].forEach((st, i) => st.textContent = i < (ratings[pid] || 0) ? '★' : '☆');
+  for (let n = 1; n <= 5; n++) {
+    const st = document.createElement('span');
+    st.onclick = async e => {
+      e.preventDefault();  // don't toggle the paper's dropdown
+      const prev = ratings[pid] || 0, v = prev === n ? 0 : n;
+      setRating(pid, v); paint(); refilter();
+      if (!SERVED) {
+        pending[pid] = v;
+        try { localStorage.setItem(store + 'Ratings', JSON.stringify(pending)); } catch (e) {}
+        return;
+      }
+      const res = await fetch('rate/' + pid, {method: 'POST', body: String(v)}).catch(() => null);
+      if (!res || !res.ok) { span.title = '⚠️ rating not saved (is serve.py running?)'; setRating(pid, prev); paint(); refilter(); }
+    };
+    span.append(st);
+  }
+  paint();
+  return span;
+}
+// a summary is {text, cost, input_tokens, output_tokens} (older ones are a plain string)
+const sumText = x => typeof x === 'string' ? x : x.text;
+const sumTitle = x => '📝 Summary (Claude Opus' + (x.cost != null
+  ? ` · $${x.cost.toFixed(3)} · ${x.input_tokens.toLocaleString()} in / ${x.output_tokens.toLocaleString()} out tokens)` : ')');
+function summaryBox(pid, flag) {  // flag: the 📝 marker on the paper's summary line, shown while a summary exists
+  const box = document.createElement('div');
+  box.className = 'sumbox';
+  const needServer = () => location.protocol.startsWith('http') ? '' :
+    'run: uv run python website/serve.py, then open this page through http://127.0.0.1:8026/';
+  const empty = () => {  // no summary yet: just the button
+    const btn = document.createElement('button');
+    btn.textContent = '📝 Summarize';
+    btn.onclick = async () => {
+      if (needServer()) return btn.textContent = '📝 Summarize (' + needServer() + ')';
+      btn.disabled = true; btn.textContent = '⏳ Summarizing with Claude… (~30 s)';
+      try {
+        const res = await fetch('summarize/' + pid, {method: 'POST'}), j = await res.json();
+        if (!res.ok) throw new Error(j.error);
+        summaries[pid] = j.summary; filled(true); refilter();
+      } catch (e) { btn.disabled = false; btn.textContent = '⚠️ ' + e.message + ' (retry)'; }
+    };
+    box.replaceChildren(btn);
+  };
+  const filled = open => {  // summary dropdown, "Erase summary" at its bottom
+    const sd = document.createElement('details'), ss = document.createElement('summary'),
+          body = document.createElement('div'), erase = document.createElement('button');
+    ss.textContent = sumTitle(summaries[pid]); body.textContent = sumText(summaries[pid]); sd.open = open;
+    const cost = summaries[pid].cost;
+    flag.hidden = false; flag.title = 'Has a Claude summary';
+    flag.textContent = '📝' + (cost != null ? ` $${cost.toFixed(3)}` : '');
+    erase.className = 'erase'; erase.textContent = '🗑️ Erase summary';
+    erase.onclick = async () => {
+      if (needServer()) return erase.textContent = '🗑️ Erase summary (' + needServer() + ')';
+      if (!confirm('Erase the summary of this paper?')) return;
+      const res = await fetch('summarize/' + pid, {method: 'DELETE'});
+      if (!res.ok) return erase.textContent = '⚠️ erase failed (retry)';
+      delete summaries[pid]; flag.hidden = true; empty(); refilter();
+    };
+    sd.append(ss, body, erase); box.replaceChildren(sd);
+  };
+  summaries[pid] ? filled(false) : empty();
+  return box;
+}
+
+// ---- HTML versions: POST /html_<kind>/<id> to serve.py, then a link that opens it in a new tab ----
+const HTML_KINDS = {
+  claude: {make: '🌐 Make HTML with Claude', open: '🌐 Open HTML (Claude)', busy: '⏳ Converting the whole paper with Claude… (several minutes)'},
+  python: {make: '🐍 Make HTML with python', open: '🐍 Open HTML (python)', busy: '⏳ Converting with python… (~20 s)'},
+  claude2: {open: '✂️ Open HTML Claude #2'},  // made by the Condense button on the Claude HTML page
+};
+function htmlBox(pid, kind) {
+  const box = document.createElement('span'), k = HTML_KINDS[kind];
+  box.className = 'htmlbox';
+  const link = () => {
+    const a = document.createElement('a'), v = htmlv[kind][pid];
+    a.href = v.path.split('/').map(encodeURIComponent).join('/'); a.target = '_blank';
+    a.textContent = k.open + (v.cost != null ? ` ($${v.cost.toFixed(2)})` : '');
+    box.replaceChildren(a);
+  };
+  if (htmlv[kind][pid]) { link(); return box; }
+  if (!k.make) return box;
+  const btn = document.createElement('button');
+  btn.textContent = k.make;
+  btn.onclick = async () => {
+    if (!location.protocol.startsWith('http'))
+      return btn.textContent = k.make + ' (run: uv run python website/serve.py, then open this page through http://127.0.0.1:8026/)';
+    btn.disabled = true; btn.textContent = k.busy;
+    try {
+      const res = await fetch(`html_${kind}/${pid}`, {method: 'POST'}), j = await res.json();
+      if (!res.ok) throw new Error(j.error);
+      htmlv[kind][pid] = j; link(); updateStats();
+    } catch (e) { btn.disabled = false; btn.textContent = '⚠️ ' + e.message + ' (retry)'; }
+  };
+  box.append(btn);
+  return box;
+}
+// ---- Find link to paper: POST /find_link/<id>, Claude + web search for a non-OpenReview copy (arXiv preferred) ----
+function linkBox(pid) {
+  const box = document.createElement('span');
+  box.className = 'htmlbox';
+  const link = () => {
+    const a = document.createElement('a'), v = links[pid];
+    a.href = v.url; a.target = '_blank'; a.textContent = '🔗 ' + v.url.replace(/^https?:\/\//, '');
+    a.title = `Found by Claude ($${v.cost.toFixed(3)}, ${v.searches} web searches)`;
+    box.replaceChildren(a);
+  };
+  if (links[pid]?.url) { link(); return box; }
+  const btn = document.createElement('button');
+  btn.textContent = links[pid] ? '🔗 Find link to paper (none found last time)' : '🔗 Find link to paper';
+  btn.onclick = async () => {
+    if (!location.protocol.startsWith('http'))
+      return btn.textContent = '🔗 Find link to paper (run: uv run python website/serve.py, then open this page through http://127.0.0.1:8026/)';
+    btn.disabled = true; btn.textContent = '⏳ Searching the web with Claude… (~30 s)';
+    try {
+      const res = await fetch('find_link/' + pid, {method: 'POST'}), j = await res.json();
+      if (!res.ok) throw new Error(j.error);
+      links[pid] = j; updateStats();
+      if (j.url) return link();
+      btn.disabled = false; btn.textContent = '🔗 No public copy found (retry)';
+    } catch (e) { btn.disabled = false; btn.textContent = '⚠️ ' + e.message + ' (retry)'; }
+  };
+  box.append(btn);
+  return box;
+}
+function htmlBoxes(pid) {
+  const row = document.createElement('div');
+  row.className = 'htmlrow';
+  row.append(htmlBox(pid, 'claude'), htmlBox(pid, 'claude2'), htmlBox(pid, 'python'), linkBox(pid));
+  return row;
+}
+
+// ---- papers view (native <details> dropdowns) ----
+const titleIdx = columns.indexOf('title'), idIdx = columns.indexOf('id'), ghIdx = columns.indexOf('💻 github');
+const kwIdx = ['primary_keyword', 'secondary_keyword', 'free_keyword_1', 'free_keyword_2', '🏷️ keywords']
+  .map(c => columns.indexOf(c)).filter(i => i >= 0);
+dets = rows.map((r, ri) => {
+  const d = document.createElement('details'), s = document.createElement('summary');
+  s.textContent = r[titleIdx];
+  const kws = kwIdx.map(i => r[i]).filter(Boolean);
+  if (kws.length) {
+    const k = document.createElement('span');
+    k.className = 'kw'; k.textContent = ' [' + kws.join(', ') + ']';
+    s.append(k);
+  }
+  if (r[ghIdx]) {  // GitHub sign linking the first repo; preventDefault so the click doesn't toggle the dropdown
+    const a = document.createElement('a'), url = r[ghIdx].split(' ')[0];
+    a.className = 'gh'; a.href = url; a.title = r[ghIdx].replaceAll(' ', '\n');
+    a.innerHTML = '<svg><use href="#gh"/></svg>';
+    a.onclick = e => { e.preventDefault(); open(url, '_blank'); };
+    s.append(a);
+  }
+  const sumFlag = document.createElement('span');
+  sumFlag.className = 'sumflag'; sumFlag.textContent = '📝'; sumFlag.hidden = true;
+  s.append(stars(r[idIdx].split('id=').pop()), sumFlag);
+  const m = meta[ri], b = [...m.t];
+  if (m.cites) b.push(`📈 ${m.cites}`);
+  if (m.h != null) b.push(`🏅 h ${m.h}`);
+  if (m.b.length) b.push('🤖 ' + m.b.join(', '));
+  if (m.m.length) b.push('🧠 ' + m.m.join(', '));
+  if (m.c.length) b.push('🏢 ' + m.c.join(', '));
+  if (b.length) { const e = document.createElement('span'); e.className = 'badges'; e.textContent = b.join('  ·  '); s.append(e); }
+  const dl = document.createElement('dl');
+  columns.forEach((c, i) => {
+    if (i === titleIdx || !r[i]) return;
+    const dt = document.createElement('dt'), dd = document.createElement('dd');
+    dt.textContent = c; dd.appendChild(cellContent(r[i]));
+    dl.append(dt, dd);
+  });
+  d.append(s, summaryBox(r[idIdx].split('id=').pop(), sumFlag), htmlBoxes(r[idIdx].split('id=').pop()), dl);
+  const fig = (firstPage[r[idIdx].split('id=').pop()] || {}).figure;
+  if (fig) { const img = document.createElement('img'); img.src = fig; img.loading = 'lazy'; d.append(img); }
+  const figs = (firstPage[r[idIdx].split('id=').pop()] || {}).figures || [];
+  if (figs.length) {
+    const all = document.createElement('details'), as = document.createElement('summary');
+    as.textContent = `All figures (${figs.length})`;
+    const box = document.createElement('div'); box.className = 'collage';
+    all.append(as, box);
+    all.ontoggle = () => {  // build on first open so 687 papers don't load thousands of images
+      if (!all.open || box.childElementCount) return;
+      box.append(...figs.map(f => {
+        const a = document.createElement('a'), img = document.createElement('img'), ar = f.w / f.h;
+        a.href = encodeURI(f.src); a.target = '_blank'; a.title = `Figure ${f.n} (page ${f.page})`;
+        a.style.flex = `${ar} 1 calc(${ar} * clamp(140px, 28vh, 360px))`;
+        img.src = encodeURI(f.src);
+        a.append(img);
+        return a;
+      }));
+    };
+    d.append(all);
+  }
+  const movs = movies[r[idIdx].split('id=').pop()] || [];
+  if (movs.length) {
+    const mv = document.createElement('details'), ms = document.createElement('summary');
+    ms.textContent = movs.length > 1 ? `🎬 Movies (${movs.length})` : '🎬 Movie';
+    const box = document.createElement('div'); box.className = 'movies';
+    mv.append(ms, box);
+    mv.ontoggle = () => {  // players made on first open; preload="metadata" fetches only the first frame until played
+      if (!mv.open) return box.querySelectorAll('video').forEach(v => v.pause());
+      if (box.childElementCount) return;
+      box.append(...movs.map(p => {
+        const src = p.split('/').map(encodeURIComponent).join('/');
+        const v = document.createElement(p.endsWith('.gif') ? 'img' : 'video');
+        v.src = src; v.title = p.split('/').pop();
+        if (v.tagName === 'VIDEO') { v.controls = true; v.preload = 'metadata'; }
+        return v;
+      }));
+    };
+    dl.before(mv);  // right after the HTML / link buttons, before the fields
+  }
+  return d;
+});
+
+// ---- filters ----
+const picked = {t: new Set(), p: new Set(), s: new Set(), k: new Set(), b: new Set(), m: new Set(), c: new Set(), u: new Set(), r: new Set()};
+document.querySelectorAll('.facet').forEach(fd => {
+  const key = fd.dataset.key, panel = fd.querySelector('.panel'), label = fd.querySelector('summary');
+  if (!(facets[key] || []).length) return fd.hidden = true;  // nothing to pick on this site (e.g. Oral/Poster on your papers)
+  const base = label.textContent;
+  const search = document.createElement('input');
+  search.type = 'search'; search.placeholder = '🔍 search…';
+  const items = facets[key].map(f => {
+    const l = document.createElement('label'), cb = document.createElement('input'), sm = document.createElement('small');
+    cb.type = 'checkbox'; cb.value = f.id;
+    sm.textContent = f.note;
+    l.append(cb, document.createTextNode(f.name), sm);
+    cb.onchange = () => {
+      cb.checked ? picked[key].add(f.id) : picked[key].delete(f.id);
+      label.textContent = base + (picked[key].size ? ` (${picked[key].size})` : '');
+      fd.classList.toggle('on', picked[key].size > 0);
+      applyFilters();
+    };
+    return l;
+  });
+  search.oninput = () => items.forEach(l => l.hidden = !l.textContent.toLowerCase().includes(search.value.toLowerCase()));
+  panel.append(search, ...items);
+  fd.ontoggle = () => fd.open && document.querySelectorAll('.facet').forEach(o => o !== fd && (o.open = false));
+});
+addEventListener('click', e => { if (!e.target.closest('.facet')) document.querySelectorAll('.facet').forEach(f => f.open = false); });
+const FIELDS = ['q', 'minH', 'minC', 'sort', 'ghF', 'sumF', 'rateHas', 'rateF'];
+FIELDS.forEach(id => document.getElementById(id).oninput = applyFilters);
+const haystack = rows.map(r => r.join(' ').toLowerCase());  // every column, incl. companies/universities
+document.getElementById('clear').onclick = () => {
+  Object.values(picked).forEach(p => p.clear());
+  document.querySelectorAll('.facet').forEach(fd => {
+    fd.classList.remove('on'); fd.querySelectorAll('input[type=checkbox]').forEach(cb => cb.checked = false);
+    const l = fd.querySelector('summary'); l.textContent = l.textContent.replace(/ \(\d+\)$/, '');
+  });
+  FIELDS.forEach(id => document.getElementById(id).value = '');
+  applyFilters();
+};
+
+// ---- remember the last filters (this browser only; file:// and http://127.0.0.1:8026/Corl2026/ keep separate copies) ----
+function restoreFilters() {
+  let saved;
+  try { saved = JSON.parse(localStorage.getItem(store + 'Filters')); } catch (e) {}
+  if (!saved) return;
+  FIELDS.forEach(id => { if (saved.fields?.[id] != null) document.getElementById(id).value = saved.fields[id]; });
+  document.querySelectorAll('.facet').forEach(fd => fd.querySelectorAll('input[type=checkbox]').forEach(cb => {
+    if ((saved.picked?.[fd.dataset.key] || []).includes(cb.value)) { cb.checked = true; cb.onchange(); }
+  }));
+}
+function saveFilters() {
+  const fields = Object.fromEntries(FIELDS.map(id => [id, document.getElementById(id).value]));
+  const pk = Object.fromEntries(Object.entries(picked).map(([k, v]) => [k, [...v]]));
+  try { localStorage.setItem(store + 'Filters', JSON.stringify({fields, picked: pk})); } catch (e) {}
+}
+
+function applyFilters() {
+  if (!dets.length) return;  // first renderTable() runs before the papers view exists
+  const minH = +document.getElementById('minH').value || 0, minC = +document.getElementById('minC').value || 0;
+  const sort = document.getElementById('sort').value;
+  const hit = (key, ri) => !picked[key].size || meta[ri][key].some(x => picked[key].has(x));
+  const terms = document.getElementById('q').value.toLowerCase().split(/\s+/).filter(Boolean);  // all must match
+  const ghSel = document.getElementById('ghF').value, gh = i => !ghSel || (ghSel === 'y') === !!rows[i][ghIdx];
+  const sumSel = document.getElementById('sumF').value,  // live: summaries changes as you summarize / erase
+        sm = i => !sumSel || (sumSel === 'y') === !!summaries[rows[i][idIdx].split('id=').pop()];
+  const hasSel = document.getElementById('rateHas').value, rateSel = document.getElementById('rateF').value, rt = i => {
+    const v = ratings[rows[i][idIdx].split('id=').pop()] || 0, n = +rateSel.slice(1);
+    return (!hasSel || (hasSel === 'y') === v > 0) && (!rateSel || v > 0 && (rateSel[0] === 'g' ? v > n : v < n));
+  };
+  let idx = rows.map((_, i) => i).filter(i => gh(i) && sm(i) && rt(i) &&
+    terms.every(t => haystack[i].includes(t)) &&
+    hit('t', i) && hit('p', i) && hit('s', i) && hit('k', i) && hit('b', i) && hit('m', i) && hit('c', i) && hit('u', i) && hit('r', i) && (meta[i].h || 0) >= minH && (meta[i].cites || 0) >= minC);
+  if (sort === 'az') idx.sort((a, b) => rows[a][titleIdx].localeCompare(rows[b][titleIdx], undefined, {sensitivity: 'base'}));
+  else if (sort) idx.sort((a, b) => (meta[b][sort] || 0) - (meta[a][sort] || 0));
+  table.querySelector('tbody').replaceChildren(...idx.map(i => trs[i]));
+  document.getElementById('papers').replaceChildren(...idx.map(i => dets[i]));
+  document.querySelector('.count').textContent = idx.length === rows.length
+    ? `📄 ${rows.length} papers` : `📄 ${idx.length} / ${rows.length} papers`;
+  saveFilters();
+  updateStats();
+}
+
+// ---- top-bar statistics over all papers (not just the filtered ones) ----
+function updateStats() {
+  const costOf = o => Object.values(o).reduce((t, x) => t + (x.cost || 0), 0);
+  const rated = Object.values(ratings), avg = rated.length ? rated.reduce((a, b) => a + b, 0) / rated.length : 0;
+  const spent = costOf(summaries) + costOf(htmlv.claude) + costOf(htmlv.claude2) + costOf(links);
+  document.querySelector('nav .stats').textContent = [
+    `📝 ${Object.keys(summaries).length} summaries`,
+    `🌐 ${Object.keys(htmlv.claude).length} HTML (Claude)`,
+    `🐍 ${Object.keys(htmlv.python).length} HTML (python)`,
+    `🔗 ${Object.values(links).filter(v => v.url).length} links`,
+    `⭐ ${rated.length} rated` + (rated.length ? ` (avg ${avg.toFixed(1)})` : ''),
+    `💲 $${spent.toFixed(2)} Claude spend`,
+  ].join('  ·  ');
+}
+
+restoreFilters();
+renderTable();
+show('papers');
+// ---- #<paper id> in the address scrolls to that paper, closed (the Add box on the papers site jumps to the one it added) ----
+const target = decodeURIComponent(location.hash.slice(1)),
+      ti = target ? rows.findIndex(r => r[idIdx].split('id=').pop() === target) : -1;
+if (ti >= 0) {
+  if (!dets[ti].isConnected) document.getElementById('clear').click();  // hidden by saved filters: show everything
+  dets[ti].scrollIntoView();
+}
+if (location.hash) history.replaceState(null, '', location.pathname + location.search);  // a refresh starts at the top
+</script>
+</body>
+</html>

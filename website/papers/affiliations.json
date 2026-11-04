@@ -1,0 +1,76 @@
+{
+ "papers": {
+  "arxiv-2610-39302": {
+   "companies": [],
+   "universities": [
+    "Brown University"
+   ],
+   "candidates": [
+    "Brown University",
+    "New York University",
+    "AMI Labs",
+    "AI. The Platonic Representation Hypothesis (PRH) conjectures that they do as they scale, but without a proof"
+   ]
+  },
+  "arxiv-2611-04492": {
+   "companies": [
+    "NVIDIA"
+   ],
+   "universities": [
+    "Columbia University",
+    "University of California, Berkeley",
+    "University of Michigan"
+   ],
+   "candidates": [
+    "Columbia University",
+    "UC Berkeley",
+    "University of Michigan",
+    "NVIDIA"
+   ]
+  },
+  "arxiv-2203-01153": {
+   "companies": [
+    "Bosch"
+   ],
+   "universities": [],
+   "candidates": [
+    "Bosch Center for Artiﬁcial Inteligence, Haifa, Israel"
+   ]
+  }
+ },
+ "ror": {
+  "Brown University": {
+   "name": "Brown University",
+   "types": [
+    "education",
+    "funder"
+   ]
+  },
+  "New York University": null,
+  "AMI Labs": null,
+  "AI. The Platonic Representation Hypothesis (PRH) conjectures that they do as they scale, but without a proof": null,
+  "Columbia University": {
+   "name": "Columbia University",
+   "types": [
+    "education",
+    "funder"
+   ]
+  },
+  "UC Berkeley": {
+   "name": "University of California, Berkeley",
+   "types": [
+    "education",
+    "funder"
+   ]
+  },
+  "University of Michigan": {
+   "name": "University of Michigan",
+   "types": [
+    "education",
+    "funder"
+   ]
+  },
+  "NVIDIA": null,
+  "Bosch Center for Artiﬁcial Inteligence, Haifa, Israel": null
+ }
+}

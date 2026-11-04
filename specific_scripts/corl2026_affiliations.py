@@ -6,7 +6,7 @@ page-1 footnotes. Each candidate is resolved with ROR's affiliation matcher
 or a university; well-known companies are also caught by name/email patterns because many
 robotics startups aren't in ROR.
 
-Writes htmls/corl2026/affiliations.json (ROR lookups are cached in it; reruns are cheap).
+Writes website/corl2026/affiliations.json (ROR lookups are cached in it; reruns are cheap).
 
     uv run python specific_scripts/corl2026_affiliations.py
 """
@@ -26,8 +26,8 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from extract_first_page import ANCHOR_SIZE, ANY_CAPTION_RE, SECTION_RE, blocks
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-PDF_DIR = os.path.join(ROOT, "htmls", "corl2026", "pdfs")
-OUT = os.path.join(ROOT, "htmls", "corl2026", "affiliations.json")
+PDF_DIR = os.path.join(ROOT, "website", "corl2026", "pdfs")
+OUT = os.path.join(ROOT, "website", "corl2026", "affiliations.json")
 ROR = "https://api.ror.org/v2/organizations"
 
 # canonical company name -> pattern over affiliation text and email domains

@@ -1,0 +1,306 @@
+{
+ "arxiv-2610-39302": {
+  "title": "arXiv:2610.39302v1  [cs.AI]  29 Oct 2026",
+  "abstract": "",
+  "figure": "figs/arxiv-2610-39302.png",
+  "figure_page": 1,
+  "figures": [
+   {
+    "n": 1,
+    "page": 1,
+    "src": "figs/arxiv-2610-39302/fig1.png",
+    "w": 1377,
+    "h": 859
+   },
+   {
+    "n": 2,
+    "page": 4,
+    "src": "figs/arxiv-2610-39302/fig2.png",
+    "w": 1418,
+    "h": 888
+   },
+   {
+    "n": 3,
+    "page": 6,
+    "src": "figs/arxiv-2610-39302/fig3.png",
+    "w": 1424,
+    "h": 650
+   },
+   {
+    "n": 4,
+    "page": 6,
+    "src": "figs/arxiv-2610-39302/fig4.png",
+    "w": 692,
+    "h": 825
+   },
+   {
+    "n": 5,
+    "page": 8,
+    "src": "figs/arxiv-2610-39302/fig5.png",
+    "w": 1440,
+    "h": 634
+   },
+   {
+    "n": 6,
+    "page": 8,
+    "src": "figs/arxiv-2610-39302/fig6.png",
+    "w": 701,
+    "h": 570
+   },
+   {
+    "n": 7,
+    "page": 9,
+    "src": "figs/arxiv-2610-39302/fig7.png",
+    "w": 1418,
+    "h": 1136
+   },
+   {
+    "n": 8,
+    "page": 9,
+    "src": "figs/arxiv-2610-39302/fig8.png",
+    "w": 703,
+    "h": 1028
+   },
+   {
+    "n": 9,
+    "page": 10,
+    "src": "figs/arxiv-2610-39302/fig9.png",
+    "w": 1441,
+    "h": 848
+   },
+   {
+    "n": 10,
+    "page": 11,
+    "src": "figs/arxiv-2610-39302/fig10.png",
+    "w": 1441,
+    "h": 580
+   },
+   {
+    "n": 11,
+    "page": 12,
+    "src": "figs/arxiv-2610-39302/fig11.png",
+    "w": 700,
+    "h": 879
+   },
+   {
+    "n": 12,
+    "page": 26,
+    "src": "figs/arxiv-2610-39302/fig12.png",
+    "w": 1439,
+    "h": 737
+   },
+   {
+    "n": 13,
+    "page": 28,
+    "src": "figs/arxiv-2610-39302/fig13.png",
+    "w": 1440,
+    "h": 1090
+   },
+   {
+    "n": 14,
+    "page": 36,
+    "src": "figs/arxiv-2610-39302/fig14.png",
+    "w": 1224,
+    "h": 804
+   },
+   {
+    "n": 15,
+    "page": 37,
+    "src": "figs/arxiv-2610-39302/fig15.png",
+    "w": 536,
+    "h": 1240
+   }
+  ]
+ },
+ "arxiv-2611-04492": {
+  "title": "arXiv:2611.04492v1  [cs.RO]  3 Nov 2026",
+  "abstract": "",
+  "figure": "figs/arxiv-2611-04492.png",
+  "figure_page": 1,
+  "figures": [
+   {
+    "n": 1,
+    "page": 1,
+    "src": "figs/arxiv-2611-04492/fig1.png",
+    "w": 1161,
+    "h": 664
+   },
+   {
+    "n": 2,
+    "page": 4,
+    "src": "figs/arxiv-2611-04492/fig2.png",
+    "w": 1134,
+    "h": 912
+   },
+   {
+    "n": 3,
+    "page": 6,
+    "src": "figs/arxiv-2611-04492/fig3.png",
+    "w": 1134,
+    "h": 958
+   },
+   {
+    "n": 4,
+    "page": 6,
+    "src": "figs/arxiv-2611-04492/fig4.png",
+    "w": 1134,
+    "h": 538
+   },
+   {
+    "n": 5,
+    "page": 7,
+    "src": "figs/arxiv-2611-04492/fig5.png",
+    "w": 1134,
+    "h": 986
+   },
+   {
+    "n": 6,
+    "page": 8,
+    "src": "figs/arxiv-2611-04492/fig6.png",
+    "w": 1134,
+    "h": 826
+   },
+   {
+    "n": 7,
+    "page": 9,
+    "src": "figs/arxiv-2611-04492/fig7.png",
+    "w": 1134,
+    "h": 394
+   },
+   {
+    "n": 8,
+    "page": 9,
+    "src": "figs/arxiv-2611-04492/fig8.png",
+    "w": 1134,
+    "h": 921
+   },
+   {
+    "n": 9,
+    "page": 20,
+    "src": "figs/arxiv-2611-04492/fig9.png",
+    "w": 1134,
+    "h": 744
+   },
+   {
+    "n": 10,
+    "page": 21,
+    "src": "figs/arxiv-2611-04492/fig10.png",
+    "w": 724,
+    "h": 743
+   },
+   {
+    "n": 11,
+    "page": 21,
+    "src": "figs/arxiv-2611-04492/fig11.png",
+    "w": 724,
+    "h": 743
+   },
+   {
+    "n": 12,
+    "page": 22,
+    "src": "figs/arxiv-2611-04492/fig12.png",
+    "w": 678,
+    "h": 743
+   },
+   {
+    "n": 13,
+    "page": 22,
+    "src": "figs/arxiv-2611-04492/fig13.png",
+    "w": 678,
+    "h": 746
+   },
+   {
+    "n": 14,
+    "page": 23,
+    "src": "figs/arxiv-2611-04492/fig14.png",
+    "w": 1134,
+    "h": 743
+   },
+   {
+    "n": 16,
+    "page": 25,
+    "src": "figs/arxiv-2611-04492/fig16.png",
+    "w": 1134,
+    "h": 343
+   },
+   {
+    "n": 17,
+    "page": 25,
+    "src": "figs/arxiv-2611-04492/fig17.png",
+    "w": 1134,
+    "h": 556
+   },
+   {
+    "n": 18,
+    "page": 25,
+    "src": "figs/arxiv-2611-04492/fig18.png",
+    "w": 1134,
+    "h": 345
+   }
+  ]
+ },
+ "arxiv-2203-01153": {
+  "title": "arXiv:2203.01153v1  [cs.RO]  2 Mar 2022",
+  "abstract": "— We address the problem of devising the means for a robot to rapidly and safely learn insertion skills with just a few human interventions and without hand-crafted rewards or demonstrations. Our InsertionNet version 2.0 provides an improved technique to robustly cope with a wide range of use-cases featuring different shapes, colors, initial poses, etc. In particular, we present a regression-based method based on multimodal input from stereo perception and force, augmented with contrastive learning for the efﬁcient learning of valuable features. In addition, we introduce a one-shot learning technique for insertion, which relies on a relation network scheme to better exploit the collected data and to support multi-step insertion tasks. Our method improves on the results obtained with the original InsertionNet, achieving an almost perfect score (above 97.5% on 200 trials) in 16 real-life insertion tasks while minimizing the execution time and contact during insertion. We further demonstrate our method’s ability to tackle a real-life 3-step insertion task and perfectly solve an unseen insertion task without learning. arXiv:2203.01153v1  [cs.RO]  2 Mar 2022 I. INTRODUCTION Constructing a robot that reliably inserts diverse objects (e.g., plugs, engine gears) is a grand challenge in the design of manufacturing, inspection, and home-service robots. Minimizing action time, maximizing reliability, and minimizing contact between the grasped object and the target component is difﬁcult due to the inherent uncertainty concerning sensing, control, sensitivity to applied forces, and occlusions.",
+  "figure": "figs/arxiv-2203-01153.png",
+  "figure_page": 1,
+  "figures": [
+   {
+    "n": 1,
+    "page": 1,
+    "src": "figs/arxiv-2203-01153/fig1.png",
+    "w": 704,
+    "h": 740
+   },
+   {
+    "n": 2,
+    "page": 2,
+    "src": "figs/arxiv-2203-01153/fig2.png",
+    "w": 332,
+    "h": 712
+   },
+   {
+    "n": 3,
+    "page": 4,
+    "src": "figs/arxiv-2203-01153/fig3.png",
+    "w": 684,
+    "h": 411
+   },
+   {
+    "n": 4,
+    "page": 4,
+    "src": "figs/arxiv-2203-01153/fig4.png",
+    "w": 684,
+    "h": 250
+   },
+   {
+    "n": 5,
+    "page": 4,
+    "src": "figs/arxiv-2203-01153/fig5.png",
+    "w": 704,
+    "h": 344
+   },
+   {
+    "n": 6,
+    "page": 5,
+    "src": "figs/arxiv-2203-01153/fig6.png",
+    "w": 1434,
+    "h": 559
+   },
+   {
+    "n": 7,
+    "page": 6,
+    "src": "figs/arxiv-2203-01153/fig7.png",
+    "w": 704,
+    "h": 304
+   },
+   {
+    "n": 8,
+    "page": 6,
+    "src": "figs/arxiv-2203-01153/fig8.png",
+    "w": 642,
+    "h": 299
+   }
+  ]
+ }
+}

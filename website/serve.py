@@ -1,13 +1,14 @@
-"""Serve the CoRL 2026 browser locally; summarize papers and make HTML versions of them with Claude on demand.
+"""Serve the paper browsers locally; summarize papers and make HTML versions of them with Claude on demand.
 
-The API key stays here (secrets/claude_api/claude_api.txt), never in index.html. Summaries are cached in
-summaries.json next to this file; build.py embeds them so they also show when index.html is opened as a file.
+Each site is a folder under website/ served at its own path (SITES below): CoRL 2026 at /Corl2026/, the papers
+you add yourself at /Papers/. The API key stays here (secrets/claude_api/claude_api.txt), never in index.html.
+Summaries, ratings and links are cached in each site's folder; its builder embeds them so they also show when
+index.html is opened as a file.
 
-    uv run python htmls/corl2026/serve.py      # then open http://127.0.0.1:8026/Corl2026/
+    uv run python website/serve.py      # then open http://127.0.0.1:8026/
 """
 
 import base64
-import csv
 import glob
 import http.server
 import json
@@ -22,13 +23,11 @@ import urllib.parse
 import anthropic
 import pymupdf
 
-HERE = os.path.dirname(os.path.abspath(__file__))
-ROOT = os.path.dirname(os.path.dirname(HERE))
+WEB = os.path.dirname(os.path.abspath(__file__))
+ROOT = os.path.dirname(WEB)
 KEY_FILE = os.path.join(ROOT, "secrets", "claude_api", "claude_api.txt")
-SUMMARIES = os.path.join(HERE, "summaries.json")
-RATINGS = os.path.join(HERE, "ratings.json")  # your 1-5 star ratings
+# per-site files: summaries.json, ratings.json (your 1-5 stars), links.json (Find link), htmls_claude/, htmls_python/
 PORT = 8026
-PREFIX = "/Corl2026"  # the browser lives at http://127.0.0.1:8026/Corl2026/
 MODEL = "claude-opus-5-5"
 PRICE_IN, PRICE_OUT = 4 / 1e6, 20 / 1e6  # $ per token, Opus 5.5
 MAX_PDF_BYTES = 23 * 1024 * 1024  # 32 MB request limit after base64 (+33%); bigger PDFs go as extracted text
@@ -42,7 +41,6 @@ Robots and setup: the robots (exact models), sensors, simulators, tasks and data
 Results: the main quantitative findings versus baselines, with numbers.
 Add paragraphs (e.g. ablations, limitations, takeaways) when the paper warrants it."""
 
-LINKS = os.path.join(HERE, "links.json")  # paper id -> {url (None if not found), cost, searches}
 WEB_SEARCH_PRICE = 10 / 1000  # $ per web search
 LINK_PROMPT = """Find a publicly accessible copy of this paper that is not on openreview.net.
 Prefer its arXiv abstract page (https://arxiv.org/abs/...); otherwise the project page or another open copy.
@@ -51,8 +49,6 @@ Title: {title}
 Authors: {authors}
 End your answer with one line: "URL: <the url>", or "URL: NONE" if there is no such copy."""
 
-HTML_DIR = os.path.join(HERE, "htmls_claude")  # htmls_claude/<pdf name>/index.html + figN.png + meta.json
-HTML_PY_DIR = os.path.join(HERE, "htmls_python")  # htmls_python/<pdf name>/index.html + img/ + meta.json
 PDF_TO_HTML = os.path.join(ROOT, "specific_scripts", "pdf_to_html.py")
 HTML_PROMPT = """Convert this paper into a faithful HTML version of the whole paper, including the appendix.
 Output only the inner HTML of <body>, with no <html>/<head>/<body> tags, no markdown and no code fences.
@@ -89,15 +85,34 @@ HTML_TEMPLATE = """<!doctype html>
 </body></html>
 """
 
-sys.path.insert(0, HERE)
+sys.path.insert(0, os.path.join(WEB, "corl2026"))
+sys.path.insert(0, os.path.join(WEB, "papers"))
 import build  # noqa: E402  re-run after every change so index.html carries the summaries
+import papers  # noqa: E402
 
 client = anthropic.Anthropic(api_key=open(KEY_FILE).read().strip())
 lock = threading.Lock()
 
 
-def load(path=SUMMARIES):
-    return json.load(open(path)) if os.path.exists(path) else {}
+class Site:
+    """One paper browser: its folder, the path it's served at, how to rebuild its page and look up a paper.
+
+    info(pid) -> (title, authors) or None; adder is the module with add_url() / add_pdf(), for sites with an Add box.
+    """
+
+    def __init__(self, prefix, title, here, rebuild, info, adder=None):
+        self.prefix, self.title, self.here = prefix, title, here
+        self.rebuild, self.info, self.adder = rebuild, info, adder
+
+
+SITES = [Site("/Corl2026", "CoRL 2026", build.HERE, build.main, build.paper_info),
+         Site("/Papers", papers.TITLE, papers.HERE, papers.build_page, papers.paper_info, papers)]
+INDEX = """<!doctype html><html><head><meta charset="utf-8"><title>Paper browsers</title></head>
+<body style="font:16px/1.6 system-ui,sans-serif;margin:40px"><h1>Paper browsers</h1><ul>{}</ul></body></html>"""
+
+
+def load(site, name):
+    return build.load(site.here, name, {})
 
 
 def ask(pdf, prompt, max_tokens, effort):
@@ -140,14 +155,12 @@ def summarize(pdf):
     return ask(pdf, PROMPT, 16000, "medium")
 
 
-def find_link(pid):
+def find_link(site, pid):
     """Claude + web search for a non-OpenReview copy of the paper (arXiv preferred). Returns {url or None, cost, searches}."""
-    with open(build.CSV, newline="") as f:
-        row = next((r for r in csv.DictReader(f, delimiter="\t", quoting=csv.QUOTE_NONE)
-                    if r["id"].split("id=")[-1] == pid), None)
-    if not row:
-        raise RuntimeError("paper not in the CSV")
-    messages = [{"role": "user", "content": LINK_PROMPT.format(title=row["title"], authors=row["authors"])}]
+    info = site.info(pid)
+    if not info:
+        raise RuntimeError("unknown paper")
+    messages = [{"role": "user", "content": LINK_PROMPT.format(title=info[0], authors=info[1] or "unknown")}]
     cost = searches = 0
     for _ in range(4):  # a long server-side search loop stops with pause_turn; send it back to continue
         with client.beta.messages.stream(
@@ -174,19 +187,19 @@ def find_link(pid):
     return {"url": url if ok else None, "cost": round(cost, 4), "searches": searches}
 
 
-def html_version(pid, pdf):
+def html_version(site, pid, pdf):
     """Claude transcribes text + LaTeX; figures are the crops from extract_first_page.py. Returns {path, cost}."""
     r = ask(pdf, HTML_PROMPT, 128000, "low")  # ponytail: low effort, it's transcription not reasoning
     name = os.path.splitext(os.path.basename(pdf))[0]
-    out = os.path.join(HTML_DIR, name)
+    out = os.path.join(site.here, "htmls_claude", name)
     os.makedirs(out, exist_ok=True)
-    figs = {f["n"]: f["src"] for f in json.load(open(build.FIRST_PAGE)).get(pid, {}).get("figures", [])}
+    figs = {f["n"]: f["src"] for f in load(site, "first_page.json").get(pid, {}).get("figures", [])}
 
     def figure(m):
         n = int(m.group(1))
         if n not in figs:
             return m.group(0)
-        shutil.copy(os.path.join(HERE, figs[n]), os.path.join(out, f"fig{n}.png"))
+        shutil.copy(os.path.join(site.here, figs[n]), os.path.join(out, f"fig{n}.png"))
         # the crop already contains the caption, so Claude's <figcaption> is dropped (kept as alt text)
         cap = re.sub(r"<[^>]+>", "", m.group(2)).strip().replace('"', "&quot;")
         return f'<figure data-fig="{n}"><img src="fig{n}.png" alt="{cap}" loading="lazy"></figure>'
@@ -197,15 +210,15 @@ def html_version(pid, pdf):
     title = re.search(r"<h1[^>]*>(.*?)</h1>", body, re.S)
     with open(os.path.join(out, "index.html"), "w") as f:
         f.write(HTML_TEMPLATE.format(title=re.sub(r"<[^>]+>", "", title.group(1)).strip() if title else name,
-                                     model=MODEL, pdf=urllib.parse.quote(os.path.relpath(pdf, HERE)), body=body))
+                                     model=MODEL, pdf=urllib.parse.quote(os.path.relpath(pdf, site.here)), body=body))
     meta = {"cost": r["cost"], "input_tokens": r["input_tokens"], "output_tokens": r["output_tokens"]}
     json.dump(meta, open(os.path.join(out, "meta.json"), "w"))
     with lock:
-        build.main()
-    return {"path": os.path.relpath(os.path.join(out, "index.html"), HERE), **meta}
+        site.rebuild()
+    return {"path": os.path.relpath(os.path.join(out, "index.html"), site.here), **meta}
 
 
-def condense(page):
+def condense(site, page):
     """Claude HTML version -> condensed.html beside it (+ condensed.json): prose ~50% shorter.
 
     Figures, tables, algorithms, references and math are swapped for ⟦Kn⟧ tokens before Claude sees the
@@ -237,8 +250,8 @@ def condense(page):
             "chars_before": len(re.sub(r"<[^>]+>", "", body)), "chars_after": len(re.sub(r"<[^>]+>", "", out))}
     json.dump(meta, open(os.path.join(os.path.dirname(page), "condensed.json"), "w"))
     with lock:
-        build.main()
-    return {"path": os.path.relpath(path, HERE), **meta}
+        site.rebuild()
+    return {"path": os.path.relpath(path, site.here), **meta}
 
 
 def condense_button(page):
@@ -263,46 +276,53 @@ if (cb) cb.onclick = async () => {{
 """
 
 
-def html_python(pdf):
+def html_python(site, pdf):
     """No-LLM conversion (specific_scripts/pdf_to_html.py); a subprocess, as MuPDF isn't thread-safe. Returns {path, ...}."""
-    out = os.path.join(HTML_PY_DIR, os.path.splitext(os.path.basename(pdf))[0])
+    out = os.path.join(site.here, "htmls_python", os.path.splitext(os.path.basename(pdf))[0])
     r = subprocess.run([sys.executable, PDF_TO_HTML, pdf, out], capture_output=True, text=True, timeout=900)
     if r.returncode:
         raise RuntimeError("conversion failed: " + (r.stderr.strip().splitlines() or ["?"])[-1])
     with lock:
-        build.main()
-    return {"path": os.path.relpath(os.path.join(out, "index.html"), HERE),
+        site.rebuild()
+    return {"path": os.path.relpath(os.path.join(out, "index.html"), site.here),
             **json.load(open(os.path.join(out, "meta.json")))}
 
 
-def save(pid, value, path=SUMMARIES):
-    """Store (or erase, value=None) one summary / rating and rebuild index.html with it."""
+def save(site, pid, value, name="summaries.json"):
+    """Store (or erase, value=None) one summary / rating / link and rebuild the site's index.html with it."""
     with lock:  # ponytail: whole-file rewrite + full rebuild per change (~seconds), fine for one user
-        s = load(path)
+        s = load(site, name)
         if value is None:
             s.pop(pid, None)
         else:
             s[pid] = value
-        json.dump(s, open(path, "w"), ensure_ascii=False, indent=1)
-        build.main()
+        json.dump(s, open(os.path.join(site.here, name), "w"), ensure_ascii=False, indent=1)
+        site.rebuild()
 
 
 class Handler(http.server.SimpleHTTPRequestHandler):
-    def __init__(self, *a, **kw):
-        super().__init__(*a, directory=HERE, **kw)
-
     def parse_request(self):
-        """Everything lives under PREFIX/ (other sites can sit beside it); strip it so the handlers see paths in HERE."""
+        """Find the site the path starts with and strip its prefix, so the handlers see paths in its folder."""
         if not super().parse_request():
             return False
-        if self.path.startswith(PREFIX + "/"):
-            self.path = self.path[len(PREFIX):]
-            return True
-        if self.path.split("?")[0] in ("/", PREFIX):  # the page's links are relative, so it needs the trailing slash
+        for site in SITES:
+            if self.path.startswith(site.prefix + "/"):
+                self.site, self.directory, self.path = site, site.here, self.path[len(site.prefix):]
+                return True
+        path = self.path.split("?")[0]
+        site = next((s for s in SITES if s.prefix == path), None)
+        if site:  # the page's links are relative, so it needs the trailing slash
             self.send_response(301)
-            self.send_header("Location", PREFIX + "/")
+            self.send_header("Location", site.prefix + "/")
             self.send_header("Content-Length", "0")
             self.end_headers()
+        elif path == "/":
+            body = INDEX.format("".join(f'<li><a href="{s.prefix}/">{s.title}</a></li>' for s in SITES)).encode()
+            self.send_response(200)
+            self.send_header("Content-Type", "text/html; charset=utf-8")
+            self.send_header("Content-Length", str(len(body)))
+            self.end_headers()
+            self.wfile.write(body)
         else:
             self.send_error(404)
         return False
@@ -310,7 +330,7 @@ class Handler(http.server.SimpleHTTPRequestHandler):
     def do_GET(self):
         """Claude HTML pages get the Condense button; byte ranges, so movies seek (and play at all in Safari)."""
         c = re.fullmatch(r"/htmls_claude/([^/]+)/index\.html", urllib.parse.unquote(self.path.split("?")[0]))
-        page = c and os.path.join(HTML_DIR, c.group(1), "index.html")
+        page = c and os.path.join(self.site.here, "htmls_claude", c.group(1), "index.html")
         if page and c.group(1) not in {".", ".."} and os.path.isfile(page):
             body = open(page).read().replace("</body>", condense_button(page) + "</body>", 1).encode()
             self.send_response(200)
@@ -318,6 +338,8 @@ class Handler(http.server.SimpleHTTPRequestHandler):
             self.send_header("Content-Length", str(len(body)))
             self.end_headers()
             return self.wfile.write(body)
+        if re.fullmatch(r"/(index\.html)?", self.path.split("?")[0]):
+            del self.headers["If-Modified-Since"]  # rebuilt after every click, maybe within the same second: always resend
         rng = re.fullmatch(r"bytes=(\d+)-(\d*)", self.headers.get("Range", ""))
         path = self.translate_path(self.path)
         if not rng or not os.path.isfile(path):
@@ -345,60 +367,77 @@ class Handler(http.server.SimpleHTTPRequestHandler):
             pass
 
     def do_POST(self):
+        site = self.site
+        if self.path == "/add" and site.adder:  # body: {"url": ...} as JSON, or the PDF itself
+            n = int(self.headers.get("Content-Length", 0))
+            if n > site.adder.MAX_BYTES:
+                return self.reply(413, {"error": "the file is over 100 MB"})
+            body = self.rfile.read(n)
+            before = set(build.load(site.here, "papers.json", {}))
+            try:
+                with lock:  # ponytail: one add at a time (MuPDF isn't thread-safe); also queues behind rebuilds
+                    if self.headers.get("Content-Type", "").startswith("application/pdf"):
+                        name = urllib.parse.unquote(self.headers.get("X-Filename", "file.pdf"))
+                        pid = site.adder.add_pdf(body, "uploaded: " + name)
+                    else:
+                        pid = site.adder.add_url(json.loads(body)["url"])
+            except (ValueError, KeyError, OSError) as e:  # bad link, not a PDF, private address, download failed
+                return self.reply(400, {"error": str(e)})
+            return self.reply(200, {"id": pid, "exists": pid in before})
         r = re.fullmatch(r"/rate/([A-Za-z0-9_-]+)", self.path)
         if r:  # body: "1".."5", or "0" to clear
             v = self.rfile.read(int(self.headers.get("Content-Length", 0))).decode().strip()
             if v not in {"0", "1", "2", "3", "4", "5"}:
                 return self.reply(400, {"error": "rating must be 0-5"})
-            save(r.group(1), int(v) or None, RATINGS)
+            save(site, r.group(1), int(v) or None, "ratings.json")
             return self.reply(200, {})
         c = re.fullmatch(r"/condense/([A-Za-z0-9_-]+)", self.path)
         if c:
-            pages = glob.glob(os.path.join(HTML_DIR, f"{c.group(1)}_*", "index.html"))
+            pages = glob.glob(os.path.join(site.here, "htmls_claude", f"{c.group(1)}_*", "index.html"))
             if not pages:
                 return self.reply(404, {"error": "make the Claude HTML version first"})
             try:
-                return self.reply(200, condense(pages[0]))
+                return self.reply(200, condense(site, pages[0]))
             except (anthropic.APIError, RuntimeError) as e:
                 return self.reply(502, {"error": str(e)})
         k = re.fullmatch(r"/find_link/([A-Za-z0-9_-]+)", self.path)
         if k:
             try:
-                link = find_link(k.group(1))
+                link = find_link(site, k.group(1))
             except (anthropic.APIError, RuntimeError) as e:
                 return self.reply(502, {"error": str(e)})
-            save(k.group(1), link, LINKS)
+            save(site, k.group(1), link, "links.json")
             return self.reply(200, link)
         h = re.fullmatch(r"/html_(claude|python)/([A-Za-z0-9_-]+)", self.path)
         if h:
-            pdfs = glob.glob(os.path.join(HERE, "pdfs", f"{h.group(2)}_*.pdf"))
+            pdfs = glob.glob(os.path.join(site.here, "pdfs", f"{h.group(2)}_*.pdf"))
             if not pdfs:
                 return self.reply(404, {"error": "paper PDF not found"})
             try:
-                made = html_version(h.group(2), pdfs[0]) if h.group(1) == "claude" else html_python(pdfs[0])
+                made = html_version(site, h.group(2), pdfs[0]) if h.group(1) == "claude" else html_python(site, pdfs[0])
                 return self.reply(200, made)
             except (anthropic.APIError, RuntimeError, subprocess.TimeoutExpired) as e:
                 return self.reply(502, {"error": str(e)})
         m = re.fullmatch(r"/summarize/([A-Za-z0-9_-]+)", self.path)
-        pdfs = glob.glob(os.path.join(HERE, "pdfs", f"{m.group(1)}_*.pdf")) if m else []
+        pdfs = glob.glob(os.path.join(site.here, "pdfs", f"{m.group(1)}_*.pdf")) if m else []
         if not pdfs:
             return self.reply(404, {"error": "paper PDF not found"})
         pid = m.group(1)
-        cached = load().get(pid)
+        cached = load(site, "summaries.json").get(pid)
         if cached:
             return self.reply(200, {"summary": cached})
         try:
             summary = summarize(pdfs[0])
         except (anthropic.APIError, RuntimeError) as e:
             return self.reply(502, {"error": str(e)})
-        save(pid, summary)
+        save(site, pid, summary)
         self.reply(200, {"summary": summary})
 
     def do_DELETE(self):
         m = re.fullmatch(r"/summarize/([A-Za-z0-9_-]+)", self.path)
         if not m:
             return self.reply(404, {"error": "bad path"})
-        save(m.group(1), None)
+        save(self.site, m.group(1), None)
         self.reply(200, {})
 
     def reply(self, code, obj):
@@ -411,5 +450,5 @@ class Handler(http.server.SimpleHTTPRequestHandler):
 
 
 if __name__ == "__main__":
-    print(f"http://127.0.0.1:{PORT}{PREFIX}/")
+    print(f"http://127.0.0.1:{PORT}/")
     http.server.ThreadingHTTPServer(("127.0.0.1", PORT), Handler).serve_forever()

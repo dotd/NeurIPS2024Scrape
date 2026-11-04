@@ -1,4 +1,4 @@
-"""Pull the videos out of CoRL 2026 supplementary material into htmls/corl2026/movies/.
+"""Pull the videos out of CoRL 2026 supplementary material into website/corl2026/movies/.
 
 For each paper with supplementary material, download the zip from OpenReview, extract every video in it
 to movies/<id>_<title>.<ext> (_2, _3... when there are several) and drop the rest of the zip.
@@ -25,7 +25,7 @@ import openreview_utils
 
 PKL = os.path.join(ROOT, "ConferencesData", "robot-learning_org_CoRL_2026_Conference.pkl")
 CREDS = os.path.join(ROOT, "credentials", "openreview_api.txt")
-OUT = os.path.join(ROOT, "htmls", "corl2026", "movies")
+OUT = os.path.join(ROOT, "website", "corl2026", "movies")
 INDEX = os.path.join(OUT, "index.json")
 MIN_GAP = 26  # s between downloads: OpenReview allows ~140 requests/hour
 VIDEO_EXT = {".mp4", ".mov", ".webm", ".mkv", ".avi", ".m4v", ".gif"}

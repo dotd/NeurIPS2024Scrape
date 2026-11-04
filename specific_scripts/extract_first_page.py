@@ -3,9 +3,9 @@
 Only looks above the first section heading ("1 Introduction"). Papers whose
 Figure 1 isn't before that heading get no figure.
 
-Writes htmls/corl2026/figs/<id>.png, htmls/corl2026/figs/<id>/fig<N>.png and
-htmls/corl2026/first_page.json,
-which htmls/corl2026/build.py picks up.
+Writes website/corl2026/figs/<id>.png, website/corl2026/figs/<id>/fig<N>.png and
+website/corl2026/first_page.json,
+which website/corl2026/build.py picks up.
 
     uv run python specific_scripts/extract_first_page.py --limit 3
 """
@@ -21,9 +21,9 @@ import sys
 import pymupdf
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-PDF_DIR = os.path.join(ROOT, "htmls", "corl2026", "pdfs")
+PDF_DIR = os.path.join(ROOT, "website", "corl2026", "pdfs")
 CSV = os.path.join(ROOT, "ConferenceTables", "robot-learning_org_CoRL_2026_Conference.csv")
-OUT_DIR = os.path.join(ROOT, "htmls", "corl2026")
+OUT_DIR = os.path.join(ROOT, "website", "corl2026")
 FIG_DIR = os.path.join(OUT_DIR, "figs")
 OUT_JSON = os.path.join(OUT_DIR, "first_page.json")
 
@@ -52,7 +52,8 @@ def blocks(page):
     return sorted(out, key=lambda b: b[0].y0)
 
 
-def extract(pdf_path, fig_path):
+def extract(pdf_path, fig_path, base=OUT_DIR):
+    """Title, abstract, main figure and all figures of one PDF; image paths relative to base."""
     doc = pymupdf.open(pdf_path)
     page = doc[0]
     bl = blocks(page)
@@ -83,7 +84,7 @@ def extract(pdf_path, fig_path):
             if crop_figure(pg, pbl, first_caption(pbl), fig_path):
                 figure_page = pn + 1
                 break
-    figure = os.path.relpath(fig_path, OUT_DIR) if figure_page else None
+    figure = os.path.relpath(fig_path, base) if figure_page else None
 
     # every captioned figure in the paper, first occurrence of each number
     fig_dir = os.path.splitext(fig_path)[0]
@@ -99,7 +100,7 @@ def extract(pdf_path, fig_path):
             out = os.path.join(fig_dir, f"fig{n}.png")
             size = crop_figure(pg, pbl, b, out)
             if size:
-                figures[n] = {"n": n, "page": pn + 1, "src": os.path.relpath(out, OUT_DIR), "w": size[0], "h": size[1]}
+                figures[n] = {"n": n, "page": pn + 1, "src": os.path.relpath(out, base), "w": size[0], "h": size[1]}
 
     return {"title": title, "abstract": abstract, "figure": figure, "figure_page": figure_page,
             "figures": [figures[n] for n in sorted(figures)]}

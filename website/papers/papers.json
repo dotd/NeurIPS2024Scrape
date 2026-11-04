@@ -1,0 +1,53 @@
+{
+ "arxiv-2610-39302": {
+  "title": "Proving and Improving the Platonic Representation Hypothesis with JEPAs",
+  "authors": "Randall Balestriero, Yann LeCun",
+  "abstract": "Whether models trained on different modalities converge to the same representation of the world is central to AI. The Platonic Representation Hypothesis (PRH) conjectures that they do as they scale, but without a proof it offers neither a guarantee nor a recipe. We turn the hypothesis into a theorem. First, we prove a \\emph{Platonic Representation Theorem}: Joint-Embedding Predictive Architectures (JEPAs) trained separately on any number of modalities learn the same representation up to one rotation whenever their positive pairs are two observations of one scene--\\emph{good views}--and their misalignment is bounded otherwise. Second, we show that next-token prediction is a JEPA with \\emph{bad views}, parts of a single document, which explains why language models align with vision only through scale. Third, we validate the theory from 145k captions to the texts of 940M web images, and uncover a scaling law of alignment that predicts unseen runs within seed noise. Good views need 42 times fewer training samples than next-token prediction on the same corpus to reach the same alignment, and a 109M-parameter text JEPA aligns with DINOv2 and CLIP's image encoders better than every language model we evaluated, up to 72B parameters, and than CLIP's text encoder: next-token prediction is a remarkably inefficient route to platonic representations. As a showcase, one rotation turns separately trained encoders into an image captioner (CIDEr .838 on COCO). Even that rotation needs no pair: on the latest pair-free benchmark, our text JEPA beats every zero-shot accuracy reported with language models up to 8B parameters, e.g., 64\\% against at most 56\\% top-5 on ImageNet-100. Positive views, and not scale alone, are thus the lever to build platonic representations.",
+  "source": "https://arxiv.org/abs/2610.39302",
+  "pdf": "https://arxiv.org/pdf/2610.39302",
+  "added": "2026-11-03 16:27",
+  "keywords": [
+   "platonic representation hypothesis",
+   "joint-embedding predictive architectures",
+   "representation alignment",
+   "self-supervised learning",
+   "multimodal learning",
+   "scaling laws"
+  ],
+  "youtube": "https://www.youtube.com/watch?v=hFA57nwAc7s"
+ },
+ "arxiv-2611-04492": {
+  "title": "Hybrid Particle-Voxel Dynamics for Multimodal 3D World Simulation",
+  "authors": "Jimmy Wang, Yifan Chou, Kaifeng Zhang, Yixuan Wang, Binghao Huang, Tao Yu, Saleh Nabi, Yunzhu Li",
+  "abstract": "Predicting how the world evolves in response to robot actions is central to policy learning, evaluation, and planning. However, many action-conditioned world models predict future observations in 2D image or video space without explicitly modeling the underlying 3D scene, making spatial consistency across viewpoints and over long-horizon interactions challenging. We introduce 3D World Simulator, an action-conditioned multimodal world modeling framework that jointly predicts appearance, geometry, and tactile observations from a unified 3D representation. Our approach combines a hybrid particle-voxel autoencoder that compresses point clouds into compact 3D voxel latents with an action-conditioned latent dynamics model that predicts their evolution. The shared 3D representation supports geometrically consistent rendering from arbitrary viewpoints and flexible integration of spatially aligned tactile signals. Our experiments demonstrate interactive, long-horizon, multimodal prediction at 50 Hz. We then show how our model enables scalable data generation for policy training and evaluation using tactile and multi-view visual observations, including wrist-mounted and novel camera views. Furthermore, we scale our method to large datasets containing diverse objects and demonstrate model-based planning with unseen objects and robot configurations. Together, these results highlight the potential of hybrid particle-voxel dynamics as a foundation for multimodal 3D world simulation.",
+  "keywords": [
+   "world models",
+   "multimodal learning",
+   "robot learning",
+   "tactile sensing",
+   "3d representations",
+   "model-based planning"
+  ],
+  "source": "https://jwang771.github.io/3dworldsimulator/",
+  "pdf": "https://arxiv.org/pdf/2611.04492",
+  "added": "2026-11-04 09:09",
+  "youtube": ""
+ },
+ "arxiv-2203-01153": {
+  "title": "InsertionNet 2.0: Minimal Contact Multi-Step Insertion Using Multimodal Multiview Sensory Input",
+  "authors": "Oren Spector, Vladimir Tchuiev, Dotan Di Castro",
+  "abstract": "We address the problem of devising the means for a robot to rapidly and safely learn insertion skills with just a few human interventions and without hand-crafted rewards or demonstrations. Our InsertionNet version 2.0 provides an improved technique to robustly cope with a wide range of use-cases featuring different shapes, colors, initial poses, etc. In particular, we present a regression-based method based on multimodal input from stereo perception and force, augmented with contrastive learning for the efficient learning of valuable features. In addition, we introduce a one-shot learning technique for insertion, which relies on a relation network scheme to better exploit the collected data and to support multi-step insertion tasks. Our method improves on the results obtained with the original InsertionNet, achieving an almost perfect score (above 97.5$\\%$ on 200 trials) in 16 real-life insertion tasks while minimizing the execution time and contact during insertion. We further demonstrate our method's ability to tackle a real-life 3-step insertion task and perfectly solve an unseen insertion task without learning.",
+  "keywords": [
+   "robot learning",
+   "multimodal learning",
+   "robotic insertion",
+   "contrastive learning",
+   "one-shot learning",
+   "force sensing"
+  ],
+  "source": "https://arxiv.org/abs/2203.01153",
+  "pdf": "https://arxiv.org/pdf/2203.01153",
+  "added": "2026-11-04 09:12",
+  "youtube": ""
+ }
+}

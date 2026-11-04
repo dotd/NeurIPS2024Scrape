@@ -8,10 +8,10 @@ on-demand Claude summaries.
 
 ```bash
 # browse only (static file; summaries can't be generated)
-open htmls/corl2026/index.html
+open website/corl2026/index.html
 
 # browse + Summarize button
-uv run python htmls/corl2026/serve.py      # then open http://127.0.0.1:8026/Corl2026/
+uv run python website/serve.py      # then open http://127.0.0.1:8026/Corl2026/
 ```
 
 To open local PDFs in Preview, so you can highlight them, install the link handler once:
@@ -114,7 +114,7 @@ server the next time you open http://127.0.0.1:8026/Corl2026/.
 |---|---|---|
 | `index.html` | The page. Self-contained: all data is embedded as JSON. | `build.py` |
 | `build.py` | Builds `index.html` from the CSV and the JSON files below. | — |
-| `serve.py` | Local server at http://127.0.0.1:8026/Corl2026/ (`/` redirects there; other paths are free for more sites). Serves the page (with HTTP Range, for the movies) and handles `POST`/`DELETE /summarize/<id>`, `POST /rate/<id>` and `POST /html_claude/<id>` / `POST /html_python/<id>`. Rebuilds after each change. | — |
+| `../serve.py` | Local server for all sites (`website/serve.py`), at http://127.0.0.1:8026/Corl2026/ (`/` redirects there; other paths are free for more sites). Serves the page (with HTTP Range, for the movies) and handles `POST`/`DELETE /summarize/<id>`, `POST /rate/<id>` and `POST /html_claude/<id>` / `POST /html_python/<id>`. Rebuilds after each change. | — |
 | `first_page.json` | Title, abstract and figure paths per paper. | `specific_scripts/extract_first_page.py` |
 | `affiliations.json` | Companies and universities per paper, from the PDF header and footnotes, matched with ROR. | `specific_scripts/corl2026_affiliations.py` |
 | `openalex.json` | Paper citations, plus author ids and h-index. | `specific_scripts/fetch_corl2026_openalex.py` |
@@ -144,7 +144,7 @@ uv run python specific_scripts/fetch_corl2026_openalex.py      # openalex.json (
 uv run python specific_scripts/corl2026_github.py              # github.json
 uv run python specific_scripts/corl2026_robots.py              # robots.json
 uv run python specific_scripts/corl2026_backbones.py           # backbones.json
-uv run python htmls/corl2026/build.py                          # index.html
+uv run python website/corl2026/build.py                          # index.html
 ```
 
 Every step can be re-run on its own. After any step, re-run `build.py` to update the page.

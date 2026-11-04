@@ -1,4 +1,4 @@
-"""Sort htmls/corl2026/movies/ by length: >= 30 s into paper_movies/ (explainer videos), shorter into samples/.
+"""Sort website/corl2026/movies/ by length: >= 30 s into paper_movies/ (explainer videos), shorter into samples/.
 
 Only moves files of papers already listed in movies/index.json, so a paper corl2026_movies.py is still
 extracting is left alone; safe to run while it downloads, and again once it finishes.
@@ -12,7 +12,7 @@ import shutil
 import subprocess
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-MOVIES = os.path.join(ROOT, "htmls", "corl2026", "movies")
+MOVIES = os.path.join(ROOT, "website", "corl2026", "movies")
 MIN_LEN = 30  # seconds; ponytail: length alone decides explainer vs sample
 
 

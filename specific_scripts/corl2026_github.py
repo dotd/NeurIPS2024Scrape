@@ -1,6 +1,6 @@
 """Find GitHub repos mentioned in each CoRL 2026 PDF (text + link annotations, before References).
 
-Writes htmls/corl2026/github.json: {paper_id: [repo urls]}; htmls/corl2026/build.py adds them as a column.
+Writes website/corl2026/github.json: {paper_id: [repo urls]}; website/corl2026/build.py adds them as a column.
 
     uv run python specific_scripts/corl2026_github.py
 """
@@ -13,7 +13,7 @@ import re
 import pymupdf
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-HERE = os.path.join(ROOT, "htmls", "corl2026")
+HERE = os.path.join(ROOT, "website", "corl2026")
 OUT = os.path.join(HERE, "github.json")
 # owner/repo; text extraction may put spaces after '/' at line breaks
 REPO_RE = re.compile(r"github\.com/\s*([A-Za-z0-9-]+)/\s*([A-Za-z0-9._-]+)", re.I)

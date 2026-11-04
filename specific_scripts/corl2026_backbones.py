@@ -1,6 +1,6 @@
 """Find the backbone models each CoRL 2026 paper uses, by matching known model names in the PDF text before References.
 
-Writes htmls/corl2026/backbones.json: {paper_id: [model names]}; htmls/corl2026/build.py turns the top 50 into a filter.
+Writes website/corl2026/backbones.json: {paper_id: [model names]}; website/corl2026/build.py turns the top 50 into a filter.
 
     uv run python specific_scripts/corl2026_backbones.py
 """
@@ -16,7 +16,7 @@ import pymupdf
 from corl2026_robots import MIN_MENTIONS, REFS_RE
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-HERE = os.path.join(ROOT, "htmls", "corl2026")
+HERE = os.path.join(ROOT, "website", "corl2026")
 OUT = os.path.join(HERE, "backbones.json")
 
 # canonical name -> regex; vision encoders, LLMs / VLMs, robot foundation models (VLAs), policy and world-model families

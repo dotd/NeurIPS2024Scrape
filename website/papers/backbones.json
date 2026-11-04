@@ -1,0 +1,21 @@
+{
+ "arxiv-2610-39302": [
+  "ViT",
+  "DINO / DINOv2 / DINOv3",
+  "CLIP",
+  "Llama",
+  "LLaVA",
+  "Qwen (Qwen-VL / Qwen2.5-VL)"
+ ],
+ "arxiv-2611-04492": [
+  "ResNet",
+  "U-Net",
+  "π0 / π0.5",
+  "Diffusion Policy",
+  "ACT (Action Chunking Transformer)",
+  "Cosmos"
+ ],
+ "arxiv-2203-01153": [
+  "ResNet"
+ ]
+}

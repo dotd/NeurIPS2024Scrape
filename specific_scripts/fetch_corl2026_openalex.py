@@ -1,10 +1,10 @@
 """Fetch OpenAlex metadata for CoRL 2026 papers: citations, author institutions
 (typed company / education), and author citation stats.
 
-Cached to htmls/corl2026/openalex.json (rerun only fetches missing papers; failed requests
+Cached to website/corl2026/openalex.json (rerun only fetches missing papers; failed requests
 are not cached, so a rerun retries them). Without an API key OpenAlex shares a small daily
 budget per IP; put a free key (https://openalex.org/settings/api) in credentials/openalex_key.txt.
-htmls/corl2026/build.py turns it into the company / university / researcher filters.
+website/corl2026/build.py turns it into the company / university / researcher filters.
 
     uv run python specific_scripts/fetch_corl2026_openalex.py
 """
@@ -21,7 +21,7 @@ import requests
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 CSV = os.path.join(ROOT, "ConferenceTables", "robot-learning_org_CoRL_2026_Conference.csv")
-OUT = os.path.join(ROOT, "htmls", "corl2026", "openalex.json")
+OUT = os.path.join(ROOT, "website", "corl2026", "openalex.json")
 API = "https://api.openalex.org"
 KEY_FILE = os.path.join(ROOT, "credentials", "openalex_key.txt")
 KEY = open(KEY_FILE).read().strip() if os.path.exists(KEY_FILE) else None

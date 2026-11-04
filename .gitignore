@@ -16,9 +16,13 @@ specific_scripts/iclr2026_worldmodel_site/data/papers.json
 pdfs/
 
 # CoRL 2026 paper browser: large generated assets
-htmls/corl2026/pdfs/
-htmls/corl2026/figs/
+website/corl2026/pdfs/
+website/corl2026/figs/
 secrets/
-htmls/corl2026/htmls_python/
-htmls/corl2026/movies/
+website/corl2026/htmls_python/
+website/corl2026/movies/
 htmls/corl2026.zip
+# your own papers (website/papers): same large generated assets
+website/papers/pdfs/
+website/papers/figs/
+website/papers/htmls_python/

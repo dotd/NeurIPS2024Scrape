@@ -1,7 +1,10 @@
-"""Build htmls/corl2026/index.html from the CoRL 2026 CSV.
+"""Build website/corl2026/index.html from the CoRL 2026 CSV.
 
 Standalone HTML (data embedded, no server): open index.html in a browser.
-    uv run python htmls/corl2026/build.py
+    uv run python website/corl2026/build.py
+
+build() makes the same page for any folder laid out like this one (pdfs/, figs/, first_page.json, robots.json, …);
+website/papers/papers.py uses it for the papers you add yourself.
 """
 
 import collections
@@ -15,19 +18,14 @@ import sys
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(os.path.dirname(HERE))
 CSV = os.path.join(ROOT, "ConferenceTables", "robot-learning_org_CoRL_2026_Conference.csv")
-FIRST_PAGE = os.path.join(HERE, "first_page.json")  # from specific_scripts/extract_first_page.py
-OPENALEX = os.path.join(HERE, "openalex.json")  # from specific_scripts/fetch_corl2026_openalex.py
-GITHUB = os.path.join(HERE, "github.json")  # from specific_scripts/corl2026_github.py
-AFFILIATIONS = os.path.join(HERE, "affiliations.json")  # from specific_scripts/corl2026_affiliations.py
 PRESENTATION = {"Oral": "🎤 Oral", "Spotlight": "✨ Spotlight", "Poster": "🖼️ Poster"}  # last word of venue
-SUMMARIES = os.path.join(HERE, "summaries.json")  # from serve.py (Summarize button)
-RATINGS = os.path.join(HERE, "ratings.json")  # from serve.py (star ratings)
-LINKS = os.path.join(HERE, "links.json")  # from serve.py (Find link to paper)
-HTML_DIRS = {"claude": os.path.join(HERE, "htmls_claude"),  # from serve.py (Make HTML with Claude / python)
-             "python": os.path.join(HERE, "htmls_python")}
-ROBOTS = os.path.join(HERE, "robots.json")  # from specific_scripts/corl2026_robots.py
-BACKBONES = os.path.join(HERE, "backbones.json")  # from specific_scripts/corl2026_backbones.py
-MOVIES = os.path.join(HERE, "movies", "paper_movies")  # <id>_<title>[_N].<ext>, from specific_scripts/corl2026_sort_movies.py
+# files in a site folder (here = website/<site>/):
+#   first_page.json  specific_scripts/extract_first_page.py    openalex.json    specific_scripts/fetch_corl2026_openalex.py
+#   github.json      specific_scripts/corl2026_github.py       affiliations.json specific_scripts/corl2026_affiliations.py
+#   robots.json      specific_scripts/corl2026_robots.py       backbones.json   specific_scripts/corl2026_backbones.py
+#   summaries.json, ratings.json, links.json, htmls_claude/, htmls_python/   website/serve.py (buttons on the page)
+#   movies/paper_movies/<id>_<title>[_N].<ext>                 specific_scripts/corl2026_sort_movies.py
+HTML_KINDS = ("claude", "python")  # htmls_<kind>/<id>_<title>/index.html
 TOP_COMPANIES, TOP_UNIVERSITIES, TOP_RESEARCHERS, TOP_ROBOTS, TOP_KEYWORDS = 20, 50, 50, 50, 50
 
 csv.field_size_limit(sys.maxsize)
@@ -38,7 +36,7 @@ HTML = r"""<!doctype html>
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>CoRL 2026 Papers</title>
+<title>__TITLE__</title>
 <style>
   * { box-sizing: border-box; }
   body { margin: 0; font: 14px/1.4 system-ui, sans-serif; color: #222; background: #fff;
@@ -118,18 +116,20 @@ HTML = r"""<!doctype html>
 </head>
 <body>
 <nav>
-  <b>CoRL 2026</b>
+  <b>__TITLE__</b>
   <button data-view="papers">Papers</button>
   <button data-view="table">Table</button>
   <span class="stats"></span>
   <span class="count"></span>
   <button id="clear" title="Clear every filter, search and sort">↺ Reset filters</button>
 </nav>
+__ADD__
 <div id="filters">
   <input type="search" id="q" placeholder="🔍 search titles, authors, abstracts, keywords…">
   <details class="facet" data-key="t"><summary>🎤 Oral / Spotlight / Poster</summary><div class="panel"></div></details>
   <details class="facet" data-key="p"><summary>🏷️ Primary keyword</summary><div class="panel"></div></details>
   <details class="facet" data-key="s"><summary>🔖 Secondary keyword</summary><div class="panel"></div></details>
+  <details class="facet" data-key="k"><summary>🏷️ Keywords</summary><div class="panel"></div></details>
   <details class="facet" data-key="b"><summary>🤖 Robots</summary><div class="panel"></div></details>
   <details class="facet" data-key="m"><summary>🧠 Backbones</summary><div class="panel"></div></details>
   <details class="facet" data-key="c"><summary>🏢 Companies</summary><div class="panel"></div></details>
@@ -173,7 +173,7 @@ HTML = r"""<!doctype html>
 <svg hidden><symbol id="gh" viewBox="0 0 16 16"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></symbol></svg>
 <script id="data" type="application/json">__DATA__</script>
 <script>
-const {columns, rows, firstPage, meta, facets, summaries, ratings, links, htmlv, movies, here} = JSON.parse(document.getElementById('data').textContent);
+const {columns, rows, firstPage, meta, facets, summaries, ratings, links, htmlv, movies, here, store} = JSON.parse(document.getElementById('data').textContent);
 
 function cellContent(v) {
   if (/^https:\/\/github\.com\/\S+ /.test(v)) {  // several space-separated repos
@@ -270,13 +270,13 @@ if (location.protocol.startsWith('http'))  // pick up summaries / ratings made s
 // and pushed to the server the next time the page is opened through serve.py.
 const SERVED = location.protocol.startsWith('http');
 let pending = {};
-try { pending = JSON.parse(localStorage.getItem('corlRatings') || '{}'); } catch (e) {}
+try { pending = JSON.parse(localStorage.getItem(store + 'Ratings') || '{}'); } catch (e) {}
 const setRating = (pid, v) => { if (v) ratings[pid] = v; else delete ratings[pid]; };
 const refilter = () => { if (dets.length) applyFilters(); else updateStats(); };  // so the rating / summary filters apply at once
 Object.entries(pending).forEach(([pid, v]) => {
   setRating(pid, v);
   if (SERVED) fetch('rate/' + pid, {method: 'POST', body: String(v)}).then(r => {
-    if (r.ok) { delete pending[pid]; try { localStorage.setItem('corlRatings', JSON.stringify(pending)); } catch (e) {} }
+    if (r.ok) { delete pending[pid]; try { localStorage.setItem(store + 'Ratings', JSON.stringify(pending)); } catch (e) {} }
   });
 });
 function stars(pid) {
@@ -291,7 +291,7 @@ function stars(pid) {
       setRating(pid, v); paint(); refilter();
       if (!SERVED) {
         pending[pid] = v;
-        try { localStorage.setItem('corlRatings', JSON.stringify(pending)); } catch (e) {}
+        try { localStorage.setItem(store + 'Ratings', JSON.stringify(pending)); } catch (e) {}
         return;
       }
       const res = await fetch('rate/' + pid, {method: 'POST', body: String(v)}).catch(() => null);
@@ -310,7 +310,7 @@ function summaryBox(pid, flag) {  // flag: the 📝 marker on the paper's summar
   const box = document.createElement('div');
   box.className = 'sumbox';
   const needServer = () => location.protocol.startsWith('http') ? '' :
-    'run: uv run python htmls/corl2026/serve.py, then open http://127.0.0.1:8026/Corl2026/';
+    'run: uv run python website/serve.py, then open this page through http://127.0.0.1:8026/';
   const empty = () => {  // no summary yet: just the button
     const btn = document.createElement('button');
     btn.textContent = '📝 Summarize';
@@ -367,7 +367,7 @@ function htmlBox(pid, kind) {
   btn.textContent = k.make;
   btn.onclick = async () => {
     if (!location.protocol.startsWith('http'))
-      return btn.textContent = k.make + ' (run: uv run python htmls/corl2026/serve.py, then open http://127.0.0.1:8026/Corl2026/)';
+      return btn.textContent = k.make + ' (run: uv run python website/serve.py, then open this page through http://127.0.0.1:8026/)';
     btn.disabled = true; btn.textContent = k.busy;
     try {
       const res = await fetch(`html_${kind}/${pid}`, {method: 'POST'}), j = await res.json();
@@ -393,7 +393,7 @@ function linkBox(pid) {
   btn.textContent = links[pid] ? '🔗 Find link to paper (none found last time)' : '🔗 Find link to paper';
   btn.onclick = async () => {
     if (!location.protocol.startsWith('http'))
-      return btn.textContent = '🔗 Find link to paper (run: uv run python htmls/corl2026/serve.py, then open http://127.0.0.1:8026/Corl2026/)';
+      return btn.textContent = '🔗 Find link to paper (run: uv run python website/serve.py, then open this page through http://127.0.0.1:8026/)';
     btn.disabled = true; btn.textContent = '⏳ Searching the web with Claude… (~30 s)';
     try {
       const res = await fetch('find_link/' + pid, {method: 'POST'}), j = await res.json();
@@ -415,7 +415,7 @@ function htmlBoxes(pid) {
 
 // ---- papers view (native <details> dropdowns) ----
 const titleIdx = columns.indexOf('title'), idIdx = columns.indexOf('id'), ghIdx = columns.indexOf('💻 github');
-const kwIdx = ['primary_keyword', 'secondary_keyword', 'free_keyword_1', 'free_keyword_2']
+const kwIdx = ['primary_keyword', 'secondary_keyword', 'free_keyword_1', 'free_keyword_2', '🏷️ keywords']
   .map(c => columns.indexOf(c)).filter(i => i >= 0);
 dets = rows.map((r, ri) => {
   const d = document.createElement('details'), s = document.createElement('summary');
@@ -495,9 +495,10 @@ dets = rows.map((r, ri) => {
 });
 
 // ---- filters ----
-const picked = {t: new Set(), p: new Set(), s: new Set(), b: new Set(), m: new Set(), c: new Set(), u: new Set(), r: new Set()};
+const picked = {t: new Set(), p: new Set(), s: new Set(), k: new Set(), b: new Set(), m: new Set(), c: new Set(), u: new Set(), r: new Set()};
 document.querySelectorAll('.facet').forEach(fd => {
   const key = fd.dataset.key, panel = fd.querySelector('.panel'), label = fd.querySelector('summary');
+  if (!(facets[key] || []).length) return fd.hidden = true;  // nothing to pick on this site (e.g. Oral/Poster on your papers)
   const base = label.textContent;
   const search = document.createElement('input');
   search.type = 'search'; search.placeholder = '🔍 search…';
@@ -535,7 +536,7 @@ document.getElementById('clear').onclick = () => {
 // ---- remember the last filters (this browser only; file:// and http://127.0.0.1:8026/Corl2026/ keep separate copies) ----
 function restoreFilters() {
   let saved;
-  try { saved = JSON.parse(localStorage.getItem('corlFilters')); } catch (e) {}
+  try { saved = JSON.parse(localStorage.getItem(store + 'Filters')); } catch (e) {}
   if (!saved) return;
   FIELDS.forEach(id => { if (saved.fields?.[id] != null) document.getElementById(id).value = saved.fields[id]; });
   document.querySelectorAll('.facet').forEach(fd => fd.querySelectorAll('input[type=checkbox]').forEach(cb => {
@@ -545,7 +546,7 @@ function restoreFilters() {
 function saveFilters() {
   const fields = Object.fromEntries(FIELDS.map(id => [id, document.getElementById(id).value]));
   const pk = Object.fromEntries(Object.entries(picked).map(([k, v]) => [k, [...v]]));
-  try { localStorage.setItem('corlFilters', JSON.stringify({fields, picked: pk})); } catch (e) {}
+  try { localStorage.setItem(store + 'Filters', JSON.stringify({fields, picked: pk})); } catch (e) {}
 }
 
 function applyFilters() {
@@ -563,7 +564,7 @@ function applyFilters() {
   };
   let idx = rows.map((_, i) => i).filter(i => gh(i) && sm(i) && rt(i) &&
     terms.every(t => haystack[i].includes(t)) &&
-    hit('t', i) && hit('p', i) && hit('s', i) && hit('b', i) && hit('m', i) && hit('c', i) && hit('u', i) && hit('r', i) && (meta[i].h || 0) >= minH && (meta[i].cites || 0) >= minC);
+    hit('t', i) && hit('p', i) && hit('s', i) && hit('k', i) && hit('b', i) && hit('m', i) && hit('c', i) && hit('u', i) && hit('r', i) && (meta[i].h || 0) >= minH && (meta[i].cites || 0) >= minC);
   if (sort === 'az') idx.sort((a, b) => rows[a][titleIdx].localeCompare(rows[b][titleIdx], undefined, {sensitivity: 'base'}));
   else if (sort) idx.sort((a, b) => (meta[b][sort] || 0) - (meta[a][sort] || 0));
   table.querySelector('tbody').replaceChildren(...idx.map(i => trs[i]));
@@ -592,6 +593,14 @@ function updateStats() {
 restoreFilters();
 renderTable();
 show('papers');
+// ---- #<paper id> in the address scrolls to that paper, closed (the Add box on the papers site jumps to the one it added) ----
+const target = decodeURIComponent(location.hash.slice(1)),
+      ti = target ? rows.findIndex(r => r[idIdx].split('id=').pop() === target) : -1;
+if (ti >= 0) {
+  if (!dets[ti].isConnected) document.getElementById('clear').click();  // hidden by saved filters: show everything
+  dets[ti].scrollIntoView();
+}
+if (location.hash) history.replaceState(null, '', location.pathname + location.search);  // a refresh starts at the top
 </script>
 </body>
 </html>
@@ -603,17 +612,24 @@ def clean_inst(name):
     return re.sub(r"\s*\([^)]*\)$", "", name).strip()
 
 
-def openalex_meta(rows, columns):
+def load(here, name, default):
+    """A JSON file of the site folder, or default when it doesn't exist yet."""
+    path = os.path.join(here, name)
+    return json.load(open(path)) if os.path.exists(path) else default
+
+
+def openalex_meta(rows, columns, here):
     """Per-row {c: companies, u: universities, r: top-researcher ids, cites, h} and the filter option lists."""
     from corl2026_affiliations import COMPANY_RES
-    oa = json.load(open(OPENALEX)) if os.path.exists(OPENALEX) else {"works": {}, "authors": {}}
-    robots = json.load(open(ROBOTS)) if os.path.exists(ROBOTS) else {}
-    backbones = json.load(open(BACKBONES)) if os.path.exists(BACKBONES) else {}
-    pdf_aff = json.load(open(AFFILIATIONS))["papers"] if os.path.exists(AFFILIATIONS) else {}
+    oa = load(here, "openalex.json", {"works": {}, "authors": {}})
+    robots = load(here, "robots.json", {})
+    backbones = load(here, "backbones.json", {})
+    pdf_aff = load(here, "affiliations.json", {"papers": {}})["papers"]
     authors = oa["authors"]
     id_col = columns.index("id")
-    venue_col = columns.index("venue")
+    venue_col = columns.index("venue") if "venue" in columns else None
     kw_cols = {k: columns.index(c) for k, c in [("p", "primary_keyword"), ("s", "secondary_keyword")] if c in columns}
+    gen_col = columns.index("🏷️ keywords") if "🏷️ keywords" in columns else None  # "a; b; c", from Claude (papers site)
     meta = []
     for r in rows:
         pid = r[id_col].split("id=")[-1]
@@ -627,9 +643,10 @@ def openalex_meta(rows, columns):
                                                  for c, rx in COMPANY_RES.items() if rx.search(n)}),
             "u": sorted({re.sub(r"^The ", "", n) for n in  # "The University of Tokyo" == "University of Tokyo"
                          set(aff["universities"]) | {n for n, t in insts if t == "education"}}),
-            "t": [PRESENTATION.get(r[venue_col].split()[-1], r[venue_col])] if r[venue_col] else [],
+            "t": [PRESENTATION.get(r[venue_col].split()[-1], r[venue_col])] if venue_col is not None and r[venue_col] else [],
             "b": robots.get(pid, []),
             "m": backbones.get(pid, []),
+            "k": r[gen_col].split("; ") if gen_col is not None and r[gen_col] else [],
             **{k: [r[i]] if r[i] else [] for k, i in kw_cols.items()},
             "r": sorted({a["id"] for a in w["authors"] if a["id"] in authors}),
             "cites": w["cites"],
@@ -649,59 +666,55 @@ def openalex_meta(rows, columns):
     top_ids = {a["id"] for a in researchers}
     for m in meta:
         m["r"] = [a for a in m["r"] if a in top_ids]
-    return meta, {"c": top("c", TOP_COMPANIES), "u": top("u", TOP_UNIVERSITIES), "r": researchers, "b": top("b", TOP_ROBOTS), "m": top("m", TOP_ROBOTS), "t": top("t", 3),
+    return meta, {"c": top("c", TOP_COMPANIES), "u": top("u", TOP_UNIVERSITIES), "r": researchers, "b": top("b", TOP_ROBOTS), "m": top("m", TOP_ROBOTS), "k": top("k", TOP_KEYWORDS), "t": top("t", 3),
                   **{k: top(k, TOP_KEYWORDS) for k in kw_cols}}
 
 
-def html_versions(kind):
+def html_versions(kind, here):
     """paper id -> {path, cost / seconds, ...} for every htmls_<kind>/<id>_<title>/index.html."""
     out = {}
-    for idx in glob.glob(os.path.join(HTML_DIRS[kind], "*", "index.html")):
+    for idx in glob.glob(os.path.join(here, f"htmls_{kind}", "*", "index.html")):
         meta = os.path.join(os.path.dirname(idx), "meta.json")
         pid = os.path.basename(os.path.dirname(idx)).split("_", 1)[0]
-        out[pid] = {"path": os.path.relpath(idx, HERE), **(json.load(open(meta)) if os.path.exists(meta) else {})}
+        out[pid] = {"path": os.path.relpath(idx, here), **(json.load(open(meta)) if os.path.exists(meta) else {})}
     return out
 
 
-def paper_movies():
-    """paper id -> movie paths relative to HERE, the main one first, then _2, _3, …"""
+def paper_movies(here):
+    """paper id -> movie paths relative to here, the main one first, then _2, _3, …"""
     def n(p):
         m = re.search(r"_(\d+)\.\w+$", p)
         return int(m.group(1)) if m else 1
     out = collections.defaultdict(list)
-    for p in sorted(glob.glob(os.path.join(MOVIES, "*")), key=lambda p: (os.path.basename(p).split("_", 1)[0], n(p))):
-        out[os.path.basename(p).split("_", 1)[0]].append(os.path.relpath(p, HERE))
+    for p in sorted(glob.glob(os.path.join(here, "movies", "paper_movies", "*")),
+                    key=lambda p: (os.path.basename(p).split("_", 1)[0], n(p))):
+        out[os.path.basename(p).split("_", 1)[0]].append(os.path.relpath(p, here))
     return out
 
 
-def condensed_versions():
-    """paper id -> {path, cost, ...} for every htmls_claude/<id>_<title>/condensed.html (serve.py's Condense button)."""
+def condensed_versions(here):
+    """paper id -> {path, cost, ...} for every htmls_claude/<id>_<title>/condensed.html (the Condense button)."""
     out = {}
-    for page in glob.glob(os.path.join(HTML_DIRS["claude"], "*", "condensed.html")):
+    for page in glob.glob(os.path.join(here, "htmls_claude", "*", "condensed.html")):
         meta = os.path.join(os.path.dirname(page), "condensed.json")
         pid = os.path.basename(os.path.dirname(page)).split("_", 1)[0]
-        out[pid] = {"path": os.path.relpath(page, HERE), **(json.load(open(meta)) if os.path.exists(meta) else {})}
+        out[pid] = {"path": os.path.relpath(page, here), **(json.load(open(meta)) if os.path.exists(meta) else {})}
     return out
 
 
-def main():
-    with open(CSV, newline="") as f:
-        reader = csv.reader(f, delimiter="\t", quoting=csv.QUOTE_NONE)
-        columns = next(reader)
-        rows = [r + [""] * (len(columns) - len(r)) for r in reader if any(r)]
-    local = {os.path.basename(p).split("_", 1)[0]: os.path.relpath(p, HERE) for p in glob.glob(os.path.join(HERE, "pdfs", "*.pdf"))}
+def build(here, title, columns, rows, add_box="", store="corl"):
+    """Write here/index.html for these rows (columns must include id, title and pdf; id ends in the paper id).
+
+    store prefixes the browser-storage keys (saved filters, pending ratings): sites on one server share the storage."""
+    local = {os.path.basename(p).split("_", 1)[0]: os.path.relpath(p, here) for p in glob.glob(os.path.join(here, "pdfs", "*.pdf"))}
     columns.insert(columns.index("pdf") + 1, "local_pdf")
     for r in rows:
         r.insert(columns.index("local_pdf"), local.get(r[0].split("id=")[-1], ""))
-    github = json.load(open(GITHUB)) if os.path.exists(GITHUB) else {}
+    github = load(here, "github.json", {})
     columns.insert(columns.index("local_pdf") + 1, "💻 github")
     for r in rows:
         r.insert(columns.index("💻 github"), " ".join(github.get(r[0].split("id=")[-1], [])))
-    keep = [i for i in range(len(columns)) if any(r[i] for r in rows)]  # drop all-empty columns
-    columns = [columns[i] for i in keep]
-    rows = [[r[i] for i in keep] for r in rows]
-    first_page = json.load(open(FIRST_PAGE)) if os.path.exists(FIRST_PAGE) else {}
-    meta, facets = openalex_meta(rows, columns)
+    meta, facets = openalex_meta(rows, columns, here)
     for name, key in [("🤖 robots", "b"), ("🧠 backbones", "m"), ("🏢 companies", "c"), ("🎓 universities", "u")]:
         columns.append(name)
         for r, m in zip(rows, meta):
@@ -709,15 +722,36 @@ def main():
     columns += ["📈 citations", "🏅 max author h-index"]
     for r, m in zip(rows, meta):
         r += ["" if m["cites"] is None else str(m["cites"]), "" if m["h"] is None else str(m["h"])]
-    data = json.dumps({"columns": columns, "rows": rows, "firstPage": first_page, "meta": meta, "facets": facets,
-                       "summaries": json.load(open(SUMMARIES)) if os.path.exists(SUMMARIES) else {},
-                       "ratings": json.load(open(RATINGS)) if os.path.exists(RATINGS) else {},
-                       "links": json.load(open(LINKS)) if os.path.exists(LINKS) else {},
-                       "htmlv": {**{k: html_versions(k) for k in HTML_DIRS}, "claude2": condensed_versions()}, "movies": paper_movies(), "here": HERE}, ensure_ascii=False).replace("</", "<\\/")
-    out = os.path.join(HERE, "index.html")
+    keep = [i for i in range(len(columns)) if any(r[i] for r in rows) or not rows]  # drop all-empty columns
+    columns = [columns[i] for i in keep]
+    rows = [[r[i] for i in keep] for r in rows]
+    data = json.dumps({"columns": columns, "rows": rows, "firstPage": load(here, "first_page.json", {}), "meta": meta,
+                       "facets": facets, "summaries": load(here, "summaries.json", {}),
+                       "ratings": load(here, "ratings.json", {}), "links": load(here, "links.json", {}),
+                       "htmlv": {**{k: html_versions(k, here) for k in HTML_KINDS}, "claude2": condensed_versions(here)},
+                       "movies": paper_movies(here), "here": here, "store": store}, ensure_ascii=False).replace("</", "<\\/")
+    out = os.path.join(here, "index.html")
     with open(out, "w") as f:
-        f.write(HTML.replace("__DATA__", data))
+        f.write(HTML.replace("__TITLE__", title).replace("__ADD__", add_box).replace("__DATA__", data))
     print(f"wrote {out} ({len(rows)} papers, {len(columns)} columns)")
+
+
+def csv_rows():
+    with open(CSV, newline="") as f:
+        reader = csv.reader(f, delimiter="\t", quoting=csv.QUOTE_NONE)
+        columns = next(reader)
+        return columns, [r + [""] * (len(columns) - len(r)) for r in reader if any(r)]
+
+
+def paper_info(pid):
+    """(title, authors) of a CoRL 2026 paper, for the Find link button."""
+    columns, rows = csv_rows()
+    row = next((dict(zip(columns, r)) for r in rows if r[0].split("id=")[-1] == pid), None)
+    return (row["title"], row["authors"]) if row else None
+
+
+def main():
+    build(HERE, "CoRL 2026", *csv_rows())
 
 
 if __name__ == "__main__":

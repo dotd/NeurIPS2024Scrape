@@ -1,4 +1,4 @@
-"""Download all CoRL 2026 PDFs listed in ConferenceTables/ into htmls/corl2026/pdfs/.
+"""Download all CoRL 2026 PDFs listed in ConferenceTables/ into website/corl2026/pdfs/.
 
     uv run python OpenreviewScrape/pdf_downloader_CoRL_2026.py             # all papers
     uv run python OpenreviewScrape/pdf_downloader_CoRL_2026.py --limit 10  # quick check
@@ -27,7 +27,7 @@ from OpenreviewScrape import openreview_utils
 from OpenreviewScrape.definitions import PROJECT_ROOT_DIR
 
 CSV = f"{PROJECT_ROOT_DIR}/ConferenceTables/robot-learning_org_CoRL_2026_Conference.csv"
-OUT = f"{PROJECT_ROOT_DIR}/htmls/corl2026/pdfs"
+OUT = f"{PROJECT_ROOT_DIR}/website/corl2026/pdfs"
 CREDS = f"{PROJECT_ROOT_DIR}/credentials/openreview_api.txt"
 NOT_FOUND = f"{OUT}/arxiv_not_found.txt"
 ATOM = "{http://www.w3.org/2005/Atom}"
