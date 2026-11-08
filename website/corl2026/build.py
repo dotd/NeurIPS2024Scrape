@@ -88,6 +88,7 @@ HTML = r"""<!doctype html>
   .btbar select { padding: 5px 8px; border: 1px solid #bbb; border-radius: 6px; font-size: 14px; }
   .btnum { color: #2b6cb0; font-weight: bold; }
   .drive { margin: 4px 0; font-size: 13px; }
+  .nextmov { margin: 4px 0; padding: 3px 10px; border: 1px solid #bbb; border-radius: 6px; background: #f7f7f7; cursor: pointer; }
   a { color: #2b6cb0; }
 
   /* table view */
@@ -514,9 +515,24 @@ function card(r, ri) {  // one paper's dropdown; the By time view builds its own
       dl2.append(f);
       mv.append(ms, dl2, box);
     } else mv.append(ms, box);
+    mv.className = 'movie';
+    const nx = document.createElement('button');
+    nx.className = 'nextmov'; nx.textContent = '⏭ Next movie';
+    nx.title = 'Next paper with a movie, in the list as shown now (filters, sort, session)';
+    nx.onclick = () => {  // d's container holds only the papers on screen, in screen order
+      const cards = [...d.parentElement.children];
+      const next = cards.slice(cards.indexOf(d) + 1).find(c => c.querySelector(':scope > details.movie'));
+      if (!next) { nx.textContent = '⏹ No more movies in this list'; return; }
+      const m = next.querySelector(':scope > details.movie');
+      mv.open = false; d.open = false;
+      m.dataset.autoplay = '1'; next.open = true; m.open = true;
+      next.scrollIntoView({block: 'start'});
+    };
+    mv.insertBefore(nx, box);
     mv.ontoggle = () => {  // players made on first open; preload="metadata" fetches only the first frame until played
       if (!mv.open) return box.querySelectorAll('video').forEach(v => v.pause());
-      if (box.childElementCount) return;
+      const play = () => { if (mv.dataset.autoplay) { delete mv.dataset.autoplay; box.querySelector('video')?.play().catch(() => {}); } };
+      if (box.childElementCount) return play();
       box.append(...movs.map(p => {
         const src = p.split('/').map(encodeURIComponent).join('/');
         const v = document.createElement(p.endsWith('.gif') ? 'img' : 'video');
@@ -524,6 +540,7 @@ function card(r, ri) {  // one paper's dropdown; the By time view builds its own
         if (v.tagName === 'VIDEO') { v.controls = true; v.preload = 'metadata'; }
         return v;
       }));
+      play();
     };
     dl.before(mv);  // right after the HTML / link buttons, before the fields
   }
