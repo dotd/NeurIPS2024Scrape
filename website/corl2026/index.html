@@ -83,6 +83,7 @@
   details details summary { font-weight: normal; color: #2b6cb0; margin-left: 18px; }
   .movies { display: flex; flex-wrap: wrap; gap: 8px; margin: 8px 0 4px 18px; }
   .movies video, .movies img { width: min(100%, 640px); background: #000; }
+  .movies iframe { width: min(100%, 640px); aspect-ratio: 16 / 9; border: 0; background: #000; }
   details > img { display: block; max-width: min(100%, 900px); margin: 8px 0 4px 18px; }
 </style>
 </head>
@@ -498,11 +499,17 @@ function card(r, ri) {  // one paper's dropdown; the By time view builds its own
       if (!mv.open) return box.querySelectorAll('video').forEach(v => v.pause());
       const play = () => { if (mv.dataset.autoplay) { delete mv.dataset.autoplay; box.querySelector('video')?.play().catch(() => {}); } };
       if (box.childElementCount) return play();
-      box.append(...movs.map(p => {
+      box.append(...movs.map((p, i) => {
         const src = p.split('/').map(encodeURIComponent).join('/');
         const v = document.createElement(p.endsWith('.gif') ? 'img' : 'video');
         v.src = src; v.title = p.split('/').pop();
         if (v.tagName === 'VIDEO') { v.controls = true; v.preload = 'metadata'; }
+        if (ids[i]) v.onerror = () => {  // no local file (e.g. on GitHub Pages): Google Drive's player instead
+          const f = document.createElement('iframe');
+          f.src = `https://drive.google.com/file/d/${ids[i]}/preview`; f.title = v.title;
+          f.allow = 'autoplay; fullscreen'; f.allowFullscreen = true;
+          v.replaceWith(f);
+        };
         return v;
       }));
       play();
