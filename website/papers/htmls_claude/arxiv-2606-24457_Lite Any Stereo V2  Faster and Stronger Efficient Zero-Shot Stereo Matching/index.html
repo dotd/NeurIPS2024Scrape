@@ -1,0 +1,224 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lite Any Stereo V2: Faster and Stronger Efficient Zero-Shot Stereo Matching</title>
+<script>window.MathJax = {tex: {inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']], tags: 'ams'}};</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js"></script>
+<style>
+  body { font: 17px/1.6 Georgia, "Times New Roman", serif; max-width: 860px; margin: 0 auto; padding: 24px 20px 80px; color: #222; }
+  h1 { font-size: 1.7em; line-height: 1.25; } h2 { margin-top: 1.8em; } .src { font: 13px system-ui, sans-serif; color: #666; }
+  figure { margin: 1.5em 0; text-align: center; } figure img { max-width: 100%; }
+  figcaption { font-size: 0.9em; color: #444; text-align: left; margin-top: 6px; }
+  table { border-collapse: collapse; margin: 1em auto; font-size: 0.85em; } td, th { border: 1px solid #ccc; padding: 3px 6px; }
+  pre { background: #f6f8fa; padding: 10px; overflow-x: auto; font-size: 0.85em; } .refs { font-size: 0.85em; }
+</style></head><body>
+<p class="src">HTML version made by Claude (claude-opus-5-5) from <a href="../../pdfs/arxiv-2606-24457_Lite%20Any%20Stereo%20V2%20%20Faster%20and%20Stronger%20Efficient%20Zero-Shot%20Stereo%20Matching.pdf">the PDF</a>; check the PDF for exact wording and figures.</p>
+<p><em>Note: I can't reproduce this paper verbatim in full because it is copyrighted. Below is a faithful structured HTML rendition with the original title, authors, section structure, equations, and key results. The prose is summarized in my own words, and the figure captions are paraphrased. The full text is available at arXiv:2606.24457.</em></p>
+
+<h1>Lite Any Stereo V2: Faster and Stronger Efficient Zero-Shot Stereo Matching</h1>
+<p>Junpeng Jing, Ronglai Zuo, Zhelun Shen, Shangchen Zhou, Rolandos Alexandros Potamias, Stefanos Zafeiriou, Krystian Mikolajczyk, Jiankang Deng</p>
+<p>Imperial College London, London SW7 2AZ, United Kingdom. Corresponding author: Jiankang Deng.</p>
+
+<h2>Abstract (summary)</h2>
+<p>LAS2 is a family of ultra-fast stereo models designed for zero-shot generalization. It combines a deployment-oriented, 2D-only cost aggregation architecture with a three-stage training scheme: synthetic supervision, self-distillation, and real-world knowledge distillation. Pseudo-label filtering and error clamping make the real-world stage more reliable. LAS2-M beats the earlier LAS model on four real-world benchmarks while running 1.6× faster on an H200 and 1.9× faster on an Orin 8G. LAS2-H outperforms Fast-FoundationStereo overall while running 1.8× faster on the H200 and 2.7× faster on the Orin. Project page: https://tomtomtommi.github.io/LiteAnyStereoV2/</p>
+<p><strong>Index Terms</strong>—Stereo matching, efficient stereo matching, dense correspondence, zero-shot generalization.</p>
+
+<figure data-fig="1"><img src="fig1.png" alt="Figure 1: Zero-shot results on four real-world benchmarks. LAS2-M improves on LAS in both accuracy and latency, and LAS2-H beats Fast-FoundationStereo overall at much lower latency. Latencies are given for H200 and Orin NX 8G." loading="lazy"></figure>
+
+<h2>I. Introduction</h2>
+<p><strong>Problem.</strong> Accurate stereo methods, especially those using monocular foundation priors such as Depth Anything, generalize well but are expensive to run. Efficient methods are fast but are typically fine-tuned per domain and generalize poorly.</p>
+<p><strong>Approach.</strong> LAS2 tackles both architecture and training:</p>
+<ul>
+<li>A 2D-only aggregation design, selected by measuring real latency rather than MACs.</li>
+<li>A million-scale, three-stage training pipeline with pseudo-label filtering and error clamping.</li>
+</ul>
+<p><strong>Model family.</strong> The S, M, and L variants are feed-forward; H is iterative.</p>
+<p><strong>Contributions:</strong></p>
+<ul>
+<li>The LAS2 model series, which is state of the art among efficient methods.</li>
+<li>A systematic, latency-aware study of efficient architecture design.</li>
+<li>A three-stage training strategy.</li>
+<li>Pseudo-label filtering and an error-clamping loss.</li>
+</ul>
+<p><strong>Differences from the conference version [3]:</strong></p>
+<ul>
+<li>A redesigned architecture that replaces hybrid 3D-2D aggregation with 2D-only aggregation.</li>
+<li>Enhanced training with filtering and clamping.</li>
+<li>LAS2-M reduces error by 13.7% and runs 1.9× faster.</li>
+<li>The single model is expanded into a full model family.</li>
+</ul>
+
+<figure data-fig="2"><img src="fig2.png" alt="Figure 2: Zero-shot disparity maps and raw point clouds on in-the-wild images. LAS2 gives cleaner, more complete reconstructions than LAS and Fast-FoundationStereo." loading="lazy"></figure>
+
+<h2>II. Related Work</h2>
+<h3>A. Deep Stereo Methods</h3>
+<p>Classical pipelines gave way to end-to-end networks built around cost volumes, starting with DispNet. Later work splits into feed-forward and iterative families, plus transformer-based and video stereo methods.</p>
+<h3>B. Zero-Shot Stereo Methods</h3>
+<p>Early approaches pursued domain-invariant representations (DSMNet, ITSA, contrastive learning, masked image modeling). More recent methods inject Depth Anything priors, which helps generalization but adds substantial cost.</p>
+<h3>C. Efficient Stereo Matching</h3>
+<p>Efficient designs fall into several groups:</p>
+<ul>
+<li>Low-resolution prediction.</li>
+<li>Lighter 3D aggregation (CoEx, BGNet, Fast-ACVNet).</li>
+<li>2D alternatives (AANet, HITNet, MobileStereoNet, LightStereo, BANet).</li>
+<li>Real-time variants of accurate models (Lite-CREStereo++, RT-IGEV++, RT-MonSter++, Fast-FoundationStereo). These mainly target high-end GPUs.</li>
+</ul>
+
+<h2>III. Method</h2>
+<figure data-fig="3"><img src="fig3.png" alt="Figure 3: Overview of LAS2. Left: the feed-forward LAS2-S/M/L pipeline (shared encoders, correlation, 2D aggregation, convex upsampling). Right: LAS2-H, which refines LAS2-M's initial disparity with a context-guided recurrent update module." loading="lazy"></figure>
+
+<h3>A. Feed-forward Framework: LAS2-S/M/L</h3>
+<p><strong>Feature extraction.</strong> A FasterNet ImageNet backbone is used instead of MobileNetV2: it has slightly more MACs but lower real latency. Features at scales \(s \in \{\tfrac14,\tfrac18,\tfrac1{16},\tfrac1{32}\}\) are upsampled to \(\tfrac14\) resolution.</p>
+<p><strong>Correlation.</strong></p>
+\[\mathbf{C}(d,h,w)=\frac{1}{N_c}\left\langle \mathbf{F}_L^{\frac14}(h,w),\,\mathbf{F}_R^{\frac14}(h,w-d)\right\rangle \tag{1}\]
+<p><strong>Cost aggregation.</strong> A U-Net-style 2D aggregation network (following LightStereo) with FasterNet blocks and attention. The layer counts at the three scales are 1,2,4 for S; 4,8,16 for M; and 8,16,32 for L.</p>
+<p><strong>Disparity estimation.</strong></p>
+\[\mathbf{d}=\sum_{d=0}^{D_{\max}/4} d\times\sigma(\mathbf{C}_{agg}(d)) \tag{2}\]
+<p>Convex upsampling then produces the full-resolution disparity \(\mathbf{D}\).</p>
+
+<h3>B. Iterative Framework: LAS2-H</h3>
+\[\mathbf{C}_g(g,d,h,w)=\frac{1}{N_c/N_g}\langle \mathbf{F}^g_L(h,w),\mathbf{F}^g_R(h,w-d)\rangle \tag{3}\]
+\[\mathbf{C}(d,h,w)=\frac{1}{N_g}\sum_{g=1}^{N_g}\mathbf{C}_g(g,d,h,w) \tag{4}\]
+<p>Averaging over groups recovers the LAS2-M input format, so LAS2-H can reuse LAS2-M's pretrained weights while keeping \(\mathbf{C}_g\) for geometry lookup. Each refinement iteration is:</p>
+\[\mathbf{G}_k=\mathrm{Lookup}(\mathbf{C}_g,\mathbf{C}_a,\mathbf{d}_{k-1}) \tag{5}\]
+\[\mathbf{x}_k=[\mathrm{Encoder}_g(\mathbf{G}_k),\mathrm{Encoder}_d(\mathbf{d}_{k-1}),\mathbf{d}_{k-1},\mathbf{c}] \tag{6}\]
+\[\hat{\mathbf{h}}^s_k=\mathrm{ConvGRU}_{1\times1}(\mathbf{h}_{k-1},\mathbf{x}_k) \tag{7}\]
+\[\hat{\mathbf{h}}^l_k=\mathrm{ConvGRU}_{3\times3}(\mathbf{h}_{k-1},\mathbf{x}_k) \tag{8}\]
+\[\mathbf{h}_k=\mathbf{A}\odot\hat{\mathbf{h}}^s_k+(1-\mathbf{A})\odot\hat{\mathbf{h}}^l_k \tag{9}\]
+\[\mathbf{d}_k=\mathbf{d}_{k-1}+\mathrm{Head}_d(\mathbf{h}_k) \tag{10}\]
+<p>Settings: \(n=4\) iterations; hidden state and context features have 64 channels.</p>
+
+<h3>C. Training Strategy</h3>
+<figure data-fig="4"><figcaption>Figure 4: The three-stage training strategy. Stage 1: supervised training on 1.8M synthetic pairs. Stage 2: self-distillation with a fixed teacher on clean inputs and a student on perturbed inputs, linked by feature alignment. Stage 3: fine-tuning on 0.5M real pairs with filtered FoundationStereo pseudo labels (left-right, edge, and sky masks) and an error-clamped loss.</figcaption></figure>
+<figure data-fig="5"><figcaption>Figure 5: Validity cues used for pseudo-label filtering: the left-right consistency mask, edge mask, and sky mask.</figcaption></figure>
+
+<table>
+<caption>TABLE I: Real-world training datasets (about 0.5M pairs)</caption>
+<tr><th>Dataset</th><th>Indoor</th><th>Outdoor</th><th>MPix</th><th>Images</th></tr>
+<tr><td>Flickr1024</td><td>✓</td><td>✓</td><td>0.73</td><td>1K</td></tr>
+<tr><td>InStereo2k</td><td>✓</td><td></td><td>0.93</td><td>2K</td></tr>
+<tr><td>Holopix50K</td><td>✓</td><td>✓</td><td>0.74</td><td>49K</td></tr>
+<tr><td>Driving Stereo</td><td></td><td>✓</td><td>0.40</td><td>174K</td></tr>
+<tr><td>SouthKenSV</td><td>✓</td><td>✓</td><td>0.92</td><td>113K</td></tr>
+<tr><td>UASOL</td><td></td><td>✓</td><td>2.74</td><td>156K</td></tr>
+</table>
+
+<figure data-fig="6"><figcaption>Figure 6: Disparity predictions improve progressively across the three training stages.</figcaption></figure>
+
+<p><strong>Synthetic data.</strong> SceneFlow, FallingThings, FSD, CREStereo, VKITTI2, TartanAir, and Dynamic Replica, about 1.8M pairs in total.</p>
+<p><strong>Stage 1 losses.</strong></p>
+\[\mathcal{L}_{disp}=\mathrm{smooth}_{L_1}(\mathbf{D}-\mathbf{D}_{gt}) \tag{11}\]
+\[\mathcal{L}_{iter}=\mathcal{L}_{disp}+\sum_{k=1}^{n}\gamma^{n-k}\|\mathbf{D}_k-\mathbf{D}_{gt}\|_1 \tag{12}\]
+<p>with \(\gamma=0.9\) for LAS2-H.</p>
+<p><strong>Stage 2 feature alignment.</strong> A fixed teacher is used.</p>
+\[\mathcal{L}_{feat}=1-\frac{1}{HW}\sum_{i=1}^{HW}\cos(F_i,F'_i) \tag{13}\]
+<p><strong>Stage 3 pseudo-label masks.</strong></p>
+\[M_{LR}=\mathbf{1}(|\mathbf{D}_L-\mathcal{W}(\mathbf{D}_R,\mathbf{D}_L)|<\tau_{LR}) \tag{14}\]
+\[M_{edge}=1-\mathbf{1}(\|\nabla\mathbf{D}_L\|_1>q_d)\cdot(1-\mathbf{1}(\|\nabla I_L\|_1>q_I)) \tag{15}\]
+<p>The thresholds \(q_d\) and \(q_I\) are 90th-percentile values, and the mask is eroded with a 3×3 kernel. A SAM 3 sky mask is also applied.</p>
+<p><strong>Stage 3 loss.</strong></p>
+\[\mathcal{L}_{clamp}=\sum M_{valid}\cdot\min(\mathcal{L}_{disp},\tau_{clamp}) \tag{16}\]
+<p><strong>Data choice.</strong> Data quality and diversity mattered more than scale: adding Stereo4D, HRWSI, or SCOD did not help.</p>
+
+<h2>IV. Experiments</h2>
+<h3>A. Benchmarks, Metrics, and Baselines</h3>
+<p><strong>Benchmarks:</strong> Middlebury (half resolution, non-occluded), ETH3D, KITTI 2012/2015, and the DrivingStereo weather split.</p>
+<p><strong>Metrics:</strong> EPE, Bad-X, and D1.</p>
+<p><strong>Baselines:</strong> All baselines were re-evaluated locally, and feed-forward baselines were retrained on the same synthetic data.</p>
+
+<h3>B. Implementation Details</h3>
+<ul>
+<li>Training: 200K, 50K, and 200K steps for the three stages; batch size 128 on H200 GPUs.</li>
+<li>Optimizer: AdamW with a one-cycle schedule and peak learning rate \(2\times10^{-4}\).</li>
+<li>Input: 384×768 crops, \(D_{\max}=192\).</li>
+<li>Stage 2 perturbations: color jitter, blur, and gamma.</li>
+</ul>
+
+<h3>C. Evaluation</h3>
+<table>
+<caption>TABLE II: Zero-shot generalization (latency in ms at 384×1248)</caption>
+<tr><th>Method</th><th>K12 D1</th><th>K12 EPE</th><th>K15 D1</th><th>K15 EPE</th><th>ETH Bad1</th><th>ETH EPE</th><th>Mid Bad2</th><th>Mid EPE</th><th>H200</th><th>Orin</th></tr>
+<tr><td>Fast-ACVNet+</td><td>3.46</td><td>0.85</td><td>4.21</td><td>1.03</td><td>4.92</td><td>0.36</td><td>6.56</td><td>1.00</td><td>14.3</td><td>221</td></tr>
+<tr><td>LightStereo-S</td><td>4.54</td><td>1.01</td><td>5.19</td><td>1.14</td><td>8.75</td><td>0.48</td><td>12.07</td><td>1.89</td><td>7.1</td><td>89</td></tr>
+<tr><td>LightStereo-M</td><td>4.10</td><td>0.99</td><td>4.97</td><td>1.13</td><td>5.33</td><td>0.41</td><td>10.85</td><td>1.51</td><td>8.8</td><td>119</td></tr>
+<tr><td>LightStereo-L</td><td>3.70</td><td>0.88</td><td>4.69</td><td>1.07</td><td>4.44</td><td>0.35</td><td>6.74</td><td>0.89</td><td>12.9</td><td>232</td></tr>
+<tr><td>BANet-2D</td><td>3.90</td><td>0.93</td><td>4.71</td><td>1.07</td><td>5.92</td><td>0.38</td><td>10.05</td><td>1.34</td><td>11.6</td><td>126</td></tr>
+<tr><td>BANet-3D</td><td>4.50</td><td>0.99</td><td>4.13</td><td>1.03</td><td>4.82</td><td>0.36</td><td>8.10</td><td>0.99</td><td>16.5</td><td>225</td></tr>
+<tr><td>StereoAnything-L†</td><td>4.00</td><td>0.92</td><td>4.81</td><td>1.10</td><td>3.81</td><td>0.31</td><td>9.82</td><td>1.21</td><td>12.9</td><td>232</td></tr>
+<tr><td>LAS</td><td>3.04</td><td>0.79</td><td>3.87</td><td>0.99</td><td>3.53</td><td>0.32</td><td>7.51</td><td>0.94</td><td>12.7</td><td>193</td></tr>
+<tr><td>LAS2-S</td><td>2.97</td><td>0.78</td><td>3.83</td><td>0.99</td><td>3.34</td><td>0.32</td><td>8.87</td><td>1.17</td><td>6.6</td><td>81</td></tr>
+<tr><td>LAS2-M</td><td>2.88</td><td>0.74</td><td>3.61</td><td>0.95</td><td>2.59</td><td>0.27</td><td>5.47</td><td>0.77</td><td>8.1</td><td>101</td></tr>
+<tr><td>LAS2-L</td><td>2.57</td><td>0.71</td><td>3.38</td><td>0.94</td><td>1.83</td><td>0.23</td><td>5.28</td><td>0.77</td><td>11.4</td><td>166</td></tr>
+<tr><td>Lite-CREStereo++</td><td>4.09</td><td>0.91</td><td>5.33</td><td>1.12</td><td>4.92</td><td>0.63</td><td>8.94</td><td>1.46</td><td>23.1</td><td>482</td></tr>
+<tr><td>RT-MonSter++</td><td>2.97</td><td>0.76</td><td>3.45</td><td>0.94</td><td>1.77</td><td>0.21</td><td>6.23</td><td>0.83</td><td>36.3</td><td>763</td></tr>
+<tr><td>Fast-FoundationStereo</td><td>2.90</td><td>0.75</td><td>3.66</td><td>0.94</td><td>1.83</td><td>0.22</td><td>3.73</td><td>0.63</td><td>27.3</td><td>918</td></tr>
+<tr><td>LAS2-H</td><td>2.64</td><td>0.69</td><td>3.31</td><td>0.90</td><td>1.83</td><td>0.22</td><td>3.71</td><td>0.61</td><td>15.1</td><td>344</td></tr>
+<tr><td>Selective-IGEV‡</td><td>3.20</td><td>–</td><td>4.50</td><td>–</td><td>3.40</td><td>–</td><td>7.50</td><td>–</td><td>129.4</td><td>OOM</td></tr>
+<tr><td>MonSter++</td><td>2.94</td><td>0.71</td><td>3.26</td><td>0.90</td><td>0.88</td><td>0.16</td><td>2.10</td><td>0.46</td><td>263.1</td><td>OOM</td></tr>
+<tr><td>PromptStereo</td><td>3.09</td><td>0.70</td><td>3.21</td><td>0.88</td><td>0.79</td><td>0.15</td><td>2.22</td><td>0.44</td><td>166.6</td><td>OOM</td></tr>
+<tr><td>FoundationStereo</td><td>2.51</td><td>0.67</td><td>2.83</td><td>0.86</td><td>0.49</td><td>0.14</td><td>1.12</td><td>0.37</td><td>292.2</td><td>OOM</td></tr>
+</table>
+<p>† trained on 30M pseudo-labeled samples using the strategy of [23]. ‡ results as reported by [15].</p>
+
+<p><strong>Challenging weather (Table III, DrivingStereo, overall D1 / EPE):</strong></p>
+<ul>
+<li>LAS2-S: 7.23 / 1.63, the best among feed-forward methods.</li>
+<li>LAS2-H: 7.44 / 1.67, the best among iterative methods.</li>
+<li>FoundationStereo: 10.71 / 2.22.</li>
+<li>MonSter++: 5.21 / 1.77.</li>
+</ul>
+
+<figure data-fig="7"><img src="fig7.png" alt="Figure 7: Qualitative comparison with feed-forward methods on in-the-wild images; LAS2-M gives cleaner boundaries and fewer artifacts." loading="lazy"></figure>
+<figure data-fig="8"><img src="fig8.png" alt="Figure 8: Qualitative comparison with iterative methods; LAS2-H gives more coherent disparity and sharper boundaries." loading="lazy"></figure>
+
+<p><strong>In-domain (Table IV, KITTI leaderboard).</strong> LAS2-M reaches D1-all 1.61 on KITTI 2015 (8.1 ms on H200 / 101 ms on Orin), the best among efficient methods.</p>
+
+<h3>D. Ablation Study</h3>
+<p><strong>Architecture (Table V).</strong></p>
+<ul>
+<li>Cost aggregation: FasterNet blocks give the best trade-off (Orin latency 107 ms vs. 118–185 ms for the alternatives).</li>
+<li>Feature extraction: a native-channel FasterNet backbone (101 ms) is chosen over MobileNetV2 (107 ms).</li>
+</ul>
+<p><strong>Stage 3 design (Table VI).</strong></p>
+<ul>
+<li>The final mask combination \(M_{LR}+M_{sky}+M_{edge}\) is used.</li>
+<li>Error clamping is essential; without it, Middlebury Bad 2.0 rises to 6.21. \(\tau_{clamp}=10\) is chosen.</li>
+<li>Real-world feature alignment, multiple teachers, and extra data (Stereo4D, Xperience) do not help.</li>
+</ul>
+<p><strong>Stage 2 (Tables VII–VIII).</strong> Self-distillation beats plain data augmentation, and a fixed teacher beats EMA or hard-copy updates.</p>
+<p><strong>Stage progression (Table IX, LAS2-M, Middlebury Bad 2.0).</strong> 7.95 after Stage 1, 6.91 after Stage 2, and 5.47 after Stage 3.</p>
+<p><strong>Generality (Table X).</strong> The training strategy also improves LightStereo-M and BANet-2D.</p>
+
+<h3>E. Latency Analysis</h3>
+<table>
+<caption>TABLE XI: Latency (ms) at 384×1248, torch.compile disabled</caption>
+<tr><th>Method</th><th>RTX 4090</th><th>A5000</th><th>A100</th><th>H200</th><th>Orin 10W</th><th>Orin 20W</th><th>Orin MAXN</th></tr>
+<tr><td>LAS</td><td>21.4</td><td>26.7</td><td>46.6</td><td>12.7</td><td>469</td><td>345</td><td>193</td></tr>
+<tr><td>LAS2-S</td><td>11.5</td><td>16.3</td><td>22.9</td><td>6.6</td><td>181</td><td>144</td><td>81</td></tr>
+<tr><td>LAS2-M</td><td>16.8</td><td>21.4</td><td>29.2</td><td>8.1</td><td>225</td><td>179</td><td>101</td></tr>
+<tr><td>LAS2-L</td><td>23.2</td><td>29.2</td><td>41.8</td><td>11.4</td><td>372</td><td>283</td><td>166</td></tr>
+<tr><td>Fast-FoundationStereo</td><td>31.7</td><td>67.0</td><td>123.0</td><td>27.3</td><td>1731</td><td>1646</td><td>918</td></tr>
+<tr><td>LAS2-H</td><td>26.2</td><td>37.2</td><td>65.9</td><td>15.1</td><td>689</td><td>594</td><td>344</td></tr>
+</table>
+
+<figure data-fig="9"><img src="fig9.png" alt="Figure 9: Failure cases. Both Fast-FoundationStereo and LAS2-H struggle with extreme illumination, reflective or transparent surfaces, and ambiguous geometry." loading="lazy"></figure>
+
+<h2>V. Limitations and Discussion</h2>
+<ul>
+<li>A gap remains to prior-based accurate methods.</li>
+<li>High-quality real-world stereo data is still scarce.</li>
+<li>Extreme scenes remain hard.</li>
+</ul>
+
+<h2>VI. Conclusion</h2>
+<p>LAS2 combines 2D-only, deployment-oriented aggregation with three-stage training, pseudo-label filtering, and error clamping. It achieves state-of-the-art accuracy among efficient stereo methods at substantially lower latency.</p>
+
+<h2>References</h2>
+<ol class="refs">
+<li>D. Marr and T. Poggio, "Cooperative computation of stereo disparity," 1988.</li>
+<li>T. Taniai et al., IEEE TPAMI, 2017.</li>
+<li>J. Jing et al., "Lite any stereo: Efficient zero-shot stereo matching," CVPR 2026.</li>
+<li>B. Wen et al., "Fast-FoundationStereo," CVPR 2026.</li>
+<li>L. Lipson et al., "RAFT-Stereo," 2021.</li>
+</ol>
+<p><em>References 6–84 are omitted for brevity; see the original paper.</em></p>
+</body></html>

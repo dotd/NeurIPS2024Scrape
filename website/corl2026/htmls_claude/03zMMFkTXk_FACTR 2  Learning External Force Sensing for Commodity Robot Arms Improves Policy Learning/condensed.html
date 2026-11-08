@@ -1,0 +1,436 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FACTR 2: Learning External Force Sensing for Commodity Robot Arms Improves Policy Learning</title>
+<script>window.MathJax = {tex: {inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']], tags: 'ams'}};</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js"></script>
+<style>
+  body { font: 17px/1.6 Georgia, "Times New Roman", serif; max-width: 860px; margin: 0 auto; padding: 24px 20px 80px; color: #222; }
+  h1 { font-size: 1.7em; line-height: 1.25; } h2 { margin-top: 1.8em; } .src { font: 13px system-ui, sans-serif; color: #666; }
+  figure { margin: 1.5em 0; text-align: center; } figure img { max-width: 100%; }
+  figcaption { font-size: 0.9em; color: #444; text-align: left; margin-top: 6px; }
+  table { border-collapse: collapse; margin: 1em auto; font-size: 0.85em; } td, th { border: 1px solid #ccc; padding: 3px 6px; }
+  pre { background: #f6f8fa; padding: 10px; overflow-x: auto; font-size: 0.85em; } .refs { font-size: 0.85em; }
+</style></head><body>
+<p class="src">Condensed HTML version (text ~50% shorter; <a href="index.html">full version</a>) made by Claude (claude-opus-5-5) from <a href="../../pdfs/03zMMFkTXk_FACTR%202%20%20Learning%20External%20Force%20Sensing%20for%20Commodity%20Robot%20Arms%20Improves%20Policy%20Learning.pdf">the PDF</a>; check the PDF for exact wording and figures.</p>
+<h1>FACTR 2: Learning External Force Sensing for Commodity Robot Arms Improves Policy Learning</h1>
+<p>Steven Oh<sup>∗1,2</sup>, Jason Jingzhou Liu<sup>∗†1</sup>, Tony Tao<sup>∗1</sup>, Philip Han<sup>1</sup>, Kenneth Shaw<sup>1</sup>, Satoshi Funabashi<sup>2</sup>, Ruslan Salakhutdinov<sup>1</sup>, Deepak Pathak<sup>1</sup></p>
+<p><sup>1</sup>Carnegie Mellon University <sup>2</sup>Waseda University <sup>∗</sup>Equal contribution</p>
+
+<p><strong>Abstract:</strong> Contact-rich manipulation requires force sensitivity, but many robot arms lack costly force sensors. We present Neural External Torque Estimation (NEXT), which estimates external joint torques without dedicated sensors. NEXT trains in 1 minute on 10 minutes of free-motion data and matches dedicated joint-torque sensors. It enables force-feedback teleoperation on low-cost arms and improves policy learning via Force-Informed Re-Sampling Training (FIRST), which up-samples pre-contact and contact segments during behavior cloning. Across five long-horizon tasks, FIRST outperforms prior force-aware policies by over 17% in task progress. Video results and code are available at https://jasonjzliu.com/factr2</p>
+
+<figure data-fig="1"><img src="fig1.png" alt="Figure 1: Overview of our approach. (a) Neural External Torque estimation (NEXT) produces high quality joint torque estimates using only 10 minutes of data without dedicated force sensors or explicit system-identification, enabling force-feedback teleoperation on low-cost arms, such as the Piper, YAM, and Nero. (b) Force-Informed Re-Sampling Training (FIRST) uses learned external torque estimates to segment demonstrations into free-space, pre-contact, and contact phases, then up-samples contact-relevant segments during training to improve policy performance." loading="lazy"></figure>
+
+<h2>1 Introduction</h2>
+<p>Tasks like insertion, fastening, and deformable-object handling need force-aware control, which vision alone cannot reliably provide. Force-torque (FT) sensors are mostly found on expensive arms (Franka, Flexiv, KUKA); low-cost arms lack them, limiting force feedback during data collection and force-aware policies. Retrofitting is costly: piezoresistive FT sensors are expensive and bulky [1, 2], while cheaper capacitive (CoinFT [3]) or magnetic (ReSkin [4]) sensors cannot withstand large end-effector forces [5].</p>
+<p>We present Neural External Torque estimation (NEXT), which learns from 10 minutes of contact-free trajectories (1 minute of training) a network predicting free-space torque. External torque is the residual between measured motor torque, from motor current, and this prediction. No FT sensors are needed for data collection or deployment. NEXT closely matches dedicated joint-torque sensors on high-end arms and outperforms prior estimators.</p>
+<p>This enables (1) force-feedback teleoperation on non-sensorized arms (e.g., AgileX Piper, YAM), comparable to sensorized systems [6, 7]; and (2) FIRST, a behavior cloning method that segments demonstrations into free-space, pre-contact, and contact phases and up-samples the latter two.</p>
+<p>FIRST is motivated by policy failures concentrating in pre-contact alignment and contact phases rather than free motion. On five long-horizon, contact-rich tasks it consistently improves success, alignment, recovery, and contact performance.</p>
+<p>The combined system, FACTR 2, generalizes FACTR [6] to arms without force sensors, evaluated on platforms from the Piper ($2,500) to the Franka ($30,000). Contributions:</p>
+<ul>
+<li><strong>Data-driven external torque estimation without force sensors.</strong> NEXT, a recurrent model trained on 10 minutes of free-motion data without FT sensors or system identification, outperforms prior methods.</li>
+<li><strong>Force-feedback teleoperation on low-cost arms.</strong> Bilateral teleoperation on Piper and YAM with feedback quality comparable to sensorized systems.</li>
+<li><strong>Force-Informed Re-Sampling Training.</strong> FIRST uses torque estimates to identify and up-sample pre-contact and contact phases during training.</li>
+</ul>
+<p class="footnote">†Correspondence to: Jason Jingzhou Liu, liujason@cmu.edu</p>
+
+<h2>2 Related Works</h2>
+<h3>2.1 Sensorless External Force Estimation</h3>
+<p>Sensorless methods model robot dynamics and treat residuals as external contact. Analytical modeling and system identification [8, 9, 10] require heavy engineering and struggle with dead zones [11] and torque ripple [12]. Supervised learning uses paired real [13] or simulated [14] contact data, requiring labeled collection. Autoencoder anomaly detection [15] suits contact detection, not continuous estimation. Inverse-dynamics learning has been shown for single actuators [12] and the da Vinci system [16], but not broadly on low-cost robots.</p>
+<h3>2.2 Imitation Learning with Force Information</h3>
+<p>Some methods use force as policy input: TA-VLA [17] (joint effort), BiACT [8] (joint torque), CompACT [18] (end-effector force), and ForceVLA [19] (mixture-of-experts). TA-VLA [17] and FoAR [20] add auxiliary contact-aware objectives. Others combine behavior cloning with hybrid force-position or impedance control [21, 22, 23]. FACTR [6] uses force during training to improve generalization. FIRST instead uses external torque to infer contact phases and reshape the training distribution; our ablations show pre-contact samples are often more valuable than in-contact ones.</p>
+<h3>2.3 Policy Learning with Dataset Reweighting</h3>
+<p>In RL, AWR [24], CRR [25], and AWAC [26] weight actions by advantage or critics. In imitation learning, Re-Mix adapts DoReMi-style [27] Group DRO [28], DataMIL uses data model estimators [29] for selection [30], DemInf scores mutual information [31], and SCIZOR prunes transitions via progress prediction and clustering [32]. GVL [33] and SARM [34] filter with learned value functions. Demo-SCORE [35] and CUPID [36] use rollouts to filter or estimate demonstration influence.</p>
+
+<h2>3 Background</h2>
+<p>External joint torque \(\tau_{\text{ext}}\) is joint-space torque induced by environmental interaction, excluding free-space motion torque. It is directly available only on arms with dedicated sensing.</p>
+<p>Otherwise, it can be estimated from motor current via \(\tau_m = K I_m\), where \(I_m\) is measured current and \(K\) the torque constant. Given measured motor torque \(\tau_m\) and a dynamics model,</p>
+\[\tau_{\text{ext}} = \tau_m - \tau_f, \qquad \tau_f = M(q)\ddot{q} + C(q,\dot{q})\dot{q} + g(q) + \tau_{\text{other}} \tag{1}\]
+<p>where \(\tau_f\) is the free-space torque for the observed motion. Computing \(\tau_f\) requires the mass matrix \(M\), Coriolis and centrifugal terms \(C\), gravity \(g\), and other terms \(\tau_{\text{other}}\).</p>
+<p>This is highly sensitive to errors in \(\tau_f\); identifying inertial, gravitational, and friction parameters from motor-side measurements is difficult [37, 38]. The residual \(\tau_m - \tau_f\) also absorbs unmodeled effects such as nonlinear friction, stiction, backlash, hysteresis, temperature dependence, noise, torque ripple, deadzones, and saturation [39, 40, 41], many history-dependent and only partially observable.</p>
+
+<h2>4 Learning External Force Estimation</h2>
+<p>NEXT estimates external joint torque \(\tau_{\text{ext}}\) without force sensors during collection or deployment. Instead of model-based \(\tau_f\), we learn free-space inverse dynamics from joint states:</p>
+\[\hat{\tau}_f = f_\theta(x), \qquad \hat{\tau}_{\text{ext}} = \tau_m - \hat{\tau}_f. \tag{2}\]
+<p>where \(f_\theta\) is a network parameterized by \(\theta\) and \(x\) a proprioceptive history. At deployment, \(\hat{\tau}_{\text{ext}}\) is obtained by subtracting \(\hat{\tau}_f\) from \(\tau_m = K I_m\) (Figure 2). NEXT outperforms prior methods (Section 7, Appendix A.2).</p>
+<p>We collect contact-free trajectories \(\mathcal{D}_{\text{free}} = \{(x_i, \tau_{m,i})\}_{i=1}^N\), where \(\tau_{m,i}\) is measured motor torque at timestep \(i\). The input \(x_i\) is</p>
+\[x_i = \left[q_{i-H:i},\ \dot{q}_{i-H:i},\ \Delta q_{d,i-H:i}\right], \tag{3}\]
+<p>where \(H\) is history length, \(q\) joint position, \(\dot{q}\) joint velocity, and \(\Delta q_{d,i}\) the difference between commanded target \(q_{d,i}\) and current position \(q_i\).</p>
+<p>Since \(\mathcal{D}_{\text{free}}\) is contact-free, measured torque equals free-space torque, so \(\tau_{m,i}\) supervises \(\tau_f\). About 10 minutes of free motion via teleoperation, motion planning, or replay suffices, with no FT sensing, payload calibration, or system identification.</p>
+<figure data-fig="2"><img src="fig2.png" alt="Figure 2: External Force Estimation Deployment. At deployment time, we first obtain the measured joint torque from multiplying each joint’s measured current by its torque constant K. We then use an LSTM trained on free-space data to estimate free-space torque, which is then subtracted from the measured joint torque to obtain external joint torque." loading="lazy"></figure>
+<p>We instantiate \(f_\theta\) as an LSTM mapping \(x_i\) to \(\hat{\tau}_{f,i}\); history captures hysteresis, actuator dynamics, frictional memory, and controller-dependent tracking. Training uses an L2 loss,</p>
+\[\mathcal{L}(\theta) = \frac{1}{N}\sum_{i=1}^N \left\| f_\theta(x_i) - \tau_{m,i} \right\|_2^2 \tag{4}\]
+<p>yielding \(\hat{\tau}_f\) and external torque as residual \(\tau_m - \hat{\tau}_f\). Training takes 1 minute on an RTX 3090; details in Appendix A.</p>
+
+<h2>5 Force-Informed Re-Sampling Training</h2>
+<p>FIRST addresses failures concentrating near contact—pre-contact alignment and controlled contact interaction—by re-weighting the data mixture to sample these segments more often. In Section 7, FIRST improves task success by over 17% and lowers validation loss on these phases.</p>
+<figure data-fig="3"><img src="fig3.png" alt="Figure 3: FIRST is evaluated on five long-horizon, contact-rich tasks. Each task comprises multiple stages, many requiring precise alignment or fine-grained, force-sensitive adjustments. Please see videos of these tasks at https://jasonjzliu.com/factr2" loading="lazy"></figure>
+<p><strong>Problem Statement.</strong> At timestep \(t\), the policy conditions on \(o_t = (I_t^{1:M}, q_t, \hat{\tau}_{\text{ext},t})\): \(M\) camera images, joint position \(q_t\), and estimated external torque \(\hat{\tau}_{\text{ext},t}\). It predicts future joint targets \(\hat{a}_{t:t+k} \sim \pi_\theta(\cdot \mid o_t)\), where \(a_{t:t+k}\) is an action chunk.</p>
+<p>We train by behavior cloning on demonstrations \(\mathcal{D} = \{(o_t, a_{t:t+k})\}\), instantiating \(\pi_\theta\) as a flow-matching policy with velocity field \(v_\theta\). Let \(x_1 = a_{t:t+k}\) be an expert chunk, \(x_0 \sim \mathcal{N}(0, I)\) noise, and \(x_\alpha = (1-\alpha)x_0 + \alpha x_1\) for \(\alpha \sim \mathcal{U}(0,1)\). Using a velocity objective [42], \(v_\theta\) predicts flow from \(x_0\) to \(x_1\):</p>
+\[\mathcal{L}_{\text{FM}}(\theta) = \mathbb{E}\left[\left\| v_\theta(x_\alpha, \alpha, o_t) - (x_1 - x_0)\right\|_2^2\right]. \tag{5}\]
+<p><strong>Segmenting Trajectories into Contact Phases.</strong> Each datapoint is labeled contact (physical interaction), pre-contact (one second before contact onset), or free motion.</p>
+<p>Contact is detected from \(\hat{\tau}_{\text{ext},t}\) using score \(f_t = \|\hat{\tau}_{\text{ext},t}\|_1\) with hysteresis thresholding: indicator \(c_t\) turns on when \(f_t \ge T_{\text{high}}\), off when \(f_t \le T_{\text{low}}\), otherwise holds. Onsets are where \(c_t\) switches to contact,</p>
+\[\mathcal{T}_{\text{onset}} = \{t \mid c_{t-1} = 0,\ c_t = 1\} \tag{6}\]
+<p>Given control frequency \(F\), label \(s_t\) marks contact timesteps as Contact, the \(F\) timesteps before onset as Pre-Contact, and others as Free Space:</p>
+\[s_t = \begin{cases} \text{Contact (C)}, & c_t = 1,\\ \text{Pre-Contact (PC)}, & \exists\, t_{\text{onset}} \in \mathcal{T}_{\text{onset}} : t_{\text{onset}} - F \le t < t_{\text{onset}},\\ \text{Free Space (F)}, & \text{otherwise.}\end{cases} \tag{7}\]
+<p><strong>Up-Sampling Pre-Contact and Contact Phases in Training.</strong> With labels \(s_t \in \{\text{Free Space}, \text{Pre-Contact}, \text{Contact}\}\), FIRST changes only batch sampling, assigning weights \(w_F\), \(w_{PC}\), and \(w_C\) to free-space, pre-contact, and contact, with \(w_{PC}, w_C &gt; w_F\). Datapoints are sampled with probability \(p_t = w(s_t)/\sum_{j=1}^N w(s_j)\), where \(w(s_t)\) is the weight of datapoint \(t\)'s phase, increasing the share of alignment- and force-critical examples per minibatch.</p>
+
+<h2>6 Experiments</h2>
+<h3>6.1 External Force Estimation and Force-Feedback Teleoperation</h3>
+<p>We evaluate on a Franka, whose joint torque sensors and factory-calibrated external torque estimate serve as contact ground truth. For contact, we collect 5 minutes of held-out data with a human applying forces and report joint-averaged L1 error for NEXT, FILIC [22], and a disturbance observer (DO) [43]. For free space, 5 held-out minutes use zero torque as ground truth, with the Franka sensor as an extra baseline (details in Appendix A.4). We repeat free-space evaluation on the sensorless AgileX Piper, assessing contact via a teleoperation user study.</p>
+<p><strong>Force-Feedback Teleoperation User Study.</strong> 20 participants perform a wiping task on the Franka (Figure 4) under 5 conditions: no feedback, DO feedback, position-position feedback [44] (PP), FACTR Teleop with Franka's torque sensors, and FACTR Teleop with NEXT. Both FACTR variants use the control law [6]:</p>
+<figure data-fig="4"><img src="fig4.png" alt="Figure 4: User Study. Our external force estimate (using NEXT) improves teleoperation over baselines and remains comparable to FACTR Teleop, which relies on dedicated external force sensors. Lower joint torque applied corresponds to less unnecessary exertion." loading="lazy"></figure>
+\[\tau_{\text{feedback}} = K_{f,p}\,\tau_{\text{ext}} \tag{8}\]
+<p>where \(\tau_{\text{feedback}}\) is leader-arm torque and \(K_{f,p}\) scales follower external torque \(\tau_{\text{ext}}\); \(\tau_{\text{ext}}\) comes from Franka's factory estimate or NEXT. We collect 1–5 ease-of-use ratings and applied torque, and repeat on the Piper (Appendix A.5).</p>
+<h3>6.2 Imitation Learning with Force Input</h3>
+<p><strong>Experiment Settings.</strong> We evaluate on five long-horizon, contact-rich tasks (Figure 3; Appendix C.1), collecting 250 demonstrations each on a bimanual Piper with two wrist and two overhead RGB cameras. Each policy gets 20 rollouts per task; we report task progress (Appendix C.2).</p>
+<p><strong>Policy Details and Baselines.</strong> All methods share a flow-matching policy adapted from Multi-modal Diffusion Transformer [45], trained 20 epochs with chunk size 30; we repeat with ACT [46]. Action heads are trained from scratch (Appendix B). Variants:</p>
+<ul>
+<li><strong>Base Policy:</strong> Images and joint positions, no force.</li>
+<li><strong>Base Policy + Torque:</strong> Adds learned external torque input.</li>
+<li><strong>FACTR [6]:</strong> External torque plus scheduled image blurring during training.</li>
+<li><strong>TA-VLA [17]:</strong> Auxiliary objective reconstructing input torque.</li>
+<li><strong>FIRST (Ours):</strong> Learned torque input plus pre-contact and contact up-sampling; ratios ablated in Appendix D.4.</li>
+</ul>
+<table>
+<caption>Table 1: Average L1 joint torque error on the Franka in free-space and contact settings. Free-space errors are measured against zero external torque, while contact errors are measured against the Franka built-in external torque estimate. NEXT achieves the lowest error in both settings.</caption>
+<thead><tr><th>Motion Type</th><th>External Torque Method</th><th>L1 Error (Nm)</th></tr></thead>
+<tbody>
+<tr><td rowspan="4">Contact</td><td>External Sensor (GT)</td><td>0.000 ± 0.000</td></tr>
+<tr><td>FILIC [22]</td><td>4.395 ± 1.531</td></tr>
+<tr><td>Disturbance Observer [43]</td><td>1.471 ± 0.761</td></tr>
+<tr><td>NEXT (Ours)</td><td>0.547 ± 0.348</td></tr>
+<tr><td rowspan="5">Free Space</td><td>Free Space (GT)</td><td>0.000 ± 0.000</td></tr>
+<tr><td>FILIC [22]</td><td>2.460 ± 1.358</td></tr>
+<tr><td>Disturbance Observer [43]</td><td>2.429 ± 1.298</td></tr>
+<tr><td>External Sensor</td><td>0.449 ± 0.208</td></tr>
+<tr><td>NEXT (Ours)</td><td>0.414 ± 0.278</td></tr>
+</tbody>
+</table>
+<figure data-fig="5"><img src="fig5.png" alt="Figure 5: Left: In free space, the external joint torque should remain zero. Our method produces an estimate that is less noisy than the external sensor and remains near zero, while FILIC and the Disturbance Observer drift away. Right: During contact, our estimate closely tracks the external sensor, whereas FILIC and the Disturbance Observer deviate substantially." loading="lazy"></figure>
+
+<h2>7 Results</h2>
+<p>For force estimation we ask: (i) how NEXT compares to sensors and baselines; (ii) how effective it is for force-feedback teleoperation.</p>
+<p>For imitation learning: (i) how FIRST compares to force-aware baselines; (ii) which phases to up-sample.</p>
+<p><strong>NEXT predicts external joint torque comparable to dedicated sensors.</strong> Under contact on the Franka (Table 1), NEXT achieves 0.547 Nm average L1 error, 87.6% lower than FILIC and 62.8% lower than DO. Figure 5 (right) shows NEXT tracking the sensor closely while baselines deviate, especially at contact transitions.</p>
+<p>In free space, NEXT achieves the lowest error, even beating the Franka sensor, with a less noisy, near-zero estimate (Figure 5, left), likely because it learns hardware-specific effects from data.</p>
+<p>On the Piper, NEXT achieves 0.018 Nm average L1 error, well below baselines (Table 5, Appendix A.6). LSTM outperforms GRU and MLP variants (Appendix A.2).</p>
+<p><strong>NEXT enables high-quality force-feedback teleoperation on low-cost arms.</strong> On the Franka, participants rated NEXT feedback easier to use than baselines (Figure 4 (a)), and it reduced applied force comparably to sensor-based FACTR Teleop (Figure 4 (b)); lower force indicates greater force awareness. On the Piper, NEXT also outperforms baselines (Appendix A.6).</p>
+<p><strong>FIRST leads to improved policy performance.</strong> Figure 6 shows FIRST achieves the highest task progress on all five tasks with flow matching (ACT in Appendix D.2), especially on multi-stage tasks like NIST Belt requiring reliable transitions between free motion, alignment, and contact. FIRST produces more robust recovery, such as fine realignment before insertion, wrapping, or screwing.</p>
+<figure data-fig="6"><img src="fig6.png" alt="Figure 6: Task progress across five contact-rich manipulation tasks using flow matching policy." loading="lazy"></figure>
+<figure data-fig="7"><figcaption>Figure 7: Default sampling yields higher validation loss on pre-contact and contact phases. By upsampling these phases during training, FIRST reduces their validation losses.</figcaption></figure>
+<p>Figure 7 shows phase-wise validation loss on NIST Belt: for Base Policy + Torque, pre-contact and contact losses exceed free-motion loss; FIRST reduces them toward free-motion levels.</p>
+<p><strong>FIRST upsampling ablation.</strong> Table 2 shows upsampling pre-contact gives the highest average progress, as these moments determine pose and alignment. Upsampling pre-contact and contact is competitive and best on Cap Screwing, where sustained contact matters; upsampling contact alone does not help. Per-task ratios are in Appendix D.4.</p>
+<table>
+<caption>Table 2: Upsampling ablation. C: contact, PC: pre-contact, PC+C: pre-contact + contact.</caption>
+<thead><tr><th rowspan="2">Task</th><th colspan="3">Upsampling Phase</th></tr><tr><th>C</th><th>PC</th><th>PC+C</th></tr></thead>
+<tbody>
+<tr><td>LEGO Assembly</td><td>0.697</td><td>0.913</td><td>0.875</td></tr>
+<tr><td>NIST Belt</td><td>0.494</td><td>0.767</td><td>0.649</td></tr>
+<tr><td>NIST Insertion</td><td>0.800</td><td>0.933</td><td>0.933</td></tr>
+<tr><td>Tool Clean Up</td><td>0.650</td><td>0.805</td><td>0.775</td></tr>
+<tr><td>Cap Screwing</td><td>0.707</td><td>0.673</td><td>0.825</td></tr>
+<tr><td>Average</td><td>0.670</td><td>0.818</td><td>0.811</td></tr>
+</tbody>
+</table>
+<p><strong>Why not use raw joint current as input?</strong> Table 10 shows raw current helps NIST Insertion but not Cap Screwing, while NEXT torque is best on both, suggesting subtracting learned free-space dynamics gives a cleaner contact representation. See Appendix D.6.</p>
+
+<h2>8 Conclusion</h2>
+<p>NEXT estimates external joint torque without force sensors from 10 minutes of free-space data and 1 minute of training, matching dedicated sensors and enabling force-feedback teleoperation on low-cost arms. FIRST uses these estimates to up-sample pre-contact and contact segments, improving contact-rich behavior cloning.</p>
+
+<h2>9 Limitations</h2>
+<p>First, NEXT's absolute torque scale depends on the torque constant \(K\) from the manufacturer or a current–torque curve; if \(K\) is inaccurate, calibration against an external sensor is needed. This matters less for teleoperation, where forces are scaled for comfort [6], and policy learning, where inputs are normalized. Second, NEXT is robot-specific and may need retraining across arms.</p>
+
+<h2>Acknowledgments</h2>
+<p>We thank Andrew Wang, Yulong Li, Koki Yamane, Yangcen Liu, Yongliang Wang, Ritvik Singh, Zheyuan Hu, Adam Kan, and Arthur Allshire for discussions and feedback, and Zheyuan Hu and the AIRe Lab for YAM arm access. Supported in part by AFOSR FA9550-23-1-0747, ONR MURI N00014-22-1-2773 and ONR MURI N00014-24-1-2748.</p>
+
+<h2>References</h2>
+<ol class="refs">
+<li>ATI Industrial Automation. Gamma Force/Torque sensor. https://www.ati-ia.com/products/ft/ft_models.aspx?id=gamma, 2026. Accessed: April 28, 2026.</li>
+<li>Bota Systems. 6-Axis Force Torque Sensors for Robotics. https://www.botasys.com/force-torque-sensors, 2024. Accessed: April 28, 2026.</li>
+<li>H. Choi, J. E. Low, T. M. Huh, S. Hong, G. A. Uribe, K. A. Hoffmann, J. Di, T. G. Chen, A. A. Stanley, and M. R. Cutkosky. Coinft: A coin-sized, capacitive 6-axis force torque sensor for robotic applications. arXiv preprint arXiv:2503.19225, 2025.</li>
+<li>R. Bhirangi, T. Hellebrekers, C. Majidi, and A. Gupta. Reskin:versatile, replaceable, lasting tactile skins. In CoRL, 2021.</li>
+<li>M. Y. Cao, S. Laws, and F. R. y Baena. Six-axis force/torque sensors for robotics applications: A review. IEEE Sensors Journal, 21(24):27238–27251, 2021.</li>
+<li>J. J. Liu, Y. Li, K. Shaw, T. Tao, R. Salakhutdinov, and D. Pathak. FACTR: Force-Attending Curriculum Training for Contact-Rich Policy Learning. In Proceedings of Robotics: Science and Systems, LosAngeles, CA, USA, June 2025. doi:10.15607/RSS.2025.XXI.079.</li>
+<li>S. Oh, T. Takahashi, C. C. Beltran-Hernandez, Y. Kuroda, and M. Hamaya. A soft wrist with anisotropic and selectable stiffness for robust robot learning in contact-rich manipulation, 2026. URL https://arxiv.org/abs/2602.14434.</li>
+<li>T. Buamanee, M. Kobayashi, Y. Uranishi, and H. Takemura. Bi-act: Bilateral control-based imitation learning via action chunking with transformer. In 2024 IEEE International Conference on Advanced Intelligent Mechatronics (AIM), pages 410–415, 2024. doi:10.1109/AIM55361.2024.10637173.</li>
+<li>K. Yamane, Y. Li, M. Konosu, K. Inami, J. Oaki, T. Tsuji, and S. Sakaino. Design and experimental validation of sensorless 4-channel bilateral teleoperation for low-cost manipulators, 2026. URL https://arxiv.org/abs/2507.06174.</li>
+<li>H. Shi, S. Hu, Y. Hou, W. Wang, K. Liu, and S. Song. Minimalist compliance control, 2026. URL https://arxiv.org/abs/2603.00913.</li>
+<li>K. Inami, K. Yamane, and S. Sakaino. Loss function considering dead zone for neural networks, 2024. URL https://arxiv.org/abs/2402.00393.</li>
+<li>A. Zhu, Y. Tanaka, F. Rafeedi, and D. Hong. Cycloidal quasi-direct drive actuator designs with learning-based torque estimation for legged robotics. In 2025 IEEE International Conference on Robotics and Automation (ICRA), pages 1–8. IEEE, 2025.</li>
+<li>K. M. Park, J. Kim, J. Park, and F. C. Park. Learning-based real-time detection of robot collisions without joint torque sensors. IEEE Robotics and Automation Letters, 6(1):103–110, 2021. doi:10.1109/LRA.2020.3033269.</li>
+<li>J. Liang and O. Kroemer. Contact localization for robot arms in motion without torque sensing. In 2021 IEEE International Conference on Robotics and Automation (ICRA), pages 6322–6328. IEEE, 2021.</li>
+<li>K. M. Park, Y. Park, S. Yoon, and F. C. Park. Collision detection for robot manipulators using unsupervised anomaly detection algorithms. IEEE/ASME Transactions on Mechatronics, 27(5):2841–2851, 2022. doi:10.1109/TMECH.2021.3119057.</li>
+<li>N. Yilmaz, J. Y. Wu, P. Kazanzides, and U. Tumerdem. Neural network based inverse dynamics identification and external force estimation on the da vinci research kit. In 2020 IEEE International Conference on Robotics and Automation (ICRA), pages 1387–1393. IEEE, 2020.</li>
+<li>Z. Zhang, H. Xu, Z. Yang, C. Yue, Z. Lin, H.-a. Gao, Z. Wang, and H. Zhao. Elucidating the design space of torque-aware vision-language-action models. In J. Lim, S. Song, and H.-W. Park, editors, Proceedings of The 9th Conference on Robot Learning, volume 305 of Proceedings of Machine Learning Research, pages 4019–4037. PMLR, 27–30 Sep 2025. URL https://proceedings.mlr.press/v305/zhang25k.html.</li>
+<li>T. Kamijo, C. C. Beltran-Hernandez, and M. Hamaya. Learning variable compliance control from a few demonstrations for bimanual robot with haptic feedback teleoperation system. In IEEE/RSJ International Conference on Intelligent Robots and Systems (IROS), 2024.</li>
+<li>J. Yu, H. Liu, Q. Yu, J. Ren, C. Hao, H. Ding, G. Huang, G. Huang, Y. Song, P. Cai, W. Zhang, and C. Lu. ForceVLA: Enhancing VLA models with a force-aware moe for contact-rich manipulation. In The Thirty-ninth Annual Conference on Neural Information Processing Systems, 2026. URL https://openreview.net/forum?id=2845H8Ua5D.</li>
+<li>Z. He, H. Fang, J. Chen, H.-S. Fang, and C. Lu. Foar: Force-aware reactive policy for contact-rich robotic manipulation. IEEE Robotics and Automation Letters, 10(6):5625–5632, 2025. doi:10.1109/LRA.2025.3560871.</li>
+<li>W. Liu, J. Wang, Y. Wang, W. Wang, and C. Lu. Forcemimic: Force-centric imitation learning with force-motion capture system for contact-rich manipulation. In 2025 IEEE International Conference on Robotics and Automation (ICRA), 2025.</li>
+<li>H. Ge, Y. Jia, Z. Li, Y. Li, Z. Chen, R. Huang, and G. Zhou. Filic: Dual-loop force-guided imitation learning with impedance torque control for contact-rich manipulation tasks, 2025. URL https://arxiv.org/abs/2509.17053.</li>
+<li>H. Xue, J. Ren, W. Chen, G. Zhang, Y. Fang, G. Gu, H. Xu, and C. Lu. Reactive diffusion policy: Slow-fast visual-tactile policy learning for contact-rich manipulation. In Proceedings of Robotics: Science and Systems (RSS), 2025.</li>
+<li>X. B. Peng, A. Kumar, G. Zhang, and S. Levine. Advantage-weighted regression: Simple and scalable off-policy reinforcement learning. arXiv preprint arXiv:1910.00177, 2019.</li>
+<li>Z. Wang, A. Novikov, K. Zolna, J. T. Springenberg, S. Reed, B. Shahriari, N. Siegel, J. Merel, C. Gulcehre, N. Heess, and N. de Freitas. Critic regularized regression. Advances in Neural Information Processing Systems, 33:7768–7778, 2020.</li>
+<li>A. Nair, A. Gupta, M. Dalal, and S. Levine. Awac: Accelerating online reinforcement learning with offline datasets. arXiv preprint arXiv:2006.09359, 2020.</li>
+<li>S. M. Xie, H. Pham, X. Dong, N. Du, H. Liu, Y. Lu, P. S. Liang, Q. V. Le, T. Ma, and A. W. Yu. Doremi: Optimizing data mixtures speeds up language model pretraining. Advances in Neural Information Processing Systems, 36:69798–69818, 2023.</li>
+<li>J. Hejna, C. A. Bhateja, Y. Jiang, K. Pertsch, and D. Sadigh. Remix: Optimizing data mixtures for large scale imitation learning. In P. Agrawal, O. Kroemer, and W. Burgard, editors, Proceedings of The 8th Conference on Robot Learning, volume 270 of Proceedings of Machine Learning Research, pages 145–164. PMLR, 06–09 Nov 2025. URL https://proceedings.mlr.press/v270/hejna25a.html.</li>
+<li>A. Ilyas, S. M. Park, L. Engstrom, G. Leclerc, and A. Madry. Datamodels: Understanding predictions with data and data with predictions. In ICML, 2022.</li>
+<li>S. Dass, A. Khaddaj, L. Engstrom, A. Madry, A. Ilyas, and R. Martín-Martín. DataMIL: Selecting data for robot imitation learning with datamodels. In The Fourteenth International Conference on Learning Representations, 2026. URL https://openreview.net/forum?id=AcTsKglDdh.</li>
+<li>J. Hejna, S. Mirchandani, A. Balakrishna, A. Xie, A. Wahid, J. Tompson, P. Sanketi, D. Shah, C. Devin, and D. Sadigh. Robot data curation with mutual information estimators. In Robotics: Science and Systems (RSS), 2025.</li>
+<li>Y. Zhang, Y. Xie, H. Liu, R. Shah, M. Wan, L. Fan, and Y. Zhu. Scizor: Self-supervised data curation for large-scale imitation learning. In IEEE International Conference on Robotics and Automation (ICRA), 2026.</li>
+<li>Y. J. Ma, J. Hejna, C. Fu, D. Shah, J. Liang, Z. Xu, S. Kirmani, P. Xu, D. Driess, T. Xiao, et al. Vision language models are in-context value learners. In The Thirteenth International Conference on Learning Representations, 2024.</li>
+<li>Q. Chen, J. Yu, M. Schwager, P. Abbeel, F. Shentu, and P. Wu. SARM: Stage-aware reward modeling for long horizon robot manipulation. In The Fourteenth International Conference on Learning Representations, 2026. URL https://openreview.net/forum?id=aemqAxScl9.</li>
+<li>A. S. Chen, A. M. Lessing, Y. Liu, and C. Finn. Curating demonstrations using online experience. In Proceedings of Robotics: Science and Systems, 2025. doi:10.15607/RSS.2025.XXI.071.</li>
+<li>C. Agia, R. Sinha, J. Yang, R. Antonova, M. Pavone, H. Nishimura, M. Itkina, and J. Bohg. Cupid: Curating data your robot loves with influence functions. In J. Lim, S. Song, and H.-W. Park, editors, Proceedings of The 9th Conference on Robot Learning, volume 305 of Proceedings of Machine Learning Research, pages 2907–2932. PMLR, 27–30 Sep 2025. URL https://proceedings.mlr.press/v305/agia25a.html.</li>
+<li>A. Jubien, M. Gautier, and A. Janot. Dynamic identification of the kuka lwr robot using motor torques and joint torque sensors data. In 19th IFAC World Congress, 2014.</li>
+<li>S. Haddadin, A. De Luca, and A. Albu-Schäffer. Robot collisions: A survey on detection, isolation, and identification. IEEE Transactions on Robotics, 33(6):1292–1312, 2017.</li>
+<li>M. Linderoth, A. Stolt, A. Robertsson, and R. Johansson. Robotic force estimation using motor torques and modeling of low velocity friction disturbances. In 2013 IEEE/RSJ International Conference on Intelligent Robots and Systems, pages 3550–3556, 2013.</li>
+<li>N. M. Kircanski and A. A. Goldenberg. An experimental study of nonlinear stiffness, hysteresis, and friction effects in robot joints with harmonic drives and torque sensors. The International Journal of Robotics Research, 16(2):214–239, 1997.</li>
+<li>M. Reuss, N. van Duijkeren, R. Krug, P. Becker, V. Shaj, and G. Neumann. End-to-end learning of hybrid inverse dynamics models for precise and compliant impedance control. In Robotics: Science and Systems, 2022.</li>
+<li>X. Liu, C. Gong, and qiang liu. Flow straight and fast: Learning to generate and transfer data with rectified flow. In The Eleventh International Conference on Learning Representations, 2023. URL https://openreview.net/forum?id=XVjTT1nw5z.</li>
+<li>S. Mamedov and S. Mikhel. Practical aspects of model-based collision detection. Frontiers in Robotics and AI, 7:571574, 2020.</li>
+<li>P. F. Hokayem and M. W. Spong. Bilateral teleoperation: An historical survey. Automatica, 42(12):2035–2057, 2006. ISSN 0005-1098. doi:https://doi.org/10.1016/j.automatica.2006.06.027. URL https://www.sciencedirect.com/science/article/pii/S0005109806002871.</li>
+<li>M. Reuss, Ö. E. Yağmurlu, F. Wenzel, and R. Lioutikov. Multimodal diffusion transformer: Learning versatile behavior from multimodal goals. In Proceedings of Robotics: Science and Systems, Delft, Netherlands, July 2024. doi:10.15607/RSS.2024.XX.121.</li>
+<li>T. Z. Zhao, V. Kumar, S. Levine, and C. Finn. Learning Fine-Grained Bimanual Manipulation with Low-Cost Hardware. In Proceedings of Robotics: Science and Systems, Daegu, Republic of Korea, July 2023. doi:10.15607/RSS.2023.XIX.016.</li>
+<li>C. Gaz, M. Cognetti, A. Oliva, P. Robuffo Giordano, and A. De Luca. Dynamic identification of the franka emika panda robot with retrieval of feasible parameters using penalty-based optimization. IEEE Robotics and Automation Letters, 4(4):4147–4154, 2019. doi:10.1109/LRA.2019.2931248.</li>
+<li>AgileX Robotics. agx arm urdf: Agilex robot arm urdf models. https://github.com/agilexrobotics/agx_arm_urdf, 2026. Accessed: 2026-05-11.</li>
+<li>P. Wu, Y. Shentu, Z. Yi, X. Lin, and P. Abbeel. GELLO: A general, low-cost, and intuitive teleoperation framework for robot manipulators. In 2024 IEEE/RSJ International Conference on Intelligent Robots and Systems (IROS), pages 12156–12163. IEEE, 2024. doi:10.1109/IROS58592.2024.10801581.</li>
+<li>O. Siméoni, H. V. Vo, M. Seitzer, F. Baldassarre, M. Oquab, C. Jose, V. Khalidov, M. Szafraniec, S. Yi, M. Ramamonjisoa, et al. Dinov3. arXiv preprint arXiv:2508.10104, 2025.</li>
+<li>K. Shaw and D. Pathak. Leap hand v2: Dexterous, low-cost anthropomorphic hybrid rigid soft hand for robot learning. In 2nd Workshop on Dexterous Manipulation: Design, Perception and Control (RSS).</li>
+</ol>
+
+<h2>Appendix</h2>
+<h2>A NEXT Implementation Details</h2>
+<h3>A.1 Free-Space Inverse Dynamics Model Architecture</h3>
+<p>We use a stateless sliding-window LSTM, resetting the hidden state per sequence to provide recent context without long-trajectory drift. Local history captures velocity-, actuator-, and friction-dependent effects without estimating acceleration. At deployment a rolling buffer of the last N observations is used, and external torque is the residual from measured torque. Architecture and hyperparameters are in Table 3.</p>
+<p>On one thread of an Intel Core i9-10920X, a forward pass takes about 1.76 ms (568 Hz); we run at 100 Hz.</p>
+<table>
+<caption>Table 3: Network architecture and training hyperparameters for the free-space inverse dynamics neural network used in NEXT.</caption>
+<thead><tr><th>Hyperparameter</th><th>Value</th></tr></thead>
+<tbody>
+<tr><td>Recurrent backbone</td><td>2-layer LSTM with hidden size 128</td></tr>
+<tr><td>Prediction head</td><td>2-layer MLP with hidden size 256</td></tr>
+<tr><td>Dropout</td><td>0.1</td></tr>
+<tr><td>Loss function</td><td>Mean squared error (MSE)</td></tr>
+<tr><td>Optimizer</td><td>AdamW</td></tr>
+<tr><td>Base learning rate</td><td>\(1 \times 10^{-3}\)</td></tr>
+<tr><td>Weight decay</td><td>\(1 \times 10^{-6}\)</td></tr>
+<tr><td>Gradient clipping</td><td>1.0</td></tr>
+<tr><td>Early stopping</td><td>Enabled; validation loss, patience 20, warmup 10, min \(\Delta = 10^{-5}\)</td></tr>
+<tr><td>Hardware</td><td>NVIDIA RTX 3090, 24 GB</td></tr>
+<tr><td>Training time</td><td>Approximately 1 minute with early stopping</td></tr>
+<tr><td>Data frequency</td><td>100Hz</td></tr>
+</tbody>
+</table>
+<h3>A.2 Free-Space Inverse Dynamics Network Ablations</h3>
+<p>We ablate architecture, input, and history length using free-space and contact estimation error, comparing MLPs (used on da Vinci [16]), GRUs (used for single actuators [12]), and LSTMs.</p>
+<p>Table 4 reports average joint L1 validation error. MLPs underperform recurrent models, showing the value of history. GRUs do well in free space but worse in contact; LSTMs are best in both, likely capturing longer-term actuator, friction, and controller effects.</p>
+<p>We compare inputs \(q\), \((q, \dot{q})\), and \((q, \dot{q}, \Delta q_d)\) with histories of 10, 25, and 50. \((q, \dot{q}, \Delta q_d)\) is consistently best, as tracking error reflects controller effort. Longer histories help, especially for LSTMs. We use an LSTM with \(H = 50\) and input \((q, \dot{q}, \Delta q_d)\).</p>
+<table>
+<caption>Table 4: Ablation of model family, input modality, and temporal history length for external torque estimation. Values corresponding to the average joint L1 validation error between predicted free-space torque and ground-truth free-space torque on the held-out set, reported in Nm.</caption>
+<thead>
+<tr><th rowspan="2">Input</th><th rowspan="2">H</th><th colspan="2">MLP</th><th colspan="2">GRU</th><th colspan="2">LSTM (Ours)</th></tr>
+<tr><th>Free Motion ↓</th><th>Contact ↓</th><th>Free Motion ↓</th><th>Contact ↓</th><th>Free Motion ↓</th><th>Contact ↓</th></tr>
+</thead>
+<tbody>
+<tr><td rowspan="3">\(q\)</td><td>10</td><td>2.35±2.34</td><td>1.78±1.64</td><td>2.25±1.79</td><td>1.12±1.09</td><td>2.53±2.52</td><td>2.61±2.29</td></tr>
+<tr><td>25</td><td>2.02±2.01</td><td>1.34±1.32</td><td>1.68±1.30</td><td>0.665±0.478</td><td>2.21±2.20</td><td>1.45±1.39</td></tr>
+<tr><td>50</td><td>1.76±1.76</td><td>1.13±1.06</td><td>1.62±1.24</td><td>0.843±0.835</td><td>2.15±2.15</td><td>1.09±0.908</td></tr>
+<tr><td rowspan="3">\(q, \dot{q}\)</td><td>10</td><td>1.04±1.03</td><td>0.681±0.647</td><td>0.863±0.862</td><td>0.580±0.535</td><td>1.15±1.15</td><td>0.715±0.553</td></tr>
+<tr><td>25</td><td>0.980±0.976</td><td>0.908±0.802</td><td>0.814±0.814</td><td>0.596±0.506</td><td>1.11±1.11</td><td>0.551±0.511</td></tr>
+<tr><td>50</td><td>1.02±1.02</td><td>0.905±0.892</td><td>0.795±0.794</td><td>0.653±0.549</td><td>1.12±1.12</td><td>0.578±0.526</td></tr>
+<tr><td rowspan="3">\(q, \dot{q}, \Delta q_d\)</td><td>10</td><td>0.706±0.702</td><td>1.89±1.71</td><td>0.423±0.422</td><td>1.94±1.75</td><td>0.504±0.503</td><td>0.876±0.244</td></tr>
+<tr><td>25</td><td>0.755±0.747</td><td>1.56±1.45</td><td>0.473±0.472</td><td>1.47±1.29</td><td>0.490±0.489</td><td>0.789±0.453</td></tr>
+<tr><td>50</td><td>0.813±0.811</td><td>1.47±1.33</td><td>0.429±0.429</td><td>1.62±1.45</td><td>0.414±0.278</td><td>0.547±0.348</td></tr>
+</tbody>
+</table>
+<h3>A.3 Free-Space Data Collection Guidelines for NEXT</h3>
+<p>Figure 8 shows the 10-minute Piper free-motion dataset distribution. We move each joint across its range, then perform multi-joint Cartesian-like motions, repeating at slow and fast speeds. Trajectories can come from motion planning or be recorded once and replayed on new setups.</p>
+<figure data-fig="8"><img src="fig8.png" alt="Figure 8: Distribution of the 10-minute free-motion dataset used to train NEXT on the Piper arm. The plots show the coverage of joint-position error Δq, joint position q, joint velocity q̇, and free-space torque τf across all six joints." loading="lazy"></figure>
+<h3>A.4 External Joint Torque Estimation Baseline Implementation</h3>
+<p>We implement FILIC [22] and a disturbance observer [43] on Franka and Piper, using the system-identified Franka model from [47] and the Piper URDF model [48].</p>
+<p><strong>FILIC [22].</strong> Given measured torque \(\tau_m\), external torque subtracts MuJoCo inverse-dynamics free-space torque:</p>
+\[\hat{\tau}^{\text{FILIC}}_{\text{ext}} = \tau_m - \tau_f, \qquad \tau_f = M(q)\ddot{q} + C(q,\dot{q})\dot{q} + g(q) \tag{9}\]
+<p>attributing the full residual to external interaction.</p>
+<p><strong>Disturbance Observer [43].</strong> A momentum-based observer estimates external torque from the generalized momentum residual,</p>
+\[p = M(q)\dot{q}. \tag{10}\]
+<p>with internal estimate \(\hat{p}\) evolving as</p>
+\[\dot{\hat{p}} = \tau_m - C(q,\dot{q})\dot{q} - g(q) + \dot{M}(q)\dot{q} + \hat{\tau}^{\text{MDO}}_{\text{ext}}, \qquad \hat{\tau}^{\text{MDO}}_{\text{ext}} = K_o(p - \hat{p}). \tag{11}\]
+<p>Avoiding \(\ddot{q}\) makes it smoother than FILIC, but still less accurate than NEXT (Figure 5).</p>
+<h3>A.5 Force-Feedback Teleoperation Baseline Implementation</h3>
+<p>Five feedback conditions on the Franka Panda:</p>
+<ul>
+<li><strong>No Feedback:</strong> GELLO leader-follower [49] without force feedback.</li>
+<li><strong>Disturbance Observer (DO):</strong> DO-estimated follower torque (Appendix A.4) relayed to the leader.</li>
+<li><strong>Position-Position Feedback (PP):</strong> Scaled leader-follower position difference, following [44].</li>
+<li><strong>FACTR Teleop:</strong> FACTR [6] with dedicated joint torque sensors, gravity and friction compensation, and null-space regulation.</li>
+<li><strong>Ours:</strong> FACTR Teleop using NEXT-predicted torque.</li>
+</ul>
+<p>On the Piper we repeat the study without FACTR Teleop, as it lacks torque sensing.</p>
+<h3>A.6 AgileX Piper NEXT Evaluations</h3>
+<p>On the Piper we evaluate only free space (zero ground truth). NEXT achieves the lowest error, 0.018 Nm average L1, beating FILIC and DO (Table 5).</p>
+<p>For contact, the user study (Figure 9) shows participants found NEXT feedback easier to use than baselines.</p>
+<table>
+<caption>Table 5: Average L1 joint torque error on the AgileX Piper in free-space settings. Free-space errors are measured against zero external torque. NEXT achieves the lowest error.</caption>
+<thead><tr><th>External Torque Method</th><th>Error (Nm) ↓</th></tr></thead>
+<tbody>
+<tr><td>Free Motion (GT)</td><td>0.000 ± 0.000</td></tr>
+<tr><td>FILIC</td><td>0.435 ± 0.225</td></tr>
+<tr><td>Disturbance Observer</td><td>0.248 ± 0.132</td></tr>
+<tr><td>Ours</td><td>0.018 ± 0.012</td></tr>
+</tbody>
+</table>
+<figure data-fig="9"><img src="fig9.png" alt="Figure 9: User study results comparing external torque feedback methods on the Piper." loading="lazy"></figure>
+
+<h2>B Behavior Cloning Policy Architecture and Training Hyperparameters</h2>
+<p>RGB images, proprioception, and force estimates are tokenized for an ACT or Flow Matching DiT policy. Images use a DINOv3-Base encoder [50]; proprioception and force use MLP projections.</p>
+<p>Proprioception includes joint positions and gripper widths; force is estimated external joint torque; only the current observation is used. Actions are absolute joint angles and gripper width with horizon 30. Action heads are trained from scratch. Training details are in Table 6.</p>
+<table>
+<caption>Table 6: Policy Architecture and Training Hyperparameters</caption>
+<thead><tr><th>Hyperparameter</th><th>Value</th></tr></thead>
+<tbody>
+<tr><th colspan="2">Behavior Policy Training</th></tr>
+<tr><td>Optimizer</td><td>AdamW</td></tr>
+<tr><td>Base Learning Rate</td><td>\(3 \times 10^{-4}\)</td></tr>
+<tr><td>Weight Decay</td><td>0.05</td></tr>
+<tr><td>Optimizer Momentum</td><td>\(\beta_1, \beta_2 = 0.9, 0.95\)</td></tr>
+<tr><td>Batch Size</td><td>128</td></tr>
+<tr><td>Learning Rate Schedule</td><td>Cosine Decay</td></tr>
+<tr><td>Total Epochs</td><td>15–20</td></tr>
+<tr><td>Warmup Steps</td><td>500</td></tr>
+<tr><td>Augmentation</td><td>RandomResizeCrop</td></tr>
+<tr><td>GPU</td><td>A6000 (48 GB)</td></tr>
+<tr><td>Wall-Clock Time</td><td>12–24 hours</td></tr>
+<tr><th colspan="2">Action Chunking Transformer Details</th></tr>
+<tr><td># Encoder Layers</td><td>4</td></tr>
+<tr><td># Decoder Layers</td><td>6</td></tr>
+<tr><td># MHSA Heads</td><td>8</td></tr>
+<tr><td>Hidden Dim</td><td>768</td></tr>
+<tr><td>Feed-Forward Dim</td><td>3072</td></tr>
+<tr><td>Dropout</td><td>0.1</td></tr>
+<tr><td>Positional Encoding</td><td>Sinusoidal</td></tr>
+<tr><td>Action Chunk</td><td>30</td></tr>
+<tr><th colspan="2">Flow Matching Details</th></tr>
+<tr><td># Decoder Layers</td><td>6</td></tr>
+<tr><td># MHSA Heads</td><td>8</td></tr>
+<tr><td>Hidden Dim</td><td>768</td></tr>
+<tr><td>Feed-Forward Dim</td><td>3072</td></tr>
+<tr><td>Dropout</td><td>0.1</td></tr>
+<tr><td>Positional Encoding</td><td>Sinusoidal</td></tr>
+<tr><td>Action Chunk</td><td>30</td></tr>
+<tr><td>Eval Steps</td><td>10</td></tr>
+<tr><td>Time Sampling</td><td>\(\tau \sim \text{Beta}(1.0, 1.5)\)</td></tr>
+<tr><td>ODE Solver</td><td>Euler</td></tr>
+<tr><td>Noise Distribution</td><td>\(\mathcal{N}(0, I)\)</td></tr>
+</tbody>
+</table>
+
+<h2>C Behavior Cloning Evaluation Tasks</h2>
+<h3>C.1 Task Description</h3>
+<p>Five long-horizon, contact-rich tasks:</p>
+<ul>
+<li>LEGO assembly (LEAP Hand V2 [51]): bimanual assembly of two small LEGO blocks onto a bigger one.</li>
+<li>NIST belt assembly (gripper): bimanual placement of two belts around two pulley sets.</li>
+<li>NIST insertion (gripper): inserting two pulley sets onto NIST board pegs.</li>
+<li>Tool Clean Up (gripper): screwdriver insertion then case assembly.</li>
+<li>Cap screwing (gripper): cap pickup, alignment, and screwing until tightened.</li>
+</ul>
+<h3>C.2 Task Progress Rate Calculation</h3>
+<p>Each task is split into stages marked completed (s) or failed (f) per rollout; progress rate is the percentage of completed stages across rollouts.</p>
+<p>Stages are in Table 7: LEGO covers grasping, aligning, and inserting red and green cubes; NIST Belt covers picking, aligning, and pushing both belts; NIST Insertion covers picking, aligning, and inserting the black part, then picking the aluminum part; Case Assembly covers picking, aligning, inserting the driver, then assembling the box.</p>
+<p>For cap screwing, each over-turn after tightening subtracts 0.02, penalizing policies that fail to stop.</p>
+<table>
+<caption>Table 7: Stage decomposition used for task progress calculation.</caption>
+<thead><tr><th>Task</th><th>Stages</th></tr></thead>
+<tbody>
+<tr><td>LEGO</td><td>red grasp, red align, red insert, green grasp, green align, green insert</td></tr>
+<tr><td>NIST Belt</td><td>pick orange, align big, align small, push, pick grey, align grey, push</td></tr>
+<tr><td>NIST Insertion</td><td>pick black, align black, insert black, pick aluminum</td></tr>
+<tr><td>Tool Clean Up</td><td>pick driver, align driver, insert driver, assemble box</td></tr>
+<tr><td>Cap Screwing</td><td>pick cap, align cap, screw on, end properly</td></tr>
+</tbody>
+</table>
+<h3>C.3 Imitation Learning with Force Information Baseline Implementations</h3>
+<p><strong>Base Policy:</strong> ACT or flow-matching policy (Sec. 6.2) on multi-view RGB and proprioception, predicting joint and gripper command chunks.</p>
+<p><strong>Base Policy + Torque:</strong> Adds NEXT torque, MLP-embedded as an extra observation token.</p>
+<p><strong>FACTR [6]:</strong> Unchanged architecture with a linear Gaussian-blur curriculum on images; at step \(n\), blur strength is</p>
+\[\sigma_n = \sigma_0\left(1 - \frac{n}{N}\right),\]
+<p>where \(\sigma_0\) is initial strength and \(N\) total curriculum steps, so blur fades during training.</p>
+<p><strong>TA-VLA[17]:</strong> Predicts torque/contact as an auxiliary target; only action dimensions are executed at inference.</p>
+
+<h2>D Additional Results on FIRST</h2>
+<h3>D.1 Segmenting Trajectories into Contact Phases Visualization</h3>
+<p>Figure 10 shows hysteresis-based phase labels: NEXT torque stays near zero in free motion and rises during interaction, separating free-motion, pre-contact (alignment just before onset), and contact phases, enabling automatic segmentation on sensorless arms.</p>
+<figure data-fig="10"><img src="fig10.png" alt="Figure 10: Contact phase segmentation from learned external torque. The normalized τext from NEXT is used to segment demonstrations into free motion, pre-contact, and contact phases. The image overlays show that the predicted labels align with the robot’s interaction state during the task." loading="lazy"></figure>
+<h3>D.2 Task Progress Evaluation on ACT</h3>
+<p>With ACT (Figure 11), up-sampling pre-contact and contact similarly improves task progress over baselines.</p>
+<figure data-fig="11"><img src="fig11.png" alt="Figure 11: Task progress across five contact-rich manipulation tasks using ACT policy." loading="lazy"></figure>
+<h3>D.3 Selected Re-Sampling Ratios for Each Task</h3>
+<p>Table 8 lists ratios \(w_F : w_{PC} : w_C\), where \(w_F\), \(w_{PC}\), and \(w_C\) weight free-motion, pre-contact, and contact. Most tasks use 1 : 5 : 1; Cap Screwing uses 1 : 3 : 3, given sustained contact. Ratios are chosen by task progress.</p>
+<table>
+<caption>Table 8: Best re-sampling ratios used by FIRST for each task. Ratios are reported as \(w_F : w_{PC} : w_C\), corresponding to free-motion, pre-contact, and contact sampling weights.</caption>
+<thead><tr><th>Task</th><th>Best Re-Sampling Ratio</th></tr></thead>
+<tbody>
+<tr><td>LEGO Assembly</td><td>1 : 5 : 1</td></tr>
+<tr><td>NIST Belt Assembly</td><td>1 : 5 : 1</td></tr>
+<tr><td>NIST Insertion</td><td>1 : 5 : 1</td></tr>
+<tr><td>Tool Clean Up</td><td>1 : 5 : 1</td></tr>
+<tr><td>Cap Screwing</td><td>1 : 3 : 3</td></tr>
+</tbody>
+</table>
+<h3>D.4 Up-Sampling Magnitude Ablation</h3>
+<p>Figure 12 ablates magnitude \(m\), the up-sampled phase weight relative to free motion. For pre-contact up-sampling the weights are</p>
+\[w_F : w_{PC} : w_C = 1 : m : 1,\]
+<p>and for pre-contact + contact up-sampling</p>
+\[w_F : w_{PC} : w_C = 1 : m : m.\]
+<p>We use ACT on NIST Belt Assembly, NIST Insertion, and Tool Clean Up, plus flow matching on Tool Clean Up only due to compute. Moderate up-sampling helps, peaking around \(m = 5\); larger values saturate or degrade, over-biasing toward contact segments and reducing trajectory coverage.</p>
+<figure data-fig="12"><img src="fig12.png" alt="Figure 12: Moderate up-sampling generally improves performance, with best results around m = 5, while larger values lead to saturation or degradation." loading="lazy"></figure>
+<h3>D.5 Up-Sampling Policies Without Force Input</h3>
+<p>FIRST can also be used without force input: NEXT only segments demonstrations offline for re-sampling, while the policy sees only visual and proprioceptive inputs.</p>
+<p>Table 9 shows, first, that without torque input, PC or PC+C up-sampling generally improves over standard behavior cloning for both ACT and Flow Matching, so NEXT-derived labels help even when used only at training time.</p>
+<p>Second, force-conditioned policies consistently outperform their counterparts without torque, and the best results combine NEXT torque input with FIRST up-sampling.</p>
+<table>
+<caption>Table 9: Effect of phase-based upsampling on policies trained with and without external joint torque. Results are reported as task success rates.</caption>
+<thead>
+<tr><th rowspan="2">Policy</th><th rowspan="2">Up-sampling Strategy</th><th colspan="2">w/o \(\tau_{\text{ext}}\)</th><th colspan="2">w/ \(\tau_{\text{ext}}\)</th></tr>
+<tr><th>Belt Assembly</th><th>Tool Clean Up</th><th>Belt Assembly</th><th>Tool Clean Up</th></tr>
+</thead>
+<tbody>
+<tr><td rowspan="3">ACT</td><td>None</td><td>0.220</td><td>0.600</td><td>0.347</td><td>0.650</td></tr>
+<tr><td>PC</td><td>0.360</td><td>0.600</td><td>0.687</td><td>0.650</td></tr>
+<tr><td>PC + C</td><td>0.283</td><td>0.763</td><td>0.770</td><td>0.788</td></tr>
+<tr><td rowspan="3">Flow Matching</td><td>None</td><td>0.150</td><td>0.463</td><td>0.431</td><td>0.525</td></tr>
+<tr><td>PC</td><td>0.213</td><td>0.575</td><td>0.767</td><td>0.805</td></tr>
+<tr><td>PC + C</td><td>0.241</td><td>0.525</td><td>0.649</td><td>0.775</td></tr>
+</tbody>
+</table>
+<h3>D.6 Inputting Joint Current vs. External Joint Torque on Policy Performance</h3>
+<p>Prior work such as TA-VLA [17] uses raw joint current, but current mixes free-space actuation, contact, and hardware- and controller-dependent effects, forcing the policy to disentangle them.</p>
+<table>
+<caption>Table 10: Policy performance when conditioning on raw joint current versus learned external joint torque. Learned external joint torque provides the best performance on both contact-sensitive tasks. Higher is better. Bold indicates the best result within each task.</caption>
+<thead><tr><th>Method</th><th>NIST Insertion ↑</th><th>Cap Screwing ↑</th></tr></thead>
+<tbody>
+<tr><td>ACT</td><td>0.220</td><td>0.440</td></tr>
+<tr><td>ACT w/ current</td><td>0.431</td><td>0.440</td></tr>
+<tr><td>ACT w/ \(\tau_{\text{ext}}\)</td><td><strong>0.567</strong></td><td><strong>0.525</strong></td></tr>
+</tbody>
+</table>
+<p>NEXT subtracts learned free-space torque, which requires temporal context: Appendix A.2 shows longer histories improve estimation, so instantaneous observations are insufficient. Policies typically see only the current observation; giving them a 50-step history would burden them with dynamics inference and risk overfitting to motion patterns rather than reacting visually. NEXT handles history in a dedicated module and gives the policy a compact contact signal.</p>
+<p>On NIST Insertion (detecting alignment and contact) and Cap Screwing (detecting tightness), Table 10 shows current helps NIST Insertion over base ACT but not Cap Screwing, while NEXT torque is best on both. Current-conditioned policies often over-screw, while torque-conditioned ones detect tightening and stop.</p>
+<p>Figure 13 plots average first-decoder-layer cross-attention from action tokens to force-related tokens (current or external-torque tokens), measuring how strongly the policy attends to force input.</p>
+<p>During screwing, the torque-conditioned policy's attention rises clearly at key contact events, especially tightening, while the current-conditioned policy shows weaker, less event-aligned attention. Though not causal proof, this suggests learned torque is a cleaner, more task-relevant representation.</p>
+<figure data-fig="13"><img src="fig13.png" alt="Figure 13: Attention values during screw-cap manipulation. Learned external torque produces clearer attention around key contact events than raw joint effort." loading="lazy"></figure>
+<h3>D.7 Per-batch Up-sampling vs. Weighted Regression</h3>
+<p>We compare FIRST to weighted regression, which reweights the loss by phase instead of changing batch composition.</p>
+<p>Table 11 shows weighted regression degrades or barely improves over no up-sampling, while weighted sampling consistently improves LEGO assembly, with similar trends elsewhere. Upweighting sparse samples' loss may destabilize optimization or overfit to those segments, whereas per-batch up-sampling keeps the original objective while exposing the policy more often to critical transitions.</p>
+<table>
+<caption>Table 11: Comparison of phase emphasis mechanisms for LEGO assembly using ACT.</caption>
+<thead><tr><th>Phase Emphasis Mechanism</th><th>Emphasized Phase</th><th>Task Progress</th></tr></thead>
+<tbody>
+<tr><td>None</td><td>–</td><td>0.453</td></tr>
+<tr><td rowspan="2">Weighted Regression</td><td>PC</td><td>0.345</td></tr>
+<tr><td>PC + C</td><td>0.478</td></tr>
+<tr><td rowspan="2">FIRST (Ours)</td><td>PC</td><td>0.573</td></tr>
+<tr><td>PC + C</td><td>0.501</td></tr>
+</tbody>
+</table>
+</body></html>

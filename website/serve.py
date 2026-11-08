@@ -223,7 +223,7 @@ def condense(site, page):
 
     Figures, tables, algorithms, references and math are swapped for ⟦Kn⟧ tokens before Claude sees the
     page and put back after, so they come through byte for byte. Returns {path, cost, ...}."""
-    html = open(page).read()
+    html = open(page).read().replace(CONDENSED_LINK, "")  # a re-condense must not link condensed.html to itself
     m = re.search(r'(<p class="src">.*?</p>\n)(.*)(\n</body>)', html, re.S)
     if not m:
         raise RuntimeError("unexpected HTML layout")
@@ -249,16 +249,29 @@ def condense(site, page):
     meta = {"cost": r["cost"], "input_tokens": r["input_tokens"], "output_tokens": r["output_tokens"],
             "chars_before": len(re.sub(r"<[^>]+>", "", body)), "chars_after": len(re.sub(r"<[^>]+>", "", out))}
     json.dump(meta, open(os.path.join(os.path.dirname(page), "condensed.json"), "w"))
+    link_condensed(page)
     with lock:
         site.rebuild()
     return {"path": os.path.relpath(path, site.here), **meta}
+
+
+CONDENSED_LINK = ' · <a href="condensed.html">✂️ Condensed version</a>'
+
+
+def link_condensed(page):
+    """Add a Condensed version link to the original Claude page's source line; the page is otherwise kept as is."""
+    html = open(page).read()
+    if CONDENSED_LINK not in html:
+        with open(page, "w") as f:
+            f.write(re.sub(r'(<p class="src">.*?)(</p>)', lambda t: t.group(1) + CONDENSED_LINK + t.group(2),
+                           html, count=1, flags=re.S))
 
 
 def condense_button(page):
     """Snippet added to a served Claude HTML page: the Condense button, or the link once condensed."""
     pid = os.path.basename(os.path.dirname(page)).split("_", 1)[0]
     meta = os.path.join(os.path.dirname(page), "condensed.json")
-    inner = (f'<a href="condensed.html">✂️ Open condensed version (${json.load(open(meta))["cost"]:.2f})</a>'
+    inner = (f'<a href="condensed.html">✂️ Condensed version (${json.load(open(meta))["cost"]:.2f})</a>'
              if os.path.exists(meta) else "<button>✂️ Condense</button>")
     return f"""<div id="condense" style="position:fixed;top:10px;right:12px;font:13px system-ui,sans-serif;
 background:#fff;padding:4px 8px;border:1px solid #ccc;border-radius:6px">{inner}</div>
@@ -269,7 +282,7 @@ if (cb) cb.onclick = async () => {{
   try {{
     const r = await fetch('../../condense/{pid}', {{method: 'POST'}}), j = await r.json();  // page is htmls_claude/<dir>/
     if (!r.ok) throw new Error(j.error);
-    cb.outerHTML = `<a href="condensed.html">✂️ Open condensed version ($${{j.cost.toFixed(2)}})</a>`;
+    cb.outerHTML = `<a href="condensed.html">✂️ Condensed version ($${{j.cost.toFixed(2)}})</a>`;
   }} catch (e) {{ cb.disabled = false; cb.textContent = '⚠️ ' + e.message + ' (retry)'; }}
 }};
 </script>

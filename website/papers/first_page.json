@@ -302,5 +302,210 @@
     "h": 299
    }
   ]
+ },
+ "arxiv-2606-24457": {
+  "title": "I. INTRODUCTION F",
+  "abstract": "—Recent advances in stereo matching have achieved remarkable accuracy, but often rely on large models, heavy computation, or additional foundation priors, making them difficult to deploy on resource-constrained platforms. In contrast, efficient stereo models offer faster inference but are commonly considered less capable of strong zero-shot generalization. In this paper, we challenge this assumption by introducing Lite Any Stereo V2 (LAS2), an ultra-fast model series designed for efficient zero-shot stereo matching. LAS2 is developed from both architecture and training perspectives. Architecturally, we revisit efficient stereo design under practical deployment settings and propose a 2D-only cost aggregation framework, optimized for real inference latency rather than theoretical MACs alone. For training, we develop a three-stage strategy that combines synthetic supervision, self-distillation, and realworld knowledge distillation. To improve the reliability of realworld pseudo supervision, we further introduce pseudo-label filtering and an error-clamping operation, enabling smoother synthetic-to-real transfer. We instantiate LAS2 as a family of models, including feed-forward variants for different efficiency budgets and an iterative variant for higher accuracy. Extensive experiments show that LAS2 achieves state-of-the-art accuracy among efficient stereo methods while maintaining significantly lower latency. Specifically, LAS2-M consistently outperforms our previous SOTA feed-forward efficient method LAS across four real-world benchmarks, while running 1.6× faster on H200 and 1.9× faster on Orin 8G. LAS2-H further achieves stronger overall zero-shot performance than the iterative method FastFoundationStereo, with 1.8× and 2.7× faster inference on H200 and Orin, respectively. The project page, demos, and code are available at https://tomtomtommi.github.io/LiteAnyStereoV2/.",
+  "figure": "figs/arxiv-2606-24457.png",
+  "figure_page": 1,
+  "figures": [
+   {
+    "n": 1,
+    "page": 1,
+    "src": "figs/arxiv-2606-24457/fig1.png",
+    "w": 721,
+    "h": 857
+   },
+   {
+    "n": 2,
+    "page": 2,
+    "src": "figs/arxiv-2606-24457/fig2.png",
+    "w": 1462,
+    "h": 855
+   },
+   {
+    "n": 3,
+    "page": 4,
+    "src": "figs/arxiv-2606-24457/fig3.png",
+    "w": 1462,
+    "h": 844
+   },
+   {
+    "n": 7,
+    "page": 9,
+    "src": "figs/arxiv-2606-24457/fig7.png",
+    "w": 1462,
+    "h": 776
+   },
+   {
+    "n": 8,
+    "page": 10,
+    "src": "figs/arxiv-2606-24457/fig8.png",
+    "w": 1462,
+    "h": 890
+   },
+   {
+    "n": 9,
+    "page": 13,
+    "src": "figs/arxiv-2606-24457/fig9.png",
+    "w": 721,
+    "h": 492
+   }
+  ]
+ },
+ "arxiv-2511-08544": {
+  "title": "LeJEPA: Provable and Scalable Self-Supervised Learning Without the Heuristics",
+  "abstract": "",
+  "figure": "figs/arxiv-2511-08544.png",
+  "figure_page": 1,
+  "figures": [
+   {
+    "n": 1,
+    "page": 1,
+    "src": "figs/arxiv-2511-08544/fig1.png",
+    "w": 1407,
+    "h": 995
+   },
+   {
+    "n": 2,
+    "page": 3,
+    "src": "figs/arxiv-2511-08544/fig2.png",
+    "w": 1481,
+    "h": 674
+   },
+   {
+    "n": 3,
+    "page": 6,
+    "src": "figs/arxiv-2511-08544/fig3.png",
+    "w": 1458,
+    "h": 609
+   },
+   {
+    "n": 4,
+    "page": 7,
+    "src": "figs/arxiv-2511-08544/fig4.png",
+    "w": 1458,
+    "h": 603
+   },
+   {
+    "n": 5,
+    "page": 8,
+    "src": "figs/arxiv-2511-08544/fig5.png",
+    "w": 1481,
+    "h": 503
+   },
+   {
+    "n": 6,
+    "page": 9,
+    "src": "figs/arxiv-2511-08544/fig6.png",
+    "w": 1481,
+    "h": 854
+   },
+   {
+    "n": 7,
+    "page": 10,
+    "src": "figs/arxiv-2511-08544/fig7.png",
+    "w": 1461,
+    "h": 702
+   },
+   {
+    "n": 8,
+    "page": 13,
+    "src": "figs/arxiv-2511-08544/fig8.png",
+    "w": 1459,
+    "h": 709
+   },
+   {
+    "n": 9,
+    "page": 14,
+    "src": "figs/arxiv-2511-08544/fig9.png",
+    "w": 1480,
+    "h": 648
+   },
+   {
+    "n": 10,
+    "page": 15,
+    "src": "figs/arxiv-2511-08544/fig10.png",
+    "w": 1480,
+    "h": 540
+   },
+   {
+    "n": 11,
+    "page": 15,
+    "src": "figs/arxiv-2511-08544/fig11.png",
+    "w": 721,
+    "h": 789
+   },
+   {
+    "n": 12,
+    "page": 16,
+    "src": "figs/arxiv-2511-08544/fig12.png",
+    "w": 1478,
+    "h": 673
+   },
+   {
+    "n": 13,
+    "page": 16,
+    "src": "figs/arxiv-2511-08544/fig13.png",
+    "w": 1478,
+    "h": 378
+   },
+   {
+    "n": 14,
+    "page": 17,
+    "src": "figs/arxiv-2511-08544/fig14.png",
+    "w": 1458,
+    "h": 1375
+   },
+   {
+    "n": 15,
+    "page": 42,
+    "src": "figs/arxiv-2511-08544/fig15.png",
+    "w": 1474,
+    "h": 619
+   },
+   {
+    "n": 16,
+    "page": 47,
+    "src": "figs/arxiv-2511-08544/fig16.png",
+    "w": 1259,
+    "h": 1870
+   },
+   {
+    "n": 17,
+    "page": 48,
+    "src": "figs/arxiv-2511-08544/fig17.png",
+    "w": 1475,
+    "h": 1917
+   },
+   {
+    "n": 18,
+    "page": 49,
+    "src": "figs/arxiv-2511-08544/fig18.png",
+    "w": 1474,
+    "h": 863
+   },
+   {
+    "n": 19,
+    "page": 49,
+    "src": "figs/arxiv-2511-08544/fig19.png",
+    "w": 1474,
+    "h": 793
+   },
+   {
+    "n": 20,
+    "page": 50,
+    "src": "figs/arxiv-2511-08544/fig20.png",
+    "w": 1474,
+    "h": 471
+   },
+   {
+    "n": 21,
+    "page": 50,
+    "src": "figs/arxiv-2511-08544/fig21.png",
+    "w": 1474,
+    "h": 428
+   }
+  ]
  }
 }

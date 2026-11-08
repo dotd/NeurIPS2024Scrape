@@ -1,0 +1,225 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LeJEPA: Provable and Scalable Self-Supervised Learning Without the Heuristics</title>
+<script>window.MathJax = {tex: {inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']], tags: 'ams'}};</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js"></script>
+<style>
+  body { font: 17px/1.6 Georgia, "Times New Roman", serif; max-width: 860px; margin: 0 auto; padding: 24px 20px 80px; color: #222; }
+  h1 { font-size: 1.7em; line-height: 1.25; } h2 { margin-top: 1.8em; } .src { font: 13px system-ui, sans-serif; color: #666; }
+  figure { margin: 1.5em 0; text-align: center; } figure img { max-width: 100%; }
+  figcaption { font-size: 0.9em; color: #444; text-align: left; margin-top: 6px; }
+  table { border-collapse: collapse; margin: 1em auto; font-size: 0.85em; } td, th { border: 1px solid #ccc; padding: 3px 6px; }
+  pre { background: #f6f8fa; padding: 10px; overflow-x: auto; font-size: 0.85em; } .refs { font-size: 0.85em; }
+</style></head><body>
+<p class="src">HTML version made by Claude (claude-opus-5-5) from <a href="../../pdfs/arxiv-2511-08544_LeJEPA%20%20Provable%20and%20Scalable%20Self-Supervised%20Learning%20Without%20the%20Heuristics.pdf">the PDF</a>; check the PDF for exact wording and figures.</p>
+I can't reproduce the full paper verbatim, since that would copy a long copyrighted work in its entirety. Below is a faithful HTML **condensed version** instead. It follows the paper's structure, paraphrases the content, and keeps the key equations, algorithms (summarized), figure placeholders with paraphrased captions, and main results.
+
+<h1>LeJEPA: Provable and Scalable Self-Supervised Learning Without the Heuristics</h1>
+<p>Randall Balestriero (Brown University, Meta-FAIR)*, Yann LeCun (New York University, Meta-FAIR)* — *Equal contribution</p>
+<p><em>Condensed, paraphrased HTML version. Not the verbatim text.</em></p>
+
+<h2>Abstract (summary)</h2>
+<p>The paper develops a theory of Joint-Embedding Predictive Architectures (JEPAs) and derives LeJEPA from it. The authors first show that an isotropic Gaussian is the embedding distribution that minimizes downstream prediction risk. They then introduce Sketched Isotropic Gaussian Regularization (SIGReg) to push embeddings toward that distribution. Combined with the JEPA predictive loss, the method has:</p>
+<ul>
+<li>a single trade-off hyperparameter;</li>
+<li>linear time and memory cost;</li>
+<li>stability across architectures and domains;</li>
+<li>no stop-gradient, teacher–student setup, or schedulers;</li>
+<li>a roughly 50-line implementation.</li>
+</ul>
+<p>Experiments cover 10+ datasets and 60+ architectures. A ViT-H/14 pretrained on ImageNet-1k reaches 79% linear-probe accuracy.</p>
+
+<figure data-fig="1"><img src="fig1.png" alt="Figure 1: Overview. The training loss correlates strongly with linear-probe accuracy. Training is stable up to a 1.8B-parameter ViT-g. PCA features are semantically meaningful. On Galaxy10, in-domain LeJEPA pretraining beats DINOv2/v3 transfer from 1-shot to full supervision." loading="lazy"></figure>
+
+<h2>1 Introduction</h2>
+<p>JEPAs train an encoder \(f_{\boldsymbol\theta}\) so that embeddings of related views predict each other. Without safeguards, this objective can collapse, either completely or to a low-dimensional subspace. Current recipes avoid collapse with heuristics: stop-gradients, asymmetric views, EMA teacher–student networks, and whitening.</p>
+<p>The authors instead posit two axioms for a JEPA:</p>
+<ol>
+<li>solve the prediction task;</li>
+<li>keep the embeddings isotropic Gaussian.</li>
+</ol>
+<p>The contributions are:</p>
+<ol>
+<li>a proof that the isotropic Gaussian is the optimal embedding distribution;</li>
+<li>SIGReg, a scalable and provable distribution-matching objective;</li>
+<li>LeJEPA, a JEPA with a single hyperparameter;</li>
+<li>large-scale validation, including in-domain pretraining that beats frontier-model transfer.</li>
+</ol>
+
+<figure data-fig="2"><img src="fig2.png" alt="Figure 2: SIGReg. Embeddings are projected onto random 1D directions, and each projected density is matched to the corresponding projection of the target (isotropic Gaussian) using a univariate goodness-of-fit test." loading="lazy"></figure>
+
+<h2>2 Background and Notations</h2>
+<h3>2.1 Notations and Definitions</h3>
+<ul>
+<li><strong>Data:</strong> a dataset of shape \((N,V,D)\), with samples assumed i.i.d.</li>
+<li><strong>Encoder:</strong> \(f_{\boldsymbol\theta}:\mathbb{R}^D\to\mathbb{R}^K\), with parameters \(\boldsymbol\theta\in\mathbb{R}^P\).</li>
+</ul>
+\[\text{JEPA}(\boldsymbol x)\iff \text{Enc}(\boldsymbol x_{n,t+1,\cdot})\text{ is predictable from Enc}(\boldsymbol x_{n,t,\cdot}),\ \forall n,t,\ \text{and Enc}(\boldsymbol x_{\cdot,\cdot,\cdot})\text{ is not degenerate.}\tag{1}\]
+
+<h3>2.2 The Need for Reliable Pretraining</h3>
+<p>Existing anti-collapse mechanisms (whitening, negatives, teacher–student with stop-gradient) suffer from some combination of:</p>
+<ul>
+<li>under-specification;</li>
+<li>quadratic cost;</li>
+<li>sensitivity to hyperparameters;</li>
+<li>a lack of guarantees.</li>
+</ul>
+
+<h3>2.3 The Need for Actionable Theory</h3>
+<p>Supervised and reconstruction-based learning are well understood theoretically. JEPA theory, by contrast, has mostly been post-hoc, often based on mutual information.</p>
+
+<h2>3 Latent Euclidean: Embeddings Should be Isotropic Gaussian</h2>
+<h3>3.1 Linear Probing</h3>
+\[\hat\beta=\arg\min_{\beta\in\mathbb{R}^K}\|\boldsymbol y-\boldsymbol Z\beta\|_2^2+\lambda\|\beta\|_2^2\tag{OLS}\]
+<p>Compare two embeddings with the same span and the same total variance: an anisotropic one and an isotropic one.</p>
+<ul>
+<li><strong>Lemma 1 (anisotropy amplifies bias):</strong> for \(\lambda>0\), some downstream task always yields higher bias under the anisotropic embedding.</li>
+<li><strong>Lemma 2 (anisotropy amplifies variance):</strong> for \(\lambda=0\), \(\mathrm{tr}\,\mathrm{Var}(\hat\beta_{\rm aniso})>\mathrm{tr}\,\mathrm{Var}(\hat\beta_{\rm iso})\).</li>
+</ul>
+<figure data-fig="3"><img src="fig3.png" alt="Figure 3: Logistic-regression decision boundaries fitted on many resampled training sets vary much more under anisotropic embeddings than under isotropic ones." loading="lazy"></figure>
+
+<h3>3.2 Nonlinear Probing</h3>
+<p>The analysis covers radius-based k-NN and Nadaraya–Watson kernel regression, under a scalar constraint on the covariance.</p>
+<p><strong>Theorem 1:</strong></p>
+\[\mathrm{ISB}_{k\text{-NN}}=\frac{r_0^4}{(K+2)^2}\tau_g^2J(p)+O(r_0^4),\qquad \mathrm{ISB}_{\rm kernel}\le\Big(\tfrac{h^2\mu_2(K)}{2}\Big)^2(2B^2+8L^2J(p))+o(h^4)\]
+<p>The isotropic Gaussian is the unique minimizer of both bounds.</p>
+
+<h3>3.3 Geometric and Practical Insights</h3>
+<p>Empirically, anisotropy increases both bias (Figure 18) and variance (Figures 3 and 17) of the probe.</p>
+
+<h2>4 SIGReg: Reliable Isotropic Gaussian Regularization in High-Dimension</h2>
+<h3>4.1 Hypothesis Testing as a Judge</h3>
+<p>The global test is:</p>
+\[H_0:P_{\boldsymbol\theta}=Q\ \text{vs.}\ H_1:P_{\boldsymbol\theta}\neq Q\tag{2}\]
+<p>It is decomposed into directional tests along unit vectors \(\boldsymbol a\):</p>
+\[H_0(\boldsymbol a):P^{(\boldsymbol a)}_{\boldsymbol\theta}=Q^{(\boldsymbol a)}\tag{3}\]
+<p>These are aggregated over a set of directions \(\mathbb{A}\):</p>
+\[T_{\mathbb{A}}=\max_{\boldsymbol a\in\mathbb{A}}T(\{\boldsymbol a^\top f_{\boldsymbol\theta}(\boldsymbol x_n)\})\tag{4}\]
+<ul>
+<li><strong>Lemma 3 (hyperspherical Cramér–Wold):</strong> two distributions are equal if and only if all their unit-direction projections are equal.</li>
+<li><strong>Theorem 2:</strong> the aggregated directional test has the correct asymptotic level and power.</li>
+</ul>
+<figure data-fig="4"><img src="fig4.png" alt="Figure 4: Spherical distributions with different Sobolev smoothness \(\alpha\). The smoother the distribution, the more globally a fixed number of directions constrains it." loading="lazy"></figure>
+
+<h3>4.2 SIGReg: Sketching the Epps-Pulley Test</h3>
+\[\mathrm{SIGReg}_T=\frac{1}{|\mathbb{A}|}\sum_{\boldsymbol a\in\mathbb{A}}T(\{\boldsymbol a^\top f_{\boldsymbol\theta}(\boldsymbol x_n)\}_{n=1}^N)\]
+<p>The maximum is replaced by an average to avoid sparse gradients across directions.</p>
+<figure data-fig="5"><img src="fig5.png" alt="Figure 5: An &quot;X&quot;-shaped distribution with Gaussian marginals and identity covariance. Projecting along the right direction exposes the degeneracy, and the test statistics spike." loading="lazy"></figure>
+
+<h3>4.2.1 Moments</h3>
+<p>Moment-based tests, such as an extended Jarque–Bera test, are not identifiable with finitely many moments (Theorem 3). Adding higher moments makes gradients explode.</p>
+
+<h3>4.2.2 CDF-based tests</h3>
+<p>Cramér–von Mises, Anderson–Darling, and Watson tests all require sorting. This makes them hard to parallelize and non-smooth.</p>
+<figure data-fig="6"><img src="fig6.png" alt="Figure 6: Gradient descent on 100 samples in 1024 dimensions, using each statistic with 10 random directions per step. SIGReg recovers an isotropic Gaussian from the &quot;X&quot; distribution." loading="lazy"></figure>
+
+<h3>4.2.3 Characteristic Functions</h3>
+\[EP=N\int|\hat\phi_X(t)-\phi(t)|^2w(t)\,dt\]
+<p>The empirical characteristic function is differentiable and can be computed across devices with a single all_reduce.</p>
+<p><strong>Theorem 4:</strong> the gradient and curvature are bounded:</p>
+\[|\partial EP/\partial z_i|\le 4\sigma^2/N,\qquad |\partial^2EP/\partial z_i^2|\le C\sqrt\pi\sigma^3/(2N)\]
+<p><strong>Algorithm 1 (summary):</strong></p>
+<pre>
+sample M random unit directions, seeded by global_step so all devices agree
+project embeddings onto the directions
+t = 17 points in [-5, 5]
+ECF = mean over the batch of exp(i * proj * t)
+all_reduce the ECF across devices
+loss = N * trapz(|ECF - exp(-t^2/2)|^2 * exp(-t^2/2))
+</pre>
+<figure data-fig="7"><img src="fig7.png" alt="Figure 7: The end-of-training directional statistic as a function of the number of directions M. Resampling directions at every step greatly outperforms keeping them fixed." loading="lazy"></figure>
+
+<h3>4.3 How SIGReg Beats the Curse of Dimensionality</h3>
+<p><strong>Theorem 5:</strong> the bound decays as \(|\mathbb{A}|^{-2\alpha/(K-1)}\) for Sobolev-\(\alpha\) densities. Resampling directions at each SGD step compounds coverage over training.</p>
+
+<h2>5 LeJEPA: Stable and Scalable Implementation</h2>
+<h3>5.1 LeJEPA: SIGReg + Prediction Loss</h3>
+<p><strong>Theorem 6:</strong> using minibatches introduces a bias of order \(O(1/N)\).</p>
+<p>The prediction loss has every view predict the mean of the global views:</p>
+\[\mathcal L_{\rm pred}=\frac1V\sum_{v'=1}^V\|\boldsymbol\mu_n-\boldsymbol z_{n,v'}\|_2^2\tag{7}\]
+<p>The full objective is:</p>
+\[\mathcal L_{\rm LeJEPA}=\frac{\lambda}{V}\sum_v\mathrm{SIGReg}(\{\boldsymbol z_{n,v}\})+\frac{1-\lambda}{B}\sum_n\mathcal L_{\rm pred}\]
+<h3>5.2 Relation to Prior Work</h3>
+<p>The slicing idea relates to sliced score matching and the sliced Wasserstein distance. Computing the Epps–Pulley integral exactly recovers kernel MMD. Replacing the test with a mean/std matching statistic recovers VICReg.</p>
+
+<h2>6 LeJEPA: Empirical Validation</h2>
+<figure data-fig="8"><img src="fig8.png" alt="Figure 8: ResNet-50 on ImageNet-100. Linear-probe accuracy stays stable across \(\lambda\) and the number of views." loading="lazy"></figure>
+<h3>6.1 Stability</h3>
+<p>Recommended defaults:</p>
+<ul>
+<li>\(\lambda=0.05\);</li>
+<li>\(V_g=2\) global views and \(V_l=8\) local views;</li>
+<li>batch size of at least 128;</li>
+<li>17 integration points over \([-5,5]\);</li>
+<li>1024 slices.</li>
+</ul>
+<p>The method needs no predictor or register tokens. SWA optionally helps ViTs.</p>
+
+<table>
+<caption>Table 1 (excerpt): ViT-L/14 on ImageNet-1k, 100 epochs, linear probe accuracy (%)</caption>
+<tr><th>batch size</th><th>128</th><th>256</th><th>512</th><th>1024</th></tr>
+<tr><td>acc.</td><td>72.20</td><td>74.15</td><td>74.72</td><td>74.07</td></tr>
+</table>
+
+<figure data-fig="9"><img src="fig9.png" alt="Figure 9: About 50 timm architectures (each under 20M parameters) pretrained on ImageNet-10 reach 91.5–95% frozen linear-probe accuracy." loading="lazy"></figure>
+
+<h3>6.2 Training Loss is Informative</h3>
+<p>The training loss has about 85% Spearman correlation with downstream accuracy. Scaling the loss by \(\lambda^{-\alpha}\) with \(\alpha\approx0.4\) raises this to about 99%.</p>
+<figure data-fig="10"><img src="fig10.png" alt="Figure 10: In the plane of (SIGReg loss, prediction loss), accuracy improves toward the lower-left corner." loading="lazy"></figure>
+<figure data-fig="11"><img src="fig11.png" alt="Figure 11: Spearman correlation between training loss and accuracy as a function of the alignment coefficient \(\alpha\)." loading="lazy"></figure>
+
+<h3>6.3 In-Domain Pretraining</h3>
+<p>On Galaxy10 (11k samples), in-domain LeJEPA outperforms DINOv2/v3 transfer under both frozen-backbone and full-finetuning evaluation.</p>
+<figure data-fig="12"><img src="fig12.png" alt="Figure 12: Galaxy10 accuracy versus the number of samples per class. LeJEPA's small in-domain models are compared with DINOv2 and DINOv3." loading="lazy"></figure>
+
+<h3>6.4 Scaling</h3>
+<ul>
+<li>ImageNet-1k online linear probe: 77.1% for ViT-L and 78.5% for ConvNeXtV2-H.</li>
+<li>Few-shot transfer (Table 2): LeJEPA is competitive with I-JEPA ViT-H while using fewer epochs.</li>
+</ul>
+<table>
+<caption>Table 2 (average column only, %)</caption>
+<tr><th>model</th><th>1-shot</th><th>10-shot</th><th>all</th></tr>
+<tr><td>LeJEPA ViT-L (100 ep)</td><td>29.55</td><td>60.95</td><td>79.48</td></tr>
+<tr><td>LeJEPA ConvNeXtV2-H</td><td>31.58</td><td>60.70</td><td>77.56</td></tr>
+<tr><td>I-JEPA ViT-H (300 ep)</td><td>30.20</td><td>60.51</td><td>78.50</td></tr>
+<tr><td>I-JEPA ViT-H + STOP</td><td>32.05</td><td>62.92</td><td>80.70</td></tr>
+</table>
+<figure data-fig="13"><img src="fig13.png" alt="Figure 13: Thresholding the last-layer attention produces emergent, temporally consistent object segmentation in videos." loading="lazy"></figure>
+<figure data-fig="14"><img src="fig14.png" alt="Figure 14: PCA of ViT-L features separates foreground objects from background." loading="lazy"></figure>
+
+<h3>6.5 Emergent Semantic Structure</h3>
+<p>Following DINO, PCA of the embeddings and thresholded [CLS] attention show object-level structure without any labels.</p>
+
+<h2>7 Conclusion</h2>
+<p>Isotropic Gaussian embeddings minimize worst-case downstream risk. SIGReg enforces this distribution efficiently. LeJEPA removes collapse heuristics and scales to 1.8B parameters.</p>
+
+<h2>Appendix (summary)</h2>
+<ul>
+<li><strong>A:</strong> derivations of the k-NN and kernel probe bias (Lemmas 4–5, Theorems 7–8).</li>
+<li><strong>B:</strong> proofs. B.1–B.2 cover the ridge bias and OLS variance via Jensen's inequality. B.4 uses Fisher information \(J(p)\ge \mathrm{tr}(\Sigma^{-1})\), with the minimum attained by an isotropic covariance under trace, determinant, Frobenius, or spectral constraints. B.8 proves Cramér–Wold, B.11 gives the moment non-identifiability construction, B.12 the ECF gradient bounds, B.13 the \(O(1/N)\) bias, and B.14 the VICReg recovery.</li>
+<li><strong>C:</strong> OLS background.</li>
+<li><strong>D:</strong> Sobol low-discrepancy directions.</li>
+<li><strong>E:</strong> Shapiro–Wilk variants.</li>
+<li><strong>F:</strong> multivariate ECF/MGF tests (BHEP, HZ).</li>
+</ul>
+<figure data-fig="15"><img src="fig15.png" alt="Figure 15: Decay of the Theorem 5 bound with the number of directions M for different smoothness values \(\alpha\)." loading="lazy"></figure>
+<figure data-fig="16"><img src="fig16.png" alt="Figure 16: Figure 6 repeated for other dimensions and numbers of slices." loading="lazy"></figure>
+<figure data-fig="17"><img src="fig17.png" alt="Figure 17: Distribution of the estimated \(\beta\) for isotropic versus anisotropic embeddings across three tasks." loading="lazy"></figure>
+<figure data-fig="18"><img src="fig18.png" alt="Figure 18: Accuracy and cosine alignment of the estimate as functions of the Tikhonov regularization strength." loading="lazy"></figure>
+<figure data-fig="19"><img src="fig19.png" alt="Figure 19: Training loss versus test accuracy across datasets and models." loading="lazy"></figure>
+<figure data-fig="20"><img src="fig20.png" alt="Figure 20: Error of the trapezoid quadrature as a function of the number of quadrature points." loading="lazy"></figure>
+<figure data-fig="21"><img src="fig21.png" alt="Figure 21: Additional (SIGReg, prediction loss) planes." loading="lazy"></figure>
+
+<h2>References (abbreviated)</h2>
+<ol class="refs">
+<li>Assran et al., 2023. Self-supervised learning from images with a joint-embedding predictive architecture. CVPR.</li>
+<li>Bardes, Ponce, LeCun, 2021. VICReg. arXiv:2105.04906.</li>
+<li>Caron et al., 2021. Emerging properties in self-supervised vision transformers. ICCV.</li>
+<li>Cramér and Wold, 1936. Some theorems on distribution functions.</li>
+<li>Epps and Pulley, 1983. A test for normality based on the empirical characteristic function. Biometrika.</li>
+<li>LeCun, 2022. A path towards autonomous machine intelligence.</li>
+<li>Oquab et al., 2023. DINOv2. arXiv:2304.07193.</li>
+<li>Siméoni et al., 2025. DINOv3. arXiv:2508.10104.</li>
+</ol>
+</body></html>

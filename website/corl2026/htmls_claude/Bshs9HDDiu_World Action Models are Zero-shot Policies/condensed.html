@@ -1,0 +1,162 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>World Action Models are Zero-shot Policies</title>
+<script>window.MathJax = {tex: {inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']], tags: 'ams'}};</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js"></script>
+<style>
+  body { font: 17px/1.6 Georgia, "Times New Roman", serif; max-width: 860px; margin: 0 auto; padding: 24px 20px 80px; color: #222; }
+  h1 { font-size: 1.7em; line-height: 1.25; } h2 { margin-top: 1.8em; } .src { font: 13px system-ui, sans-serif; color: #666; }
+  figure { margin: 1.5em 0; text-align: center; } figure img { max-width: 100%; }
+  figcaption { font-size: 0.9em; color: #444; text-align: left; margin-top: 6px; }
+  table { border-collapse: collapse; margin: 1em auto; font-size: 0.85em; } td, th { border: 1px solid #ccc; padding: 3px 6px; }
+  pre { background: #f6f8fa; padding: 10px; overflow-x: auto; font-size: 0.85em; } .refs { font-size: 0.85em; }
+</style></head><body>
+<p class="src">Condensed HTML version (text ~50% shorter; <a href="index.html">full version</a>) made by Claude (claude-opus-5-5) from <a href="../../pdfs/Bshs9HDDiu_World%20Action%20Models%20are%20Zero-shot%20Policies.pdf">the PDF</a>; check the PDF for exact wording and figures.</p>
+<h1>World Action Models are Zero-shot Policies</h1>
+<p>Seonghyeon Ye†, Yunhao Ge*, Kaiyuan Zheng*, Shenyuan Gao*, Sihyun Yu*, George Kurian*, Suneel Indupuru*, You Liang Tan*, et al.; Yuke Zhu†, Linxi "Jim" Fan†, Joel Jang† (NVIDIA). †Project Leads, *Core Contributors. https://dreamzero0.github.io</p>
+
+<figure data-fig="1"><img src="fig1.png" alt="Figure 1: Overview of DreamZero, a World Action Model that jointly predicts video and action (caption summarized)." loading="lazy"></figure>
+
+<h2>Abstract (summary)</h2>
+<p>DreamZero is a 14B World Action Model (WAM) on a pretrained video diffusion backbone that jointly predicts future video and actions. It generalizes over 2× better than state-of-the-art VLAs to new tasks and environments and runs real-time control at 7Hz. Video-only data from other robots or humans improves unseen tasks by over 42% relative, and it adapts to a new robot with 30 minutes of play data.</p>
+
+<h2>1. Introduction (summary)</h2>
+<p>VLAs inherit VLM semantic priors but struggle with novel motions and environments. WAMs inherit spatiotemporal priors from web video, making action learning closer to inverse dynamics. This enables learning from heterogeneous data, zero-shot generalization, and efficient cross-embodiment transfer. Contributions: the 14B model, over 2× gains on unseen verbs and motions, a 38× inference speedup for 7Hz control, cross-embodiment results, and open-source weights, inference and benchmark code.</p>
+
+<figure data-fig="2"><img src="fig2.png" alt="Figure 2: Joint Video and Action Prediction on unseen tasks (summarized)." loading="lazy"></figure>
+<figure data-fig="3"><img src="fig3.png" alt="Figure 3: Free-form Evaluation across diverse language-conditioned tasks (summarized)." loading="lazy"></figure>
+
+<h2>2. Related Work (summary)</h2>
+<h3>2.1 Vision Language Action Models</h3>
+<p>Covers modular planner-over-skills systems, end-to-end VLAs initialized from VLMs, and VLA generalization, mostly shown at object and semantic level.</p>
+<h3>2.2 Video Model-based Robot Policies</h3>
+<p>Prior work extracts actions from generated videos or jointly generates both. "WAM" is used since video is only one world-modeling target; WAMs combine end-to-end gradients with dense world-modeling supervision. Appendix A compares latent and 3D world models.</p>
+
+<h2>3. DreamZero</h2>
+<figure data-fig="4"><img src="fig4.png" alt="Figure 4: Model Architecture of DreamZero, showing training with joint flow matching and closed-loop inference with a KV cache (summarized)." loading="lazy"></figure>
+<p>Three choices address three challenges: joint end-to-end video-action training for alignment; an autoregressive architecture that puts ground-truth observations in the KV cache; and system-, implementation- and model-level optimizations for real-time inference.</p>
+
+<h3>3.1 Model Architecture</h3>
+<p>Joint prediction factorizes into video prediction and an inverse dynamics model:</p>
+\[ \pi_0(\mathbf{o}_{l:l+H},\mathbf{a}_{l:l+H}\mid \mathbf{o}_{0:l},\mathbf{c},\mathbf{q}_l)=\pi_0(\mathbf{o}_{l:l+H}\mid \mathbf{o}_{0:l},\mathbf{c},\mathbf{q}_l)\,\pi_0(\mathbf{a}_{l:l+H}\mid \mathbf{o}_{0:l+H},\mathbf{q}_l) \tag{1} \]
+<p>Only small state/action encoders and decoders are added; multi-view inputs are concatenated into one frame. Generation is chunk-wise autoregressive with \(K\) latent frames per chunk, trained via flow matching with a shared video-action timestep and teacher forcing.</p>
+\[ \mathbf{z}^k_{t_k}=t_k\mathbf{z}^k_1+(1-t_k)\mathbf{z}^k_0,\quad \mathbf{a}^k_{t_k}=t_k\mathbf{a}^k_1+(1-t_k)\mathbf{a}^k_0 \tag{2} \]
+\[ \mathcal{L}(\theta)=\mathbb{E}\left[\frac{1}{K}\sum_{k=1}^{K}w(t_k)\left\|\mathbf{u}_\theta([\mathbf{z}^k_{t_k},\mathbf{a}^k_{t_k}];\mathcal{C}_k,\mathbf{c},\mathbf{q}_k,t_k)-\mathbf{v}^k\right\|^2\right] \tag{3} \]
+
+<h3>3.2 Real-time Execution</h3>
+<p>Naive inference takes ~5.7s per chunk. Asynchronous execution runs the current chunk (48 steps at 30Hz) while computing the next, targeting ~200ms. System level: CFG parallelism over two GPUs and DiT velocity caching (16 to 4 denoising steps). Implementation level: torch.compile with CUDA Graphs, NVFP4 quantization, cuDNN attention, GPU-side scheduler. DreamZero-Flash samples video timesteps from \(t^{video}_k=1-\eta,\ \eta\sim\mathrm{Beta}(7,1)\) with uniform action timesteps, enabling single-step inference (~350ms to ~150ms). A Savitzky-Golay filter smooths actions.</p>
+<figure data-fig="5"><img src="fig5.png" alt="Figure 5: Decoupled Noise Schedules for video and action (summarized)." loading="lazy"></figure>
+
+<table>
+<tr><th>Optimization</th><th>H100</th><th>GB200</th></tr>
+<tr><td>Baseline</td><td>1×</td><td>1.1×</td></tr>
+<tr><td>+ CFG Parallelism</td><td>1.9×</td><td>1.8×</td></tr>
+<tr><td>+ DiT Caching</td><td>5.5×</td><td>5.4×</td></tr>
+<tr><td>+ Torch Compile + CUDA Graphs</td><td>8.9×</td><td>10.9×</td></tr>
+<tr><td>+ Kernel &amp; Scheduler Opts.</td><td>9.6×</td><td>14.8×</td></tr>
+<tr><td>+ Quantization (NVFP4)</td><td>—</td><td>16.6×</td></tr>
+<tr><td>+ DreamZero-Flash</td><td>—</td><td>38×</td></tr>
+</table>
+<p>Table 1: Cumulative inference speedups.</p>
+
+<h2>4. Experimental Setup (summary)</h2>
+<p><strong>Embodiments:</strong> AgiBot G1 (~500h teleoperation, 22 environments) and Franka (DROID); YAM and human egocentric data for cross-embodiment.</p>
+<p><strong>Baselines:</strong> GR00T N1.6 and π0.5, from scratch and pretrained, with matched compute.</p>
+<p><strong>Training:</strong> Wan2.1-I2V-14B backbone, 100K steps, batch 128.</p>
+<p><strong>Evaluation:</strong> unseen environments and objects throughout. AgiBot: 10 seen and 10 unseen tasks, 80 rollouts each; DROID: 20 seen and 20 unseen. Post-training: shirt folding (33h), fruit packing (12h), table bussing (40h).</p>
+<figure data-fig="6"><img src="fig6.png" alt="Figure 6: Distribution statistics for the AgiBot pretraining corpus (summarized)." loading="lazy"></figure>
+<figure data-fig="7"><img src="fig7.png" alt="Figure 7: AgiBot Evaluation Set-up (summarized)." loading="lazy"></figure>
+
+<h2>5. Experimental Results (summary)</h2>
+<figure data-fig="8"><img src="fig8.png" alt="Figure 8: Seen Task Evaluation (summarized)." loading="lazy"></figure>
+<ul>
+<li><strong>Q1 seen:</strong> 62.2% AgiBot task progress vs. 27.4% for the best pretrained VLA; from-scratch VLAs near zero.</li>
+<li><strong>Q2 unseen:</strong> 39.5% vs. 16.3% on AgiBot; DROID 49% progress, 22.5% success.</li>
+<li><strong>Q3 post-training:</strong> 90.5% vs. 79.8% for pretrained π0.5.</li>
+<li><strong>Q4 transfer:</strong> 38.3% rises to 54.3% (human video) and 55.4% (YAM video).</li>
+<li><strong>Q5:</strong> adapts to YAM with 30 minutes of play data.</li>
+<li><strong>Q6 Flash:</strong> 74% at 1 step vs. 52% for standard DreamZero.</li>
+</ul>
+<figure data-fig="9"><img src="fig9.png" alt="Figure 9: Zero-shot Generalization to Unseen Tasks (summarized)." loading="lazy"></figure>
+<figure data-fig="10"><img src="fig10.png" alt="Figure 10: Post-training Results (summarized)." loading="lazy"></figure>
+<figure data-fig="11"><img src="fig11.png" alt="Figure 11: Cross-Embodiment Transfer (summarized)." loading="lazy"></figure>
+
+<table>
+<tr><th>Method</th><th>Task Progress</th></tr>
+<tr><td>DreamZero</td><td>38.3% ± 7.6%</td></tr>
+<tr><td>+ Human2Robot</td><td>54.3% ± 10.4%</td></tr>
+<tr><td>+ Robot2Robot</td><td>55.4% ± 9.5%</td></tr>
+</table>
+<p>Table 2: Cross-embodiment transfer results.</p>
+
+<figure data-fig="12"><img src="fig12.png" alt="Figure 12: Few-shot Embodiment Adaptation (summarized)." loading="lazy"></figure>
+
+<table>
+<tr><th>Method</th><th>Steps</th><th>Task Progress</th><th>Latency</th></tr>
+<tr><td>DreamZero</td><td>4</td><td>83%</td><td>350ms</td></tr>
+<tr><td>DreamZero</td><td>1</td><td>52%</td><td>150ms</td></tr>
+<tr><td>DreamZero-Flash</td><td>1</td><td>74%</td><td>150ms</td></tr>
+</table>
+<p>Table 3: DreamZero-Flash evaluation on table bussing.</p>
+
+<h3>5.2 Ablations</h3>
+<table>
+<tr><th>Setting</th><th>Size</th><th>Data</th><th>Progress</th></tr>
+<tr><td>AR</td><td>14B</td><td>Repetitive</td><td>33%</td></tr>
+<tr><td>AR</td><td>14B</td><td>Diverse</td><td>50%</td></tr>
+<tr><td>AR</td><td>5B</td><td>Diverse</td><td>21%</td></tr>
+<tr><td>VLA</td><td>5B / 14B</td><td>Diverse</td><td>0%</td></tr>
+<tr><td>BD</td><td>14B</td><td>Diverse</td><td>50%</td></tr>
+</table>
+<p>Table 4: Model and data ablations (AR = autoregressive, BD = bidirectional). BD matches AR task progress, but AR is smoother and 3–4× faster.</p>
+
+<h2>6. Discussion and Future Work (summary)</h2>
+<p>Open directions: WAM scaling laws, in-the-wild human video, faster inference (now 7Hz on 2 GB200s), long-horizon reasoning beyond ~6s context, high-precision tasks, and embodiment trade-offs between degrees of freedom and human similarity.</p>
+
+<h2>Appendices (summary)</h2>
+<h3>A. Alternative world models</h3>
+<p>Latent (JEPA, Dreamer) and 3D point-cloud models need test-time planning; WAMs output actions directly.</p>
+
+<h3>B. Bidirectional vs. autoregressive</h3>
+<p>Bidirectional models need video subsampling to align with language, distorting native FPS; autoregressive ones don't.</p>
+<figure data-fig="13"><img src="fig13.png" alt="Figure 13: Bidirectional vs. Autoregressive WAMs (summarized)." loading="lazy"></figure>
+
+<h3>C. Model and training details</h3>
+<p>Chunk size \(K=2\) latent frames, \(M=4\) chunks. Video at 5 FPS; action horizon \(H=48\) at 30Hz (AgiBot) and \(H=24\) at 15Hz (DROID), 1.6 s per chunk.</p>
+<figure data-fig="14"><img src="fig14.png" alt="Figure 14: Attention strategy of DreamZero during training and inference (summarized)." loading="lazy"></figure>
+<pre>Algorithms 1–2 (paraphrased outline):
+Training: for each chunk, sample timestep(s) (Beta(7,1) for video in Flash mode),
+  noise video/action latents, predict joint velocity, and minimize MSE.
+Inference: prefill the KV cache with the observation; loop: jointly denoise
+  video and action (with DiT caching), filter and execute actions asynchronously,
+  then re-encode the real observation into the KV cache.</pre>
+
+<h3>D. Real-time execution details</h3>
+<p>Details on CFG parallelism, DiT caching, torch.compile, NVFP4/FP8 quantization, cuDNN SDPA, the GPU UniPC scheduler, and Flash.</p>
+
+<h3>E. Data collection</h3>
+<p>Episodes combine three coarse tasks; tasks retire after 50 episodes, so the list keeps growing.</p>
+<figure data-fig="15"><img src="fig15.png" alt="Figure 15: Data Collection Environments across 22 diverse real-world settings (summarized)." loading="lazy"></figure>
+
+<h3>F–G. Evaluation setups</h3>
+<p>Tables 5–7 list AgiBot and DROID tasks and instructions.</p>
+
+<h3>H. Failure cases</h3>
+<p>Execution follows generated video, so failures stem from flawed visual plans.</p>
+<figure data-fig="16"><img src="fig16.png" alt="Figure 16: Illustration of generated and executed pairs where the video prediction failed (summarized)." loading="lazy"></figure>
+
+<h2>References</h2>
+<ol class="refs">
+<li>Albergo et al., Stochastic interpolants, 2023.</li>
+<li>Bjorck et al., GR00T N1, 2025.</li>
+<li>Black et al., π0, 2024.</li>
+<li>Brohan et al., RT-2, 2023.</li>
+<li>Khazatsky et al., DROID, 2024.</li>
+<li>Kim et al., Cosmos Policy, 2026.</li>
+<li>Physical Intelligence, π0.5, 2025.</li>
+<li>Team Wan, Wan video models, 2025.</li>
+<li>Pai et al., mimic-video, 2025.</li>
+<li>Lipman et al., Flow matching, 2022.</li>
+<li>(Abbreviated; see the original paper for all 92 references.)</li>
+</ol>
+</body></html>

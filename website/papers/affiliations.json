@@ -36,6 +36,20 @@
    "candidates": [
     "Bosch Center for Artiﬁcial Inteligence, Haifa, Israel"
    ]
+  },
+  "arxiv-2606-24457": {
+   "companies": [],
+   "universities": [
+    "Imperial College London"
+   ],
+   "candidates": [
+    "J. Jing, R. Zuo, Z. Shen, S. Zhou, R. A. Potamias, S. Zafeiriou, K. Mikolajczyk, and J. Deng are with Imperial College London, London SW7"
+   ]
+  },
+  "arxiv-2511-08544": {
+   "companies": [],
+   "universities": [],
+   "candidates": []
   }
  },
  "ror": {
@@ -71,6 +85,13 @@
    ]
   },
   "NVIDIA": null,
-  "Bosch Center for Artiﬁcial Inteligence, Haifa, Israel": null
+  "Bosch Center for Artiﬁcial Inteligence, Haifa, Israel": null,
+  "J. Jing, R. Zuo, Z. Shen, S. Zhou, R. A. Potamias, S. Zafeiriou, K. Mikolajczyk, and J. Deng are with Imperial College London, London SW7": {
+   "name": "Imperial College London",
+   "types": [
+    "education",
+    "funder"
+   ]
+  }
  }
 }

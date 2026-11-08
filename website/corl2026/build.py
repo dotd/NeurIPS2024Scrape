@@ -24,6 +24,8 @@ PRESENTATION = {"Oral": "🎤 Oral", "Spotlight": "✨ Spotlight", "Poster": "�
 #   github.json      specific_scripts/corl2026_github.py       affiliations.json specific_scripts/corl2026_affiliations.py
 #   robots.json      specific_scripts/corl2026_robots.py       backbones.json   specific_scripts/corl2026_backbones.py
 #   summaries.json, ratings.json, links.json, htmls_claude/, htmls_python/   website/serve.py (buttons on the page)
+#   schedule.json    specific_scripts/corl2026_schedule.py      (talk + poster session of each paper)
+#   drive_movies.json specific_scripts/corl2026_drive_movies.py (Google Drive copies of the movies)
 #   movies/paper_movies/<id>_<title>[_N].<ext>                 specific_scripts/corl2026_sort_movies.py
 HTML_KINDS = ("claude", "python")  # htmls_<kind>/<id>_<title>/index.html
 TOP_COMPANIES, TOP_UNIVERSITIES, TOP_RESEARCHERS, TOP_ROBOTS, TOP_KEYWORDS = 20, 50, 50, 50, 50
@@ -82,6 +84,10 @@ HTML = r"""<!doctype html>
   summary .sumflag { margin-left: 6px; font-weight: normal; font-size: 12px; color: #777; }
   summary .badges { font-weight: normal; color: #777; font-size: 12px; margin-left: 6px; }
   .view.active { display: block; }
+  .btbar { position: sticky; top: 0; z-index: 4; background: #fff; padding: 8px 0; display: flex; gap: 8px; align-items: center; }
+  .btbar select { padding: 5px 8px; border: 1px solid #bbb; border-radius: 6px; font-size: 14px; }
+  .btnum { color: #2b6cb0; font-weight: bold; }
+  .drive { margin: 4px 0; font-size: 13px; }
   a { color: #2b6cb0; }
 
   /* table view */
@@ -116,9 +122,19 @@ HTML = r"""<!doctype html>
 </head>
 <body>
 <nav>
-  <b>__TITLE__</b>
+  <select id="site" title="Go to another paper browser" style="font-weight:bold;padding:5px 8px;border:1px solid #bbb;border-radius:6px">
+    <option data-dir="corl2026" value="/Corl2026/">CoRL 2026</option>
+    <option data-dir="papers" value="/Papers/">My papers</option>
+  </select>
+  <script>  // ponytail: sites listed by hand, same as SITES in serve.py
+  { const sel = document.getElementById('site');
+    sel.value = [...sel.options].find(o => o.textContent === '__TITLE__')?.value ?? sel.value;
+    sel.onchange = () => location.href = location.protocol.startsWith('http') ? sel.value
+      : '../' + sel.selectedOptions[0].dataset.dir + '/index.html'; }  // opened as a file: the sibling folder
+  </script>
   <button data-view="papers">Papers</button>
   <button data-view="table">Table</button>
+  <button data-view="bytime">🕒 By time</button>
   <span class="stats"></span>
   <span class="count"></span>
   <button id="clear" title="Clear every filter, search and sort">↺ Reset filters</button>
@@ -126,6 +142,7 @@ HTML = r"""<!doctype html>
 __ADD__
 <div id="filters">
   <input type="search" id="q" placeholder="🔍 search titles, authors, abstracts, keywords…">
+  <details class="facet" data-key="d"><summary>📅 Session</summary><div class="panel"></div></details>
   <details class="facet" data-key="t"><summary>🎤 Oral / Spotlight / Poster</summary><div class="panel"></div></details>
   <details class="facet" data-key="p"><summary>🏷️ Primary keyword</summary><div class="panel"></div></details>
   <details class="facet" data-key="s"><summary>🔖 Secondary keyword</summary><div class="panel"></div></details>
@@ -170,10 +187,13 @@ __ADD__
 </div>
 <div id="table" class="view"><table><colgroup></colgroup><thead><tr></tr></thead><tbody></tbody></table></div>
 <div id="papers" class="view"></div>
+<div id="bytime" class="view"><div class="btbar"><button id="btPrev" title="Previous session">◀</button>
+  <select id="btSession"></select><button id="btNext" title="Next session">▶</button><span id="btCount"></span></div>
+  <div id="btList"></div></div>
 <svg hidden><symbol id="gh" viewBox="0 0 16 16"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></symbol></svg>
 <script id="data" type="application/json">__DATA__</script>
 <script>
-const {columns, rows, firstPage, meta, facets, summaries, ratings, links, htmlv, movies, here, store} = JSON.parse(document.getElementById('data').textContent);
+const {columns, rows, firstPage, meta, facets, summaries, ratings, links, htmlv, movies, here, store, schedule, drive} = JSON.parse(document.getElementById('data').textContent);
 
 function cellContent(v) {
   if (/^https:\/\/github\.com\/\S+ /.test(v)) {  // several space-separated repos
@@ -202,6 +222,7 @@ const buttons = document.querySelectorAll('nav button[data-view]');
 function show(view) {
   buttons.forEach(b => b.classList.toggle('active', b.dataset.view === view));
   document.querySelectorAll('.view').forEach(v => v.classList.toggle('active', v.id === view));
+  if (view === 'bytime') renderByTime();
 }
 buttons.forEach(b => b.onclick = () => show(b.dataset.view));
 
@@ -417,7 +438,7 @@ function htmlBoxes(pid) {
 const titleIdx = columns.indexOf('title'), idIdx = columns.indexOf('id'), ghIdx = columns.indexOf('💻 github');
 const kwIdx = ['primary_keyword', 'secondary_keyword', 'free_keyword_1', 'free_keyword_2', '🏷️ keywords']
   .map(c => columns.indexOf(c)).filter(i => i >= 0);
-dets = rows.map((r, ri) => {
+function card(r, ri) {  // one paper's dropdown; the By time view builds its own copies
   const d = document.createElement('details'), s = document.createElement('summary');
   s.textContent = r[titleIdx];
   const kws = kwIdx.map(i => r[i]).filter(Boolean);
@@ -436,7 +457,7 @@ dets = rows.map((r, ri) => {
   const sumFlag = document.createElement('span');
   sumFlag.className = 'sumflag'; sumFlag.textContent = '📝'; sumFlag.hidden = true;
   s.append(stars(r[idIdx].split('id=').pop()), sumFlag);
-  const m = meta[ri], b = [...m.t];
+  const m = meta[ri], b = [...m.t, ...m.d.map(x => '📅 ' + x)];
   if (m.cites) b.push(`📈 ${m.cites}`);
   if (m.h != null) b.push(`🏅 h ${m.h}`);
   if (m.b.length) b.push('🤖 ' + m.b.join(', '));
@@ -477,7 +498,22 @@ dets = rows.map((r, ri) => {
     const mv = document.createElement('details'), ms = document.createElement('summary');
     ms.textContent = movs.length > 1 ? `🎬 Movies (${movs.length})` : '🎬 Movie';
     const box = document.createElement('div'); box.className = 'movies';
-    mv.append(ms, box);
+    const ids = movs.map(p => drive.files[p.split('/').pop()]);
+    if (ids.some(Boolean)) {  // the same movies on Google Drive; they also play where the local files aren't (GitHub Pages)
+      const dl2 = document.createElement('div'); dl2.className = 'drive';
+      dl2.append('☁️ Google Drive: ');
+      ids.forEach((id, i) => {
+        if (!id) return;
+        const a = document.createElement('a');
+        a.href = `https://drive.google.com/file/d/${id}/view`; a.target = '_blank';
+        a.textContent = movs.length > 1 ? `movie ${i + 1}` : 'movie';
+        dl2.append(a, ' · ');
+      });
+      const f = document.createElement('a');
+      f.href = drive.folder; f.target = '_blank'; f.textContent = 'all movies folder';
+      dl2.append(f);
+      mv.append(ms, dl2, box);
+    } else mv.append(ms, box);
     mv.ontoggle = () => {  // players made on first open; preload="metadata" fetches only the first frame until played
       if (!mv.open) return box.querySelectorAll('video').forEach(v => v.pause());
       if (box.childElementCount) return;
@@ -492,10 +528,11 @@ dets = rows.map((r, ri) => {
     dl.before(mv);  // right after the HTML / link buttons, before the fields
   }
   return d;
-});
+}
+dets = rows.map(card);
 
 // ---- filters ----
-const picked = {t: new Set(), p: new Set(), s: new Set(), k: new Set(), b: new Set(), m: new Set(), c: new Set(), u: new Set(), r: new Set()};
+const picked = {d: new Set(), t: new Set(), p: new Set(), s: new Set(), k: new Set(), b: new Set(), m: new Set(), c: new Set(), u: new Set(), r: new Set()};
 document.querySelectorAll('.facet').forEach(fd => {
   const key = fd.dataset.key, panel = fd.querySelector('.panel'), label = fd.querySelector('summary');
   if (!(facets[key] || []).length) return fd.hidden = true;  // nothing to pick on this site (e.g. Oral/Poster on your papers)
@@ -564,11 +601,13 @@ function applyFilters() {
   };
   let idx = rows.map((_, i) => i).filter(i => gh(i) && sm(i) && rt(i) &&
     terms.every(t => haystack[i].includes(t)) &&
-    hit('t', i) && hit('p', i) && hit('s', i) && hit('k', i) && hit('b', i) && hit('m', i) && hit('c', i) && hit('u', i) && hit('r', i) && (meta[i].h || 0) >= minH && (meta[i].cites || 0) >= minC);
+    hit('d', i) && hit('t', i) && hit('p', i) && hit('s', i) && hit('k', i) && hit('b', i) && hit('m', i) && hit('c', i) && hit('u', i) && hit('r', i) && (meta[i].h || 0) >= minH && (meta[i].cites || 0) >= minC);
   if (sort === 'az') idx.sort((a, b) => rows[a][titleIdx].localeCompare(rows[b][titleIdx], undefined, {sensitivity: 'base'}));
   else if (sort) idx.sort((a, b) => (meta[b][sort] || 0) - (meta[a][sort] || 0));
   table.querySelector('tbody').replaceChildren(...idx.map(i => trs[i]));
   document.getElementById('papers').replaceChildren(...idx.map(i => dets[i]));
+  shown = new Set(idx);
+  if (document.getElementById('bytime').classList.contains('active')) renderByTime();
   document.querySelector('.count').textContent = idx.length === rows.length
     ? `📄 ${rows.length} papers` : `📄 ${idx.length} / ${rows.length} papers`;
   saveFilters();
@@ -589,6 +628,36 @@ function updateStats() {
     `💲 $${spent.toFixed(2)} Claude spend`,
   ].join('  ·  ');
 }
+
+// ---- by-time view: one session's papers in presentation order (talk order / poster number), same filters ----
+const btSel = document.getElementById('btSession'), posterIdx = columns.indexOf('🖼️ poster session');
+const rowOf = Object.fromEntries(rows.map((r, i) => [r[idIdx].split('id=').pop(), i]));
+let shown = null;  // rows passing the filters, set by applyFilters
+if (!schedule.sessions.length) document.querySelector('nav button[data-view=bytime]').hidden = true;  // no schedule (your papers)
+btSel.append(...schedule.sessions.map(x => new Option(x, x)));
+// ponytail: "Mon 11/9, 5:00–6:30 PM" read as this year in this computer's time zone (not converted from the venue's)
+const endOf = x => {
+  const m = x.match(/(\d+)\/(\d+),.*–(\d+):(\d+)\s*([AP]M)/);
+  return m && new Date(new Date().getFullYear(), m[1] - 1, +m[2], m[3] % 12 + (m[5] === 'PM' ? 12 : 0), +m[4]);
+};
+btSel.value = schedule.sessions.find(x => endOf(x) > new Date()) || schedule.sessions[0] || '';  // the next session
+function renderByTime() {
+  const ids = schedule.order[btSel.value] || [], poster = btSel.value.startsWith('Poster');
+  const list = ids.map((pid, k) => [rowOf[pid], k]).filter(([i]) => i != null && (!shown || shown.has(i)));
+  document.getElementById('btCount').textContent = `📄 ${list.length} / ${ids.length} papers` +
+    (list.length < ids.length ? ' (the rest are hidden by your filters)' : '');
+  document.getElementById('btList').replaceChildren(...list.map(([i, k]) => {
+    const d = card(rows[i], i), n = document.createElement('span');
+    n.className = 'btnum';
+    n.textContent = poster ? (rows[i][posterIdx].match(/#\d+$/) || [''])[0] + ' ' : `${k + 1}. `;
+    d.querySelector('summary').prepend(n);
+    return d;
+  }));
+}
+btSel.onchange = renderByTime;
+const step = by => { btSel.selectedIndex = Math.min(Math.max(btSel.selectedIndex + by, 0), btSel.options.length - 1); renderByTime(); };
+document.getElementById('btPrev').onclick = () => step(-1);
+document.getElementById('btNext').onclick = () => step(1);
 
 restoreFilters();
 renderTable();
@@ -624,6 +693,7 @@ def openalex_meta(rows, columns, here):
     oa = load(here, "openalex.json", {"works": {}, "authors": {}})
     robots = load(here, "robots.json", {})
     backbones = load(here, "backbones.json", {})
+    schedule = load(here, "schedule.json", {"papers": {}, "sessions": []})
     pdf_aff = load(here, "affiliations.json", {"papers": {}})["papers"]
     authors = oa["authors"]
     id_col = columns.index("id")
@@ -644,6 +714,7 @@ def openalex_meta(rows, columns, here):
             "u": sorted({re.sub(r"^The ", "", n) for n in  # "The University of Tokyo" == "University of Tokyo"
                          set(aff["universities"]) | {n for n, t in insts if t == "education"}}),
             "t": [PRESENTATION.get(r[venue_col].split()[-1], r[venue_col])] if venue_col is not None and r[venue_col] else [],
+            "d": schedule["papers"].get(pid, {}).get("sessions", []),
             "b": robots.get(pid, []),
             "m": backbones.get(pid, []),
             "k": r[gen_col].split("; ") if gen_col is not None and r[gen_col] else [],
@@ -666,7 +737,9 @@ def openalex_meta(rows, columns, here):
     top_ids = {a["id"] for a in researchers}
     for m in meta:
         m["r"] = [a for a in m["r"] if a in top_ids]
-    return meta, {"c": top("c", TOP_COMPANIES), "u": top("u", TOP_UNIVERSITIES), "r": researchers, "b": top("b", TOP_ROBOTS), "m": top("m", TOP_ROBOTS), "k": top("k", TOP_KEYWORDS), "t": top("t", 3),
+    in_session = collections.Counter(x for m in meta for x in m["d"])
+    sessions = [{"id": x, "name": x, "note": f"{in_session[x]} 📄"} for x in schedule["sessions"]]  # in time order
+    return meta, {"d": sessions, "c": top("c", TOP_COMPANIES), "u": top("u", TOP_UNIVERSITIES), "r": researchers, "b": top("b", TOP_ROBOTS), "m": top("m", TOP_ROBOTS), "k": top("k", TOP_KEYWORDS), "t": top("t", 3),
                   **{k: top(k, TOP_KEYWORDS) for k in kw_cols}}
 
 
@@ -714,6 +787,12 @@ def build(here, title, columns, rows, add_box="", store="corl"):
     columns.insert(columns.index("local_pdf") + 1, "💻 github")
     for r in rows:
         r.insert(columns.index("💻 github"), " ".join(github.get(r[0].split("id=")[-1], [])))
+    schedule = load(here, "schedule.json", {"papers": {}})["papers"]
+    at = columns.index("title") + 1
+    columns[at:at] = ["🎤 talk", "🖼️ poster session"]
+    for r in rows:
+        s = schedule.get(r[0].split("id=")[-1], {})
+        r[at:at] = [s.get("talk", ""), s.get("poster", "")]
     meta, facets = openalex_meta(rows, columns, here)
     for name, key in [("🤖 robots", "b"), ("🧠 backbones", "m"), ("🏢 companies", "c"), ("🎓 universities", "u")]:
         columns.append(name)
@@ -729,7 +808,10 @@ def build(here, title, columns, rows, add_box="", store="corl"):
                        "facets": facets, "summaries": load(here, "summaries.json", {}),
                        "ratings": load(here, "ratings.json", {}), "links": load(here, "links.json", {}),
                        "htmlv": {**{k: html_versions(k, here) for k in HTML_KINDS}, "claude2": condensed_versions(here)},
-                       "movies": paper_movies(here), "here": here, "store": store}, ensure_ascii=False).replace("</", "<\\/")
+                       "movies": paper_movies(here), "here": here, "store": store,
+                       "drive": load(here, "drive_movies.json", {"folder": "", "files": {}}),
+                       "schedule": {k: v for k, v in load(here, "schedule.json", {"sessions": [], "order": {}}).items()
+                                    if k in ("sessions", "order")}}, ensure_ascii=False).replace("</", "<\\/")
     out = os.path.join(here, "index.html")
     with open(out, "w") as f:
         f.write(HTML.replace("__TITLE__", title).replace("__ADD__", add_box).replace("__DATA__", data))

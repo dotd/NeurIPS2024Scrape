@@ -49,5 +49,38 @@
   "pdf": "https://arxiv.org/pdf/2203.01153",
   "added": "2026-11-04 09:12",
   "youtube": ""
+ },
+ "arxiv-2606-24457": {
+  "title": "Lite Any Stereo V2: Faster and Stronger Efficient Zero-Shot Stereo Matching",
+  "authors": "Junpeng Jing, Ronglai Zuo, Zhelun Shen, Shangchen Zhou, Rolandos Alexandros Potamias, Stefanos Zafeiriou, Krystian Mikolajczyk, Jiankang Deng",
+  "abstract": "Recent advances in stereo matching have achieved remarkable accuracy, but often rely on large models, heavy computation, or additional foundation-model priors, making them difficult to deploy on resource-constrained platforms. In contrast, efficient stereo models offer faster inference but are commonly considered less capable of strong zero-shot generalization. In this paper, we challenge this assumption by introducing Lite Any Stereo V2 (LAS2), an ultra-fast model series designed for efficient zero-shot stereo matching. LAS2 is developed from both architecture and training perspectives. Architecturally, we revisit efficient stereo design under practical deployment settings and propose a 2D-only cost aggregation framework, optimized for real inference latency rather than theoretical MACs alone. For training, we develop a three-stage strategy that combines synthetic supervision, self-distillation, and real-world knowledge distillation. To improve the reliability of real-world pseudo supervision, we further introduce pseudo-label filtering and an error-clamping operation, enabling smoother synthetic-to-real transfer. We instantiate LAS2 as a family of models, including feed-forward variants for different efficiency budgets and an iterative variant for higher accuracy. Extensive experiments show that LAS2 achieves state-of-the-art accuracy among efficient stereo methods while maintaining significantly lower latency. Specifically, LAS2-H achieves stronger overall zero-shot performance than the iterative method Fast-FoundationStereo, with 1.8x and 2.7x faster inference on H200 and Orin, respectively. The project page, demos, and code are available at https://tomtomtommi.github.io/LiteAnyStereoV2/.",
+  "keywords": [
+   "stereo matching",
+   "zero-shot generalization",
+   "knowledge distillation",
+   "efficient inference",
+   "depth estimation",
+   "pseudo-labeling"
+  ],
+  "source": "https://arxiv.org/pdf/2606.24457",
+  "pdf": "https://arxiv.org/pdf/2606.24457",
+  "youtube": "",
+  "added": "2026-11-05 10:00"
+ },
+ "arxiv-2511-08544": {
+  "title": "LeJEPA: Provable and Scalable Self-Supervised Learning Without the Heuristics",
+  "authors": "Randall Balestriero, Yann LeCun",
+  "abstract": "Learning manipulable representations of the world and its dynamics is central to AI. Joint-Embedding Predictive Architectures (JEPAs) offer a promising blueprint, but lack of practical guidance and theory has led to ad-hoc R&D. We present a comprehensive theory of JEPAs and instantiate it in {\\bf LeJEPA}, a lean, scalable, and theoretically grounded training objective. First, we identify the isotropic Gaussian as the optimal distribution that JEPAs' embeddings should follow to minimize downstream prediction risk. Second, we introduce a novel objective--{\\bf Sketched Isotropic Gaussian Regularization} (SIGReg)--to constrain embeddings to reach that ideal distribution. Combining the JEPA predictive loss with SIGReg yields LeJEPA with numerous theoretical and practical benefits: (i) single trade-off hyperparameter, (ii) linear time and memory complexity, (iii) stability across hyper-parameters, architectures (ResNets, ViTs, ConvNets) and domains, (iv) heuristics-free, e.g., no stop-gradient, no teacher-student, no hyper-parameter schedulers, and (v) distributed training-friendly implementation requiring only $\\approx$50 lines of code. Our empirical validation covers 10+ datasets, 60+ architectures, all with varying scales and domains. As an example, using imagenet-1k for pretraining and linear evaluation with frozen backbone, LeJEPA reaches 79\\% with a ViT-H/14. We hope that the simplicity and theory-friendly ecosystem offered by LeJEPA will reestablish self-supervised pre-training as a core pillar of AI research (\\href{https://github.com/rbalestr-lab/lejepa}{GitHub repo}).",
+  "keywords": [
+   "self-supervised learning",
+   "joint-embedding predictive architectures",
+   "representation collapse",
+   "isotropic gaussian regularization",
+   "scalable training"
+  ],
+  "source": "https://arxiv.org/pdf/2511.08544",
+  "pdf": "https://arxiv.org/pdf/2511.08544",
+  "youtube": "https://www.youtube.com/watch?v=5ARoR4YfQg4",
+  "added": "2026-11-06 15:58"
  }
 }

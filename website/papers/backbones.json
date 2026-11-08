@@ -17,5 +17,14 @@
  ],
  "arxiv-2203-01153": [
   "ResNet"
+ ],
+ "arxiv-2606-24457": [
+  "Depth Anything",
+  "EfficientNet"
+ ],
+ "arxiv-2511-08544": [
+  "ResNet",
+  "ViT",
+  "DINO / DINOv2 / DINOv3"
  ]
 }

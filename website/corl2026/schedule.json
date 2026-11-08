@@ -1,0 +1,5150 @@
+{
+ "papers": {
+  "gQFYIM5dJy": {
+   "sessions": [
+    "Spotlight S1 · Mon 11/9, 9:00–9:30 AM",
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "talk": "Spotlight S1: Generalist policies, memory and transfer · Mon 11/9, 9:00–9:30 AM · Hilton Austin",
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #115"
+  },
+  "2Z8xQxrlsY": {
+   "sessions": [
+    "Spotlight S1 · Mon 11/9, 9:00–9:30 AM",
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "talk": "Spotlight S1: Generalist policies, memory and transfer · Mon 11/9, 9:00–9:30 AM · Hilton Austin",
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #65"
+  },
+  "z47bcul4Zk": {
+   "sessions": [
+    "Spotlight S1 · Mon 11/9, 9:00–9:30 AM",
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "talk": "Spotlight S1: Generalist policies, memory and transfer · Mon 11/9, 9:00–9:30 AM · Hilton Austin",
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #64"
+  },
+  "5TiiTY1fK3": {
+   "sessions": [
+    "Spotlight S1 · Mon 11/9, 9:00–9:30 AM",
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "talk": "Spotlight S1: Generalist policies, memory and transfer · Mon 11/9, 9:00–9:30 AM · Hilton Austin",
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #42"
+  },
+  "Q6xWLHyg6x": {
+   "sessions": [
+    "Spotlight S1 · Mon 11/9, 9:00–9:30 AM",
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "talk": "Spotlight S1: Generalist policies, memory and transfer · Mon 11/9, 9:00–9:30 AM · Hilton Austin",
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #28"
+  },
+  "QwpnI3BlwT": {
+   "sessions": [
+    "Spotlight S1 · Mon 11/9, 9:00–9:30 AM",
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "talk": "Spotlight S1: Generalist policies, memory and transfer · Mon 11/9, 9:00–9:30 AM · Hilton Austin",
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #14"
+  },
+  "YTw6LOO9C5": {
+   "sessions": [
+    "Spotlight S1 · Mon 11/9, 9:00–9:30 AM",
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "talk": "Spotlight S1: Generalist policies, memory and transfer · Mon 11/9, 9:00–9:30 AM · Hilton Austin",
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #19"
+  },
+  "HmdwOezjlQ": {
+   "sessions": [
+    "Spotlight S1 · Mon 11/9, 9:00–9:30 AM",
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "talk": "Spotlight S1: Generalist policies, memory and transfer · Mon 11/9, 9:00–9:30 AM · Hilton Austin",
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #114"
+  },
+  "4RLjGPEfpH": {
+   "sessions": [
+    "Spotlight S1 · Mon 11/9, 9:00–9:30 AM",
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "talk": "Spotlight S1: Generalist policies, memory and transfer · Mon 11/9, 9:00–9:30 AM · Hilton Austin",
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #66"
+  },
+  "cfzFrOJmKA": {
+   "sessions": [
+    "Oral O1 · Mon 11/9, 10:30–11:00 AM",
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "talk": "Oral O1: Generalist policies and context scaling · Mon 11/9, 10:30–11:00 AM · Hilton Austin",
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #67"
+  },
+  "NHE9q2cz1n": {
+   "sessions": [
+    "Oral O1 · Mon 11/9, 10:30–11:00 AM",
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "talk": "Oral O1: Generalist policies and context scaling · Mon 11/9, 10:30–11:00 AM · Hilton Austin",
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #47"
+  },
+  "5XKFwWrW0v": {
+   "sessions": [
+    "Oral O1 · Mon 11/9, 10:30–11:00 AM",
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "talk": "Oral O1: Generalist policies and context scaling · Mon 11/9, 10:30–11:00 AM · Hilton Austin",
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #63"
+  },
+  "f9grq4Ncx9": {
+   "sessions": [
+    "Oral O2 · Mon 11/9, 11:00–11:30 AM",
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "talk": "Oral O2: World models and temporal representations · Mon 11/9, 11:00–11:30 AM · Hilton Austin",
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #53"
+  },
+  "FVZKpmPHV8": {
+   "sessions": [
+    "Oral O2 · Mon 11/9, 11:00–11:30 AM",
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "talk": "Oral O2: World models and temporal representations · Mon 11/9, 11:00–11:30 AM · Hilton Austin",
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #48"
+  },
+  "Bshs9HDDiu": {
+   "sessions": [
+    "Oral O2 · Mon 11/9, 11:00–11:30 AM",
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "talk": "Oral O2: World models and temporal representations · Mon 11/9, 11:00–11:30 AM · Hilton Austin",
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #51"
+  },
+  "TscNG5Wcwn": {
+   "sessions": [
+    "Oral O3 · Mon 11/9, 11:30 AM–12:00 PM",
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "talk": "Oral O3: Data, simulation and evaluation · Mon 11/9, 11:30 AM–12:00 PM · Hilton Austin",
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #199"
+  },
+  "c4Z0Y8gvnI": {
+   "sessions": [
+    "Oral O3 · Mon 11/9, 11:30 AM–12:00 PM",
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "talk": "Oral O3: Data, simulation and evaluation · Mon 11/9, 11:30 AM–12:00 PM · Hilton Austin",
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #196"
+  },
+  "RdvH11pAfJ": {
+   "sessions": [
+    "Oral O3 · Mon 11/9, 11:30 AM–12:00 PM",
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "talk": "Oral O3: Data, simulation and evaluation · Mon 11/9, 11:30 AM–12:00 PM · Hilton Austin",
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #116"
+  },
+  "mHCqiRUiHi": {
+   "sessions": [
+    "Spotlight S2 · Mon 11/9, 2:30–3:00 PM",
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "talk": "Spotlight S2: Efficient execution, world models and learning · Mon 11/9, 2:30–3:00 PM · Hilton Austin",
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #59"
+  },
+  "dngZLI0SlV": {
+   "sessions": [
+    "Spotlight S2 · Mon 11/9, 2:30–3:00 PM",
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "talk": "Spotlight S2: Efficient execution, world models and learning · Mon 11/9, 2:30–3:00 PM · Hilton Austin",
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #109"
+  },
+  "HbuX1Fe8bl": {
+   "sessions": [
+    "Spotlight S2 · Mon 11/9, 2:30–3:00 PM",
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "talk": "Spotlight S2: Efficient execution, world models and learning · Mon 11/9, 2:30–3:00 PM · Hilton Austin",
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #112"
+  },
+  "OckqYiY2QM": {
+   "sessions": [
+    "Spotlight S2 · Mon 11/9, 2:30–3:00 PM",
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "talk": "Spotlight S2: Efficient execution, world models and learning · Mon 11/9, 2:30–3:00 PM · Hilton Austin",
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #60"
+  },
+  "QBAA8svAIK": {
+   "sessions": [
+    "Spotlight S2 · Mon 11/9, 2:30–3:00 PM",
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "talk": "Spotlight S2: Efficient execution, world models and learning · Mon 11/9, 2:30–3:00 PM · Hilton Austin",
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #88"
+  },
+  "v24DO7JOuN": {
+   "sessions": [
+    "Spotlight S2 · Mon 11/9, 2:30–3:00 PM",
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "talk": "Spotlight S2: Efficient execution, world models and learning · Mon 11/9, 2:30–3:00 PM · Hilton Austin",
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #52"
+  },
+  "FFB8qNJwV2": {
+   "sessions": [
+    "Spotlight S2 · Mon 11/9, 2:30–3:00 PM",
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "talk": "Spotlight S2: Efficient execution, world models and learning · Mon 11/9, 2:30–3:00 PM · Hilton Austin",
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #61"
+  },
+  "WvR13cRtRf": {
+   "sessions": [
+    "Spotlight S2 · Mon 11/9, 2:30–3:00 PM",
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "talk": "Spotlight S2: Efficient execution, world models and learning · Mon 11/9, 2:30–3:00 PM · Hilton Austin",
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #62"
+  },
+  "6T2ebANGy5": {
+   "sessions": [
+    "Spotlight S2 · Mon 11/9, 2:30–3:00 PM",
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "talk": "Spotlight S2: Efficient execution, world models and learning · Mon 11/9, 2:30–3:00 PM · Hilton Austin",
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #54"
+  },
+  "jeNVGuJQrb": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #1"
+  },
+  "ZAdTLinUnd": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #2"
+  },
+  "qKU6lifnPU": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #3"
+  },
+  "3M39Fmw8Mx": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #4"
+  },
+  "X2mRYIgshj": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #5"
+  },
+  "HvKifHMHcM": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #6"
+  },
+  "Z04KxYWC6V": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #7"
+  },
+  "mG3eBTsBiG": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #8"
+  },
+  "uhnmcdamCa": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #9"
+  },
+  "wRLEgpRnVR": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #10"
+  },
+  "VY6U0drX88": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #11"
+  },
+  "tegLlXBRCU": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #12"
+  },
+  "fGWkovHMQE": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #13"
+  },
+  "EfgCnZgmvN": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #15"
+  },
+  "iy5oCeLdEF": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #16"
+  },
+  "ghx1d6PQUR": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #17"
+  },
+  "yNHgrgATuY": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #18"
+  },
+  "Y55iJjxMsh": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #20"
+  },
+  "03qRtmw4qx": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #21"
+  },
+  "JKoP9L6myQ": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #22"
+  },
+  "XnIdgAtBX7": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #23"
+  },
+  "IjnCc1OZnJ": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #24"
+  },
+  "rYkaehgzzO": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #25"
+  },
+  "oKJnHTluoA": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #26"
+  },
+  "U620dzd51N": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #27"
+  },
+  "rcE4amkjBq": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #29"
+  },
+  "1uKIsrjCvt": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #30"
+  },
+  "Afq9dTKP09": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #31"
+  },
+  "PEWWDUL10X": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #32"
+  },
+  "wKRawikMuG": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #33"
+  },
+  "0HnCTHL4fw": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #34"
+  },
+  "0PThTAIwPD": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #35"
+  },
+  "n31eEof0k3": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #36"
+  },
+  "aPppmSJzb5": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #37"
+  },
+  "TTJ3uxLcxL": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #38"
+  },
+  "TZM6J864Lf": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #39"
+  },
+  "8FGH4qAdNB": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #40"
+  },
+  "hJv9yhbgxR": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #41"
+  },
+  "rnp2Bj4RUX": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #43"
+  },
+  "Q4ehHMIPmb": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #44"
+  },
+  "GqqwqejrTq": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #45"
+  },
+  "aPosmVaV9y": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #46"
+  },
+  "ndhpQ86iXs": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #49"
+  },
+  "dSbtHPqFj9": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #50"
+  },
+  "kB0KO1Wife": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #55"
+  },
+  "OIhLrULoIq": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #56"
+  },
+  "PniGejQAdF": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #57"
+  },
+  "aITDcHSCTW": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #58"
+  },
+  "DzAZfcPUiP": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #68"
+  },
+  "thG2jwuii6": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #69"
+  },
+  "qxboQ98QN4": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #70"
+  },
+  "79jC3quhGp": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #71"
+  },
+  "mwJwAQ0CXT": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #72"
+  },
+  "hvArz6F8eA": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #73"
+  },
+  "rAyG2MJka5": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #74"
+  },
+  "VnF3D7ia9Y": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #75"
+  },
+  "nXfwmrzXzz": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #76"
+  },
+  "v4QUDwGroQ": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #77"
+  },
+  "m0Zqqi9Lfr": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #78"
+  },
+  "xWoyO2BPcl": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #79"
+  },
+  "aILPNAxgHb": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #80"
+  },
+  "Tk20sRMzhv": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #81"
+  },
+  "HfHTPpDBYr": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #82"
+  },
+  "Gpc0nCixhZ": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #83"
+  },
+  "2vx7I6aRPS": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #84"
+  },
+  "656PH9MVla": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #85"
+  },
+  "VVdYxLGhxH": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #86"
+  },
+  "qx5mPYiXVi": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #87"
+  },
+  "aZ2Ojk8zxd": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #89"
+  },
+  "ar3eWq6mh4": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #90"
+  },
+  "TPeVwyCt8w": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #91"
+  },
+  "kCeFEyLOuW": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #92"
+  },
+  "PNSqN6Bng7": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #93"
+  },
+  "ZDnuAR0GMn": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #94"
+  },
+  "AAn8ouEHwO": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #95"
+  },
+  "DBLXUxxslN": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #96"
+  },
+  "0ua1KHFIUD": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #97"
+  },
+  "U3Nmrhun8B": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #98"
+  },
+  "z5Mgc1GGjP": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #99"
+  },
+  "GFxjqZVSND": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #100"
+  },
+  "9I9DPyr2f9": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #101"
+  },
+  "2vDRocNuih": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #102"
+  },
+  "9seU2kEIxR": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #103"
+  },
+  "s8ZiyIAn3z": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #104"
+  },
+  "MQdt80qzTP": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #105"
+  },
+  "JqZEEaNDLJ": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #106"
+  },
+  "RS2INStAhX": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #107"
+  },
+  "W443fVglzC": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #108"
+  },
+  "dKRgZYcdRV": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #110"
+  },
+  "4dqRAd2sNp": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #111"
+  },
+  "qd6clCx6QY": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #113"
+  },
+  "jnEHLRyWTZ": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #117"
+  },
+  "P8H2WZH2Tw": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #118"
+  },
+  "bLQynefrlp": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #119"
+  },
+  "f5329HhijI": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #120"
+  },
+  "qHndjmxgs1": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #121"
+  },
+  "Nfz7oM0Vwz": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #122"
+  },
+  "ORKJlyLOHv": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #123"
+  },
+  "pENAQ22Jh1": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #124"
+  },
+  "4M7C3PsA78": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #125"
+  },
+  "xOhVCWilYJ": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #126"
+  },
+  "kGLogzKtYq": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #127"
+  },
+  "8QEFjWSgyu": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #128"
+  },
+  "zhiG7XB56D": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #129"
+  },
+  "UMHg65UHcY": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #130"
+  },
+  "sF3YZbbTNX": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #131"
+  },
+  "5cXsYqAjNs": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #132"
+  },
+  "WeNTfF2Rks": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #133"
+  },
+  "cvPjGuUATQ": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #134"
+  },
+  "84ea2xeP60": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #135"
+  },
+  "keuUzk1RSd": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #136"
+  },
+  "AztNrTzNOf": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #137"
+  },
+  "QLhHHolka7": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #138"
+  },
+  "MQlY5j6pnd": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #139"
+  },
+  "PAX622BSf6": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #140"
+  },
+  "1HqdYVWaXi": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #141"
+  },
+  "JiMWz6U93i": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #142"
+  },
+  "Av4ykyMvpX": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #143"
+  },
+  "PjzSYChBzg": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #144"
+  },
+  "nYkpEYmvbg": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #145"
+  },
+  "1zWj66605w": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #146"
+  },
+  "8xaYRUduNe": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #147"
+  },
+  "5m9zSorosa": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #148"
+  },
+  "dkaxE3v6uu": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #149"
+  },
+  "1JcOSLXzHB": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #150"
+  },
+  "7tCsPSbYZb": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #151"
+  },
+  "da5VPQA7G7": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #152"
+  },
+  "foRrdaQ3mz": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #153"
+  },
+  "ODfnFGIIe3": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #154"
+  },
+  "nBwRDRUdMc": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #155"
+  },
+  "0rvhGgRYjx": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #156"
+  },
+  "oJTM5ysEeJ": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #157"
+  },
+  "Sal8Urvt1F": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #158"
+  },
+  "xyFvvMLQRo": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #159"
+  },
+  "7vjPgJ7x2b": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #160"
+  },
+  "A1Wg3RqdsR": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #161"
+  },
+  "6RJsxVCnhB": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #162"
+  },
+  "FuxTpvfYnh": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #163"
+  },
+  "G2Ja89f1e8": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #165"
+  },
+  "qbninLImrj": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #166"
+  },
+  "bXQv3Kn5qL": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #167"
+  },
+  "pTqOGquuCh": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #168"
+  },
+  "xm8LPYlbxA": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #169"
+  },
+  "DyO8vc0zYK": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #170"
+  },
+  "xyRbF93MWh": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #171"
+  },
+  "60tPXLIFyM": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #172"
+  },
+  "XA0dFQQlqP": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #173"
+  },
+  "c0ygOLwL7i": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #174"
+  },
+  "rwx9GCSVjH": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #175"
+  },
+  "eRpTR7EEC1": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #176"
+  },
+  "5oNzcK6SBR": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #177"
+  },
+  "wHAVgmIwj3": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #178"
+  },
+  "uSrlwzdTIC": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #179"
+  },
+  "ojMvvFKk6t": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #180"
+  },
+  "A9tBpzFsWI": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #181"
+  },
+  "33H7BChFgI": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #182"
+  },
+  "2AOAVWqGC6": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #183"
+  },
+  "ffIOVlfRQN": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #184"
+  },
+  "7BCkvvmpuj": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #185"
+  },
+  "WNZ4Dr57JS": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #186"
+  },
+  "Mnggg9cnbh": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #187"
+  },
+  "L8ATlveWKT": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #188"
+  },
+  "0o1c1Xxn1m": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #189"
+  },
+  "9gWuAC6Oum": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #190"
+  },
+  "1j0Hw81jY9": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #191"
+  },
+  "4uXhlSOnz5": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #192"
+  },
+  "nl8iBTm3Mt": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #193"
+  },
+  "awVlNORXDS": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #194"
+  },
+  "YZ4p3WbWKX": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #195"
+  },
+  "ecN9efL5zs": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #197"
+  },
+  "w1x9MHo93E": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #198"
+  },
+  "w3g5PWur7i": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #200"
+  },
+  "uizBY3yrgz": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #201"
+  },
+  "0cK9Wf9Eeq": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #202"
+  },
+  "BxW31Dilgn": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #203"
+  },
+  "menElmunwi": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #204"
+  },
+  "k6kMJCL22t": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #205"
+  },
+  "DMljKr2f4O": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #206"
+  },
+  "y1uP4arjzC": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #207"
+  },
+  "gvM7KWEhVI": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #208"
+  },
+  "jAbjN3n1jr": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #209"
+  },
+  "BKafd0mNwy": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #210"
+  },
+  "tXUfbhgQg2": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #211"
+  },
+  "EAeJdjpDzM": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #212"
+  },
+  "2NBZAh51If": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #213"
+  },
+  "M8NqiSkMDr": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #214"
+  },
+  "DgA5zlu7Ck": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #215"
+  },
+  "wYLEzeAKFI": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #216"
+  },
+  "PW8egEb2no": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #217"
+  },
+  "4ar3F6Obiq": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #218"
+  },
+  "ST0jumL7Ma": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #219"
+  },
+  "SniDOKrnNY": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #220"
+  },
+  "39Q3r1h0mD": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #221"
+  },
+  "CqkIkio00K": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #222"
+  },
+  "HeUmGQaw3M": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #223"
+  },
+  "weyfPS89NJ": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #224"
+  },
+  "NZrwlgnR4X": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #225"
+  },
+  "4pwzyVBjXY": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #226"
+  },
+  "802PZFmFGd": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #227"
+  },
+  "2LNbCnzTQk": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #228"
+  },
+  "7BXJJYw05E": {
+   "sessions": [
+    "Poster Session 1 · Mon 11/9, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 1 · Mon 11/9, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #229"
+  },
+  "ODnu3ohjEQ": {
+   "sessions": [
+    "Spotlight S3 · Tue 11/10, 8:30–9:00 AM",
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "talk": "Spotlight S3: Human learning, dexterity and cooperation · Tue 11/10, 8:30–9:00 AM · Hilton Austin",
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #122"
+  },
+  "QGzgVP8RnK": {
+   "sessions": [
+    "Spotlight S3 · Tue 11/10, 8:30–9:00 AM",
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "talk": "Spotlight S3: Human learning, dexterity and cooperation · Tue 11/10, 8:30–9:00 AM · Hilton Austin",
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #56"
+  },
+  "JV472m0zgq": {
+   "sessions": [
+    "Spotlight S3 · Tue 11/10, 8:30–9:00 AM",
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "talk": "Spotlight S3: Human learning, dexterity and cooperation · Tue 11/10, 8:30–9:00 AM · Hilton Austin",
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #55"
+  },
+  "aspenN9eir": {
+   "sessions": [
+    "Spotlight S3 · Tue 11/10, 8:30–9:00 AM",
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "talk": "Spotlight S3: Human learning, dexterity and cooperation · Tue 11/10, 8:30–9:00 AM · Hilton Austin",
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #29"
+  },
+  "BXNVzGSYFe": {
+   "sessions": [
+    "Spotlight S3 · Tue 11/10, 8:30–9:00 AM",
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "talk": "Spotlight S3: Human learning, dexterity and cooperation · Tue 11/10, 8:30–9:00 AM · Hilton Austin",
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #134"
+  },
+  "l0bwpzWRKy": {
+   "sessions": [
+    "Spotlight S3 · Tue 11/10, 8:30–9:00 AM",
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "talk": "Spotlight S3: Human learning, dexterity and cooperation · Tue 11/10, 8:30–9:00 AM · Hilton Austin",
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #170"
+  },
+  "N77om40jWL": {
+   "sessions": [
+    "Spotlight S3 · Tue 11/10, 8:30–9:00 AM",
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "talk": "Spotlight S3: Human learning, dexterity and cooperation · Tue 11/10, 8:30–9:00 AM · Hilton Austin",
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #171"
+  },
+  "rfRjWMFfvV": {
+   "sessions": [
+    "Spotlight S3 · Tue 11/10, 8:30–9:00 AM",
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "talk": "Spotlight S3: Human learning, dexterity and cooperation · Tue 11/10, 8:30–9:00 AM · Hilton Austin",
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #172"
+  },
+  "AmQH2hU9Gs": {
+   "sessions": [
+    "Spotlight S3 · Tue 11/10, 8:30–9:00 AM",
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "talk": "Spotlight S3: Human learning, dexterity and cooperation · Tue 11/10, 8:30–9:00 AM · Hilton Austin",
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #131"
+  },
+  "fHzDEYENPF": {
+   "sessions": [
+    "Oral O4 · Tue 11/10, 9:00–9:30 AM",
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "talk": "Oral O4: Reinforcement learning and motion reasoning · Tue 11/10, 9:00–9:30 AM · Hilton Austin",
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #218"
+  },
+  "acslhrig33": {
+   "sessions": [
+    "Oral O4 · Tue 11/10, 9:00–9:30 AM",
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "talk": "Oral O4: Reinforcement learning and motion reasoning · Tue 11/10, 9:00–9:30 AM · Hilton Austin",
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #63"
+  },
+  "RYXo2ktK1M": {
+   "sessions": [
+    "Oral O4 · Tue 11/10, 9:00–9:30 AM",
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "talk": "Oral O4: Reinforcement learning and motion reasoning · Tue 11/10, 9:00–9:30 AM · Hilton Austin",
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #64"
+  },
+  "WF4X17Al2r": {
+   "sessions": [
+    "Oral O5 · Tue 11/10, 10:30–11:00 AM",
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "talk": "Oral O5: Dexterous learning, grasping and assembly · Tue 11/10, 10:30–11:00 AM · Hilton Austin",
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #54"
+  },
+  "wLgEYxjqid": {
+   "sessions": [
+    "Oral O5 · Tue 11/10, 10:30–11:00 AM",
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "talk": "Oral O5: Dexterous learning, grasping and assembly · Tue 11/10, 10:30–11:00 AM · Hilton Austin",
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #121"
+  },
+  "RRl1xXZLdM": {
+   "sessions": [
+    "Oral O5 · Tue 11/10, 10:30–11:00 AM",
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "talk": "Oral O5: Dexterous learning, grasping and assembly · Tue 11/10, 10:30–11:00 AM · Hilton Austin",
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #126"
+  },
+  "03zMMFkTXk": {
+   "sessions": [
+    "Oral O6 · Tue 11/10, 11:00–11:30 AM",
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "talk": "Oral O6: Force, tactile control and manipulation planning · Tue 11/10, 11:00–11:30 AM · Hilton Austin",
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #155"
+  },
+  "hWuk4y2AeR": {
+   "sessions": [
+    "Oral O6 · Tue 11/10, 11:00–11:30 AM",
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "talk": "Oral O6: Force, tactile control and manipulation planning · Tue 11/10, 11:00–11:30 AM · Hilton Austin",
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #176"
+  },
+  "AIInkHZlvB": {
+   "sessions": [
+    "Oral O6 · Tue 11/10, 11:00–11:30 AM",
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "talk": "Oral O6: Force, tactile control and manipulation planning · Tue 11/10, 11:00–11:30 AM · Hilton Austin",
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #164"
+  },
+  "2dEfANeQL7": {
+   "sessions": [
+    "Oral O7 · Tue 11/10, 11:30 AM–12:00 PM",
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "talk": "Oral O7: Humanoid data, control and skills · Tue 11/10, 11:30 AM–12:00 PM · Hilton Austin",
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #216"
+  },
+  "WBGnJHRIso": {
+   "sessions": [
+    "Oral O7 · Tue 11/10, 11:30 AM–12:00 PM",
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "talk": "Oral O7: Humanoid data, control and skills · Tue 11/10, 11:30 AM–12:00 PM · Hilton Austin",
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #181"
+  },
+  "psNqjklVOK": {
+   "sessions": [
+    "Oral O7 · Tue 11/10, 11:30 AM–12:00 PM",
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "talk": "Oral O7: Humanoid data, control and skills · Tue 11/10, 11:30 AM–12:00 PM · Hilton Austin",
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #217"
+  },
+  "cJGMjQlgz5": {
+   "sessions": [
+    "Spotlight S4 · Tue 11/10, 2:00–2:30 PM",
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "talk": "Spotlight S4: Touch, force and contact-rich manipulation · Tue 11/10, 2:00–2:30 PM · Hilton Austin",
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #167"
+  },
+  "MjpidVjNMS": {
+   "sessions": [
+    "Spotlight S4 · Tue 11/10, 2:00–2:30 PM",
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "talk": "Spotlight S4: Touch, force and contact-rich manipulation · Tue 11/10, 2:00–2:30 PM · Hilton Austin",
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #168"
+  },
+  "hSRtOgnkTM": {
+   "sessions": [
+    "Spotlight S4 · Tue 11/10, 2:00–2:30 PM",
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "talk": "Spotlight S4: Touch, force and contact-rich manipulation · Tue 11/10, 2:00–2:30 PM · Hilton Austin",
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #162"
+  },
+  "BV0T1o1ZIL": {
+   "sessions": [
+    "Spotlight S4 · Tue 11/10, 2:00–2:30 PM",
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "talk": "Spotlight S4: Touch, force and contact-rich manipulation · Tue 11/10, 2:00–2:30 PM · Hilton Austin",
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #166"
+  },
+  "yMD1ykviND": {
+   "sessions": [
+    "Spotlight S4 · Tue 11/10, 2:00–2:30 PM",
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "talk": "Spotlight S4: Touch, force and contact-rich manipulation · Tue 11/10, 2:00–2:30 PM · Hilton Austin",
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #156"
+  },
+  "RAA96LpIxJ": {
+   "sessions": [
+    "Spotlight S4 · Tue 11/10, 2:00–2:30 PM",
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "talk": "Spotlight S4: Touch, force and contact-rich manipulation · Tue 11/10, 2:00–2:30 PM · Hilton Austin",
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #163"
+  },
+  "19iADsbO9A": {
+   "sessions": [
+    "Spotlight S4 · Tue 11/10, 2:00–2:30 PM",
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "talk": "Spotlight S4: Touch, force and contact-rich manipulation · Tue 11/10, 2:00–2:30 PM · Hilton Austin",
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #148"
+  },
+  "Ti3oK55n1H": {
+   "sessions": [
+    "Spotlight S4 · Tue 11/10, 2:00–2:30 PM",
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "talk": "Spotlight S4: Touch, force and contact-rich manipulation · Tue 11/10, 2:00–2:30 PM · Hilton Austin",
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #169"
+  },
+  "ult1vxdeUb": {
+   "sessions": [
+    "Spotlight S4 · Tue 11/10, 2:00–2:30 PM",
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "talk": "Spotlight S4: Touch, force and contact-rich manipulation · Tue 11/10, 2:00–2:30 PM · Hilton Austin",
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #165"
+  },
+  "FKKr8jKS29": {
+   "sessions": [
+    "Spotlight S5 · Tue 11/10, 2:30–3:00 PM",
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "talk": "Spotlight S5: Deformable manipulation, geometry and morphology · Tue 11/10, 2:30–3:00 PM · Hilton Austin",
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #174"
+  },
+  "nzYChkCtvT": {
+   "sessions": [
+    "Spotlight S5 · Tue 11/10, 2:30–3:00 PM",
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "talk": "Spotlight S5: Deformable manipulation, geometry and morphology · Tue 11/10, 2:30–3:00 PM · Hilton Austin",
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #48"
+  },
+  "3hsq75Gmr9": {
+   "sessions": [
+    "Spotlight S5 · Tue 11/10, 2:30–3:00 PM",
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "talk": "Spotlight S5: Deformable manipulation, geometry and morphology · Tue 11/10, 2:30–3:00 PM · Hilton Austin",
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #45"
+  },
+  "r8MOxo93Mv": {
+   "sessions": [
+    "Spotlight S5 · Tue 11/10, 2:30–3:00 PM",
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "talk": "Spotlight S5: Deformable manipulation, geometry and morphology · Tue 11/10, 2:30–3:00 PM · Hilton Austin",
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #175"
+  },
+  "SaMjmUr6xC": {
+   "sessions": [
+    "Spotlight S5 · Tue 11/10, 2:30–3:00 PM",
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "talk": "Spotlight S5: Deformable manipulation, geometry and morphology · Tue 11/10, 2:30–3:00 PM · Hilton Austin",
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #84"
+  },
+  "UVJPDRCmlf": {
+   "sessions": [
+    "Spotlight S5 · Tue 11/10, 2:30–3:00 PM",
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "talk": "Spotlight S5: Deformable manipulation, geometry and morphology · Tue 11/10, 2:30–3:00 PM · Hilton Austin",
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #47"
+  },
+  "nIbnBCtz79": {
+   "sessions": [
+    "Spotlight S5 · Tue 11/10, 2:30–3:00 PM",
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "talk": "Spotlight S5: Deformable manipulation, geometry and morphology · Tue 11/10, 2:30–3:00 PM · Hilton Austin",
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #173"
+  },
+  "xhO9wj1gGt": {
+   "sessions": [
+    "Spotlight S5 · Tue 11/10, 2:30–3:00 PM",
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "talk": "Spotlight S5: Deformable manipulation, geometry and morphology · Tue 11/10, 2:30–3:00 PM · Hilton Austin",
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #115"
+  },
+  "cQPnBRGgWM": {
+   "sessions": [
+    "Spotlight S5 · Tue 11/10, 2:30–3:00 PM",
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "talk": "Spotlight S5: Deformable manipulation, geometry and morphology · Tue 11/10, 2:30–3:00 PM · Hilton Austin",
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #50"
+  },
+  "mw8BgE8ADo": {
+   "sessions": [
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #1"
+  },
+  "r2uaBmvWgH": {
+   "sessions": [
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #2"
+  },
+  "wXv81vB0Xt": {
+   "sessions": [
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #3"
+  },
+  "gTazI5D0Fj": {
+   "sessions": [
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #4"
+  },
+  "7cfCazwFp6": {
+   "sessions": [
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #5"
+  },
+  "uHhNEb0OSW": {
+   "sessions": [
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #6"
+  },
+  "lorikYEkAx": {
+   "sessions": [
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #7"
+  },
+  "05nE8s5e7I": {
+   "sessions": [
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #8"
+  },
+  "9ih6YlxhI5": {
+   "sessions": [
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #9"
+  },
+  "iXJWieKME1": {
+   "sessions": [
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #10"
+  },
+  "jlXzHOkSXq": {
+   "sessions": [
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #11"
+  },
+  "mR4L9LaUGJ": {
+   "sessions": [
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #12"
+  },
+  "pPrwDHXw93": {
+   "sessions": [
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #13"
+  },
+  "hSZ0lT7TCp": {
+   "sessions": [
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #14"
+  },
+  "rTX0zr5FjT": {
+   "sessions": [
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #15"
+  },
+  "2vsTg6WU2p": {
+   "sessions": [
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #16"
+  },
+  "ZyLuLA1Tsy": {
+   "sessions": [
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #17"
+  },
+  "VxUazHdUwe": {
+   "sessions": [
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #18"
+  },
+  "Gr9nFtFTjn": {
+   "sessions": [
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #19"
+  },
+  "HBHR1GxaS0": {
+   "sessions": [
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #20"
+  },
+  "8TvqhVkrMd": {
+   "sessions": [
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #21"
+  },
+  "14GtmKGuCf": {
+   "sessions": [
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #22"
+  },
+  "GeENMbQXhi": {
+   "sessions": [
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #23"
+  },
+  "RmP7m64fQ6": {
+   "sessions": [
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #24"
+  },
+  "3KzmpJQUpy": {
+   "sessions": [
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #25"
+  },
+  "NCeeEHy8d5": {
+   "sessions": [
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #26"
+  },
+  "tfC6LMD02z": {
+   "sessions": [
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #27"
+  },
+  "Z35baC5jBe": {
+   "sessions": [
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #28"
+  },
+  "J8pJIDI6rM": {
+   "sessions": [
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #30"
+  },
+  "AY4totylcx": {
+   "sessions": [
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #31"
+  },
+  "6BQ9NdqznS": {
+   "sessions": [
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #32"
+  },
+  "7KV78k8rcv": {
+   "sessions": [
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #33"
+  },
+  "S3FVTypVnZ": {
+   "sessions": [
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #34"
+  },
+  "DwRC6la1Kr": {
+   "sessions": [
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #35"
+  },
+  "9Jm97oFGuA": {
+   "sessions": [
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #36"
+  },
+  "OJkazbkLtE": {
+   "sessions": [
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #37"
+  },
+  "LfugZN8AN2": {
+   "sessions": [
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #38"
+  },
+  "AhpH1nGaUp": {
+   "sessions": [
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #39"
+  },
+  "zr63f3tmyq": {
+   "sessions": [
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #40"
+  },
+  "P1R9iBKyv4": {
+   "sessions": [
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #41"
+  },
+  "Am3aGfOlLh": {
+   "sessions": [
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #42"
+  },
+  "H5QWMBcNSU": {
+   "sessions": [
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #43"
+  },
+  "PJuQx9kBg5": {
+   "sessions": [
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #44"
+  },
+  "gO08puaqia": {
+   "sessions": [
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #46"
+  },
+  "2Y1Osh6gOU": {
+   "sessions": [
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #49"
+  },
+  "Kakzp9Lr9V": {
+   "sessions": [
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #51"
+  },
+  "JMcC5JoPKD": {
+   "sessions": [
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #52"
+  },
+  "N1gnyxWW2f": {
+   "sessions": [
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #53"
+  },
+  "drlpFld34L": {
+   "sessions": [
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #57"
+  },
+  "MYYKl10JKD": {
+   "sessions": [
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #58"
+  },
+  "vQmF2cR04D": {
+   "sessions": [
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #59"
+  },
+  "wMrKZ9eYBg": {
+   "sessions": [
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #60"
+  },
+  "aTDKKvOg7W": {
+   "sessions": [
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #61"
+  },
+  "EfkPQTtjky": {
+   "sessions": [
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #62"
+  },
+  "bsjuF5klA3": {
+   "sessions": [
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #65"
+  },
+  "MCTsPd3H0q": {
+   "sessions": [
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #66"
+  },
+  "eIwbKQS5pz": {
+   "sessions": [
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #67"
+  },
+  "BWHjoo36Dr": {
+   "sessions": [
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #68"
+  },
+  "F5KmQJCC8X": {
+   "sessions": [
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #69"
+  },
+  "ey3y7lxWY1": {
+   "sessions": [
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #70"
+  },
+  "o03EddNo6r": {
+   "sessions": [
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #71"
+  },
+  "Unsv9DsbfO": {
+   "sessions": [
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #72"
+  },
+  "6EN09R3NGP": {
+   "sessions": [
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #73"
+  },
+  "AO1shrWa8H": {
+   "sessions": [
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #74"
+  },
+  "rQZHMVTYYy": {
+   "sessions": [
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #75"
+  },
+  "0gwpqWBvhJ": {
+   "sessions": [
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #76"
+  },
+  "u56Z5KqtkI": {
+   "sessions": [
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #77"
+  },
+  "vA3t8YK04w": {
+   "sessions": [
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #78"
+  },
+  "Tjg1ZvCdXU": {
+   "sessions": [
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #79"
+  },
+  "jQAOksG9Bd": {
+   "sessions": [
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #80"
+  },
+  "5fZzu1zWzG": {
+   "sessions": [
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #81"
+  },
+  "Lp94sPpAo0": {
+   "sessions": [
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #82"
+  },
+  "NnFdATGR3L": {
+   "sessions": [
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #83"
+  },
+  "k9EjTLL8bA": {
+   "sessions": [
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #85"
+  },
+  "Qu7v3GmYDU": {
+   "sessions": [
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #86"
+  },
+  "A9AQjk3dAt": {
+   "sessions": [
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #87"
+  },
+  "qH1h7UkK0k": {
+   "sessions": [
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #88"
+  },
+  "cCI6zZIcEw": {
+   "sessions": [
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #89"
+  },
+  "59kpavSqlw": {
+   "sessions": [
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #90"
+  },
+  "QDJCwo9pmt": {
+   "sessions": [
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #91"
+  },
+  "mg7X6SFE75": {
+   "sessions": [
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #92"
+  },
+  "1yL1d39r7K": {
+   "sessions": [
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #93"
+  },
+  "HuFkyUA5RR": {
+   "sessions": [
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #94"
+  },
+  "7jMlaTLtAc": {
+   "sessions": [
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #95"
+  },
+  "JQvRoFU5aS": {
+   "sessions": [
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #96"
+  },
+  "r7ZN8cPEcj": {
+   "sessions": [
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #97"
+  },
+  "e9ZYAwJqFR": {
+   "sessions": [
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #98"
+  },
+  "QFFjW11NYa": {
+   "sessions": [
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #99"
+  },
+  "7qMRpmvhZL": {
+   "sessions": [
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #100"
+  },
+  "quVJ7qbQl6": {
+   "sessions": [
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #101"
+  },
+  "Br2rXixvyN": {
+   "sessions": [
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #102"
+  },
+  "bL51SsKShM": {
+   "sessions": [
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #103"
+  },
+  "xMysKLF2hX": {
+   "sessions": [
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #104"
+  },
+  "Nxn1pyNZpE": {
+   "sessions": [
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #105"
+  },
+  "SMBnET3Mz9": {
+   "sessions": [
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #106"
+  },
+  "GRyPwVAxpq": {
+   "sessions": [
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #107"
+  },
+  "lTLiSuIBAj": {
+   "sessions": [
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #108"
+  },
+  "SBGylS4zwM": {
+   "sessions": [
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #109"
+  },
+  "MWHlzlo4UD": {
+   "sessions": [
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #110"
+  },
+  "QJI3N7JzBc": {
+   "sessions": [
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #111"
+  },
+  "51YZMUGRUA": {
+   "sessions": [
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #112"
+  },
+  "iOU9zkASbg": {
+   "sessions": [
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #113"
+  },
+  "3jf63cW3cJ": {
+   "sessions": [
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #114"
+  },
+  "yPkDKkOD11": {
+   "sessions": [
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Lone Star (3rd floor) · #116"
+  },
+  "wt25SMJmEq": {
+   "sessions": [
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #117"
+  },
+  "IbO5qWFXuh": {
+   "sessions": [
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #118"
+  },
+  "4soIQrXqxj": {
+   "sessions": [
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #119"
+  },
+  "hPz010j4EA": {
+   "sessions": [
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #120"
+  },
+  "cxxUgLuNa2": {
+   "sessions": [
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #123"
+  },
+  "hDNvcoKMXH": {
+   "sessions": [
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #124"
+  },
+  "AGM5ZQRjOT": {
+   "sessions": [
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #125"
+  },
+  "uKRtsLLqs6": {
+   "sessions": [
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #127"
+  },
+  "8CDEvBQA6x": {
+   "sessions": [
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #128"
+  },
+  "JI9u9A9JJO": {
+   "sessions": [
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #129"
+  },
+  "Rrnnh3mDaH": {
+   "sessions": [
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #130"
+  },
+  "ULCeXiRzJD": {
+   "sessions": [
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #132"
+  },
+  "PL6UDcy9Eu": {
+   "sessions": [
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #133"
+  },
+  "MTZ4eKUP94": {
+   "sessions": [
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #135"
+  },
+  "JhEwJ56SH3": {
+   "sessions": [
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #136"
+  },
+  "zMbOvWpUUw": {
+   "sessions": [
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #137"
+  },
+  "CtcahYuPBL": {
+   "sessions": [
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #138"
+  },
+  "TH0fdttVB0": {
+   "sessions": [
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #139"
+  },
+  "xn8Hwa4hpq": {
+   "sessions": [
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #140"
+  },
+  "0DopZPPLvw": {
+   "sessions": [
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #141"
+  },
+  "xc8asDq7QI": {
+   "sessions": [
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #142"
+  },
+  "b2gSINMX3R": {
+   "sessions": [
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #143"
+  },
+  "yeAKwjw5Xa": {
+   "sessions": [
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #144"
+  },
+  "1zYrrwoISV": {
+   "sessions": [
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #145"
+  },
+  "q1q252TIt0": {
+   "sessions": [
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #146"
+  },
+  "42z4ov9nRQ": {
+   "sessions": [
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #147"
+  },
+  "H7b56xK590": {
+   "sessions": [
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #149"
+  },
+  "vG6UymddY4": {
+   "sessions": [
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #150"
+  },
+  "suRtJLXVxI": {
+   "sessions": [
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #151"
+  },
+  "TlWfBm8jtZ": {
+   "sessions": [
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #152"
+  },
+  "tJpI5D27wh": {
+   "sessions": [
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #153"
+  },
+  "wiovp2zRWA": {
+   "sessions": [
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #154"
+  },
+  "PCVxUMrP6N": {
+   "sessions": [
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #157"
+  },
+  "d0ltfevDaD": {
+   "sessions": [
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #158"
+  },
+  "gn0kBXdK0G": {
+   "sessions": [
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #159"
+  },
+  "bC8Sv8wTTL": {
+   "sessions": [
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #160"
+  },
+  "334wtBsPIG": {
+   "sessions": [
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #161"
+  },
+  "XnyoJXimAK": {
+   "sessions": [
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #177"
+  },
+  "cHCwUratwL": {
+   "sessions": [
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #178"
+  },
+  "hFLtQusqPy": {
+   "sessions": [
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #179"
+  },
+  "FP3mCkMV24": {
+   "sessions": [
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #180"
+  },
+  "VTSUekrCnH": {
+   "sessions": [
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #182"
+  },
+  "USXQ0bDfAz": {
+   "sessions": [
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #183"
+  },
+  "uZalcCyrVl": {
+   "sessions": [
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #184"
+  },
+  "9kXz22fI7a": {
+   "sessions": [
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #185"
+  },
+  "aRtb8NIgc3": {
+   "sessions": [
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #186"
+  },
+  "aq2hmhW0kU": {
+   "sessions": [
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #187"
+  },
+  "trTMmn2U1g": {
+   "sessions": [
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #188"
+  },
+  "qMAfkDMTOy": {
+   "sessions": [
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #189"
+  },
+  "kpX1KOfNI5": {
+   "sessions": [
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #190"
+  },
+  "qF26obIUEX": {
+   "sessions": [
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #191"
+  },
+  "r27erS063s": {
+   "sessions": [
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #192"
+  },
+  "3Ex2nEGqHP": {
+   "sessions": [
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #193"
+  },
+  "kBoTnjRw4s": {
+   "sessions": [
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #194"
+  },
+  "hf8X30fAtz": {
+   "sessions": [
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #195"
+  },
+  "dhh4gmm3NK": {
+   "sessions": [
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #196"
+  },
+  "rK0JCfddwK": {
+   "sessions": [
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #197"
+  },
+  "XJgz1iK29G": {
+   "sessions": [
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #198"
+  },
+  "0jY75QYDMn": {
+   "sessions": [
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #199"
+  },
+  "e9OQ6xsma9": {
+   "sessions": [
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #200"
+  },
+  "R1fgJZLFnx": {
+   "sessions": [
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #201"
+  },
+  "Gkka9VEhWb": {
+   "sessions": [
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #202"
+  },
+  "gbchkYm28k": {
+   "sessions": [
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #203"
+  },
+  "NzvfxoRvOC": {
+   "sessions": [
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #204"
+  },
+  "HWaigsXLaH": {
+   "sessions": [
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #205"
+  },
+  "u2dtQWAFQo": {
+   "sessions": [
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #206"
+  },
+  "wALhOwQWnx": {
+   "sessions": [
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #207"
+  },
+  "2tjuz95jmb": {
+   "sessions": [
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #208"
+  },
+  "X4i3kSa2kd": {
+   "sessions": [
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #209"
+  },
+  "pWDT36r945": {
+   "sessions": [
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #210"
+  },
+  "Wp9ex57Z2k": {
+   "sessions": [
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #211"
+  },
+  "JhdmNwpT4o": {
+   "sessions": [
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #212"
+  },
+  "l8hOz8loVg": {
+   "sessions": [
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #213"
+  },
+  "mjvsJNQuFV": {
+   "sessions": [
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #214"
+  },
+  "WxBKiMUZtI": {
+   "sessions": [
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #215"
+  },
+  "uoFfrJHHq8": {
+   "sessions": [
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #219"
+  },
+  "NWlhQeCX3L": {
+   "sessions": [
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #220"
+  },
+  "j5QcZcRrda": {
+   "sessions": [
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #221"
+  },
+  "yzejD0WIk9": {
+   "sessions": [
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #222"
+  },
+  "8iFziu27Yy": {
+   "sessions": [
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #223"
+  },
+  "SN5sVBOZ8D": {
+   "sessions": [
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #224"
+  },
+  "XjyM9If1Tm": {
+   "sessions": [
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #225"
+  },
+  "RExYYVsLbT": {
+   "sessions": [
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #226"
+  },
+  "n0v95NpvyY": {
+   "sessions": [
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #227"
+  },
+  "m94Acp7Al5": {
+   "sessions": [
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #228"
+  },
+  "PHNhlZK2uS": {
+   "sessions": [
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #229"
+  },
+  "LwMNsyCnCk": {
+   "sessions": [
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #230"
+  },
+  "qEOv7MuWIx": {
+   "sessions": [
+    "Poster Session 2 · Tue 11/10, 5:00–6:30 PM"
+   ],
+   "poster": "Poster Session 2 · Tue 11/10, 5:00–6:30 PM · JW Marriott, Griffin (2nd floor) · #231"
+  },
+  "DpOVq6nE2d": {
+   "sessions": [
+    "Spotlight S6 · Wed 11/11, 8:30–9:00 AM",
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "talk": "Spotlight S6: Optimization, agentic planning and evaluation · Wed 11/11, 8:30–9:00 AM · Hilton Austin",
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Lone Star (3rd floor) · #107"
+  },
+  "El4EDBhqCG": {
+   "sessions": [
+    "Spotlight S6 · Wed 11/11, 8:30–9:00 AM",
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "talk": "Spotlight S6: Optimization, agentic planning and evaluation · Wed 11/11, 8:30–9:00 AM · Hilton Austin",
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Lone Star (3rd floor) · #103"
+  },
+  "c9tCcHtVcS": {
+   "sessions": [
+    "Spotlight S6 · Wed 11/11, 8:30–9:00 AM",
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "talk": "Spotlight S6: Optimization, agentic planning and evaluation · Wed 11/11, 8:30–9:00 AM · Hilton Austin",
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Lone Star (3rd floor) · #102"
+  },
+  "XY8QpMSxvq": {
+   "sessions": [
+    "Spotlight S6 · Wed 11/11, 8:30–9:00 AM",
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "talk": "Spotlight S6: Optimization, agentic planning and evaluation · Wed 11/11, 8:30–9:00 AM · Hilton Austin",
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Lone Star (3rd floor) · #72"
+  },
+  "C96z0RnFh8": {
+   "sessions": [
+    "Spotlight S6 · Wed 11/11, 8:30–9:00 AM",
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "talk": "Spotlight S6: Optimization, agentic planning and evaluation · Wed 11/11, 8:30–9:00 AM · Hilton Austin",
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Lone Star (3rd floor) · #100"
+  },
+  "qQs6JndxfZ": {
+   "sessions": [
+    "Spotlight S6 · Wed 11/11, 8:30–9:00 AM",
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "talk": "Spotlight S6: Optimization, agentic planning and evaluation · Wed 11/11, 8:30–9:00 AM · Hilton Austin",
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Lone Star (3rd floor) · #104"
+  },
+  "GeL3GdwSYo": {
+   "sessions": [
+    "Spotlight S6 · Wed 11/11, 8:30–9:00 AM",
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "talk": "Spotlight S6: Optimization, agentic planning and evaluation · Wed 11/11, 8:30–9:00 AM · Hilton Austin",
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Lone Star (3rd floor) · #99"
+  },
+  "xfZJ2GKrZG": {
+   "sessions": [
+    "Spotlight S6 · Wed 11/11, 8:30–9:00 AM",
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "talk": "Spotlight S6: Optimization, agentic planning and evaluation · Wed 11/11, 8:30–9:00 AM · Hilton Austin",
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Lone Star (3rd floor) · #105"
+  },
+  "CSYA6oHdlE": {
+   "sessions": [
+    "Spotlight S6 · Wed 11/11, 8:30–9:00 AM",
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "talk": "Spotlight S6: Optimization, agentic planning and evaluation · Wed 11/11, 8:30–9:00 AM · Hilton Austin",
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Lone Star (3rd floor) · #101"
+  },
+  "yyitbtz7rQ": {
+   "sessions": [
+    "Spotlight S7 · Wed 11/11, 9:00–9:30 AM",
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "talk": "Spotlight S7: Humanoid locomotion and whole-body control · Wed 11/11, 9:00–9:30 AM · Hilton Austin",
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Griffin (2nd floor) · #202"
+  },
+  "2Z9666X2B7": {
+   "sessions": [
+    "Spotlight S7 · Wed 11/11, 9:00–9:30 AM",
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "talk": "Spotlight S7: Humanoid locomotion and whole-body control · Wed 11/11, 9:00–9:30 AM · Hilton Austin",
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Griffin (2nd floor) · #200"
+  },
+  "aKjXDWnmzc": {
+   "sessions": [
+    "Spotlight S7 · Wed 11/11, 9:00–9:30 AM",
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "talk": "Spotlight S7: Humanoid locomotion and whole-body control · Wed 11/11, 9:00–9:30 AM · Hilton Austin",
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Lone Star (3rd floor) · #98"
+  },
+  "PLNJ3a6Yht": {
+   "sessions": [
+    "Spotlight S7 · Wed 11/11, 9:00–9:30 AM",
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "talk": "Spotlight S7: Humanoid locomotion and whole-body control · Wed 11/11, 9:00–9:30 AM · Hilton Austin",
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Griffin (2nd floor) · #195"
+  },
+  "5b4j0e21aJ": {
+   "sessions": [
+    "Spotlight S7 · Wed 11/11, 9:00–9:30 AM",
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "talk": "Spotlight S7: Humanoid locomotion and whole-body control · Wed 11/11, 9:00–9:30 AM · Hilton Austin",
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Griffin (2nd floor) · #201"
+  },
+  "TTFZrb0Hw3": {
+   "sessions": [
+    "Spotlight S7 · Wed 11/11, 9:00–9:30 AM",
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "talk": "Spotlight S7: Humanoid locomotion and whole-body control · Wed 11/11, 9:00–9:30 AM · Hilton Austin",
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Griffin (2nd floor) · #199"
+  },
+  "lY47GBfn32": {
+   "sessions": [
+    "Spotlight S7 · Wed 11/11, 9:00–9:30 AM",
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "talk": "Spotlight S7: Humanoid locomotion and whole-body control · Wed 11/11, 9:00–9:30 AM · Hilton Austin",
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Griffin (2nd floor) · #196"
+  },
+  "rEmMzoUnpn": {
+   "sessions": [
+    "Spotlight S7 · Wed 11/11, 9:00–9:30 AM",
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "talk": "Spotlight S7: Humanoid locomotion and whole-body control · Wed 11/11, 9:00–9:30 AM · Hilton Austin",
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Griffin (2nd floor) · #198"
+  },
+  "aGLO1l8SNB": {
+   "sessions": [
+    "Spotlight S7 · Wed 11/11, 9:00–9:30 AM",
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "talk": "Spotlight S7: Humanoid locomotion and whole-body control · Wed 11/11, 9:00–9:30 AM · Hilton Austin",
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Griffin (2nd floor) · #197"
+  },
+  "Q53ayGo2IE": {
+   "sessions": [
+    "Spotlight S8 · Wed 11/11, 9:30–10:00 AM",
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "talk": "Spotlight S8: Perception, navigation and autonomous systems · Wed 11/11, 9:30–10:00 AM · Hilton Austin",
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Griffin (2nd floor) · #228"
+  },
+  "lSrxDURLdG": {
+   "sessions": [
+    "Spotlight S8 · Wed 11/11, 9:30–10:00 AM",
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "talk": "Spotlight S8: Perception, navigation and autonomous systems · Wed 11/11, 9:30–10:00 AM · Hilton Austin",
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Griffin (2nd floor) · #229"
+  },
+  "RwGNm8fUxX": {
+   "sessions": [
+    "Spotlight S8 · Wed 11/11, 9:30–10:00 AM",
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "talk": "Spotlight S8: Perception, navigation and autonomous systems · Wed 11/11, 9:30–10:00 AM · Hilton Austin",
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Griffin (2nd floor) · #205"
+  },
+  "k2QZxbcSbQ": {
+   "sessions": [
+    "Spotlight S8 · Wed 11/11, 9:30–10:00 AM",
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "talk": "Spotlight S8: Perception, navigation and autonomous systems · Wed 11/11, 9:30–10:00 AM · Hilton Austin",
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Griffin (2nd floor) · #227"
+  },
+  "hr2FYFod4n": {
+   "sessions": [
+    "Spotlight S8 · Wed 11/11, 9:30–10:00 AM",
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "talk": "Spotlight S8: Perception, navigation and autonomous systems · Wed 11/11, 9:30–10:00 AM · Hilton Austin",
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Griffin (2nd floor) · #204"
+  },
+  "SUV5PudsyI": {
+   "sessions": [
+    "Spotlight S8 · Wed 11/11, 9:30–10:00 AM",
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "talk": "Spotlight S8: Perception, navigation and autonomous systems · Wed 11/11, 9:30–10:00 AM · Hilton Austin",
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Lone Star (3rd floor) · #71"
+  },
+  "wBzyyPlFs6": {
+   "sessions": [
+    "Spotlight S8 · Wed 11/11, 9:30–10:00 AM",
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "talk": "Spotlight S8: Perception, navigation and autonomous systems · Wed 11/11, 9:30–10:00 AM · Hilton Austin",
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Griffin (2nd floor) · #203"
+  },
+  "98pbD92mEI": {
+   "sessions": [
+    "Spotlight S8 · Wed 11/11, 9:30–10:00 AM",
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "talk": "Spotlight S8: Perception, navigation and autonomous systems · Wed 11/11, 9:30–10:00 AM · Hilton Austin",
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Griffin (2nd floor) · #226"
+  },
+  "dE7KjOl8yu": {
+   "sessions": [
+    "Spotlight S8 · Wed 11/11, 9:30–10:00 AM",
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "talk": "Spotlight S8: Perception, navigation and autonomous systems · Wed 11/11, 9:30–10:00 AM · Hilton Austin",
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Lone Star (3rd floor) · #97"
+  },
+  "Zts11nHGLq": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Lone Star (3rd floor) · #1"
+  },
+  "GMAZdF34n5": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Lone Star (3rd floor) · #2"
+  },
+  "1u6oriJJcU": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Lone Star (3rd floor) · #3"
+  },
+  "YrNlVJcApO": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Lone Star (3rd floor) · #4"
+  },
+  "qvOl1xOUtn": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Lone Star (3rd floor) · #5"
+  },
+  "AilV1LyfXF": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Lone Star (3rd floor) · #6"
+  },
+  "oX3ErTz3rv": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Lone Star (3rd floor) · #7"
+  },
+  "0w0ylGezd5": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Lone Star (3rd floor) · #8"
+  },
+  "2nityiXWGJ": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Lone Star (3rd floor) · #9"
+  },
+  "nBDd4rVq5Q": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Lone Star (3rd floor) · #10"
+  },
+  "lsfM8TzuH2": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Lone Star (3rd floor) · #11"
+  },
+  "ntHuqgjrgs": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Lone Star (3rd floor) · #12"
+  },
+  "KHjJ1z5m4y": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Lone Star (3rd floor) · #13"
+  },
+  "Ih059VNeWq": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Lone Star (3rd floor) · #14"
+  },
+  "U5POjpnj6J": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Lone Star (3rd floor) · #15"
+  },
+  "xHjEeyHkhY": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Lone Star (3rd floor) · #16"
+  },
+  "hCG12ifteJ": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Lone Star (3rd floor) · #17"
+  },
+  "mlF6DhhBNF": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Lone Star (3rd floor) · #18"
+  },
+  "8YqfXYof0Y": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Lone Star (3rd floor) · #19"
+  },
+  "ddzWaOmWZE": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Lone Star (3rd floor) · #20"
+  },
+  "Jq0aPlIS34": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Lone Star (3rd floor) · #21"
+  },
+  "hwTNqrJmuQ": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Lone Star (3rd floor) · #22"
+  },
+  "E5lvpA2Glx": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Lone Star (3rd floor) · #23"
+  },
+  "xombt7ofur": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Lone Star (3rd floor) · #24"
+  },
+  "QHIz2k4E88": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Lone Star (3rd floor) · #25"
+  },
+  "HATezFmdN5": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Lone Star (3rd floor) · #26"
+  },
+  "zDGliNPeBL": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Lone Star (3rd floor) · #27"
+  },
+  "Xgth4qBOmb": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Lone Star (3rd floor) · #28"
+  },
+  "587eUkwa7d": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Lone Star (3rd floor) · #29"
+  },
+  "RLsVfgv1pS": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Lone Star (3rd floor) · #30"
+  },
+  "FVPhDDjumI": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Lone Star (3rd floor) · #31"
+  },
+  "74gh4jCB2a": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Lone Star (3rd floor) · #32"
+  },
+  "ShBMWDRPVu": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Lone Star (3rd floor) · #33"
+  },
+  "T3IOHvur0R": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Lone Star (3rd floor) · #34"
+  },
+  "hgRIVs5QZU": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Lone Star (3rd floor) · #35"
+  },
+  "9uM5JbXz4T": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Lone Star (3rd floor) · #36"
+  },
+  "OOCwc3Dn5d": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Lone Star (3rd floor) · #37"
+  },
+  "994ptkAdnU": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Lone Star (3rd floor) · #38"
+  },
+  "5zw401UEGd": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Lone Star (3rd floor) · #39"
+  },
+  "FLxpmRskLG": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Lone Star (3rd floor) · #40"
+  },
+  "LoGyKMEVVc": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Lone Star (3rd floor) · #41"
+  },
+  "dYOnmedjXv": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Lone Star (3rd floor) · #42"
+  },
+  "LHLnvoAEhr": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Lone Star (3rd floor) · #43"
+  },
+  "OnGdMFJg2i": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Lone Star (3rd floor) · #44"
+  },
+  "9w3PEC3XLg": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Lone Star (3rd floor) · #45"
+  },
+  "8MNr0evyJT": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Lone Star (3rd floor) · #46"
+  },
+  "DEPCm83K5I": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Lone Star (3rd floor) · #47"
+  },
+  "h1yqzSoZ49": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Lone Star (3rd floor) · #48"
+  },
+  "SMKzI5HX9P": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Lone Star (3rd floor) · #49"
+  },
+  "J5RZyNKq8z": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Lone Star (3rd floor) · #50"
+  },
+  "sitHOFsi2x": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Lone Star (3rd floor) · #51"
+  },
+  "XKZ7YJEfr4": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Lone Star (3rd floor) · #52"
+  },
+  "tsWZwXGz5P": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Lone Star (3rd floor) · #53"
+  },
+  "QsmD0Pq7uP": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Lone Star (3rd floor) · #54"
+  },
+  "xaGVjPTxtr": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Lone Star (3rd floor) · #55"
+  },
+  "lHDmYo4bzs": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Lone Star (3rd floor) · #56"
+  },
+  "FYlYM2c6Xc": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Lone Star (3rd floor) · #57"
+  },
+  "C08KksTfEx": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Lone Star (3rd floor) · #58"
+  },
+  "xEOer7gykg": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Lone Star (3rd floor) · #59"
+  },
+  "LOvZujpKxN": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Lone Star (3rd floor) · #60"
+  },
+  "c7BvD59RpP": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Lone Star (3rd floor) · #61"
+  },
+  "Wv9xF5Ii7L": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Lone Star (3rd floor) · #62"
+  },
+  "fTx97RpooW": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Lone Star (3rd floor) · #63"
+  },
+  "7hdkIcfGRw": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Lone Star (3rd floor) · #64"
+  },
+  "tAXtXe4Oqd": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Lone Star (3rd floor) · #65"
+  },
+  "EfJCm9am0o": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Lone Star (3rd floor) · #66"
+  },
+  "uNi5VigrGr": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Lone Star (3rd floor) · #67"
+  },
+  "yaYM35u9Su": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Lone Star (3rd floor) · #68"
+  },
+  "Qgk0k192w6": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Lone Star (3rd floor) · #69"
+  },
+  "h4x4aofBgS": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Lone Star (3rd floor) · #70"
+  },
+  "gUSryIAaeN": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Lone Star (3rd floor) · #73"
+  },
+  "o4lQTMHyTc": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Lone Star (3rd floor) · #74"
+  },
+  "bjPoaczBRX": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Lone Star (3rd floor) · #75"
+  },
+  "QoUwcaTc3d": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Lone Star (3rd floor) · #76"
+  },
+  "Sh0dG0HwVK": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Lone Star (3rd floor) · #77"
+  },
+  "dFblf2sS7M": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Lone Star (3rd floor) · #78"
+  },
+  "6pHgTk73zs": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Lone Star (3rd floor) · #79"
+  },
+  "MWj9u2VZPx": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Lone Star (3rd floor) · #80"
+  },
+  "8gqhCYKrxR": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Lone Star (3rd floor) · #81"
+  },
+  "xXnpKl2IgD": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Lone Star (3rd floor) · #82"
+  },
+  "y5Z5ccS0Bv": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Lone Star (3rd floor) · #83"
+  },
+  "6epaMjDFWZ": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Lone Star (3rd floor) · #84"
+  },
+  "gk8bvFSZq3": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Lone Star (3rd floor) · #85"
+  },
+  "VEsQVsxMMw": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Lone Star (3rd floor) · #86"
+  },
+  "db6WHoqH91": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Lone Star (3rd floor) · #87"
+  },
+  "WaIPZtSrpq": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Lone Star (3rd floor) · #88"
+  },
+  "GX5xey9ade": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Lone Star (3rd floor) · #89"
+  },
+  "UZnHsKKAAB": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Lone Star (3rd floor) · #90"
+  },
+  "6TXMWx1Wih": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Lone Star (3rd floor) · #91"
+  },
+  "GVDQtVONA1": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Lone Star (3rd floor) · #92"
+  },
+  "Vv1WXMkSTD": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Lone Star (3rd floor) · #93"
+  },
+  "dPgz9Kssgo": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Lone Star (3rd floor) · #94"
+  },
+  "xXHKqL5u5P": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Lone Star (3rd floor) · #95"
+  },
+  "pLyDkcGbkT": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Lone Star (3rd floor) · #96"
+  },
+  "x05Rf7L7H4": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Lone Star (3rd floor) · #106"
+  },
+  "58liP3p4hu": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Lone Star (3rd floor) · #108"
+  },
+  "dykg3Ed5Wy": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Lone Star (3rd floor) · #109"
+  },
+  "FYNtpa7rwN": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Lone Star (3rd floor) · #110"
+  },
+  "ZwUhb2fAWb": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Lone Star (3rd floor) · #111"
+  },
+  "Y6pog6YGIX": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Lone Star (3rd floor) · #112"
+  },
+  "kGGI0115Rg": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Lone Star (3rd floor) · #113"
+  },
+  "cauTGdv8L0": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Lone Star (3rd floor) · #114"
+  },
+  "xL2eR7x00h": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Lone Star (3rd floor) · #115"
+  },
+  "Glj2RSQIS4": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Lone Star (3rd floor) · #116"
+  },
+  "sIe2LX2HaF": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Griffin (2nd floor) · #117"
+  },
+  "Qa1Uu7lc8n": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Griffin (2nd floor) · #118"
+  },
+  "QAHhXvXHtb": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Griffin (2nd floor) · #119"
+  },
+  "GseuCgLNtO": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Griffin (2nd floor) · #120"
+  },
+  "Eb5TKtrt2X": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Griffin (2nd floor) · #121"
+  },
+  "2qcSjfv9pr": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Griffin (2nd floor) · #122"
+  },
+  "8T3FxlYk9K": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Griffin (2nd floor) · #123"
+  },
+  "z5cgS0XgeK": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Griffin (2nd floor) · #124"
+  },
+  "0HLj8l0bB4": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Griffin (2nd floor) · #125"
+  },
+  "FsgXevFLkn": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Griffin (2nd floor) · #126"
+  },
+  "lGOsJtsr5q": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Griffin (2nd floor) · #127"
+  },
+  "tQRHDxUApa": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Griffin (2nd floor) · #128"
+  },
+  "mzGjyghofG": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Griffin (2nd floor) · #129"
+  },
+  "nG11dAaFIX": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Griffin (2nd floor) · #130"
+  },
+  "iIanOcE27q": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Griffin (2nd floor) · #131"
+  },
+  "FGyOl5tNGl": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Griffin (2nd floor) · #132"
+  },
+  "CPY2RsdnjI": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Griffin (2nd floor) · #133"
+  },
+  "fuB1LcFk9g": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Griffin (2nd floor) · #134"
+  },
+  "KdaClHHEUt": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Griffin (2nd floor) · #135"
+  },
+  "ALlLaCTHKQ": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Griffin (2nd floor) · #136"
+  },
+  "anfRreNqMN": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Griffin (2nd floor) · #137"
+  },
+  "S0rbnmOkit": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Griffin (2nd floor) · #138"
+  },
+  "7ymfgWpcWw": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Griffin (2nd floor) · #139"
+  },
+  "f3Dic5dJnz": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Griffin (2nd floor) · #140"
+  },
+  "zsHXQqYhFn": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Griffin (2nd floor) · #141"
+  },
+  "40CsfPl2cq": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Griffin (2nd floor) · #142"
+  },
+  "loMfT7cfYl": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Griffin (2nd floor) · #143"
+  },
+  "9SnXCYklB0": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Griffin (2nd floor) · #144"
+  },
+  "KDuIgyXUtd": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Griffin (2nd floor) · #145"
+  },
+  "PAtsmTswIr": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Griffin (2nd floor) · #146"
+  },
+  "NEtxISu52Q": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Griffin (2nd floor) · #147"
+  },
+  "h26AmTGnfu": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Griffin (2nd floor) · #148"
+  },
+  "ik1SfLQgZA": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Griffin (2nd floor) · #149"
+  },
+  "CH33XUEIBO": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Griffin (2nd floor) · #150"
+  },
+  "w2H90oEzfp": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Griffin (2nd floor) · #151"
+  },
+  "rIyIQWvpST": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Griffin (2nd floor) · #152"
+  },
+  "tU2SHEG4to": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Griffin (2nd floor) · #153"
+  },
+  "oias4zZRUn": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Griffin (2nd floor) · #154"
+  },
+  "X7QOq3QotA": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Griffin (2nd floor) · #155"
+  },
+  "YQoaLlpDD3": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Griffin (2nd floor) · #156"
+  },
+  "sS9FjkKKsm": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Griffin (2nd floor) · #157"
+  },
+  "VKVM1q9FbN": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Griffin (2nd floor) · #158"
+  },
+  "zYpPmDICVV": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Griffin (2nd floor) · #159"
+  },
+  "6DFI1qPxPg": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Griffin (2nd floor) · #160"
+  },
+  "O7LrmASsJS": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Griffin (2nd floor) · #161"
+  },
+  "eioQ9vJ6Oj": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Griffin (2nd floor) · #162"
+  },
+  "4IT3fcnny2": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Griffin (2nd floor) · #163"
+  },
+  "TmKLynfHXr": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Griffin (2nd floor) · #164"
+  },
+  "JbpsGhdjs9": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Griffin (2nd floor) · #165"
+  },
+  "c5oiL7JqbQ": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Griffin (2nd floor) · #166"
+  },
+  "IY6ti85pg0": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Griffin (2nd floor) · #167"
+  },
+  "JWkaXdmqKb": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Griffin (2nd floor) · #168"
+  },
+  "317SZV2vuS": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Griffin (2nd floor) · #169"
+  },
+  "oq5Byppu7Q": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Griffin (2nd floor) · #170"
+  },
+  "uMgOYXmgn2": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Griffin (2nd floor) · #171"
+  },
+  "L9RkFeuKRc": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Griffin (2nd floor) · #172"
+  },
+  "EL8hXhrhFK": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Griffin (2nd floor) · #173"
+  },
+  "7UeBDg4KRa": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Griffin (2nd floor) · #174"
+  },
+  "USCrYWxsUc": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Griffin (2nd floor) · #175"
+  },
+  "93leGzRaPV": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Griffin (2nd floor) · #176"
+  },
+  "xcDyj95l5P": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Griffin (2nd floor) · #177"
+  },
+  "HT8whUVp22": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Griffin (2nd floor) · #178"
+  },
+  "mMRhLrwLFx": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Griffin (2nd floor) · #179"
+  },
+  "8klpl3FXjN": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Griffin (2nd floor) · #180"
+  },
+  "PQdtUNzQLj": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Griffin (2nd floor) · #181"
+  },
+  "u2oeVtdVX8": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Griffin (2nd floor) · #182"
+  },
+  "mday00WZFr": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Griffin (2nd floor) · #183"
+  },
+  "mru8iHzSqR": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Griffin (2nd floor) · #184"
+  },
+  "0mUj0bXuJh": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Griffin (2nd floor) · #185"
+  },
+  "rJe0dLlPev": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Griffin (2nd floor) · #186"
+  },
+  "JwpvRd730L": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Griffin (2nd floor) · #187"
+  },
+  "FK33gnkKgF": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Griffin (2nd floor) · #188"
+  },
+  "XQGBZwsuXt": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Griffin (2nd floor) · #189"
+  },
+  "Tk1gtgOESR": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Griffin (2nd floor) · #190"
+  },
+  "gqmJ7SIK5Q": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Griffin (2nd floor) · #191"
+  },
+  "sIYfeRhQrn": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Griffin (2nd floor) · #192"
+  },
+  "0HS0to0eVo": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Griffin (2nd floor) · #193"
+  },
+  "2xR8oasJuM": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Griffin (2nd floor) · #194"
+  },
+  "YnMZwXZ68A": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Griffin (2nd floor) · #206"
+  },
+  "EsZGt1eIZr": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Griffin (2nd floor) · #207"
+  },
+  "LqUR3gxKdH": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Griffin (2nd floor) · #208"
+  },
+  "9ccdcInkM9": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Griffin (2nd floor) · #209"
+  },
+  "CKVUqG4YQf": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Griffin (2nd floor) · #210"
+  },
+  "B7gccZTJyE": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Griffin (2nd floor) · #211"
+  },
+  "EWEKI0rF6v": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Griffin (2nd floor) · #212"
+  },
+  "F4IB3mxHbO": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Griffin (2nd floor) · #213"
+  },
+  "bqXyS2gKba": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Griffin (2nd floor) · #214"
+  },
+  "Hi8mV09nOi": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Griffin (2nd floor) · #215"
+  },
+  "G6vrRbO3NE": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Griffin (2nd floor) · #216"
+  },
+  "JydY4anB01": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Griffin (2nd floor) · #217"
+  },
+  "oMvcKDFLRA": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Griffin (2nd floor) · #218"
+  },
+  "eGZ6YMFVzU": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Griffin (2nd floor) · #219"
+  },
+  "022K2ZIPR6": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Griffin (2nd floor) · #220"
+  },
+  "sdujBb3P4e": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Griffin (2nd floor) · #221"
+  },
+  "vVIVf2E7KG": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Griffin (2nd floor) · #223"
+  },
+  "Alu9eLT93i": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Griffin (2nd floor) · #224"
+  },
+  "msKuD5tWYj": {
+   "sessions": [
+    "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+   ],
+   "poster": "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM · JW Marriott, Griffin (2nd floor) · #225"
+  }
+ },
+ "sessions": [
+  "Spotlight S1 · Mon 11/9, 9:00–9:30 AM",
+  "Oral O1 · Mon 11/9, 10:30–11:00 AM",
+  "Oral O2 · Mon 11/9, 11:00–11:30 AM",
+  "Oral O3 · Mon 11/9, 11:30 AM–12:00 PM",
+  "Spotlight S2 · Mon 11/9, 2:30–3:00 PM",
+  "Poster Session 1 · Mon 11/9, 5:00–6:30 PM",
+  "Spotlight S3 · Tue 11/10, 8:30–9:00 AM",
+  "Oral O4 · Tue 11/10, 9:00–9:30 AM",
+  "Oral O5 · Tue 11/10, 10:30–11:00 AM",
+  "Oral O6 · Tue 11/10, 11:00–11:30 AM",
+  "Oral O7 · Tue 11/10, 11:30 AM–12:00 PM",
+  "Spotlight S4 · Tue 11/10, 2:00–2:30 PM",
+  "Spotlight S5 · Tue 11/10, 2:30–3:00 PM",
+  "Poster Session 2 · Tue 11/10, 5:00–6:30 PM",
+  "Spotlight S6 · Wed 11/11, 8:30–9:00 AM",
+  "Spotlight S7 · Wed 11/11, 9:00–9:30 AM",
+  "Spotlight S8 · Wed 11/11, 9:30–10:00 AM",
+  "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM"
+ ],
+ "order": {
+  "Spotlight S1 · Mon 11/9, 9:00–9:30 AM": [
+   "gQFYIM5dJy",
+   "2Z8xQxrlsY",
+   "z47bcul4Zk",
+   "5TiiTY1fK3",
+   "Q6xWLHyg6x",
+   "QwpnI3BlwT",
+   "YTw6LOO9C5",
+   "HmdwOezjlQ",
+   "4RLjGPEfpH"
+  ],
+  "Oral O1 · Mon 11/9, 10:30–11:00 AM": [
+   "cfzFrOJmKA",
+   "NHE9q2cz1n",
+   "5XKFwWrW0v"
+  ],
+  "Oral O2 · Mon 11/9, 11:00–11:30 AM": [
+   "f9grq4Ncx9",
+   "FVZKpmPHV8",
+   "Bshs9HDDiu"
+  ],
+  "Oral O3 · Mon 11/9, 11:30 AM–12:00 PM": [
+   "TscNG5Wcwn",
+   "c4Z0Y8gvnI",
+   "RdvH11pAfJ"
+  ],
+  "Spotlight S2 · Mon 11/9, 2:30–3:00 PM": [
+   "mHCqiRUiHi",
+   "dngZLI0SlV",
+   "HbuX1Fe8bl",
+   "OckqYiY2QM",
+   "QBAA8svAIK",
+   "v24DO7JOuN",
+   "FFB8qNJwV2",
+   "WvR13cRtRf",
+   "6T2ebANGy5"
+  ],
+  "Poster Session 1 · Mon 11/9, 5:00–6:30 PM": [
+   "jeNVGuJQrb",
+   "ZAdTLinUnd",
+   "qKU6lifnPU",
+   "3M39Fmw8Mx",
+   "X2mRYIgshj",
+   "HvKifHMHcM",
+   "Z04KxYWC6V",
+   "mG3eBTsBiG",
+   "uhnmcdamCa",
+   "wRLEgpRnVR",
+   "VY6U0drX88",
+   "tegLlXBRCU",
+   "fGWkovHMQE",
+   "QwpnI3BlwT",
+   "EfgCnZgmvN",
+   "iy5oCeLdEF",
+   "ghx1d6PQUR",
+   "yNHgrgATuY",
+   "YTw6LOO9C5",
+   "Y55iJjxMsh",
+   "03qRtmw4qx",
+   "JKoP9L6myQ",
+   "XnIdgAtBX7",
+   "IjnCc1OZnJ",
+   "rYkaehgzzO",
+   "oKJnHTluoA",
+   "U620dzd51N",
+   "Q6xWLHyg6x",
+   "rcE4amkjBq",
+   "1uKIsrjCvt",
+   "Afq9dTKP09",
+   "PEWWDUL10X",
+   "wKRawikMuG",
+   "0HnCTHL4fw",
+   "0PThTAIwPD",
+   "n31eEof0k3",
+   "aPppmSJzb5",
+   "TTJ3uxLcxL",
+   "TZM6J864Lf",
+   "8FGH4qAdNB",
+   "hJv9yhbgxR",
+   "5TiiTY1fK3",
+   "rnp2Bj4RUX",
+   "Q4ehHMIPmb",
+   "GqqwqejrTq",
+   "aPosmVaV9y",
+   "NHE9q2cz1n",
+   "FVZKpmPHV8",
+   "ndhpQ86iXs",
+   "dSbtHPqFj9",
+   "Bshs9HDDiu",
+   "v24DO7JOuN",
+   "f9grq4Ncx9",
+   "6T2ebANGy5",
+   "kB0KO1Wife",
+   "OIhLrULoIq",
+   "PniGejQAdF",
+   "aITDcHSCTW",
+   "mHCqiRUiHi",
+   "OckqYiY2QM",
+   "FFB8qNJwV2",
+   "WvR13cRtRf",
+   "5XKFwWrW0v",
+   "z47bcul4Zk",
+   "2Z8xQxrlsY",
+   "4RLjGPEfpH",
+   "cfzFrOJmKA",
+   "DzAZfcPUiP",
+   "thG2jwuii6",
+   "qxboQ98QN4",
+   "79jC3quhGp",
+   "mwJwAQ0CXT",
+   "hvArz6F8eA",
+   "rAyG2MJka5",
+   "VnF3D7ia9Y",
+   "nXfwmrzXzz",
+   "v4QUDwGroQ",
+   "m0Zqqi9Lfr",
+   "xWoyO2BPcl",
+   "aILPNAxgHb",
+   "Tk20sRMzhv",
+   "HfHTPpDBYr",
+   "Gpc0nCixhZ",
+   "2vx7I6aRPS",
+   "656PH9MVla",
+   "VVdYxLGhxH",
+   "qx5mPYiXVi",
+   "QBAA8svAIK",
+   "aZ2Ojk8zxd",
+   "ar3eWq6mh4",
+   "TPeVwyCt8w",
+   "kCeFEyLOuW",
+   "PNSqN6Bng7",
+   "ZDnuAR0GMn",
+   "AAn8ouEHwO",
+   "DBLXUxxslN",
+   "0ua1KHFIUD",
+   "U3Nmrhun8B",
+   "z5Mgc1GGjP",
+   "GFxjqZVSND",
+   "9I9DPyr2f9",
+   "2vDRocNuih",
+   "9seU2kEIxR",
+   "s8ZiyIAn3z",
+   "MQdt80qzTP",
+   "JqZEEaNDLJ",
+   "RS2INStAhX",
+   "W443fVglzC",
+   "dngZLI0SlV",
+   "dKRgZYcdRV",
+   "4dqRAd2sNp",
+   "HbuX1Fe8bl",
+   "qd6clCx6QY",
+   "HmdwOezjlQ",
+   "gQFYIM5dJy",
+   "RdvH11pAfJ",
+   "jnEHLRyWTZ",
+   "P8H2WZH2Tw",
+   "bLQynefrlp",
+   "f5329HhijI",
+   "qHndjmxgs1",
+   "Nfz7oM0Vwz",
+   "ORKJlyLOHv",
+   "pENAQ22Jh1",
+   "4M7C3PsA78",
+   "xOhVCWilYJ",
+   "kGLogzKtYq",
+   "8QEFjWSgyu",
+   "zhiG7XB56D",
+   "UMHg65UHcY",
+   "sF3YZbbTNX",
+   "5cXsYqAjNs",
+   "WeNTfF2Rks",
+   "cvPjGuUATQ",
+   "84ea2xeP60",
+   "keuUzk1RSd",
+   "AztNrTzNOf",
+   "QLhHHolka7",
+   "MQlY5j6pnd",
+   "PAX622BSf6",
+   "1HqdYVWaXi",
+   "JiMWz6U93i",
+   "Av4ykyMvpX",
+   "PjzSYChBzg",
+   "nYkpEYmvbg",
+   "1zWj66605w",
+   "8xaYRUduNe",
+   "5m9zSorosa",
+   "dkaxE3v6uu",
+   "1JcOSLXzHB",
+   "7tCsPSbYZb",
+   "da5VPQA7G7",
+   "foRrdaQ3mz",
+   "ODfnFGIIe3",
+   "nBwRDRUdMc",
+   "0rvhGgRYjx",
+   "oJTM5ysEeJ",
+   "Sal8Urvt1F",
+   "xyFvvMLQRo",
+   "7vjPgJ7x2b",
+   "A1Wg3RqdsR",
+   "6RJsxVCnhB",
+   "FuxTpvfYnh",
+   "G2Ja89f1e8",
+   "qbninLImrj",
+   "bXQv3Kn5qL",
+   "pTqOGquuCh",
+   "xm8LPYlbxA",
+   "DyO8vc0zYK",
+   "xyRbF93MWh",
+   "60tPXLIFyM",
+   "XA0dFQQlqP",
+   "c0ygOLwL7i",
+   "rwx9GCSVjH",
+   "eRpTR7EEC1",
+   "5oNzcK6SBR",
+   "wHAVgmIwj3",
+   "uSrlwzdTIC",
+   "ojMvvFKk6t",
+   "A9tBpzFsWI",
+   "33H7BChFgI",
+   "2AOAVWqGC6",
+   "ffIOVlfRQN",
+   "7BCkvvmpuj",
+   "WNZ4Dr57JS",
+   "Mnggg9cnbh",
+   "L8ATlveWKT",
+   "0o1c1Xxn1m",
+   "9gWuAC6Oum",
+   "1j0Hw81jY9",
+   "4uXhlSOnz5",
+   "nl8iBTm3Mt",
+   "awVlNORXDS",
+   "YZ4p3WbWKX",
+   "c4Z0Y8gvnI",
+   "ecN9efL5zs",
+   "w1x9MHo93E",
+   "TscNG5Wcwn",
+   "w3g5PWur7i",
+   "uizBY3yrgz",
+   "0cK9Wf9Eeq",
+   "BxW31Dilgn",
+   "menElmunwi",
+   "k6kMJCL22t",
+   "DMljKr2f4O",
+   "y1uP4arjzC",
+   "gvM7KWEhVI",
+   "jAbjN3n1jr",
+   "BKafd0mNwy",
+   "tXUfbhgQg2",
+   "EAeJdjpDzM",
+   "2NBZAh51If",
+   "M8NqiSkMDr",
+   "DgA5zlu7Ck",
+   "wYLEzeAKFI",
+   "PW8egEb2no",
+   "4ar3F6Obiq",
+   "ST0jumL7Ma",
+   "SniDOKrnNY",
+   "39Q3r1h0mD",
+   "CqkIkio00K",
+   "HeUmGQaw3M",
+   "weyfPS89NJ",
+   "NZrwlgnR4X",
+   "4pwzyVBjXY",
+   "802PZFmFGd",
+   "2LNbCnzTQk",
+   "7BXJJYw05E"
+  ],
+  "Spotlight S3 · Tue 11/10, 8:30–9:00 AM": [
+   "ODnu3ohjEQ",
+   "QGzgVP8RnK",
+   "JV472m0zgq",
+   "aspenN9eir",
+   "BXNVzGSYFe",
+   "l0bwpzWRKy",
+   "N77om40jWL",
+   "rfRjWMFfvV",
+   "AmQH2hU9Gs"
+  ],
+  "Oral O4 · Tue 11/10, 9:00–9:30 AM": [
+   "fHzDEYENPF",
+   "acslhrig33",
+   "RYXo2ktK1M"
+  ],
+  "Oral O5 · Tue 11/10, 10:30–11:00 AM": [
+   "WF4X17Al2r",
+   "wLgEYxjqid",
+   "RRl1xXZLdM"
+  ],
+  "Oral O6 · Tue 11/10, 11:00–11:30 AM": [
+   "03zMMFkTXk",
+   "hWuk4y2AeR",
+   "AIInkHZlvB"
+  ],
+  "Oral O7 · Tue 11/10, 11:30 AM–12:00 PM": [
+   "2dEfANeQL7",
+   "WBGnJHRIso",
+   "psNqjklVOK"
+  ],
+  "Spotlight S4 · Tue 11/10, 2:00–2:30 PM": [
+   "cJGMjQlgz5",
+   "MjpidVjNMS",
+   "hSRtOgnkTM",
+   "BV0T1o1ZIL",
+   "yMD1ykviND",
+   "RAA96LpIxJ",
+   "19iADsbO9A",
+   "Ti3oK55n1H",
+   "ult1vxdeUb"
+  ],
+  "Spotlight S5 · Tue 11/10, 2:30–3:00 PM": [
+   "FKKr8jKS29",
+   "nzYChkCtvT",
+   "3hsq75Gmr9",
+   "r8MOxo93Mv",
+   "SaMjmUr6xC",
+   "UVJPDRCmlf",
+   "nIbnBCtz79",
+   "xhO9wj1gGt",
+   "cQPnBRGgWM"
+  ],
+  "Poster Session 2 · Tue 11/10, 5:00–6:30 PM": [
+   "mw8BgE8ADo",
+   "r2uaBmvWgH",
+   "wXv81vB0Xt",
+   "gTazI5D0Fj",
+   "7cfCazwFp6",
+   "uHhNEb0OSW",
+   "lorikYEkAx",
+   "05nE8s5e7I",
+   "9ih6YlxhI5",
+   "iXJWieKME1",
+   "jlXzHOkSXq",
+   "mR4L9LaUGJ",
+   "pPrwDHXw93",
+   "hSZ0lT7TCp",
+   "rTX0zr5FjT",
+   "2vsTg6WU2p",
+   "ZyLuLA1Tsy",
+   "VxUazHdUwe",
+   "Gr9nFtFTjn",
+   "HBHR1GxaS0",
+   "8TvqhVkrMd",
+   "14GtmKGuCf",
+   "GeENMbQXhi",
+   "RmP7m64fQ6",
+   "3KzmpJQUpy",
+   "NCeeEHy8d5",
+   "tfC6LMD02z",
+   "Z35baC5jBe",
+   "aspenN9eir",
+   "J8pJIDI6rM",
+   "AY4totylcx",
+   "6BQ9NdqznS",
+   "7KV78k8rcv",
+   "S3FVTypVnZ",
+   "DwRC6la1Kr",
+   "9Jm97oFGuA",
+   "OJkazbkLtE",
+   "LfugZN8AN2",
+   "AhpH1nGaUp",
+   "zr63f3tmyq",
+   "P1R9iBKyv4",
+   "Am3aGfOlLh",
+   "H5QWMBcNSU",
+   "PJuQx9kBg5",
+   "3hsq75Gmr9",
+   "gO08puaqia",
+   "UVJPDRCmlf",
+   "nzYChkCtvT",
+   "2Y1Osh6gOU",
+   "cQPnBRGgWM",
+   "Kakzp9Lr9V",
+   "JMcC5JoPKD",
+   "N1gnyxWW2f",
+   "WF4X17Al2r",
+   "JV472m0zgq",
+   "QGzgVP8RnK",
+   "drlpFld34L",
+   "MYYKl10JKD",
+   "vQmF2cR04D",
+   "wMrKZ9eYBg",
+   "aTDKKvOg7W",
+   "EfkPQTtjky",
+   "acslhrig33",
+   "RYXo2ktK1M",
+   "bsjuF5klA3",
+   "MCTsPd3H0q",
+   "eIwbKQS5pz",
+   "BWHjoo36Dr",
+   "F5KmQJCC8X",
+   "ey3y7lxWY1",
+   "o03EddNo6r",
+   "Unsv9DsbfO",
+   "6EN09R3NGP",
+   "AO1shrWa8H",
+   "rQZHMVTYYy",
+   "0gwpqWBvhJ",
+   "u56Z5KqtkI",
+   "vA3t8YK04w",
+   "Tjg1ZvCdXU",
+   "jQAOksG9Bd",
+   "5fZzu1zWzG",
+   "Lp94sPpAo0",
+   "NnFdATGR3L",
+   "SaMjmUr6xC",
+   "k9EjTLL8bA",
+   "Qu7v3GmYDU",
+   "A9AQjk3dAt",
+   "qH1h7UkK0k",
+   "cCI6zZIcEw",
+   "59kpavSqlw",
+   "QDJCwo9pmt",
+   "mg7X6SFE75",
+   "1yL1d39r7K",
+   "HuFkyUA5RR",
+   "7jMlaTLtAc",
+   "JQvRoFU5aS",
+   "r7ZN8cPEcj",
+   "e9ZYAwJqFR",
+   "QFFjW11NYa",
+   "7qMRpmvhZL",
+   "quVJ7qbQl6",
+   "Br2rXixvyN",
+   "bL51SsKShM",
+   "xMysKLF2hX",
+   "Nxn1pyNZpE",
+   "SMBnET3Mz9",
+   "GRyPwVAxpq",
+   "lTLiSuIBAj",
+   "SBGylS4zwM",
+   "MWHlzlo4UD",
+   "QJI3N7JzBc",
+   "51YZMUGRUA",
+   "iOU9zkASbg",
+   "3jf63cW3cJ",
+   "xhO9wj1gGt",
+   "yPkDKkOD11",
+   "wt25SMJmEq",
+   "IbO5qWFXuh",
+   "4soIQrXqxj",
+   "hPz010j4EA",
+   "wLgEYxjqid",
+   "ODnu3ohjEQ",
+   "cxxUgLuNa2",
+   "hDNvcoKMXH",
+   "AGM5ZQRjOT",
+   "RRl1xXZLdM",
+   "uKRtsLLqs6",
+   "8CDEvBQA6x",
+   "JI9u9A9JJO",
+   "Rrnnh3mDaH",
+   "AmQH2hU9Gs",
+   "ULCeXiRzJD",
+   "PL6UDcy9Eu",
+   "BXNVzGSYFe",
+   "MTZ4eKUP94",
+   "JhEwJ56SH3",
+   "zMbOvWpUUw",
+   "CtcahYuPBL",
+   "TH0fdttVB0",
+   "xn8Hwa4hpq",
+   "0DopZPPLvw",
+   "xc8asDq7QI",
+   "b2gSINMX3R",
+   "yeAKwjw5Xa",
+   "1zYrrwoISV",
+   "q1q252TIt0",
+   "42z4ov9nRQ",
+   "19iADsbO9A",
+   "H7b56xK590",
+   "vG6UymddY4",
+   "suRtJLXVxI",
+   "TlWfBm8jtZ",
+   "tJpI5D27wh",
+   "wiovp2zRWA",
+   "03zMMFkTXk",
+   "yMD1ykviND",
+   "PCVxUMrP6N",
+   "d0ltfevDaD",
+   "gn0kBXdK0G",
+   "bC8Sv8wTTL",
+   "334wtBsPIG",
+   "hSRtOgnkTM",
+   "RAA96LpIxJ",
+   "AIInkHZlvB",
+   "ult1vxdeUb",
+   "BV0T1o1ZIL",
+   "cJGMjQlgz5",
+   "MjpidVjNMS",
+   "Ti3oK55n1H",
+   "l0bwpzWRKy",
+   "N77om40jWL",
+   "rfRjWMFfvV",
+   "nIbnBCtz79",
+   "FKKr8jKS29",
+   "r8MOxo93Mv",
+   "hWuk4y2AeR",
+   "XnyoJXimAK",
+   "cHCwUratwL",
+   "hFLtQusqPy",
+   "FP3mCkMV24",
+   "WBGnJHRIso",
+   "VTSUekrCnH",
+   "USXQ0bDfAz",
+   "uZalcCyrVl",
+   "9kXz22fI7a",
+   "aRtb8NIgc3",
+   "aq2hmhW0kU",
+   "trTMmn2U1g",
+   "qMAfkDMTOy",
+   "kpX1KOfNI5",
+   "qF26obIUEX",
+   "r27erS063s",
+   "3Ex2nEGqHP",
+   "kBoTnjRw4s",
+   "hf8X30fAtz",
+   "dhh4gmm3NK",
+   "rK0JCfddwK",
+   "XJgz1iK29G",
+   "0jY75QYDMn",
+   "e9OQ6xsma9",
+   "R1fgJZLFnx",
+   "Gkka9VEhWb",
+   "gbchkYm28k",
+   "NzvfxoRvOC",
+   "HWaigsXLaH",
+   "u2dtQWAFQo",
+   "wALhOwQWnx",
+   "2tjuz95jmb",
+   "X4i3kSa2kd",
+   "pWDT36r945",
+   "Wp9ex57Z2k",
+   "JhdmNwpT4o",
+   "l8hOz8loVg",
+   "mjvsJNQuFV",
+   "WxBKiMUZtI",
+   "2dEfANeQL7",
+   "psNqjklVOK",
+   "fHzDEYENPF",
+   "uoFfrJHHq8",
+   "NWlhQeCX3L",
+   "j5QcZcRrda",
+   "yzejD0WIk9",
+   "8iFziu27Yy",
+   "SN5sVBOZ8D",
+   "XjyM9If1Tm",
+   "RExYYVsLbT",
+   "n0v95NpvyY",
+   "m94Acp7Al5",
+   "PHNhlZK2uS",
+   "LwMNsyCnCk",
+   "qEOv7MuWIx"
+  ],
+  "Spotlight S6 · Wed 11/11, 8:30–9:00 AM": [
+   "DpOVq6nE2d",
+   "El4EDBhqCG",
+   "c9tCcHtVcS",
+   "XY8QpMSxvq",
+   "C96z0RnFh8",
+   "qQs6JndxfZ",
+   "GeL3GdwSYo",
+   "xfZJ2GKrZG",
+   "CSYA6oHdlE"
+  ],
+  "Spotlight S7 · Wed 11/11, 9:00–9:30 AM": [
+   "yyitbtz7rQ",
+   "2Z9666X2B7",
+   "aKjXDWnmzc",
+   "PLNJ3a6Yht",
+   "5b4j0e21aJ",
+   "TTFZrb0Hw3",
+   "lY47GBfn32",
+   "rEmMzoUnpn",
+   "aGLO1l8SNB"
+  ],
+  "Spotlight S8 · Wed 11/11, 9:30–10:00 AM": [
+   "Q53ayGo2IE",
+   "lSrxDURLdG",
+   "RwGNm8fUxX",
+   "k2QZxbcSbQ",
+   "hr2FYFod4n",
+   "SUV5PudsyI",
+   "wBzyyPlFs6",
+   "98pbD92mEI",
+   "dE7KjOl8yu"
+  ],
+  "Poster Session 3 · Wed 11/11, 10:30 AM–12:00 PM": [
+   "Zts11nHGLq",
+   "GMAZdF34n5",
+   "1u6oriJJcU",
+   "YrNlVJcApO",
+   "qvOl1xOUtn",
+   "AilV1LyfXF",
+   "oX3ErTz3rv",
+   "0w0ylGezd5",
+   "2nityiXWGJ",
+   "nBDd4rVq5Q",
+   "lsfM8TzuH2",
+   "ntHuqgjrgs",
+   "KHjJ1z5m4y",
+   "Ih059VNeWq",
+   "U5POjpnj6J",
+   "xHjEeyHkhY",
+   "hCG12ifteJ",
+   "mlF6DhhBNF",
+   "8YqfXYof0Y",
+   "ddzWaOmWZE",
+   "Jq0aPlIS34",
+   "hwTNqrJmuQ",
+   "E5lvpA2Glx",
+   "xombt7ofur",
+   "QHIz2k4E88",
+   "HATezFmdN5",
+   "zDGliNPeBL",
+   "Xgth4qBOmb",
+   "587eUkwa7d",
+   "RLsVfgv1pS",
+   "FVPhDDjumI",
+   "74gh4jCB2a",
+   "ShBMWDRPVu",
+   "T3IOHvur0R",
+   "hgRIVs5QZU",
+   "9uM5JbXz4T",
+   "OOCwc3Dn5d",
+   "994ptkAdnU",
+   "5zw401UEGd",
+   "FLxpmRskLG",
+   "LoGyKMEVVc",
+   "dYOnmedjXv",
+   "LHLnvoAEhr",
+   "OnGdMFJg2i",
+   "9w3PEC3XLg",
+   "8MNr0evyJT",
+   "DEPCm83K5I",
+   "h1yqzSoZ49",
+   "SMKzI5HX9P",
+   "J5RZyNKq8z",
+   "sitHOFsi2x",
+   "XKZ7YJEfr4",
+   "tsWZwXGz5P",
+   "QsmD0Pq7uP",
+   "xaGVjPTxtr",
+   "lHDmYo4bzs",
+   "FYlYM2c6Xc",
+   "C08KksTfEx",
+   "xEOer7gykg",
+   "LOvZujpKxN",
+   "c7BvD59RpP",
+   "Wv9xF5Ii7L",
+   "fTx97RpooW",
+   "7hdkIcfGRw",
+   "tAXtXe4Oqd",
+   "EfJCm9am0o",
+   "uNi5VigrGr",
+   "yaYM35u9Su",
+   "Qgk0k192w6",
+   "h4x4aofBgS",
+   "SUV5PudsyI",
+   "XY8QpMSxvq",
+   "gUSryIAaeN",
+   "o4lQTMHyTc",
+   "bjPoaczBRX",
+   "QoUwcaTc3d",
+   "Sh0dG0HwVK",
+   "dFblf2sS7M",
+   "6pHgTk73zs",
+   "MWj9u2VZPx",
+   "8gqhCYKrxR",
+   "xXnpKl2IgD",
+   "y5Z5ccS0Bv",
+   "6epaMjDFWZ",
+   "gk8bvFSZq3",
+   "VEsQVsxMMw",
+   "db6WHoqH91",
+   "WaIPZtSrpq",
+   "GX5xey9ade",
+   "UZnHsKKAAB",
+   "6TXMWx1Wih",
+   "GVDQtVONA1",
+   "Vv1WXMkSTD",
+   "dPgz9Kssgo",
+   "xXHKqL5u5P",
+   "pLyDkcGbkT",
+   "dE7KjOl8yu",
+   "aKjXDWnmzc",
+   "GeL3GdwSYo",
+   "C96z0RnFh8",
+   "CSYA6oHdlE",
+   "c9tCcHtVcS",
+   "El4EDBhqCG",
+   "qQs6JndxfZ",
+   "xfZJ2GKrZG",
+   "x05Rf7L7H4",
+   "DpOVq6nE2d",
+   "58liP3p4hu",
+   "dykg3Ed5Wy",
+   "FYNtpa7rwN",
+   "ZwUhb2fAWb",
+   "Y6pog6YGIX",
+   "kGGI0115Rg",
+   "cauTGdv8L0",
+   "xL2eR7x00h",
+   "Glj2RSQIS4",
+   "sIe2LX2HaF",
+   "Qa1Uu7lc8n",
+   "QAHhXvXHtb",
+   "GseuCgLNtO",
+   "Eb5TKtrt2X",
+   "2qcSjfv9pr",
+   "8T3FxlYk9K",
+   "z5cgS0XgeK",
+   "0HLj8l0bB4",
+   "FsgXevFLkn",
+   "lGOsJtsr5q",
+   "tQRHDxUApa",
+   "mzGjyghofG",
+   "nG11dAaFIX",
+   "iIanOcE27q",
+   "FGyOl5tNGl",
+   "CPY2RsdnjI",
+   "fuB1LcFk9g",
+   "KdaClHHEUt",
+   "ALlLaCTHKQ",
+   "anfRreNqMN",
+   "S0rbnmOkit",
+   "7ymfgWpcWw",
+   "f3Dic5dJnz",
+   "zsHXQqYhFn",
+   "40CsfPl2cq",
+   "loMfT7cfYl",
+   "9SnXCYklB0",
+   "KDuIgyXUtd",
+   "PAtsmTswIr",
+   "NEtxISu52Q",
+   "h26AmTGnfu",
+   "ik1SfLQgZA",
+   "CH33XUEIBO",
+   "w2H90oEzfp",
+   "rIyIQWvpST",
+   "tU2SHEG4to",
+   "oias4zZRUn",
+   "X7QOq3QotA",
+   "YQoaLlpDD3",
+   "sS9FjkKKsm",
+   "VKVM1q9FbN",
+   "zYpPmDICVV",
+   "6DFI1qPxPg",
+   "O7LrmASsJS",
+   "eioQ9vJ6Oj",
+   "4IT3fcnny2",
+   "TmKLynfHXr",
+   "JbpsGhdjs9",
+   "c5oiL7JqbQ",
+   "IY6ti85pg0",
+   "JWkaXdmqKb",
+   "317SZV2vuS",
+   "oq5Byppu7Q",
+   "uMgOYXmgn2",
+   "L9RkFeuKRc",
+   "EL8hXhrhFK",
+   "7UeBDg4KRa",
+   "USCrYWxsUc",
+   "93leGzRaPV",
+   "xcDyj95l5P",
+   "HT8whUVp22",
+   "mMRhLrwLFx",
+   "8klpl3FXjN",
+   "PQdtUNzQLj",
+   "u2oeVtdVX8",
+   "mday00WZFr",
+   "mru8iHzSqR",
+   "0mUj0bXuJh",
+   "rJe0dLlPev",
+   "JwpvRd730L",
+   "FK33gnkKgF",
+   "XQGBZwsuXt",
+   "Tk1gtgOESR",
+   "gqmJ7SIK5Q",
+   "sIYfeRhQrn",
+   "0HS0to0eVo",
+   "2xR8oasJuM",
+   "PLNJ3a6Yht",
+   "lY47GBfn32",
+   "aGLO1l8SNB",
+   "rEmMzoUnpn",
+   "TTFZrb0Hw3",
+   "2Z9666X2B7",
+   "5b4j0e21aJ",
+   "yyitbtz7rQ",
+   "wBzyyPlFs6",
+   "hr2FYFod4n",
+   "RwGNm8fUxX",
+   "YnMZwXZ68A",
+   "EsZGt1eIZr",
+   "LqUR3gxKdH",
+   "9ccdcInkM9",
+   "CKVUqG4YQf",
+   "B7gccZTJyE",
+   "EWEKI0rF6v",
+   "F4IB3mxHbO",
+   "bqXyS2gKba",
+   "Hi8mV09nOi",
+   "G6vrRbO3NE",
+   "JydY4anB01",
+   "oMvcKDFLRA",
+   "eGZ6YMFVzU",
+   "022K2ZIPR6",
+   "sdujBb3P4e",
+   "vVIVf2E7KG",
+   "Alu9eLT93i",
+   "msKuD5tWYj",
+   "98pbD92mEI",
+   "k2QZxbcSbQ",
+   "Q53ayGo2IE",
+   "lSrxDURLdG"
+  ]
+ }
+}
