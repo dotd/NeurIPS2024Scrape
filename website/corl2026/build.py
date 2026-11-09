@@ -87,6 +87,9 @@ HTML = r"""<!doctype html>
   .btbar { position: sticky; top: 0; z-index: 4; background: #fff; padding: 8px 0; display: flex; gap: 8px; align-items: center; }
   .btbar select { padding: 5px 8px; border: 1px solid #bbb; border-radius: 6px; font-size: 14px; }
   .btnum { color: #2b6cb0; font-weight: bold; }
+  .rd { padding: 6px 0; border-bottom: 1px solid #eee; }
+  .rd .rdtitle { font-weight: bold; }
+  .rd .rdtitle a { font-weight: normal; margin-left: 8px; }
   .drive { margin: 4px 0; font-size: 13px; }
   .nextmov { margin: 4px 0; padding: 3px 10px; border: 1px solid #bbb; border-radius: 6px; background: #f7f7f7; cursor: pointer; }
   a { color: #2b6cb0; }
@@ -137,6 +140,7 @@ HTML = r"""<!doctype html>
   <button data-view="papers">Papers</button>
   <button data-view="table">Table</button>
   <button data-view="bytime">🕒 By time</button>
+  <button data-view="random">🎲 Random</button>
   <span class="stats"></span>
   <span class="count"></span>
   <button id="clear" title="Clear every filter, search and sort">↺ Reset filters</button>
@@ -192,6 +196,9 @@ __ADD__
 <div id="bytime" class="view"><div class="btbar"><button id="btPrev" title="Previous session">◀</button>
   <select id="btSession"></select><button id="btNext" title="Next session">▶</button><span id="btCount"></span></div>
   <div id="btList"></div></div>
+<div id="random" class="view"><div class="btbar"><span id="rdCount"></span>
+  <a href="#" id="rdReset" title="Shuffle again; the movies you watched come back">🔀 Reset random</a></div>
+  <div id="rdList"></div></div>
 <svg hidden><symbol id="gh" viewBox="0 0 16 16"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></symbol></svg>
 <script id="data" type="application/json">__DATA__</script>
 <script>
@@ -225,6 +232,7 @@ function show(view) {
   buttons.forEach(b => b.classList.toggle('active', b.dataset.view === view));
   document.querySelectorAll('.view').forEach(v => v.classList.toggle('active', v.id === view));
   if (view === 'bytime') renderByTime();
+  if (view === 'random' && !rdList.childElementCount) renderRandom();
 }
 buttons.forEach(b => b.onclick = () => show(b.dataset.view));
 
@@ -440,6 +448,21 @@ function htmlBoxes(pid) {
 const titleIdx = columns.indexOf('title'), idIdx = columns.indexOf('id'), ghIdx = columns.indexOf('💻 github');
 const kwIdx = ['primary_keyword', 'secondary_keyword', 'free_keyword_1', 'free_keyword_2', '🏷️ keywords']
   .map(c => columns.indexOf(c)).filter(i => i >= 0);
+function players(movs, ids) {  // local players; Google Drive's (ids[i]) where the local file is missing (GitHub Pages)
+  return movs.map((p, i) => {
+    const src = p.split('/').map(encodeURIComponent).join('/');
+    const v = document.createElement(p.endsWith('.gif') ? 'img' : 'video');
+    v.src = src; v.title = p.split('/').pop();
+    if (v.tagName === 'VIDEO') { v.controls = true; v.preload = 'metadata'; }
+    if (ids[i]) v.onerror = () => {
+      const f = document.createElement('iframe');
+      f.src = `https://drive.google.com/file/d/${ids[i]}/preview`; f.title = v.title;
+      f.allow = 'autoplay; fullscreen'; f.allowFullscreen = true;
+      v.replaceWith(f);
+    };
+    return v;
+  });
+}
 function card(r, ri) {  // one paper's dropdown; the By time view builds its own copies
   const d = document.createElement('details'), s = document.createElement('summary');
   s.textContent = r[titleIdx];
@@ -534,19 +557,7 @@ function card(r, ri) {  // one paper's dropdown; the By time view builds its own
       if (!mv.open) return box.querySelectorAll('video').forEach(v => v.pause());
       const play = () => { if (mv.dataset.autoplay) { delete mv.dataset.autoplay; box.querySelector('video')?.play().catch(() => {}); } };
       if (box.childElementCount) return play();
-      box.append(...movs.map((p, i) => {
-        const src = p.split('/').map(encodeURIComponent).join('/');
-        const v = document.createElement(p.endsWith('.gif') ? 'img' : 'video');
-        v.src = src; v.title = p.split('/').pop();
-        if (v.tagName === 'VIDEO') { v.controls = true; v.preload = 'metadata'; }
-        if (ids[i]) v.onerror = () => {  // no local file (e.g. on GitHub Pages): Google Drive's player instead
-          const f = document.createElement('iframe');
-          f.src = `https://drive.google.com/file/d/${ids[i]}/preview`; f.title = v.title;
-          f.allow = 'autoplay; fullscreen'; f.allowFullscreen = true;
-          v.replaceWith(f);
-        };
-        return v;
-      }));
+      box.append(...players(movs, ids));
       play();
     };
     dl.before(mv);  // right after the HTML / link buttons, before the fields
@@ -682,6 +693,72 @@ btSel.onchange = renderByTime;
 const step = by => { btSel.selectedIndex = Math.min(Math.max(btSel.selectedIndex + by, 0), btSel.options.length - 1); renderByTime(); };
 document.getElementById('btPrev').onclick = () => step(-1);
 document.getElementById('btNext').onclick = () => step(1);
+
+// ---- random view: papers with a movie in a shuffled order; ⏭ Next drops the one you watched and opens the next.
+// The order and what you watched are kept in this browser (localStorage) until 🔀 Reset random ----
+const rdKey = store + 'Random', rdList = document.getElementById('rdList');
+const pdfIdx = columns.indexOf('local_pdf'), webIdx = columns.indexOf('pdf');
+const withMovies = rows.map(r => r[idIdx].split('id=').pop()).filter(pid => (movies[pid] || []).length);
+if (!withMovies.length) document.querySelector('nav button[data-view=random]').hidden = true;
+let rd = null;
+try { rd = JSON.parse(localStorage.getItem(rdKey)); } catch (e) {}
+const saveRd = () => { try { localStorage.setItem(rdKey, JSON.stringify(rd)); } catch (e) {} };
+function shuffle() {  // Fisher-Yates
+  const a = [...withMovies];
+  for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; }
+  rd = {order: a, seen: []}; saveRd();
+}
+if (!rd?.order) shuffle();
+else {  // papers added or dropped since: new ones go in at random places
+  const have = new Set(withMovies), known = new Set(rd.order);
+  rd.order = rd.order.filter(p => have.has(p));
+  withMovies.filter(p => !known.has(p)).forEach(p => rd.order.splice(Math.floor(Math.random() * (rd.order.length + 1)), 0, p));
+  saveRd();
+}
+const rdCount = () => document.getElementById('rdCount').textContent = rdList.childElementCount
+  ? `🎲 ${rdList.childElementCount} movies left of ${rd.order.length}` : `🎉 All ${rd.order.length} movies watched`;
+function rdEntry(pid) {
+  const r = rows[rowOf[pid]], e = document.createElement('div'), h = document.createElement('div');
+  e.className = 'rd'; h.className = 'rdtitle'; h.textContent = r[titleIdx];
+  const link = (href, text, title) => {
+    const a = document.createElement('a'); a.href = encodeURI(href); a.target = '_blank'; a.textContent = text; a.title = title; h.append(a);
+  };
+  if (pdfIdx >= 0 && r[pdfIdx]) link(r[pdfIdx], '📄 PDF', 'Local PDF');
+  if (webIdx >= 0 && r[webIdx]) link(r[webIdx], '🌐 OpenReview', 'PDF on OpenReview');
+  const movs = movies[pid], ids = movs.map(p => drive.files[p.split('/').pop()]);
+  const mv = document.createElement('details'), ms = document.createElement('summary'),
+        box = document.createElement('div'), nx = document.createElement('button');
+  ms.textContent = movs.length > 1 ? `🎬 Movies (${movs.length})` : '🎬 Movie';
+  box.className = 'movies'; nx.className = 'nextmov'; nx.textContent = '⏭ Next';
+  nx.title = 'Done with this one: remove it and open the next movie';
+  mv.append(ms, nx, box);
+  mv.ontoggle = () => {
+    if (!mv.open) return box.replaceChildren();  // players only while open, so only one movie holds memory
+    box.replaceChildren(...players(movs, ids));
+    if (mv.dataset.autoplay) { delete mv.dataset.autoplay; box.querySelector('video')?.play().catch(() => {}); }
+  };
+  nx.onclick = () => {
+    rd.seen.push(pid); saveRd();
+    const next = e.nextElementSibling;
+    e.remove(); rdCount();
+    if (!next) return;
+    const m = next.querySelector('details');
+    m.dataset.autoplay = '1'; m.open = true;
+    next.scrollIntoView({block: 'start'});
+  };
+  e.append(h, mv);
+  return e;
+}
+function renderRandom() {
+  const seen = new Set(rd.seen);
+  rdList.replaceChildren(...rd.order.filter(p => !seen.has(p)).map(rdEntry));
+  rdCount();
+}
+document.getElementById('rdReset').onclick = ev => {
+  ev.preventDefault();
+  if (!confirm('Start a new random order? The movies you already watched will come back.')) return;
+  shuffle(); renderRandom();
+};
 
 restoreFilters();
 renderTable();
