@@ -453,7 +453,7 @@ function htmlBoxes(pid) {
 const titleIdx = columns.indexOf('title'), idIdx = columns.indexOf('id'), ghIdx = columns.indexOf('💻 github');
 const kwIdx = ['primary_keyword', 'secondary_keyword', 'free_keyword_1', 'free_keyword_2', '🏷️ keywords']
   .map(c => columns.indexOf(c)).filter(i => i >= 0);
-// ---- WhatsApp message: bold title, CoRL 2026, talk / poster time and place, the movie on GitHub Pages, arXiv, OpenReview,
+// ---- WhatsApp message: bold title, CoRL 2026, talk / poster time and place, the movie on Google Drive (else GitHub Pages), arXiv, OpenReview,
 // GitHub, a one-slide summary ----
 const WA = store === 'corl';  // ponytail: only the CoRL site is on GitHub Pages; "your papers" has no public page
 const PAGES = 'https://dotd.github.io/corl2026/';
@@ -463,7 +463,9 @@ function waText(pid) {
   const talk = r[columns.indexOf('🎤 talk')], poster = r[columns.indexOf('🖼️ poster session')];  // schedule.json
   if (talk) lines.push(`🎤 Talk: ${talk}`);
   if (poster) lines.push(`🖼️ Poster: ${poster}`);
-  lines.push((movies[pid] || []).length ? `🎬 Movie: ${PAGES}#${pid}/movie` : `📄 Paper: ${PAGES}#${pid}`);
+  const ids = (movies[pid] || []).map(p => drive.files[p.split('/').pop()]).filter(Boolean);  // Drive opens the movie directly
+  if (ids.length) lines.push(...ids.map(id => `🎬 Movie: https://drive.google.com/file/d/${id}/view`));
+  else lines.push((movies[pid] || []).length ? `🎬 Movie: ${PAGES}#${pid}/movie` : `📄 Paper: ${PAGES}#${pid}`);
   const arx = arxiv[pid] || ((links[pid] || {}).url || '').match(/^https?:\/\/arxiv\.org\/\S+/)?.[0];
   if (arx) lines.push(`📝 arXiv: ${arx}`);
   lines.push(`💬 OpenReview: https://openreview.net/forum?id=${pid}`);
