@@ -26,6 +26,7 @@ PRESENTATION = {"Oral": "🎤 Oral", "Spotlight": "✨ Spotlight", "Poster": "�
 #   summaries.json, ratings.json, links.json, htmls_claude/, htmls_python/   website/serve.py (buttons on the page)
 #   schedule.json    specific_scripts/corl2026_schedule.py      (talk + poster session of each paper)
 #   drive_movies.json specific_scripts/corl2026_drive_movies.py (Google Drive copies of the movies)
+#   arxiv.json, slide_summaries.json  specific_scripts/corl2026_whatsapp.py (the WhatsApp message)
 #   movies/paper_movies/<id>_<title>[_N].<ext>                 specific_scripts/corl2026_sort_movies.py
 HTML_KINDS = ("claude", "python")  # htmls_<kind>/<id>_<title>/index.html
 TOP_COMPANIES, TOP_UNIVERSITIES, TOP_RESEARCHERS, TOP_ROBOTS, TOP_KEYWORDS = 20, 50, 50, 50, 50
@@ -88,6 +89,10 @@ HTML = r"""<!doctype html>
   .btbar select { padding: 5px 8px; border: 1px solid #bbb; border-radius: 6px; font-size: 14px; }
   .btnum { color: #2b6cb0; font-weight: bold; }
   .rd { padding: 6px 0; border-bottom: 1px solid #eee; }
+  .wa { margin: 4px 0; }
+  .wa > button, .wa .panel button { padding: 3px 10px; border: 1px solid #bbb; border-radius: 6px; background: #f7f7f7; cursor: pointer; }
+  .wa .panel { margin-top: 4px; }
+  .wa textarea { display: block; width: min(100%, 640px); font: 13px/1.4 system-ui, sans-serif; margin-bottom: 4px; }
   .rd .rdtitle { font-weight: bold; }
   .rd .rdtitle a { font-weight: normal; margin-left: 8px; }
   .drive { margin: 4px 0; font-size: 13px; }
@@ -202,7 +207,7 @@ __ADD__
 <svg hidden><symbol id="gh" viewBox="0 0 16 16"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></symbol></svg>
 <script id="data" type="application/json">__DATA__</script>
 <script>
-const {columns, rows, firstPage, meta, facets, summaries, ratings, links, htmlv, movies, here, store, schedule, drive} = JSON.parse(document.getElementById('data').textContent);
+const {columns, rows, firstPage, meta, facets, summaries, ratings, links, htmlv, movies, here, store, schedule, drive, arxiv, shortSum} = JSON.parse(document.getElementById('data').textContent);
 
 function cellContent(v) {
   if (/^https:\/\/github\.com\/\S+ /.test(v)) {  // several space-separated repos
@@ -448,6 +453,39 @@ function htmlBoxes(pid) {
 const titleIdx = columns.indexOf('title'), idIdx = columns.indexOf('id'), ghIdx = columns.indexOf('💻 github');
 const kwIdx = ['primary_keyword', 'secondary_keyword', 'free_keyword_1', 'free_keyword_2', '🏷️ keywords']
   .map(c => columns.indexOf(c)).filter(i => i >= 0);
+// ---- WhatsApp message: bold title, CoRL 2026, talk / poster time and place, the movie on GitHub Pages, arXiv, OpenReview,
+// GitHub, a one-slide summary ----
+const WA = store === 'corl';  // ponytail: only the CoRL site is on GitHub Pages; "your papers" has no public page
+const PAGES = 'https://dotd.github.io/corl2026/';
+const gist = x => ((x && sumText(x) || '').match(/^Gist:\s*([\s\S]*?)(?:\n\n|$)/) || [])[1];  // from the full-PDF summary
+function waText(pid) {
+  const r = rows[rowOf[pid]], lines = [`*${r[titleIdx].trim()}*`, 'CoRL 2026'];
+  const talk = r[columns.indexOf('🎤 talk')], poster = r[columns.indexOf('🖼️ poster session')];  // schedule.json
+  if (talk) lines.push(`🎤 Talk: ${talk}`);
+  if (poster) lines.push(`🖼️ Poster: ${poster}`);
+  lines.push((movies[pid] || []).length ? `🎬 Movie: ${PAGES}#${pid}/movie` : `📄 Paper: ${PAGES}#${pid}`);
+  const arx = arxiv[pid] || ((links[pid] || {}).url || '').match(/^https?:\/\/arxiv\.org\/\S+/)?.[0];
+  if (arx) lines.push(`📝 arXiv: ${arx}`);
+  lines.push(`💬 OpenReview: https://openreview.net/forum?id=${pid}`);
+  if (ghIdx >= 0 && r[ghIdx]) lines.push(...r[ghIdx].split(' ').map(u => `💻 GitHub: ${u}`));
+  lines.push('', shortSum[pid] || gist(summaries[pid]) || r[columns.indexOf('abstract')] || '');
+  return lines.join('\n').trim();
+}
+function waButton(pid) {
+  const wrap = document.createElement('div'), b = document.createElement('button'),
+        panel = document.createElement('div'), ta = document.createElement('textarea'), cp = document.createElement('button');
+  wrap.className = 'wa'; panel.className = 'panel'; panel.hidden = true; ta.rows = 10;
+  b.textContent = '💬 WhatsApp'; b.title = 'Prepare a WhatsApp message about this paper';
+  cp.textContent = '📋 Copy';
+  b.onclick = () => { if (!ta.value) ta.value = waText(pid); panel.hidden = !panel.hidden; };  // you can edit it before copying
+  cp.onclick = async () => {
+    ta.select();  // copying the selection works on file:// and http too; the Clipboard API is the fallback
+    if (!document.execCommand('copy')) await navigator.clipboard.writeText(ta.value);
+    cp.textContent = '✅ Copied'; setTimeout(() => cp.textContent = '📋 Copy', 1500);
+  };
+  panel.append(ta, cp); wrap.append(b, panel);
+  return wrap;
+}
 function players(movs, ids) {  // local players; Google Drive's (ids[i]) where the local file is missing (GitHub Pages)
   return movs.map((p, i) => {
     const src = p.split('/').map(encodeURIComponent).join('/');
@@ -496,7 +534,9 @@ function card(r, ri) {  // one paper's dropdown; the By time view builds its own
     dt.textContent = c; dd.appendChild(cellContent(r[i]));
     dl.append(dt, dd);
   });
-  d.append(s, summaryBox(r[idIdx].split('id=').pop(), sumFlag), htmlBoxes(r[idIdx].split('id=').pop()), dl);
+  d.append(s, summaryBox(r[idIdx].split('id=').pop(), sumFlag), htmlBoxes(r[idIdx].split('id=').pop()));
+  if (WA) d.append(waButton(r[idIdx].split('id=').pop()));
+  d.append(dl);
   const fig = (firstPage[r[idIdx].split('id=').pop()] || {}).figure;
   if (fig) { const img = document.createElement('img'); img.src = fig; img.loading = 'lazy'; d.append(img); }
   const figs = (firstPage[r[idIdx].split('id=').pop()] || {}).figures || [];
@@ -746,7 +786,9 @@ function rdEntry(pid) {
     m.dataset.autoplay = '1'; m.open = true;
     next.scrollIntoView({block: 'start'});
   };
-  e.append(h, mv);
+  e.append(h);
+  if (WA) e.append(waButton(pid));
+  e.append(mv);
   return e;
 }
 function renderRandom() {
@@ -764,10 +806,13 @@ restoreFilters();
 renderTable();
 show('papers');
 // ---- #<paper id> in the address scrolls to that paper, closed (the Add box on the papers site jumps to the one it added) ----
-const target = decodeURIComponent(location.hash.slice(1)),
+// #<paper id>/movie (the WhatsApp link) also opens the paper and its movie
+const [target, want] = decodeURIComponent(location.hash.slice(1)).split('/'),
       ti = target ? rows.findIndex(r => r[idIdx].split('id=').pop() === target) : -1;
 if (ti >= 0) {
   if (!dets[ti].isConnected) document.getElementById('clear').click();  // hidden by saved filters: show everything
+  const m = want === 'movie' && dets[ti].querySelector(':scope > details.movie');
+  if (m) { dets[ti].open = true; m.open = true; }
   dets[ti].scrollIntoView();
 }
 if (location.hash) history.replaceState(null, '', location.pathname + location.search);  // a refresh starts at the top
@@ -911,6 +956,8 @@ def build(here, title, columns, rows, add_box="", store="corl"):
                        "htmlv": {**{k: html_versions(k, here) for k in HTML_KINDS}, "claude2": condensed_versions(here)},
                        "movies": paper_movies(here), "here": here, "store": store,
                        "drive": load(here, "drive_movies.json", {"folder": "", "files": {}}),
+                       "arxiv": {k: v for k, v in load(here, "arxiv.json", {}).items() if v},
+                       "shortSum": {k: v["text"] for k, v in load(here, "slide_summaries.json", {}).items()},
                        "schedule": {k: v for k, v in load(here, "schedule.json", {"sessions": [], "order": {}}).items()
                                     if k in ("sessions", "order")}}, ensure_ascii=False).replace("</", "<\\/")
     out = os.path.join(here, "index.html")
