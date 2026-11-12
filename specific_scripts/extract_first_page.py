@@ -39,6 +39,9 @@ CAPTION_SIZE = 7.5  # IEEE-style templates use 8pt captions
 FIG_GAP = 20
 
 
+ARXIV_STAMP_RE = re.compile(r"\s*arXiv:\d{4}\.\d{4,5}")
+
+
 def blocks(page):
     """Text blocks as (rect, text, max font size), top to bottom."""
     out = []
@@ -62,6 +65,7 @@ def extract(pdf_path, fig_path, base=OUT_DIR):
     end = next((i for i, b in enumerate(bl) if SECTION_RE.match(b[1]) and b[2] >= ANCHOR_SIZE), len(bl))
     bl = bl[:end]
 
+    bl = [b for b in bl if not ARXIV_STAMP_RE.match(b[1])] or bl  # the vertical arXiv stamp is the biggest text
     biggest = max(b[2] for b in bl)
     title = " ".join(b[1].replace("\n", " ") for b in bl if b[2] >= biggest - 0.5)
 

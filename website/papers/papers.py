@@ -65,8 +65,8 @@ border-bottom:1px solid #ddd;background:#fffbea">
          style="flex:1;min-width:240px;padding:5px 8px;border:1px solid #bbb;border-radius:6px">
   <button id="addGo" style="padding:5px 12px;border:1px solid #bbb;border-radius:6px;background:#fff;cursor:pointer">Add link</button>
   <span>or</span>
-  <label style="padding:5px 12px;border:1px solid #bbb;border-radius:6px;background:#fff;cursor:pointer">📄 Upload PDF
-    <input id="addFile" type="file" accept="application/pdf,.pdf" hidden></label>
+  <label style="padding:5px 12px;border:1px solid #bbb;border-radius:6px;background:#fff;cursor:pointer">📄 Upload PDFs
+    <input id="addFile" type="file" accept="application/pdf,.pdf" multiple hidden></label>
   <span id="addMsg" style="color:#666"></span>
 </div>
 <script>
@@ -87,25 +87,46 @@ async function addPaper(opts, what) {
     location.hash = 'claude:' + j.id; location.reload();  // show it now; Claude runs after the reload (below)
   } catch (e) { msg.textContent = '⚠️ ' + e.message; }
 }
-// after an add the page reloads with #claude:<id>: show the paper, then press 📝 Summarize and the Claude HTML
-// button for it; the server finishes them even if the tab closes. Runs before the page script reads the #.
+// after an add the page reloads with #claude:<id>[,<id>…]: show the first paper, then press 📝 Summarize and the
+// Claude HTML button for each, one paper at a time; the server finishes a paper even if the tab closes.
+// Runs before the page script reads the #.
 if (location.hash.startsWith('#claude:')) (async () => {
-  const pid = decodeURIComponent(location.hash.slice(8)), msg = document.getElementById('addMsg');
-  history.replaceState(null, '', '#' + encodeURIComponent(pid));  // the page script scrolls to it, then clears it
-  msg.textContent = '⏳ Added. Claude is summarizing it and making the HTML version… (a few minutes)';
-  const errs = (await Promise.all(['summarize/', 'html_claude/'].map(p => fetch(p + pid, {method: 'POST'})
-    .then(async x => x.ok ? '' : (await x.json()).error).catch(e => e.message)))).filter(Boolean);
+  const ids = decodeURIComponent(location.hash.slice(8)).split(','), msg = document.getElementById('addMsg'), errs = [];
+  history.replaceState(null, '', '#' + encodeURIComponent(ids[0]));  // the page script scrolls to it, then clears it
+  for (const [n, pid] of ids.entries()) {
+    msg.textContent = `⏳ Added. Claude is summarizing and making the HTML version${ids.length > 1 ? ` of ${n + 1}/${ids.length}` : ''}… (a few minutes each)`;
+    errs.push(...(await Promise.all(['summarize/', 'html_claude/'].map(p => fetch(p + pid, {method: 'POST'})
+      .then(async x => x.ok ? '' : `${pid}: ${(await x.json()).error}`).catch(e => e.message)))).filter(Boolean));
+  }
   if (errs.length) alert('Added, but: ' + errs.join('; '));
-  location.hash = pid; location.reload();  // rebuilt with the summary and HTML link
+  location.hash = ids[0]; location.reload();  // rebuilt with the summaries and HTML links
 })();
 document.getElementById('addGo').onclick = () => {
   const u = document.getElementById('addUrl').value.trim();
   if (u) addPaper({headers: {'Content-Type': 'application/json'}, body: JSON.stringify({url: u})}, 'the link');
 };
 document.getElementById('addUrl').onkeydown = e => { if (e.key === 'Enter') document.getElementById('addGo').click(); };
-document.getElementById('addFile').onchange = e => {
-  const f = e.target.files[0];
-  if (f) addPaper({headers: {'Content-Type': 'application/pdf', 'X-Filename': encodeURIComponent(f.name)}, body: f}, f.name);
+document.getElementById('addFile').onchange = async e => {
+  const files = [...e.target.files], msg = document.getElementById('addMsg');
+  if (files.length === 1) return addPaper({headers: {'Content-Type': 'application/pdf', 'X-Filename': encodeURIComponent(files[0].name)}, body: files[0]}, files[0].name);
+  if (!files.length) return;
+  if (!location.protocol.startsWith('http'))
+    return msg.textContent = 'run: uv run python website/serve.py, then open http://127.0.0.1:8026/Papers/';
+  const added = [], errs = [];
+  for (const [n, f] of files.entries()) {  // one at a time: the server adds one paper at a time anyway
+    msg.textContent = `⏳ Adding ${n + 1}/${files.length}: ${f.name} (~30 s each)`;
+    try {
+      const r = await fetch('add', {method: 'POST', body: f,
+                                    headers: {'Content-Type': 'application/pdf', 'X-Filename': encodeURIComponent(f.name)}});
+      const j = await r.json();
+      if (!r.ok) throw new Error(j.error);
+      if (!j.exists) added.push(j.id);
+    } catch (err) { errs.push(`${f.name}: ${err.message}`); }
+  }
+  e.target.value = '';  // picking the same files again fires onchange again
+  if (errs.length) alert(`Added ${added.length} of ${files.length}. Failed: ` + errs.join('; '));
+  if (!added.length) return msg.textContent = 'ℹ️ Nothing new added (already in the list or failed)';
+  location.hash = 'claude:' + added.join(','); location.reload();
 };
 </script>"""
 
@@ -229,6 +250,10 @@ def add_pdf(data, source, pdf_url="", pid=None, info=None, page_links=()):
         first = extract(pdf, os.path.join(HERE, "figs", f"{pid}.png"), base=HERE)
     except Exception:  # an odd PDF (scanned, no text) still gets added, just without figures
         first = {"title": "", "abstract": "", "figure": None, "figures": []}
+    with pymupdf.open(pdf) as doc:  # an arXiv PDF (its margin stamp): take its real title, authors and abstract
+        m = not info and re.search(r"arXiv:(\d{4}\.\d{4,5})", doc[0].get_text())
+    if m:
+        info = arxiv_info(m.group(1))
     title = info.get("title") or first["title"] or source.rsplit("/", 1)[-1]
     named = os.path.join(HERE, "pdfs", f"{pid}_{re.sub(r'[^\w\- .,()]', ' ', title)[:100].strip()}.pdf")
     os.replace(pdf, named)

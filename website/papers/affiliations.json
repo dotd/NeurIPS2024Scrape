@@ -50,6 +50,114 @@
    "companies": [],
    "universities": [],
    "candidates": []
+  },
+  "arxiv-2505-09603": {
+   "companies": [],
+   "universities": [
+    "Massachusetts Institute of Technology",
+    "Stanford University"
+   ],
+   "candidates": [
+    "University of Texas at Austin",
+    "Massachusetts Institute of Technology",
+    "Massachusetts Institute of Technology",
+    "Massachusetts Institute of Technology",
+    "Stanford University",
+    "University of Texas at Austin"
+   ]
+  },
+  "arxiv-2611-05368": {
+   "companies": [],
+   "universities": [],
+   "candidates": [
+    "University of Texas at Austin",
+    "University of Texas at Austin",
+    "University of Texas at Austin",
+    "University of Texas at Austin",
+    "University of Texas at Austin"
+   ]
+  },
+  "arxiv-2506-15847": {
+   "companies": [],
+   "universities": [
+    "The University of Texas at Austin"
+   ],
+   "candidates": [
+    "The University of Texas at Austin"
+   ]
+  },
+  "arxiv-2611-06881": {
+   "companies": [],
+   "universities": [],
+   "candidates": []
+  },
+  "pdf-beb8536dd7": {
+   "companies": [],
+   "universities": [],
+   "candidates": []
+  },
+  "pdf-a4184160bb": {
+   "companies": [],
+   "universities": [
+    "Carnegie Mellon University",
+    "University of California, Berkeley"
+   ],
+   "candidates": [
+    "UC Berkeley",
+    "Carnegie Mellon University"
+   ]
+  },
+  "pdf-08009bbec2": {
+   "companies": [],
+   "universities": [
+    "University of California, Berkeley"
+   ],
+   "candidates": [
+    "Department of Electrical Engineering and Computer Sciences, UC Berkeley"
+   ]
+  },
+  "pdf-556e228a43": {
+   "companies": [],
+   "universities": [
+    "University of California, Berkeley"
+   ],
+   "candidates": [
+    "University of California, Berkeley",
+    "Recently, some of the most impressive feats in AI have been performed through language models"
+   ]
+  },
+  "pdf-a8dfbb77a3": {
+   "companies": [],
+   "universities": [
+    "Carnegie Mellon University",
+    "University of California, Berkeley"
+   ],
+   "candidates": [
+    "What Do Learning Dynamics Reveal About",
+    "UC Berkeley",
+    "Carnegie Mellon University"
+   ]
+  },
+  "arxiv-2410-24164": {
+   "companies": [
+    "Physical Intelligence"
+   ],
+   "universities": [],
+   "candidates": [
+    "Physical Intelligence"
+   ]
+  },
+  "arxiv-2501-09747": {
+   "companies": [
+    "Physical Intelligence"
+   ],
+   "universities": [
+    "University of California, Berkeley"
+   ],
+   "candidates": [
+    "Physical Intelligence",
+    "UC Berkeley"
+   ]
   }
  },
  "ror": {
@@ -92,6 +200,52 @@
     "education",
     "funder"
    ]
-  }
+  },
+  "University of Texas at Austin": null,
+  "Massachusetts Institute of Technology": {
+   "name": "Massachusetts Institute of Technology",
+   "types": [
+    "education",
+    "funder"
+   ]
+  },
+  "Stanford University": {
+   "name": "Stanford University",
+   "types": [
+    "education",
+    "funder"
+   ]
+  },
+  "The University of Texas at Austin": {
+   "name": "The University of Texas at Austin",
+   "types": [
+    "education",
+    "funder"
+   ]
+  },
+  "Carnegie Mellon University": {
+   "name": "Carnegie Mellon University",
+   "types": [
+    "education",
+    "funder"
+   ]
+  },
+  "Department of Electrical Engineering and Computer Sciences, UC Berkeley": {
+   "name": "University of California, Berkeley",
+   "types": [
+    "education",
+    "funder"
+   ]
+  },
+  "University of California, Berkeley": {
+   "name": "University of California, Berkeley",
+   "types": [
+    "education",
+    "funder"
+   ]
+  },
+  "Recently, some of the most impressive feats in AI have been performed through language models": null,
+  "What Do Learning Dynamics Reveal About": null,
+  "Physical Intelligence": null
  }
 }

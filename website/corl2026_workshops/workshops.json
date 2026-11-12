@@ -1,0 +1,322 @@
+[
+ {
+  "title": "RoboLetics 3.0: Benchmarks for Agile Physical Human-Robot Interaction",
+  "url": "https://roboletics.github.io/corl2026/",
+  "venue": "Hilton",
+  "room": "Salon D",
+  "time": "8:30 AM–12:30 PM",
+  "slot": 0,
+  "group": "robot-learning.org/CoRL/2026/Workshop/Roboletics",
+  "label": "Thu 11/12, 8:30 AM–12:30 PM · Hilton Salon D · RoboLetics 3.0: Benchmarks for Agile Physical Human-Robot Interaction"
+ },
+ {
+  "title": "Everything Beneath the Policy: How Controllers, Hardware, and Data Infrastructure Shape Robot Learning",
+  "url": "https://beneath-the-policy.github.io/",
+  "venue": "Hilton",
+  "room": "Salon E",
+  "time": "8:30 AM–12:30 PM",
+  "slot": 0,
+  "group": "robot-learning.org/CoRL/2026/Workshop/WEBP",
+  "label": "Thu 11/12, 8:30 AM–12:30 PM · Hilton Salon E · Everything Beneath the Policy: How Controllers, Hardware, and Data Infrastructure Shape Robot Learning"
+ },
+ {
+  "title": "Remember, Retrieve, Act: Memory for Robot Foundation Models",
+  "url": "https://corl2026-memory.github.io/",
+  "venue": "Hilton",
+  "room": "Room 408",
+  "time": "8:30 AM–12:30 PM",
+  "slot": 0,
+  "group": "robot-learning.org/CoRL/2026/Workshop/RoboMem",
+  "label": "Thu 11/12, 8:30 AM–12:30 PM · Hilton Room 408 · Remember, Retrieve, Act: Memory for Robot Foundation Models"
+ },
+ {
+  "title": "Grounded 4D Multimodal World Models for Autonomous Driving Decision Making",
+  "url": "https://arlo0o.github.io/Grounded-Driving-World-Models_Workshop/",
+  "venue": "Hilton",
+  "room": "Room 410",
+  "time": "8:30 AM–12:30 PM",
+  "slot": 0,
+  "group": "robot-learning.org/CoRL/2026/Workshop/GroundedDrivingWMs",
+  "label": "Thu 11/12, 8:30 AM–12:30 PM · Hilton Room 410 · Grounded 4D Multimodal World Models for Autonomous Driving Decision Making"
+ },
+ {
+  "title": "Do Robots Need World Models? A Debate on Dynamics Learning, Planning, and End-to-End Robot Learning",
+  "url": "https://do-robots-need-world-models.github.io/",
+  "venue": "JW Marriott",
+  "room": "Brazos",
+  "time": "8:30 AM–12:30 PM",
+  "slot": 0,
+  "group": "robot-learning.org/CoRL/2026/Workshop/do-robots-need-world-models",
+  "label": "Thu 11/12, 8:30 AM–12:30 PM · JW Marriott Brazos · Do Robots Need World Models? A Debate on Dynamics Learning, Planning, and End-to-End Robot Learning"
+ },
+ {
+  "title": "Continually Self-Improving Robots Workshop (CSIR-2026)",
+  "url": "https://csircorl.github.io/website/",
+  "venue": "JW Marriott",
+  "room": "Room 202",
+  "time": "8:30 AM–12:30 PM",
+  "slot": 0,
+  "group": "robot-learning.org/CoRL/2026/Workshop/CSIR",
+  "label": "Thu 11/12, 8:30 AM–12:30 PM · JW Marriott Room 202 · Continually Self-Improving Robots Workshop (CSIR-2026)"
+ },
+ {
+  "title": "The Science of Physical AI Safety Workshop (SPAIS)",
+  "url": "https://spais-ws.org",
+  "venue": "JW Marriott",
+  "room": "Rooms 203–204",
+  "time": "8:30 AM–12:30 PM",
+  "slot": 0,
+  "group": "robot-learning.org/CoRL/2026/Workshop/SPAIS",
+  "label": "Thu 11/12, 8:30 AM–12:30 PM · JW Marriott Rooms 203–204 · The Science of Physical AI Safety Workshop (SPAIS)"
+ },
+ {
+  "title": "Learn@Deploy: Robot Learning at Deployment",
+  "url": "https://learn-at-deploy.github.io/",
+  "venue": "JW Marriott",
+  "room": "Room 205",
+  "time": "8:30 AM–12:30 PM",
+  "slot": 0,
+  "group": "robot-learning.org/CoRL/2026/Workshop/Learn_Deploy",
+  "label": "Thu 11/12, 8:30 AM–12:30 PM · JW Marriott Room 205 · Learn@Deploy: Robot Learning at Deployment"
+ },
+ {
+  "title": "1st Workshop on \"Structured Physical Intelligence\" (SPIN)",
+  "url": "https://spin-workshop.github.io/",
+  "venue": "JW Marriott",
+  "room": "Room 208",
+  "time": "8:30 AM–12:30 PM",
+  "slot": 0,
+  "group": "",
+  "label": "Thu 11/12, 8:30 AM–12:30 PM · JW Marriott Room 208 · 1st Workshop on \"Structured Physical Intelligence\" (SPIN)"
+ },
+ {
+  "title": "From GPU-Accelerated Simulation to Scalable and Generalizable Real Robot Policy Learning",
+  "url": "https://corl2026-realworld-robot-learning.github.io/",
+  "venue": "JW Marriott",
+  "room": "Room 212",
+  "time": "8:30 AM–12:30 PM",
+  "slot": 0,
+  "group": "robot-learning.org/CoRL/2026/Workshop/SimBench2Real",
+  "label": "Thu 11/12, 8:30 AM–12:30 PM · JW Marriott Room 212 · From GPU-Accelerated Simulation to Scalable and Generalizable Real Robot Policy Learning"
+ },
+ {
+  "title": "R2RL: Roadmap to Sample-Efficient Real-World Reinforcement Learning",
+  "url": "https://r2rl-workshop.github.io/",
+  "venue": "JW Marriott",
+  "room": "Room 213",
+  "time": "8:30 AM–12:30 PM",
+  "slot": 0,
+  "group": "robot-learning.org/CoRL/2026/Workshop/R2RL",
+  "label": "Thu 11/12, 8:30 AM–12:30 PM · JW Marriott Room 213 · R2RL: Roadmap to Sample-Efficient Real-World Reinforcement Learning"
+ },
+ {
+  "title": "Scaling H2R: Scaling Laws and Diversity in Human-to-Robot Workshop",
+  "url": "http://scaling-h2r-corl.github.io/",
+  "venue": "JW Marriott",
+  "room": "Rooms 301–302",
+  "time": "8:30 AM–12:30 PM",
+  "slot": 0,
+  "group": "robot-learning.org/CoRL/2026/Workshop/Scaling_H2R",
+  "label": "Thu 11/12, 8:30 AM–12:30 PM · JW Marriott Rooms 301–302 · Scaling H2R: Scaling Laws and Diversity in Human-to-Robot Workshop"
+ },
+ {
+  "title": "BiDexTool: Bimanual Dexterous Tool Use: From Contact-Rich Execution to Generalist Robot Intelligence",
+  "url": "https://bimanual-tool.github.io/",
+  "venue": "JW Marriott",
+  "room": "Rooms 303–304",
+  "time": "8:30 AM–12:30 PM",
+  "slot": 0,
+  "group": "robot-learning.org/CoRL/2026/Workshop/BiDexTool",
+  "label": "Thu 11/12, 8:30 AM–12:30 PM · JW Marriott Rooms 303–304 · BiDexTool: Bimanual Dexterous Tool Use: From Contact-Rich Execution to Generalist Robot Intelligence"
+ },
+ {
+  "title": "Learning from Corrections and Interventions",
+  "url": "https://sites.google.com/view/lfcworkshopcorl2026/home",
+  "venue": "JW Marriott",
+  "room": "Room 305",
+  "time": "8:30 AM–12:30 PM",
+  "slot": 0,
+  "group": "robot-learning.org/CoRL/2026/Workshop/LfC",
+  "label": "Thu 11/12, 8:30 AM–12:30 PM · JW Marriott Room 305 · Learning from Corrections and Interventions"
+ },
+ {
+  "title": "4th CoRL Workshop on Learning Effective Abstractions for Planning (LEAP)",
+  "url": "https://leap-workshop.github.io",
+  "venue": "JW Marriott",
+  "room": "Room 306",
+  "time": "8:30 AM–12:30 PM",
+  "slot": 0,
+  "group": "robot-learning.org/CoRL/2026/Workshop/LEAP",
+  "label": "Thu 11/12, 8:30 AM–12:30 PM · JW Marriott Room 306 · 4th CoRL Workshop on Learning Effective Abstractions for Planning (LEAP)"
+ },
+ {
+  "title": "Compositional Generalization for Real-World Robot Learning",
+  "url": "https://compogen-robotics.github.io/corl2026/",
+  "venue": "JW Marriott",
+  "room": "Rooms 310–311",
+  "time": "8:30 AM–12:30 PM",
+  "slot": 0,
+  "group": "robot-learning.org/CoRL/2026/Workshop/Compositional",
+  "label": "Thu 11/12, 8:30 AM–12:30 PM · JW Marriott Rooms 310–311 · Compositional Generalization for Real-World Robot Learning"
+ },
+ {
+  "title": "From Human Videos to Dexterous Robot Capability: A Hands-on Tutorial",
+  "url": "https://aanwar-nv.github.io/v2d-tutorial.github.io/",
+  "venue": "Hilton",
+  "room": "Salon D",
+  "time": "2:00–6:00 PM",
+  "slot": 1,
+  "group": "",
+  "label": "Thu 11/12, 2:00–6:00 PM · Hilton Salon D · From Human Videos to Dexterous Robot Capability: A Hands-on Tutorial"
+ },
+ {
+  "title": "Sim-to-Real-to-Field (SRF): The Science of Transfer",
+  "url": "https://sim2real2field-corl26.github.io/",
+  "venue": "Hilton",
+  "room": "Salon E",
+  "time": "2:00–6:00 PM",
+  "slot": 1,
+  "group": "robot-learning.org/CoRL/2026/Workshop/Sim2Real2Field",
+  "label": "Thu 11/12, 2:00–6:00 PM · Hilton Salon E · Sim-to-Real-to-Field (SRF): The Science of Transfer"
+ },
+ {
+  "title": "Efficient Foundation Models for Real-Time Embodied AI",
+  "url": "https://efficient-embodied-ai.github.io",
+  "venue": "Hilton",
+  "room": "Room 408",
+  "time": "2:00–6:00 PM",
+  "slot": 1,
+  "group": "robot-learning.org/CoRL/2026/Workshop/EEAI",
+  "label": "Thu 11/12, 2:00–6:00 PM · Hilton Room 408 · Efficient Foundation Models for Real-Time Embodied AI"
+ },
+ {
+  "title": "Beyond Binary Success: Diagnosing Fine-Grained Capabilities in Robot Manipulation",
+  "url": "https://robofinemani2026.github.io/",
+  "venue": "Hilton",
+  "room": "Room 410",
+  "time": "2:00–6:00 PM",
+  "slot": 1,
+  "group": "",
+  "label": "Thu 11/12, 2:00–6:00 PM · Hilton Room 410 · Beyond Binary Success: Diagnosing Fine-Grained Capabilities in Robot Manipulation"
+ },
+ {
+  "title": "Bringing Physics Simulation and World Models Together for Robotic Manipulation",
+  "url": "https://corl26ws-physwm.github.io",
+  "venue": "JW Marriott",
+  "room": "Brazos",
+  "time": "2:00–6:00 PM",
+  "slot": 1,
+  "group": "robot-learning.org/CoRL/2026/Workshop/PhysWM",
+  "label": "Thu 11/12, 2:00–6:00 PM · JW Marriott Brazos · Bringing Physics Simulation and World Models Together for Robotic Manipulation"
+ },
+ {
+  "title": "Human-Centered Robot Learning and Interaction: Toward Reliable and Scalable Autonomy in Human Environments",
+  "url": "https://hc-robot-learning.github.io/",
+  "venue": "JW Marriott",
+  "room": "Room 202",
+  "time": "2:00–6:00 PM",
+  "slot": 1,
+  "group": "robot-learning.org/CoRL/2026/Workshop/HumanRLI",
+  "label": "Thu 11/12, 2:00–6:00 PM · JW Marriott Room 202 · Human-Centered Robot Learning and Interaction: Toward Reliable and Scalable Autonomy in Human Environments"
+ },
+ {
+  "title": "Workshop on Agentic Robotics",
+  "url": "https://agentic-robotics-workshop.github.io/",
+  "venue": "JW Marriott",
+  "room": "Rooms 203–204",
+  "time": "2:00–6:00 PM",
+  "slot": 1,
+  "group": "robot-learning.org/CoRL/2026/Workshop/Agentic_Robotics",
+  "label": "Thu 11/12, 2:00–6:00 PM · JW Marriott Rooms 203–204 · Workshop on Agentic Robotics"
+ },
+ {
+  "title": "Open Problems in Contact-Rich Loco-Manipulation",
+  "url": "https://contact-rich-loco-manipulation.github.io",
+  "venue": "JW Marriott",
+  "room": "Room 205",
+  "time": "2:00–6:00 PM",
+  "slot": 1,
+  "group": "robot-learning.org/CoRL/2026/Workshop/Contact-Rich_Loco-Manipulation",
+  "label": "Thu 11/12, 2:00–6:00 PM · JW Marriott Room 205 · Open Problems in Contact-Rich Loco-Manipulation"
+ },
+ {
+  "title": "The action gap: large generative models (video, image, 3D) learn rich knowledge",
+  "url": "https://actiongapworkshop.github.io/",
+  "venue": "JW Marriott",
+  "room": "Room 208",
+  "time": "2:00–6:00 PM",
+  "slot": 1,
+  "group": "robot-learning.org/CoRL/2026/Workshop/TAG",
+  "label": "Thu 11/12, 2:00–6:00 PM · JW Marriott Room 208 · The action gap: large generative models (video, image, 3D) learn rich knowledge"
+ },
+ {
+  "title": "3rd Workshop on Dexterous Manipulation: Full-Stack Robotics on Learning and Design",
+  "url": "https://dex-manipulation.github.io/corl2026/",
+  "venue": "JW Marriott",
+  "room": "Room 212",
+  "time": "2:00–6:00 PM",
+  "slot": 1,
+  "group": "robot-learning.org/CoRL/2026/Workshop/Dex",
+  "label": "Thu 11/12, 2:00–6:00 PM · JW Marriott Room 212 · 3rd Workshop on Dexterous Manipulation: Full-Stack Robotics on Learning and Design"
+ },
+ {
+  "title": "Robot Learning on the Path to Surgical Autonomy: Methods, Data, and Open Challenges",
+  "url": "https://corl2026-surgical-autonomy.github.io/",
+  "venue": "JW Marriott",
+  "room": "Room 213",
+  "time": "2:00–6:00 PM",
+  "slot": 1,
+  "group": "",
+  "label": "Thu 11/12, 2:00–6:00 PM · JW Marriott Room 213 · Robot Learning on the Path to Surgical Autonomy: Methods, Data, and Open Challenges"
+ },
+ {
+  "title": "Pretrain to Adapt: What Makes a Pretrained Policy Adaptable?",
+  "url": "https://corl2026-robotcl.github.io/",
+  "venue": "JW Marriott",
+  "room": "Rooms 301–302",
+  "time": "2:00–6:00 PM",
+  "slot": 1,
+  "group": "robot-learning.org/CoRL/2026/Workshop/pretrain-to-adapt",
+  "label": "Thu 11/12, 2:00–6:00 PM · JW Marriott Rooms 301–302 · Pretrain to Adapt: What Makes a Pretrained Policy Adaptable?"
+ },
+ {
+  "title": "The UMI Olympics: From Handheld Devices to Real-World Policies",
+  "url": "https://umi-olympics.airoa.io/",
+  "venue": "JW Marriott",
+  "room": "Rooms 303–304",
+  "time": "2:00–6:00 PM",
+  "slot": 1,
+  "group": "robot-learning.org/CoRL/2026/Workshop/UMI_Arena",
+  "label": "Thu 11/12, 2:00–6:00 PM · JW Marriott Rooms 303–304 · The UMI Olympics: From Handheld Devices to Real-World Policies"
+ },
+ {
+  "title": "\"Oops, I Erred\" — Collecting, Curating and Using Imperfect Data for Realistic Scenarios",
+  "url": "http://workshop.oopsie-data.com/",
+  "venue": "JW Marriott",
+  "room": "Room 305",
+  "time": "2:00–6:00 PM",
+  "slot": 1,
+  "group": "robot-learning.org/CoRL/2026/Workshop/Oopsie",
+  "label": "Thu 11/12, 2:00–6:00 PM · JW Marriott Room 305 · \"Oops, I Erred\" — Collecting, Curating and Using Imperfect Data for Realistic Scenarios"
+ },
+ {
+  "title": "Spatial Intelligence and Structured Reasoning for Embodied Navigation (SISREN)",
+  "url": "https://sisren-embodied-nav.github.io",
+  "venue": "JW Marriott",
+  "room": "Room 306",
+  "time": "2:00–6:00 PM",
+  "slot": 1,
+  "group": "robot-learning.org/CoRL/2026/Workshop/SISREN",
+  "label": "Thu 11/12, 2:00–6:00 PM · JW Marriott Room 306 · Spatial Intelligence and Structured Reasoning for Embodied Navigation (SISREN)"
+ },
+ {
+  "title": "Modeling Uncertainty in Robotic World Models",
+  "url": "https://uncertainwm2026.github.io/",
+  "venue": "JW Marriott",
+  "room": "Rooms 310–311",
+  "time": "2:00–6:00 PM",
+  "slot": 1,
+  "group": "robot-learning.org/CoRL/2026/Workshop/UncertainWM",
+  "label": "Thu 11/12, 2:00–6:00 PM · JW Marriott Rooms 310–311 · Modeling Uncertainty in Robotic World Models"
+ }
+]

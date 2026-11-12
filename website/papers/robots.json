@@ -5,5 +5,32 @@
  "arxiv-2203-01153": [
   "Franka (Panda / FR3)",
   "UR5 / UR5e"
+ ],
+ "arxiv-2505-09603": [
+  "Franka (Panda / FR3)",
+  "Kinova (Gen3 / Jaco)",
+  "PAL TIAGo"
+ ],
+ "arxiv-2506-15847": [
+  "PAL TIAGo"
+ ],
+ "arxiv-2611-06881": [
+  "Franka (Panda / FR3)",
+  "I2RT YAM"
+ ],
+ "arxiv-2410-24164": [
+  "Franka (Panda / FR3)",
+  "UR5 / UR5e",
+  "ViperX",
+  "ALOHA / Mobile ALOHA",
+  "ARX arm"
+ ],
+ "arxiv-2501-09747": [
+  "Franka (Panda / FR3)",
+  "Unitree H1",
+  "UR5 / UR5e",
+  "ViperX",
+  "ALOHA / Mobile ALOHA",
+  "ARX arm"
  ]
 }

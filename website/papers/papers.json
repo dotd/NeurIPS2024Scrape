@@ -82,5 +82,175 @@
   "pdf": "https://arxiv.org/pdf/2511.08544",
   "youtube": "https://www.youtube.com/watch?v=5ARoR4YfQg4",
   "added": "2026-11-06 15:58"
+ },
+ "arxiv-2505-09603": {
+  "title": "DataMIL: Selecting Data for Robot Imitation Learning with Datamodels",
+  "authors": "Shivin Dass, Alaa Khaddaj, Logan Engstrom, Aleksander Madry, Andrew Ilyas, Roberto Martín-Martín",
+  "abstract": "Recently, the robotics community has amassed ever larger and more diverse datasets to train generalist policies. However, while these policies achieve strong mean performance across a variety of tasks, they often underperform on individual, specialized tasks and require further tuning on newly acquired task-specific data. Combining task-specific data with carefully curated subsets of large prior datasets via co-training can produce better specialized policies, but selecting data naively may actually harm downstream performance. To address this, we introduce DataMIL, a data selection framework built on the datamodels paradigm that reasons about data selection in an end-to-end manner, using the policy itself to identify which data points will most improve performance. Unlike standard practices that filter data using human notions of quality (e.g., based on semantic or visual similarity), DataMIL directly optimizes data selection for task success, allowing us to select data that improves the policy while dropping data that degrade it. To avoid performing expensive rollouts in the environment during selection, we introduce a surrogate loss function on task-specific data, allowing us to use DataMIL in the real world without degrading performance. We validate our approach on 60+ simulation and real-world manipulation tasks, notably showing successful data selection from the largest open collections of robot datasets (OXE); demonstrating consistent gains in success rates over prior works. Our results underscore the importance of end-to-end, performance-aware data selection for unlocking the potential of large prior datasets in robotics. More information at https://robin-lab.cs.utexas.edu/datamodels4imitation/",
+  "keywords": [
+   "robot learning",
+   "imitation learning",
+   "data selection",
+   "datamodels",
+   "co-training",
+   "robotic manipulation"
+  ],
+  "source": "https://arxiv.org/abs/2505.09603",
+  "pdf": "https://arxiv.org/pdf/2505.09603",
+  "youtube": "",
+  "added": "2026-11-10 10:30"
+ },
+ "arxiv-2611-05368": {
+  "title": "GUILD: Guided Iterative Data Collection for Imitation Learning",
+  "authors": "Shivin Dass, Kevin Nguyen, Rohan Yelandur, Junhong Xu, Roberto Martín-Martín",
+  "abstract": "Imitation learning policies in robotics are trained on datasets collected through costly real-world teleoperation. Often, the data-collection process is unguided, relying on the teleoperator's intuition, resulting in data that contributes little to overall policy performance. Recent work has shown that curating such unguided datasets can substantially improve policy performance, but these approaches operate by filtering existing datasets after collection and therefore do not prevent the acquisition of uninformative data. In this work, we propose GUILD, a novel Guided Data Collection (GDC) method that actively reasons about which data should be collected to maximize downstream policy performance. We introduce an iterative framework that alternates between 1) task proposal and data collection and 2) data evaluation to close the loop. For task proposal, we leverage semantic priors from vision-language models to identify relevant environments, object configurations, and goals for data collection. However, since semantic relevance does not imply policy improvement, we perform data evaluation. By leveraging predictive data attribution we approximate how the collected trajectories influence policy performance on a target deployment setting. This signal is then used as feedback to guide subsequent data collection, closing the data collection loop. We evaluate our approach in simulation and real robot settings, demonstrating that guided data collection substantially improves sample efficiency and deployment performance compared to passive data collection strategies, multiple baselines and experienced roboticists. More information at https://robin-lab.cs.utexas.edu/guild2026/",
+  "keywords": [
+   "imitation learning",
+   "data selection",
+   "datamodels",
+   "robotic manipulation",
+   "vision-language models",
+   "data collection"
+  ],
+  "source": "https://arxiv.org/abs/2611.05368",
+  "pdf": "https://arxiv.org/pdf/2611.05368",
+  "youtube": "",
+  "added": "2026-11-10 10:33"
+ },
+ "arxiv-2506-15847": {
+  "title": "SafeMimic: Towards Safe and Autonomous Human-to-Robot Imitation for Mobile Manipulation",
+  "authors": "Arpit Bahety, Arnav Balaji, Ben Abbatematteo, Roberto Martín-Martín",
+  "abstract": "For robots to become efficient helpers in the home, they must learn to perform new mobile manipulation tasks simply by watching humans perform them. Learning from a single video demonstration from a human is challenging as the robot needs to first extract from the demo what needs to be done and how, translate the strategy from a third to a first-person perspective, and then adapt it to be successful with its own morphology. Furthermore, to mitigate the dependency on costly human monitoring, this learning process should be performed in a safe and autonomous manner. We present SafeMimic, a framework to learn new mobile manipulation skills safely and autonomously from a single third-person human video. Given an initial human video demonstration of a multi-step mobile manipulation task, SafeMimic first parses the video into segments, inferring both the semantic changes caused and the motions the human executed to achieve them and translating them to an egocentric reference. Then, it adapts the behavior to the robot's own morphology by sampling candidate actions around the human ones, and verifying them for safety before execution in a receding horizon fashion using an ensemble of safety Q-functions trained in simulation. When safe forward progression is not possible, SafeMimic backtracks to previous states and attempts a different sequence of actions, adapting both the trajectory and the grasping modes when required for its morphology. As a result, SafeMimic yields a strategy that succeeds in the demonstrated behavior and learns task-specific actions that reduce exploration in future attempts. Our experiments show that our method allows robots to safely and efficiently learn multi-step mobile manipulation behaviors from a single human demonstration, from different users, and in different environments, with improvements over state-of-the-art baselines across seven tasks",
+  "keywords": [
+   "imitation learning",
+   "one-shot learning",
+   "mobile manipulation",
+   "safe exploration",
+   "human video demonstration",
+   "robot learning"
+  ],
+  "source": "https://arxiv.org/abs/2506.15847",
+  "pdf": "https://arxiv.org/pdf/2506.15847",
+  "youtube": "",
+  "added": "2026-11-10 10:44"
+ },
+ "arxiv-2611-06881": {
+  "title": "VABAR: A Variational Automation Benchmark for Agentic Robotics",
+  "authors": "Shuangyu Xie, Kaiyuan Chen, Uksang Yoo, Xinyue Zhu, Meadow Shen, Jaimyn Drake, Eugen Solowjow, Lionel Gulich, Alexander Millane, Rafael Cathomen, Tuur Stuyck, Sangeeta Subramanian, Yichao Pan, Bruce McGowan, Michael Benedict, Linxi Fan, Yuke Zhu, Spencer Huang, Ken Goldberg",
+  "abstract": "For robots to operate reliably in commercial and industrial applications, they must persistently perform specific tasks with known variations in object shape and pose. We call this Variational Automation (VA) to differentiate these settings from fixed automation. Inspired by recent papers on Agentic Robotics, where pretrained LLM and VLM coding agents combine interpretable robot programming with the open-world adaptability of model free policies, we propose a general set of agentic robotics benchmark design criteria that includes accessibility, repeatability, diversity, relevance to agentic robotics and practical applications, physical realizability, resistance to benchmark saturation, and computational efficiency. We instantiate these principles in six manipulation task classes spanning industrial, medical, and infrastructure applications: tool sorting, tool hanging, gear meshing, syringe packing, cable insertion, and cable routing. We introduce the Variational Automation Benchmark for Agentic Robotics (VABAR), an open, easily replicable, simulation-based manipulation benchmark to systematically evaluating agentic robotics systems. Built fully on open-source tools, VABAR features detailed implementations using the Newton physics engine, standardized task variations, difficulty tiers, success metrics, and a library of 33 generalizable skills with human-authored programmatic reference solutions. We provide initial baseline evaluations using an open agentic manipulation harness, Graph-as-Policy (GaP), and Isaac Lab Arena.",
+  "keywords": [
+   "robotic manipulation",
+   "vision-language models",
+   "benchmark design",
+   "agentic robotics",
+   "simulation",
+   "robotic insertion"
+  ],
+  "source": "https://arxiv.org/pdf/2611.06881",
+  "pdf": "https://arxiv.org/pdf/2611.06881",
+  "youtube": "",
+  "added": "2026-11-10 11:30"
+ },
+ "pdf-beb8536dd7": {
+  "title": "Evaluating Beneﬁt-Risk in Robotic Medical Devices with Autonomous or Remote Teleoperation Capabilities November 2026",
+  "authors": "",
+  "abstract": "",
+  "keywords": [
+   "medical robotics",
+   "regulatory evaluation",
+   "benefit-risk assessment",
+   "teleoperation",
+   "autonomous surgery",
+   "robotic manipulation"
+  ],
+  "source": "uploaded: evaluatingbenefitrisk_discussionpaper.pdf",
+  "pdf": "",
+  "youtube": "",
+  "added": "2026-11-12 14:53"
+ },
+ "pdf-a4184160bb": {
+  "title": "Long-Horizon Language Model Reinforcement Learning via Progressive Point Matching",
+  "authors": "Preston Fu, Kevin Frans, Oleh Rybkin, Sergey Levine, Aviral Kumar",
+  "abstract": "Current paradigms for training language models via reinforcement learning rely heavily on sparse outcome rewards. However, as we pursue tasks that require longer and more complicated trajectories, such strategies result in slow learning. Prior work has attempted to address this problem by rewarding partial progress; however, naive formulations are often biased and converge to suboptimal policies. We show that a simple and unbiased dense reward formulation, which we term progressive point matching, scales exponentially more efficiently to long-horizon tasks by rewarding partial progress on a segment level, both theoretically and empirically via synthetic environments. We then show how progressive point matching can be practically instantiated using a single reference trajectory per task. On extremely hard math reasoning problems, sparse outcome rewards cannot make any progress, whereas segment-level rewards enable improvements at larger test-time token budgets when measured by success rate or pass@k.",
+  "keywords": [
+   "reinforcement learning",
+   "dense rewards",
+   "reward shaping",
+   "language models",
+   "long-horizon reasoning",
+   "math reasoning"
+  ],
+  "source": "uploaded: 2026_Long-Horizon_Language_Model_Reinforcement_Learning_via_Progressive_Point_Matching.pdf",
+  "pdf": "",
+  "youtube": "",
+  "added": "2026-11-12 15:01"
+ },
+ "pdf-08009bbec2": {
+  "title": "Precise and Dexterous Robotic Manipulation via Human-in-the-Loop Reinforcement Learning",
+  "authors": "",
+  "abstract": "",
+  "keywords": [
+   "reinforcement learning",
+   "robotic manipulation",
+   "robot learning",
+   "teleoperation",
+   "imitation learning",
+   "robotic insertion"
+  ],
+  "source": "uploaded: 2025_Precise_and_dexterous_robotic_manipulation_via_human-in-the-loop_reinforcement_learning.pdf",
+  "pdf": "",
+  "youtube": "https://www.youtube.com/watch?v=GoJSW8e2qbI",
+  "added": "2026-11-12 15:01"
+ },
+ "pdf-556e228a43": {
+  "title": "Q-SFT: Q-Learning for Language Models via Supervised Fine-Tuning",
+  "authors": "Joey Hong, Anca Dragan, Sergey Levine",
+  "abstract": "Value-based reinforcement learning (RL) can in principle learn effective policies for a wide range of multi-turn problems, from games to dialogue to robotic control, including via offline RL from static previously collected datasets. However, despite the widespread use of policy gradient methods to train large language models for single turn tasks (e.g., question answering), value-based methods for multi-turn RL in an off-policy or offline setting have proven particularly challenging to scale to the setting of large language models. This setting requires effectively leveraging pretraining, scaling to large architectures with billions of parameters, and training on large datasets, all of which represent major challenges for current value-based RL methods. In this work, we propose a novel offline RL algorithm that addresses these drawbacks, casting Q-learning as a modified supervised fine-tuning (SFT) problem where the probabilities of tokens directly translate to Q-values. In this way we obtain an algorithm that smoothly transitions from maximizing the likelihood of the data during pretraining to learning a near-optimal Q-function during finetuning. Our algorithm has strong theoretical foundations, enjoying performance bounds similar to state-of-the-art Q-learning methods, while in practice utilizing an objective that closely resembles SFT. Because of this, our approach can enjoy the full benefits of the pretraining of language models, without the need to reinitialize any weights before RL finetuning, and without the need to initialize new heads for predicting values or advantages. Empirically, we evaluate our method on both pretrained LLMs and VLMs, on a variety of tasks including both natural language dialogue and robotic manipulation and navigation from images.",
+  "keywords": [
+   "reinforcement learning",
+   "language models",
+   "vision-language models",
+   "robotic manipulation",
+   "long-horizon reasoning",
+   "offline q-learning"
+  ],
+  "source": "uploaded: 2025_Q-SFT_Q-Learning_for_Language_Models_via_Supervised_Fine-Tuning.pdf",
+  "pdf": "",
+  "youtube": "",
+  "added": "2026-11-12 15:02"
+ },
+ "pdf-a8dfbb77a3": {
+  "title": "What Do Learning Dynamics Reveal About Generalization in LLM Reasoning?",
+  "authors": "Katie Kang, Amrith Setlur, Dibya Ghosh, Jacob Steinhardt, Claire Tomlin, Sergey Levine, Aviral Kumar",
+  "abstract": "Despite the remarkable capabilities of modern large language models (LLMs), the mechanisms behind their problem-solving abilities remain elusive. In this work, we aim to better understand how the learning dynamics of LLM finetuning shapes downstream generalization. Our analysis focuses on reasoning tasks, whose problem structure allows us to distinguish between memorization (the exact replication of reasoning steps from the training data) and performance (the correctness of the final solution). We find that a model's generalization behavior can be effectively characterized by a training metric we call pre-memorization train accuracy: the accuracy of model samples on training queries before they begin to copy the exact reasoning steps from the training set. On the dataset level, this metric is able to reliably predict test accuracy, achieving $R^2$ of around or exceeding 0.9 across various models (Llama3 8, Gemma2 9B), datasets (GSM8k, MATH), and training configurations. On a per-example level, this metric is also indicative of whether individual model predictions are robust to perturbations in the training query. By connecting a model's learning behavior to its generalization, pre-memorization train accuracy can guide targeted improvements to training strategies. We focus on data curation as an example, and show that prioritizing examples with low pre-memorization accuracy leads to 1.5-2x improvements in data efficiency compared to i.i.d. data scaling, and outperforms other standard data curation techniques.",
+  "keywords": [
+   "language models",
+   "math reasoning",
+   "data selection",
+   "memorization",
+   "generalization",
+   "learning dynamics"
+  ],
+  "source": "uploaded: 2025_What_Do_Learning_Dynamics_Reveal_About_Generalization_in_LLM_Mathematical_Reasoning.pdf",
+  "pdf": "",
+  "youtube": "",
+  "added": "2026-11-12 15:02"
+ },
+ "arxiv-2410-24164": {
+  "title": "$π_0$: A Vision-Language-Action Flow Model for General Robot Control",
+  "authors": "Kevin Black, Noah Brown, Danny Driess, Adnan Esmail, Michael Equi, Chelsea Finn, Niccolo Fusai, Lachy Groom, Karol Hausman, Brian Ichter, Szymon Jakubczak, Tim Jones, Liyiming Ke, Sergey Levine, Adrian Li-Bell, Mohith Mothukuri, Suraj Nair, Karl Pertsch, Lucy Xiaoyang Shi, James Tanner, Quan Vuong, Anna Walling, Haohuan Wang, Ury Zhilinsky",
+  "abstract": "Robot learning holds tremendous promise to unlock the full potential of flexible, general, and dexterous robot systems, as well as to address some of the deepest questions in artificial intelligence. However, bringing robot learning to the level of generality required for effective real-world systems faces major obstacles in terms of data, generalization, and robustness. In this paper, we discuss how generalist robot policies (i.e., robot foundation models) can address these challenges, and how we can design effective generalist robot policies for complex and highly dexterous tasks. We propose a novel flow matching architecture built on top of a pre-trained vision-language model (VLM) to inherit Internet-scale semantic knowledge. We then discuss how this model can be trained on a large and diverse dataset from multiple dexterous robot platforms, including single-arm robots, dual-arm robots, and mobile manipulators. We evaluate our model in terms of its ability to perform tasks in zero shot after pre-training, follow language instructions from people and from a high-level VLM policy, and its ability to acquire new skills via fine-tuning. Our results cover a wide variety of tasks, such as laundry folding, table cleaning, and assembling boxes.",
+  "keywords": [
+   "vision-language models",
+   "robotic manipulation",
+   "imitation learning",
+   "flow matching",
+   "robot foundation models",
+   "zero-shot generalization"
+  ],
+  "source": "https://arxiv.org/abs/2410.24164",
+  "pdf": "https://arxiv.org/pdf/2410.24164",
+  "youtube": "https://www.youtube.com/watch?v=CnnkU-9MWT4",
+  "added": "2026-11-12 15:14"
  }
 }

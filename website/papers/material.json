@@ -1,0 +1,39 @@
+{
+ "arxiv-2505-09603": [
+  [
+   "project",
+   "https://robin-lab.cs.utexas.edu/datamodels4imitation/"
+  ],
+  [
+   "code",
+   "https://github.com/UT-Austin-RobIn/datamil"
+  ]
+ ],
+ "arxiv-2611-05368": [],
+ "arxiv-2506-15847": [
+  [
+   "project",
+   "https://robin-lab.cs.utexas.edu/SafeMimic/"
+  ],
+  [
+   "video",
+   "https://www.youtube.com/watch?v=p7WWkZ-vO0c"
+  ]
+ ],
+ "arxiv-2611-06881": [
+  [
+   "project",
+   "https://berkeleyautomation.github.io/vabar-website/"
+  ],
+  [
+   "code",
+   "https://github.com/BerkeleyAutomation/vabar-website"
+  ]
+ ],
+ "pdf-beb8536dd7": [
+  [
+   "project",
+   "https://www.fda.gov/medical-devices/robotic-medical-devices/evaluating-benefit-risk-robotic-medical-devices-autonomous-or-remote-teleoperation-capabilities"
+  ]
+ ]
+}

@@ -507,5 +507,890 @@
     "h": 428
    }
   ]
+ },
+ "arxiv-2505-09603": {
+  "title": "arXiv:2505.09603v2  [cs.RO]  19 Jun 2026",
+  "abstract": "Recently, the robotics community has amassed ever larger and more diverse datasets to train generalist policies. However, while these policies achieve strong mean performance across a variety of tasks, they often underperform on individual, specialized tasks and require further tuning on newly acquired taskspecific data. Combining task-specific data with carefully curated subsets of large prior datasets via co-training can produce better specialized policies, but selecting data naively may actually harm downstream performance. To address this, we introduce DataMIL, a data selection framework built on the datamodels paradigm that reasons about data selection in an end-to-end manner, using the policy itself to identify which data points will most improve performance. Unlike standard practices that filter data using human notions of quality (e.g., based on semantic or visual similarity), DataMIL directly optimizes data selection for task success, allowing us to select data that improves the policy while dropping data that degrade it. To avoid performing expensive rollouts in the environment during selection, we introduce a surrogate loss function on task-specific data, allowing us to use DataMIL in the real world without degrading performance. We validate our approach on 60+ simulation and real-world manipulation tasks, notably showing successful data selection from the largest open collections of robot datasets (OXE); demonstrating consistent gains in success rates over prior works. Our results underscore the importance of end-to-end, performance-aware data selection for unlocking the potential of large prior datasets in robotics. Code and more information at our website.",
+  "figure": "figs/arxiv-2505-09603.png",
+  "figure_page": 3,
+  "figures": [
+   {
+    "n": 1,
+    "page": 3,
+    "src": "figs/arxiv-2505-09603/fig1.png",
+    "w": 1134,
+    "h": 538
+   },
+   {
+    "n": 2,
+    "page": 6,
+    "src": "figs/arxiv-2505-09603/fig2.png",
+    "w": 409,
+    "h": 520
+   },
+   {
+    "n": 3,
+    "page": 7,
+    "src": "figs/arxiv-2505-09603/fig3.png",
+    "w": 299,
+    "h": 172
+   },
+   {
+    "n": 4,
+    "page": 8,
+    "src": "figs/arxiv-2505-09603/fig4.png",
+    "w": 1134,
+    "h": 575
+   },
+   {
+    "n": 5,
+    "page": 9,
+    "src": "figs/arxiv-2505-09603/fig5.png",
+    "w": 1134,
+    "h": 407
+   },
+   {
+    "n": 6,
+    "page": 9,
+    "src": "figs/arxiv-2505-09603/fig6.png",
+    "w": 1134,
+    "h": 401
+   },
+   {
+    "n": 7,
+    "page": 15,
+    "src": "figs/arxiv-2505-09603/fig7.png",
+    "w": 1134,
+    "h": 653
+   },
+   {
+    "n": 8,
+    "page": 15,
+    "src": "figs/arxiv-2505-09603/fig8.png",
+    "w": 1134,
+    "h": 308
+   },
+   {
+    "n": 9,
+    "page": 16,
+    "src": "figs/arxiv-2505-09603/fig9.png",
+    "w": 1134,
+    "h": 309
+   },
+   {
+    "n": 10,
+    "page": 16,
+    "src": "figs/arxiv-2505-09603/fig10.png",
+    "w": 1134,
+    "h": 793
+   },
+   {
+    "n": 11,
+    "page": 19,
+    "src": "figs/arxiv-2505-09603/fig11.png",
+    "w": 1134,
+    "h": 384
+   },
+   {
+    "n": 12,
+    "page": 19,
+    "src": "figs/arxiv-2505-09603/fig12.png",
+    "w": 326,
+    "h": 561
+   },
+   {
+    "n": 13,
+    "page": 20,
+    "src": "figs/arxiv-2505-09603/fig13.png",
+    "w": 1134,
+    "h": 494
+   }
+  ]
+ },
+ "arxiv-2611-05368": {
+  "title": "arXiv:2611.05368v1  [cs.RO]  3 Nov 2026",
+  "abstract": "Imitation learning policies in robotics are trained on datasets collected through costly real-world teleoperation. Often, the data-collection process is unguided, relying on the teleoperator’s intuition, resulting in data that contributes little to overall policy performance. Recent work has shown that curating such unguided datasets can substantially improve policy performance, but these approaches operate by filtering existing datasets after collection and therefore do not prevent the acquisition of uninformative data. In this work, we propose GUILD, a novel Guided Data Collection (GDC) method that actively reasons about which data should be collected to maximize downstream policy performance. We introduce an iterative framework that alternates between 1) task proposal and data collection and 2) data evaluation to close the loop. For task proposal, we leverage semantic priors from vision–language models to identify relevant environments, object configurations, and goals for data collection. However, since semantic relevance does not imply policy improvement, we perform data evaluation. By leveraging predictive data attribution we approximate how the collected trajectories influence policy performance on a target deployment setting. This signal is then used as feedback to guide subsequent data collection, closing the data collection loop. We evaluate our approach in simulation and real robot settings, demonstrating that guided data collection substantially improves sample efficiency and deployment performance compared to passive data collection strategies, multiple baselines and experienced roboticists. More info at our website.",
+  "figure": "figs/arxiv-2611-05368.png",
+  "figure_page": 3,
+  "figures": [
+   {
+    "n": 1,
+    "page": 3,
+    "src": "figs/arxiv-2611-05368/fig1.png",
+    "w": 1134,
+    "h": 539
+   },
+   {
+    "n": 2,
+    "page": 7,
+    "src": "figs/arxiv-2611-05368/fig2.png",
+    "w": 1134,
+    "h": 743
+   },
+   {
+    "n": 3,
+    "page": 8,
+    "src": "figs/arxiv-2611-05368/fig3.png",
+    "w": 1134,
+    "h": 549
+   },
+   {
+    "n": 4,
+    "page": 8,
+    "src": "figs/arxiv-2611-05368/fig4.png",
+    "w": 332,
+    "h": 425
+   },
+   {
+    "n": 5,
+    "page": 9,
+    "src": "figs/arxiv-2611-05368/fig5.png",
+    "w": 1134,
+    "h": 433
+   },
+   {
+    "n": 6,
+    "page": 15,
+    "src": "figs/arxiv-2611-05368/fig6.png",
+    "w": 519,
+    "h": 618
+   },
+   {
+    "n": 7,
+    "page": 18,
+    "src": "figs/arxiv-2611-05368/fig7.png",
+    "w": 1134,
+    "h": 599
+   },
+   {
+    "n": 8,
+    "page": 19,
+    "src": "figs/arxiv-2611-05368/fig8.png",
+    "w": 1134,
+    "h": 381
+   },
+   {
+    "n": 9,
+    "page": 21,
+    "src": "figs/arxiv-2611-05368/fig9.png",
+    "w": 1134,
+    "h": 741
+   }
+  ]
+ },
+ "arxiv-2506-15847": {
+  "title": "SafeMimic: Towards Safe and Autonomous Human-to-Robot Imitation for Mobile Manipulation",
+  "abstract": "—For robots to become efficient helpers in the home, they must learn to perform new mobile manipulation tasks simply by watching humans perform them. Learning from a single video demonstration from a human is challenging as the robot needs to first extract from the demo what needs to be done and how, translate the strategy from a third to a first-person perspective, and then adapt it to be successful with its own morphology. Furthermore, to mitigate the dependency on costly human monitoring, this learning process should be performed in a safe and autonomous manner. We present SAFEMIMIC, a framework to learn new mobile manipulation skills safely and autonomously from a single third-person human video. Given an initial human video demonstration of a multi-step mobile manipulation task, SAFEMIMIC first parses the video into segments, inferring both the semantic changes caused and the motions the human executed to achieve them and translating them to an egocentric reference. Then, it adapts the behavior to the robot’s own morphology by sampling candidate actions around the human ones, and verifying them for safety before execution in a receding horizon fashion using an ensemble of safety Q-functions trained in simulation. When safe forward progression is not possible, SAFEMIMIC backtracks to previous states and attempts a different sequence of actions, adapting both the trajectory and the grasping modes when required for its morphology. As a result, SAFEMIMIC yields a strategy that succeeds in the demonstrated behavior and learns task-specific actions that reduce exploration in future attempts. Our experiments show that our method allows robots to safely and efficiently learn multi-step mobile manipulation behaviors from a single human demonstration, from different users, and in different environments, with improvements over state-of-theart baselines across seven tasks. For more information and video results, https://robin-lab.cs.utexas.edu/SafeMimic/ arXiv:2506.15847v1  [cs.RO]  18 Jun 2025 Unsafe  Predicted Actions Backtracking Successful Adaptation",
+  "figure": null,
+  "figure_page": null,
+  "figures": [
+   {
+    "n": 2,
+    "page": 3,
+    "src": "figs/arxiv-2506-15847/fig2.png",
+    "w": 1462,
+    "h": 884
+   },
+   {
+    "n": 3,
+    "page": 5,
+    "src": "figs/arxiv-2506-15847/fig3.png",
+    "w": 1462,
+    "h": 311
+   },
+   {
+    "n": 4,
+    "page": 6,
+    "src": "figs/arxiv-2506-15847/fig4.png",
+    "w": 1462,
+    "h": 694
+   },
+   {
+    "n": 5,
+    "page": 7,
+    "src": "figs/arxiv-2506-15847/fig5.png",
+    "w": 1096,
+    "h": 1234
+   },
+   {
+    "n": 6,
+    "page": 7,
+    "src": "figs/arxiv-2506-15847/fig6.png",
+    "w": 882,
+    "h": 974
+   },
+   {
+    "n": 7,
+    "page": 8,
+    "src": "figs/arxiv-2506-15847/fig7.png",
+    "w": 721,
+    "h": 528
+   },
+   {
+    "n": 8,
+    "page": 14,
+    "src": "figs/arxiv-2506-15847/fig8.png",
+    "w": 721,
+    "h": 954
+   },
+   {
+    "n": 9,
+    "page": 14,
+    "src": "figs/arxiv-2506-15847/fig9.png",
+    "w": 721,
+    "h": 481
+   },
+   {
+    "n": 10,
+    "page": 14,
+    "src": "figs/arxiv-2506-15847/fig10.png",
+    "w": 721,
+    "h": 1207
+   },
+   {
+    "n": 11,
+    "page": 15,
+    "src": "figs/arxiv-2506-15847/fig11.png",
+    "w": 732,
+    "h": 372
+   },
+   {
+    "n": 12,
+    "page": 15,
+    "src": "figs/arxiv-2506-15847/fig12.png",
+    "w": 732,
+    "h": 806
+   }
+  ]
+ },
+ "arxiv-2611-06881": {
+  "title": "VABAR: A Variational Automation Benchmark for Agentic Robotics",
+  "abstract": "",
+  "figure": "figs/arxiv-2611-06881.png",
+  "figure_page": 1,
+  "figures": [
+   {
+    "n": 1,
+    "page": 1,
+    "src": "figs/arxiv-2611-06881/fig1.png",
+    "w": 1441,
+    "h": 785
+   },
+   {
+    "n": 2,
+    "page": 4,
+    "src": "figs/arxiv-2611-06881/fig2.png",
+    "w": 1439,
+    "h": 900
+   },
+   {
+    "n": 3,
+    "page": 5,
+    "src": "figs/arxiv-2611-06881/fig3.png",
+    "w": 1440,
+    "h": 160
+   },
+   {
+    "n": 4,
+    "page": 6,
+    "src": "figs/arxiv-2611-06881/fig4.png",
+    "w": 1436,
+    "h": 737
+   },
+   {
+    "n": 5,
+    "page": 7,
+    "src": "figs/arxiv-2611-06881/fig5.png",
+    "w": 707,
+    "h": 586
+   }
+  ]
+ },
+ "pdf-beb8536dd7": {
+  "title": "Evaluating Beneﬁt-Risk in Robotic Medical Devices with Autonomous or Remote Teleoperation Capabilities November 2026",
+  "abstract": "",
+  "figure": null,
+  "figure_page": null,
+  "figures": []
+ },
+ "pdf-a4184160bb": {
+  "title": "arXiv:2609.07303v1  [cs.LG]  7 Sep 2026",
+  "abstract": "Current paradigms for training language models via reinforcement learning rely heavily on sparse outcome rewards. However, as we pursue tasks that require longer and more complicated trajectories, such strategies result in slow learning. Prior work has attempted to address this problem by rewarding partial progress; however, naive formulations are often biased and converge to suboptimal policies. We show that a simple and unbiased dense reward formulation, which we term progressive point matching, scales exponentially more efficiently to long-horizon tasks by rewarding partial progress on a segment level, both theoretically and empirically via synthetic environments. We then show how progressive point matching can be practically instantiated using a single reference trajectory per task. On extremely hard math reasoning problems, sparse outcome rewards cannot make any progress, whereas segment-level rewards enable improvements at larger test-time token budgets when measured by success rate or pass@k.",
+  "figure": null,
+  "figure_page": null,
+  "figures": [
+   {
+    "n": 2,
+    "page": 4,
+    "src": "figs/pdf-a4184160bb/fig2.png",
+    "w": 1143,
+    "h": 672
+   },
+   {
+    "n": 3,
+    "page": 5,
+    "src": "figs/pdf-a4184160bb/fig3.png",
+    "w": 1139,
+    "h": 277
+   },
+   {
+    "n": 5,
+    "page": 9,
+    "src": "figs/pdf-a4184160bb/fig5.png",
+    "w": 578,
+    "h": 476
+   },
+   {
+    "n": 6,
+    "page": 21,
+    "src": "figs/pdf-a4184160bb/fig6.png",
+    "w": 1140,
+    "h": 441
+   },
+   {
+    "n": 7,
+    "page": 25,
+    "src": "figs/pdf-a4184160bb/fig7.png",
+    "w": 578,
+    "h": 164
+   },
+   {
+    "n": 8,
+    "page": 27,
+    "src": "figs/pdf-a4184160bb/fig8.png",
+    "w": 1140,
+    "h": 482
+   },
+   {
+    "n": 9,
+    "page": 28,
+    "src": "figs/pdf-a4184160bb/fig9.png",
+    "w": 1140,
+    "h": 705
+   },
+   {
+    "n": 10,
+    "page": 29,
+    "src": "figs/pdf-a4184160bb/fig10.png",
+    "w": 1141,
+    "h": 408
+   }
+  ]
+ },
+ "pdf-08009bbec2": {
+  "title": "Precise and Dexterous Robotic Manipulation via Human-in-the-Loop Reinforcement Learning",
+  "abstract": "",
+  "figure": "figs/pdf-08009bbec2.png",
+  "figure_page": 2,
+  "figures": [
+   {
+    "n": 1,
+    "page": 2,
+    "src": "figs/pdf-08009bbec2/fig1.png",
+    "w": 1346,
+    "h": 1420
+   },
+   {
+    "n": 2,
+    "page": 6,
+    "src": "figs/pdf-08009bbec2/fig2.png",
+    "w": 1348,
+    "h": 1145
+   },
+   {
+    "n": 3,
+    "page": 8,
+    "src": "figs/pdf-08009bbec2/fig3.png",
+    "w": 1347,
+    "h": 956
+   },
+   {
+    "n": 4,
+    "page": 10,
+    "src": "figs/pdf-08009bbec2/fig4.png",
+    "w": 1347,
+    "h": 1796
+   },
+   {
+    "n": 5,
+    "page": 14,
+    "src": "figs/pdf-08009bbec2/fig5.png",
+    "w": 1347,
+    "h": 1232
+   },
+   {
+    "n": 6,
+    "page": 16,
+    "src": "figs/pdf-08009bbec2/fig6.png",
+    "w": 1347,
+    "h": 771
+   },
+   {
+    "n": 7,
+    "page": 18,
+    "src": "figs/pdf-08009bbec2/fig7.png",
+    "w": 1347,
+    "h": 1091
+   },
+   {
+    "n": 8,
+    "page": 20,
+    "src": "figs/pdf-08009bbec2/fig8.png",
+    "w": 1348,
+    "h": 1234
+   },
+   {
+    "n": 9,
+    "page": 32,
+    "src": "figs/pdf-08009bbec2/fig9.png",
+    "w": 1342,
+    "h": 944
+   },
+   {
+    "n": 10,
+    "page": 32,
+    "src": "figs/pdf-08009bbec2/fig10.png",
+    "w": 1342,
+    "h": 416
+   },
+   {
+    "n": 11,
+    "page": 34,
+    "src": "figs/pdf-08009bbec2/fig11.png",
+    "w": 1342,
+    "h": 520
+   },
+   {
+    "n": 12,
+    "page": 35,
+    "src": "figs/pdf-08009bbec2/fig12.png",
+    "w": 1342,
+    "h": 425
+   },
+   {
+    "n": 13,
+    "page": 36,
+    "src": "figs/pdf-08009bbec2/fig13.png",
+    "w": 1342,
+    "h": 485
+   },
+   {
+    "n": 14,
+    "page": 37,
+    "src": "figs/pdf-08009bbec2/fig14.png",
+    "w": 1341,
+    "h": 936
+   },
+   {
+    "n": 15,
+    "page": 40,
+    "src": "figs/pdf-08009bbec2/fig15.png",
+    "w": 1342,
+    "h": 934
+   },
+   {
+    "n": 16,
+    "page": 41,
+    "src": "figs/pdf-08009bbec2/fig16.png",
+    "w": 1203,
+    "h": 600
+   },
+   {
+    "n": 17,
+    "page": 42,
+    "src": "figs/pdf-08009bbec2/fig17.png",
+    "w": 1342,
+    "h": 941
+   },
+   {
+    "n": 18,
+    "page": 42,
+    "src": "figs/pdf-08009bbec2/fig18.png",
+    "w": 1342,
+    "h": 425
+   },
+   {
+    "n": 19,
+    "page": 44,
+    "src": "figs/pdf-08009bbec2/fig19.png",
+    "w": 1342,
+    "h": 945
+   },
+   {
+    "n": 20,
+    "page": 44,
+    "src": "figs/pdf-08009bbec2/fig20.png",
+    "w": 1342,
+    "h": 425
+   },
+   {
+    "n": 21,
+    "page": 46,
+    "src": "figs/pdf-08009bbec2/fig21.png",
+    "w": 1342,
+    "h": 938
+   },
+   {
+    "n": 22,
+    "page": 46,
+    "src": "figs/pdf-08009bbec2/fig22.png",
+    "w": 1342,
+    "h": 416
+   },
+   {
+    "n": 23,
+    "page": 48,
+    "src": "figs/pdf-08009bbec2/fig23.png",
+    "w": 1346,
+    "h": 1052
+   },
+   {
+    "n": 24,
+    "page": 48,
+    "src": "figs/pdf-08009bbec2/fig24.png",
+    "w": 1346,
+    "h": 416
+   },
+   {
+    "n": 25,
+    "page": 50,
+    "src": "figs/pdf-08009bbec2/fig25.png",
+    "w": 1342,
+    "h": 1047
+   },
+   {
+    "n": 26,
+    "page": 54,
+    "src": "figs/pdf-08009bbec2/fig26.png",
+    "w": 1347,
+    "h": 953
+   }
+  ]
+ },
+ "pdf-556e228a43": {
+  "title": "arXiv:2411.05193v2  [cs.LG]  27 Nov 2024",
+  "abstract": "",
+  "figure": "figs/pdf-556e228a43.png",
+  "figure_page": 2,
+  "figures": [
+   {
+    "n": 1,
+    "page": 2,
+    "src": "figs/pdf-556e228a43/fig1.png",
+    "w": 1140,
+    "h": 418
+   },
+   {
+    "n": 2,
+    "page": 8,
+    "src": "figs/pdf-556e228a43/fig2.png",
+    "w": 1141,
+    "h": 629
+   },
+   {
+    "n": 3,
+    "page": 10,
+    "src": "figs/pdf-556e228a43/fig3.png",
+    "w": 545,
+    "h": 567
+   },
+   {
+    "n": 4,
+    "page": 10,
+    "src": "figs/pdf-556e228a43/fig4.png",
+    "w": 541,
+    "h": 569
+   }
+  ]
+ },
+ "pdf-a8dfbb77a3": {
+  "title": "arXiv:2411.07681v2  [cs.LG]  18 Nov 2024",
+  "abstract": "Despite the remarkable capabilities of modern large language models (LLMs), the mechanisms behind their problem-solving abilities remain elusive. In this work, we aim to better understand how the learning dynamics of LLM finetuning shapes downstream generalization. Our analysis focuses on reasoning tasks, whose problem structure allows us to distinguish between memorization (the exact replication of reasoning steps from the training data) and performance (the correctness of the final solution). We find that a model’s generalization behavior can be effectively characterized by a training metric we call pre-memorization train accuracy: the accuracy of model samples on training queries before they begin to copy the exact reasoning steps from the training set. On the dataset level, this metric is able to reliably predict test accuracy, achieving R2 of around or exceeding 0.9 across various models (Llama3 8B, Gemma2 9B), datasets (GSM8k, MATH), and training configurations. On a per-example level, this metric is also indicative of whether individual model predictions are robust to perturbations in the training query. By connecting a model’s learning behavior to its generalization, pre-memorization train accuracy can guide targeted improvements to training strategies. We focus on data curation as an example, and show that prioritizing examples with low pre-memorization accuracy leads to 1.5-2x improvements in data efficiency compared to i.i.d. data scaling, and outperforms other standard data curation techniques.",
+  "figure": "figs/pdf-a8dfbb77a3.png",
+  "figure_page": 2,
+  "figures": [
+   {
+    "n": 1,
+    "page": 2,
+    "src": "figs/pdf-a8dfbb77a3/fig1.png",
+    "w": 1262,
+    "h": 557
+   },
+   {
+    "n": 2,
+    "page": 4,
+    "src": "figs/pdf-a8dfbb77a3/fig2.png",
+    "w": 1262,
+    "h": 779
+   },
+   {
+    "n": 3,
+    "page": 4,
+    "src": "figs/pdf-a8dfbb77a3/fig3.png",
+    "w": 1262,
+    "h": 462
+   },
+   {
+    "n": 4,
+    "page": 6,
+    "src": "figs/pdf-a8dfbb77a3/fig4.png",
+    "w": 1262,
+    "h": 960
+   },
+   {
+    "n": 5,
+    "page": 6,
+    "src": "figs/pdf-a8dfbb77a3/fig5.png",
+    "w": 1262,
+    "h": 368
+   },
+   {
+    "n": 6,
+    "page": 7,
+    "src": "figs/pdf-a8dfbb77a3/fig6.png",
+    "w": 1262,
+    "h": 500
+   },
+   {
+    "n": 7,
+    "page": 8,
+    "src": "figs/pdf-a8dfbb77a3/fig7.png",
+    "w": 1262,
+    "h": 907
+   },
+   {
+    "n": 8,
+    "page": 9,
+    "src": "figs/pdf-a8dfbb77a3/fig8.png",
+    "w": 1262,
+    "h": 611
+   },
+   {
+    "n": 10,
+    "page": 12,
+    "src": "figs/pdf-a8dfbb77a3/fig10.png",
+    "w": 1262,
+    "h": 748
+   }
+  ]
+ },
+ "arxiv-2410-24164": {
+  "title": "π0: A Vision-Language-Action Flow Model for",
+  "abstract": "—Robot learning holds tremendous promise to unlock the full potential of flexible, general, and dexterous robot systems, as well as to address some of the deepest questions in artificial intelligence. However, bringing robot learning to the level of generality required for effective real-world systems faces major obstacles in terms of data, generalization, and robustness. In this paper, we discuss how generalist robot policies (i.e., robot foundation models) can address these challenges, and how we can design effective generalist robot policies for complex and highly dexterous tasks. We propose a novel flow matching architecture built on top of a pre-trained vision-language model (VLM) to inherit Internet-scale semantic knowledge. We then discuss how this model can be trained on a large and diverse dataset from multiple dexterous robot platforms, including single-arm robots, dual-arm robots, and mobile manipulators. We evaluate our model in terms of its ability to perform tasks via direct prompting, follow language instructions from people and from a high-level VLM policy, and its ability to acquire new skills via fine-tuning. Our results cover a wide variety of tasks, such as laundry folding, table cleaning, and assembling boxes.",
+  "figure": "figs/arxiv-2410-24164.png",
+  "figure_page": 1,
+  "figures": [
+   {
+    "n": 1,
+    "page": 1,
+    "src": "figs/arxiv-2410-24164/fig1.png",
+    "w": 1462,
+    "h": 1090
+   },
+   {
+    "n": 2,
+    "page": 2,
+    "src": "figs/arxiv-2410-24164/fig2.png",
+    "w": 1462,
+    "h": 353
+   },
+   {
+    "n": 3,
+    "page": 4,
+    "src": "figs/arxiv-2410-24164/fig3.png",
+    "w": 1462,
+    "h": 589
+   },
+   {
+    "n": 4,
+    "page": 5,
+    "src": "figs/arxiv-2410-24164/fig4.png",
+    "w": 721,
+    "h": 545
+   },
+   {
+    "n": 5,
+    "page": 6,
+    "src": "figs/arxiv-2410-24164/fig5.png",
+    "w": 721,
+    "h": 629
+   },
+   {
+    "n": 6,
+    "page": 7,
+    "src": "figs/arxiv-2410-24164/fig6.png",
+    "w": 874,
+    "h": 680
+   },
+   {
+    "n": 7,
+    "page": 8,
+    "src": "figs/arxiv-2410-24164/fig7.png",
+    "w": 770,
+    "h": 866
+   },
+   {
+    "n": 8,
+    "page": 8,
+    "src": "figs/arxiv-2410-24164/fig8.png",
+    "w": 721,
+    "h": 498
+   },
+   {
+    "n": 9,
+    "page": 9,
+    "src": "figs/arxiv-2410-24164/fig9.png",
+    "w": 721,
+    "h": 770
+   },
+   {
+    "n": 10,
+    "page": 9,
+    "src": "figs/arxiv-2410-24164/fig10.png",
+    "w": 726,
+    "h": 751
+   },
+   {
+    "n": 11,
+    "page": 10,
+    "src": "figs/arxiv-2410-24164/fig11.png",
+    "w": 1462,
+    "h": 824
+   },
+   {
+    "n": 12,
+    "page": 11,
+    "src": "figs/arxiv-2410-24164/fig12.png",
+    "w": 962,
+    "h": 854
+   },
+   {
+    "n": 13,
+    "page": 11,
+    "src": "figs/arxiv-2410-24164/fig13.png",
+    "w": 1446,
+    "h": 877
+   },
+   {
+    "n": 14,
+    "page": 16,
+    "src": "figs/arxiv-2410-24164/fig14.png",
+    "w": 721,
+    "h": 565
+   }
+  ]
+ },
+ "arxiv-2501-09747": {
+  "title": "FAST: Efficient Action Tokenization for Vision-Language-Action Models",
+  "abstract": "—Autoregressive sequence models, such as Transformer-based vision-language action (VLA) policies, can be tremendously effective for capturing complex and generalizable robotic behaviors. However, such models require us to choose a tokenization of our continuous action signals, which determines how the discrete symbols predicted by the model map to continuous robot actions. We find that current approaches for robot action tokenization, based on simple per-dimension, per-timestep binning schemes, typically perform poorly when learning dexterous skills from high-frequency robot data. To address this challenge, we propose a new compression-based tokenization scheme for robot actions, based on the discrete cosine transform. Our tokenization approach, Frequency-space Action Sequence Tokenization (FAST), enables us to train autoregressive VLAs for highly dexterous and high-frequency tasks where standard discretization methods fail completely. Based on FAST, we release FAST+, a universal robot action tokenizer, trained on 1M real robot action trajectories. It can be used as a black-box tokenizer for a wide range of robot action sequences, with diverse action spaces and control frequencies. Finally, we show that, when combined with the π0 VLA, our method can scale to training on 10k hours of robot data and match the performance of diffusion VLAs, while reducing training time by up to 5x. I. INTRODUCTION Large, high-capacity Transformer models can be tremendously effective for capturing complex and generalizable robotic behaviors both from scratch [8, 69, 51, 6, 20, 62] and using models pre-trained for next-token prediction on Internet-scale image-text corpora [10, 39, 63, 7, 65]. However, these models require choosing a tokenization of the continuous action signal, which determines how the discrete symbols predicted by the model map to continuous robot actions [64, 34, 41, 12]. It is widely known that a good choice of tokenization can be critical to the performance of sequence models [55, 57]. Prior robotic policies of this sort typically use na¨ıve tokenization strategies based on a per-dimension, per-timestep binning scheme [9, 10, 39]. We find that such methods perform poorly when learning dexterous skills with high-frequency control (see Figure 2, right). We observe that correlations between time steps are a major challenge for na¨ıve tokenization strategies when predicting sequences of",
+  "figure": "figs/arxiv-2501-09747.png",
+  "figure_page": 1,
+  "figures": [
+   {
+    "n": 1,
+    "page": 1,
+    "src": "figs/arxiv-2501-09747/fig1.png",
+    "w": 721,
+    "h": 1391
+   },
+   {
+    "n": 2,
+    "page": 2,
+    "src": "figs/arxiv-2501-09747/fig2.png",
+    "w": 721,
+    "h": 848
+   },
+   {
+    "n": 3,
+    "page": 3,
+    "src": "figs/arxiv-2501-09747/fig3.png",
+    "w": 721,
+    "h": 1250
+   },
+   {
+    "n": 4,
+    "page": 5,
+    "src": "figs/arxiv-2501-09747/fig4.png",
+    "w": 1462,
+    "h": 660
+   },
+   {
+    "n": 5,
+    "page": 6,
+    "src": "figs/arxiv-2501-09747/fig5.png",
+    "w": 721,
+    "h": 1375
+   },
+   {
+    "n": 6,
+    "page": 8,
+    "src": "figs/arxiv-2501-09747/fig6.png",
+    "w": 1462,
+    "h": 557
+   },
+   {
+    "n": 7,
+    "page": 8,
+    "src": "figs/arxiv-2501-09747/fig7.png",
+    "w": 721,
+    "h": 768
+   },
+   {
+    "n": 8,
+    "page": 8,
+    "src": "figs/arxiv-2501-09747/fig8.png",
+    "w": 721,
+    "h": 518
+   },
+   {
+    "n": 9,
+    "page": 9,
+    "src": "figs/arxiv-2501-09747/fig9.png",
+    "w": 721,
+    "h": 687
+   },
+   {
+    "n": 10,
+    "page": 10,
+    "src": "figs/arxiv-2501-09747/fig10.png",
+    "w": 1462,
+    "h": 536
+   },
+   {
+    "n": 11,
+    "page": 10,
+    "src": "figs/arxiv-2501-09747/fig11.png",
+    "w": 721,
+    "h": 628
+   },
+   {
+    "n": 12,
+    "page": 16,
+    "src": "figs/arxiv-2501-09747/fig12.png",
+    "w": 721,
+    "h": 1546
+   },
+   {
+    "n": 13,
+    "page": 17,
+    "src": "figs/arxiv-2501-09747/fig13.png",
+    "w": 709,
+    "h": 1585
+   },
+   {
+    "n": 14,
+    "page": 18,
+    "src": "figs/arxiv-2501-09747/fig14.png",
+    "w": 709,
+    "h": 394
+   },
+   {
+    "n": 15,
+    "page": 18,
+    "src": "figs/arxiv-2501-09747/fig15.png",
+    "w": 721,
+    "h": 661
+   }
+  ]
  }
 }

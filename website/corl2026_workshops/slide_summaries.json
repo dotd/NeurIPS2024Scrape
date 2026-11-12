@@ -1,0 +1,10 @@
+{
+ "0SIsl52aer": {
+  "text": "• Problem: earlier SHIFT-WORLD agents cut simulated human–robot conflicts mostly by abstaining, confounding safety claims.\n• Key idea: compare intervention policies at exactly matched coverage (40%), so only which interventions are chosen matters.\n• Method: gradient-boosted regressor ranks counterfactual advantage of acting vs. yielding, trained on simulator potential-outcome labels.\n• Setup: 45k training examples; 5 held-out conditions, 120,000 episodes, 600,000 policy evaluations, 16 paired seeds.\n• High intent shift: 63.84% success, 2.52% conflict vs. Commitment heuristic 56.88%, 5.30%.\n• Linear counterfactual baseline nearly matches (64.15%, 2.65%): gains come from counterfactual supervision, not nonlinear architecture.\n• New: 20–60% budget sweep keeps gains over Commitment; synthetic only, no real-robot or collision guarantees.",
+  "cost": 0.0602
+ },
+ "c22DjhXdnt": {
+  "text": "• Problem: dodge rate ignores later failures; humanoid can dodge yet fall or leave its allowed area.\n• Task success requires dodge, no fall, and pelvis within 1 m of start for four seconds.\n• Method: paired camera faults (stale, blank frames) on two fixed G1 depth-dodge policies in simulation.\n• Restoring fresh frames at 2 s raises π1 success 50.0% to 95.3%; dodge rate stays 100%.\n• Under stale input, π1 dodges then exits area in 121 trials; all exits occur after throw resolution.\n• Blank input matches fresh-frame success (same 31/64 rescued), but fresh frames end 0.295 m closer to start.\n• Takeaway: report post-encounter motion alongside contact, falls, and area compliance, not dodge rate alone.",
+  "cost": 0.0664
+ }
+}

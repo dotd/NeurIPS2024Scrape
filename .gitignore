@@ -26,3 +26,7 @@ htmls/corl2026.zip
 website/papers/pdfs/
 website/papers/figs/
 website/papers/htmls_python/
+# CoRL 2026 workshop papers (website/corl2026_workshops): same large generated assets
+website/corl2026_workshops/pdfs/
+website/corl2026_workshops/figs/
+website/corl2026_workshops/htmls_python/

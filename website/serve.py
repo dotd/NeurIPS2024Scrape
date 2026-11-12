@@ -49,6 +49,18 @@ Title: {title}
 Authors: {authors}
 End your answer with one line: "URL: <the url>", or "URL: NONE" if there is no such copy."""
 
+WA_PROMPT = """Summarize this robotics paper as a single slide for a WhatsApp message to robotics researchers:
+at most 7 bullets with the paper's main points (problem, key idea, method, setup, main results with numbers, what's new).
+Each bullet is one line of at most 20 words and starts with "• ". Output only the bullets: no title, no intro,
+no markdown, no emojis, no hashtags."""  # the CoRL 2026 prompt (specific_scripts/corl2026_whatsapp.py), from the PDF
+MATERIAL_PROMPT = """Search the web for public material about this paper: its project page, code repository, videos
+(YouTube or other), dataset, blog post, slides, recorded talk. Include only material about this exact paper, not
+related work, not the paper itself (arXiv / OpenReview / PDF) and not the authors' homepages.
+Title: {title}
+Authors: {authors}
+End your answer with one line per item: "LINK: <kind> | <url>", kind one of project, code, video, dataset, blog,
+slides, talk, other. If you find nothing, end with "LINK: NONE"."""
+MATERIAL_KINDS = ("project", "code", "video", "dataset", "blog", "slides", "talk", "other")
 PDF_TO_HTML = os.path.join(ROOT, "specific_scripts", "pdf_to_html.py")
 HTML_PROMPT = """Convert this paper into a faithful HTML version of the whole paper, including the appendix.
 Output only the inner HTML of <body>, with no <html>/<head>/<body> tags, no markdown and no code fences.
@@ -89,6 +101,8 @@ sys.path.insert(0, os.path.join(WEB, "corl2026"))
 sys.path.insert(0, os.path.join(WEB, "papers"))
 import build  # noqa: E402  re-run after every change so index.html carries the summaries
 import papers  # noqa: E402
+sys.path.insert(0, os.path.join(WEB, "corl2026_workshops"))
+import workshops  # noqa: E402
 
 client = anthropic.Anthropic(api_key=open(KEY_FILE).read().strip())
 lock = threading.Lock()
@@ -106,7 +120,8 @@ class Site:
 
 
 SITES = [Site("/Corl2026", "CoRL 2026", build.HERE, build.main, build.paper_info),
-         Site("/Papers", papers.TITLE, papers.HERE, papers.build_page, papers.paper_info, papers)]
+         Site("/Papers", papers.TITLE, papers.HERE, papers.build_page, papers.paper_info, papers),
+         Site("/Workshops", workshops.TITLE, workshops.HERE, workshops.build_page, workshops.paper_info)]
 INDEX = """<!doctype html><html><head><meta charset="utf-8"><title>Paper browsers</title></head>
 <body style="font:16px/1.6 system-ui,sans-serif;margin:40px"><h1>Paper browsers</h1><ul>{}</ul></body></html>"""
 
@@ -313,6 +328,54 @@ def save(site, pid, value, name="summaries.json"):
         site.rebuild()
 
 
+def material(title, authors):
+    """Claude + web search: [[kind, url], ...] of the paper's project page, code, videos, ... ([] if none)."""
+    messages = [{"role": "user", "content": MATERIAL_PROMPT.format(title=title, authors=authors or "unknown")}]
+    for _ in range(4):  # a long server-side search loop stops with pause_turn; send it back to continue
+        with client.beta.messages.stream(
+            model=MODEL, max_tokens=16000, output_config={"effort": "low"},
+            betas=["server-side-fallback-2026-07-01"], extra_body={"fallbacks": "default"},
+            tools=[{"type": "web_search_20260209", "name": "web_search", "max_uses": 5}], messages=messages,
+        ) as stream:
+            msg = stream.get_final_message()
+        if msg.stop_reason != "pause_turn":
+            break
+        messages.append({"role": "assistant", "content": msg.content})
+    text = "".join(b.text for b in msg.content if b.type == "text")
+    out = []
+    for kind, url in re.findall(r"LINK:\s*(\w+)\s*\|\s*(\S+)", text):  # the answer comes from web pages: check it
+        url = url.strip("`<>*.,;)\"'")
+        if kind.lower() in MATERIAL_KINDS and re.match(r"https?://", url) and [kind.lower(), url] not in out:
+            out.append([kind.lower(), url])
+    return out
+
+
+def whatsapp(site, pid):
+    """(code, {text, material}) for the WhatsApp message; Claude runs only for what isn't stored yet."""
+    pdfs = glob.glob(os.path.join(site.here, "pdfs", f"{pid}_*.pdf"))
+    p = site.info(pid)
+    if not pdfs or not p:
+        return 404, {"error": "paper PDF not found"}
+    short, found = load(site, "slide_summaries.json").get(pid), load(site, "material.json").get(pid)
+    try:
+        short = short or ask(pdfs[0], WA_PROMPT, 4000, "low")
+        found = found if found is not None else material(*p)
+    except (anthropic.APIError, RuntimeError) as e:
+        return 502, {"error": str(e)}
+    with lock:  # the files may have changed while Claude ran: re-read before writing
+        for name, value in [("slide_summaries.json", {"text": short["text"], "cost": short["cost"]}), ("material.json", found)]:
+            d = load(site, name)
+            d[pid] = value
+            json.dump(d, open(os.path.join(site.here, name), "w"), ensure_ascii=False, indent=1)
+        gh = [u for k, u in found if re.match(r"https://github\.com/[\w.-]+/[\w.-]+/?$", u)]  # the GitHub sign + column
+        if gh:
+            g = load(site, "github.json")
+            g[pid] = list(dict.fromkeys(g.get(pid, []) + [u.rstrip("/") for u in gh]))
+            json.dump(g, open(os.path.join(site.here, "github.json"), "w"), ensure_ascii=False, indent=1)
+        site.rebuild()
+    return 200, {"text": short["text"], "material": found}
+
+
 class Handler(http.server.SimpleHTTPRequestHandler):
     def parse_request(self):
         """Find the site the path starts with and strip its prefix, so the handlers see paths in its folder."""
@@ -431,6 +494,9 @@ class Handler(http.server.SimpleHTTPRequestHandler):
                 return self.reply(200, made)
             except (anthropic.APIError, RuntimeError, subprocess.TimeoutExpired) as e:
                 return self.reply(502, {"error": str(e)})
+        w = re.fullmatch(r"/whatsapp/([A-Za-z0-9_-]+)", self.path)
+        if w and site.prefix != "/Corl2026":  # My papers / Workshops: the slide from the PDF + material links, cached
+            return self.reply(*whatsapp(site, w.group(1)))
         m = re.fullmatch(r"/summarize/([A-Za-z0-9_-]+)", self.path)
         pdfs = glob.glob(os.path.join(site.here, "pdfs", f"{m.group(1)}_*.pdf")) if m else []
         if not pdfs:

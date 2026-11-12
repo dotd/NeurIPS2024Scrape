@@ -125,6 +125,10 @@ HTML = r"""<!doctype html>
   .collage img { display: block; width: 100%; height: auto; margin: 0; max-width: none; border: 1px solid #ddd; }
   details details summary { font-weight: normal; color: #2b6cb0; margin-left: 18px; }
   .movies { display: flex; flex-wrap: wrap; gap: 8px; margin: 8px 0 4px 18px; }
+  .wsgroup { margin: 6px 0; border: 1px solid #ddd; border-radius: 8px; padding: 6px 10px; background: #fbfaf7; }
+  .wsgroup > summary { cursor: pointer; font-size: 15px; }
+  .wsgroup > summary small { color: #666; margin-left: 8px; }
+  .wsgroup > div { padding: 4px 0 4px 12px; }
   .movies video, .movies img { width: min(100%, 640px); background: #000; }
   .movies iframe { width: min(100%, 640px); aspect-ratio: 16 / 9; border: 0; background: #000; }
   details > img { display: block; max-width: min(100%, 900px); margin: 8px 0 4px 18px; }
@@ -133,14 +137,16 @@ HTML = r"""<!doctype html>
 <body>
 <nav>
   <select id="site" title="Go to another paper browser" style="font-weight:bold;padding:5px 8px;border:1px solid #bbb;border-radius:6px">
-    <option data-dir="corl2026" value="/Corl2026/">CoRL 2026</option>
-    <option data-dir="papers" value="/Papers/">My papers</option>
+    <option data-file="corl2026/index.html" value="/Corl2026/">CoRL 2026</option>
+    <option data-file="corl2026/robots.html" value="/Corl2026/robots.html">CoRL 2026 robots</option>
+    <option data-file="papers/index.html" value="/Papers/">My papers</option>
+    <option data-dir="corl2026_workshops" value="/Workshops/">CoRL 2026 Workshops</option>
   </select>
-  <script>  // ponytail: sites listed by hand, same as SITES in serve.py
+  <script>  // ponytail: pages listed by hand, here and in specific_scripts/corl2026_robot_page.py
   { const sel = document.getElementById('site');
     sel.value = [...sel.options].find(o => o.textContent === '__TITLE__')?.value ?? sel.value;
     sel.onchange = () => location.href = location.protocol.startsWith('http') ? sel.value
-      : '../' + sel.selectedOptions[0].dataset.dir + '/index.html'; }  // opened as a file: the sibling folder
+      : '../' + sel.selectedOptions[0].dataset.file; }  // opened as a file: the sibling folder
   </script>
   <button data-view="papers">Papers</button>
   <button data-view="table">Table</button>
@@ -207,7 +213,7 @@ __ADD__
 <svg hidden><symbol id="gh" viewBox="0 0 16 16"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></symbol></svg>
 <script id="data" type="application/json">__DATA__</script>
 <script>
-const {columns, rows, firstPage, meta, facets, summaries, ratings, links, htmlv, movies, here, store, schedule, drive, arxiv, shortSum} = JSON.parse(document.getElementById('data').textContent);
+const {columns, rows, firstPage, meta, facets, summaries, ratings, links, htmlv, movies, here, store, schedule, drive, arxiv, shortSum, material} = JSON.parse(document.getElementById('data').textContent);
 
 function cellContent(v) {
   if (/^https:\/\/github\.com\/\S+ /.test(v)) {  // several space-separated repos
@@ -453,33 +459,61 @@ function htmlBoxes(pid) {
 const titleIdx = columns.indexOf('title'), idIdx = columns.indexOf('id'), ghIdx = columns.indexOf('💻 github');
 const kwIdx = ['primary_keyword', 'secondary_keyword', 'free_keyword_1', 'free_keyword_2', '🏷️ keywords']
   .map(c => columns.indexOf(c)).filter(i => i >= 0);
-// ---- WhatsApp message: bold title, CoRL 2026, talk / poster time and place, the movie on Google Drive (else GitHub Pages), arXiv, OpenReview,
-// GitHub, a one-slide summary ----
-const WA = store === 'corl';  // ponytail: only the CoRL site is on GitHub Pages; "your papers" has no public page
+// ---- WhatsApp message: bold title, CoRL 2026, talk / poster time and place, the movie (Google Drive, else GitHub Pages,
+// else YouTube), arXiv, OpenReview or the paper link, GitHub, project page / code / videos / … found by Claude (My papers), a one-slide summary ----
+const WA = true;
+const MINE = store !== 'corl';  // My papers / Workshops  // My papers: the slide + material links come from Claude on the first click (POST whatsapp/<id>)
 const PAGES = 'https://dotd.github.io/corl2026/';
+const KIND = {project: '🌐 Project', code: '💻 Code', video: '🎬 Video', dataset: '🗂️ Dataset', blog: '✍️ Blog',
+              slides: '🖼️ Slides', talk: '🎤 Talk video', other: '🔗 More'};
 const gist = x => ((x && sumText(x) || '').match(/^Gist:\s*([\s\S]*?)(?:\n\n|$)/) || [])[1];  // from the full-PDF summary
 function waText(pid) {
-  const r = rows[rowOf[pid]], lines = [`*${r[titleIdx].trim()}*`, 'CoRL 2026'];
-  const talk = r[columns.indexOf('🎤 talk')], poster = r[columns.indexOf('🖼️ poster session')];  // schedule.json
-  if (talk) lines.push(`🎤 Talk: ${talk}`);
-  if (poster) lines.push(`🖼️ Poster: ${poster}`);
+  const r = rows[rowOf[pid]], col = c => r[columns.indexOf(c)] || '', lines = [`*${r[titleIdx].trim()}*`];
+  if (store !== 'papers') lines.push(store === 'workshops' ? 'CoRL 2026 Workshop' : 'CoRL 2026');
+  if (store === 'workshops') for (const x of meta[rowOf[pid]].d) {  // "Thu 11/12, 8:30 AM–12:30 PM · JW Marriott Room 202 · Title"
+    const [when, where, ...t] = x.split(' · ');
+    lines.push(`🛠️ Workshop: ${t.join(' · ')}`, `🕒 ${when} · 📍 ${where}`);
+  }
+  if (col('🎤 talk')) lines.push(`🎤 Talk: ${col('🎤 talk')}`);  // schedule.json
+  if (col('🖼️ poster session')) lines.push(`🖼️ Poster: ${col('🖼️ poster session')}`);
   const ids = (movies[pid] || []).map(p => drive.files[p.split('/').pop()]).filter(Boolean);  // Drive opens the movie directly
   if (ids.length) lines.push(...ids.map(id => `🎬 Movie: https://drive.google.com/file/d/${id}/view`));
-  else lines.push((movies[pid] || []).length ? `🎬 Movie: ${PAGES}#${pid}/movie` : `📄 Paper: ${PAGES}#${pid}`);
-  const arx = arxiv[pid] || ((links[pid] || {}).url || '').match(/^https?:\/\/arxiv\.org\/\S+/)?.[0];
+  else if (!MINE) lines.push((movies[pid] || []).length ? `🎬 Movie: ${PAGES}#${pid}/movie` : `📄 Paper: ${PAGES}#${pid}`);
+  const mat = material[pid] || [], seen = new Set(mat.map(m => m[1]));
+  if (col('🎬 youtube') && !seen.has(col('🎬 youtube'))) lines.push(`🎬 Video: ${col('🎬 youtube')}`);
+  for (const [k, u] of mat) if (k !== 'code' || !(r[ghIdx] || '').includes(u.replace(/\/$/, ''))) lines.push(`${KIND[k]}: ${u}`);
+  const arx = arxiv[pid] || ((links[pid] || {}).url || '').match(/^https?:\/\/arxiv\.org\/\S+/)?.[0]
+              || (pid.startsWith('arxiv-') ? `https://arxiv.org/abs/${pid.slice(6).replace('-', '.')}` : '');
   if (arx) lines.push(`📝 arXiv: ${arx}`);
-  lines.push(`💬 OpenReview: https://openreview.net/forum?id=${pid}`);
+  if (!MINE || /^[A-Za-z0-9_-]{10}$/.test(pid) && !/^(arxiv|pdf)-/.test(pid)) lines.push(`💬 OpenReview: https://openreview.net/forum?id=${pid}`);
+  else if (!arx && /^https?:/.test(col('source'))) lines.push(`🔗 Paper: ${col('source')}`);
   if (ghIdx >= 0 && r[ghIdx]) lines.push(...r[ghIdx].split(' ').map(u => `💻 GitHub: ${u}`));
-  lines.push('', shortSum[pid] || gist(summaries[pid]) || r[columns.indexOf('abstract')] || '');
+  lines.push('', shortSum[pid] || gist(summaries[pid]) || col('abstract'));
   return lines.join('\n').trim();
 }
 function waButton(pid) {
   const wrap = document.createElement('div'), b = document.createElement('button'),
         panel = document.createElement('div'), ta = document.createElement('textarea'), cp = document.createElement('button');
   wrap.className = 'wa'; panel.className = 'panel'; panel.hidden = true; ta.rows = 10;
-  b.textContent = '💬 WhatsApp'; b.title = 'Prepare a WhatsApp message about this paper';
+  b.textContent = '💬 WhatsApp'; b.title = MINE ? 'Prepare a WhatsApp message: Claude summarizes the paper as a 7-bullet slide and searches the web for its project page, code, videos and more'
+                                                : 'Prepare a WhatsApp message about this paper';
   cp.textContent = '📋 Copy';
-  b.onclick = () => { if (!ta.value) ta.value = waText(pid); panel.hidden = !panel.hidden; };  // you can edit it before copying
+  b.onclick = async () => {
+    if (!ta.value && MINE && !shortSum[pid]) {
+      b.disabled = true; b.textContent = '⏳ Asking Claude…';
+      try {
+        const res = await fetch('whatsapp/' + pid, {method: 'POST'}), j = await res.json();
+        if (!res.ok) throw new Error(j.error);
+        shortSum[pid] = j.text; material[pid] = j.material;
+      } catch (e) {  // nothing cached: the next click asks again
+        b.disabled = false; b.textContent = '💬 WhatsApp ⚠️'; b.title = e.message;
+        return;
+      }
+      b.disabled = false; b.textContent = '💬 WhatsApp';
+    }
+    if (!ta.value) ta.value = waText(pid);
+    panel.hidden = !panel.hidden;  // you can edit it before copying
+  };
   cp.onclick = async () => {
     ta.select();  // copying the selection works on file:// and http too; the Clipboard API is the fallback
     if (!document.execCommand('copy')) await navigator.clipboard.writeText(ta.value);
@@ -663,6 +697,37 @@ function saveFilters() {
   try { localStorage.setItem(store + 'Filters', JSON.stringify({fields, picked: pk})); } catch (e) {}
 }
 
+// ---- Workshops site: the papers view is one dropdown per workshop (in time, then room order), papers inside ----
+const GROUPS = store !== 'workshops' ? null : schedule.sessions.map(s => {
+  const g = document.createElement('details'), sm = document.createElement('summary'), body = document.createElement('div'),
+        b = document.createElement('b'), info = document.createElement('small'), n = document.createElement('small');
+  const [when, where, ...t] = s.split(' · ');
+  g.className = 'wsgroup'; b.textContent = '🛠️ ' + t.join(' · '); info.textContent = `🕒 ${when} · 📍 ${where}`;
+  sm.append(b, info, n);
+  if (schedule.links[s]) {
+    const a = document.createElement('a');
+    a.href = schedule.links[s]; a.target = '_blank'; a.textContent = '🌐 website'; a.style.marginLeft = '8px';
+    a.onclick = e => { e.preventDefault(); open(a.href, '_blank'); };  // don't toggle the dropdown
+    sm.append(a);
+  }
+  g.append(sm, body);
+  return {s, g, body, n, total: (schedule.order[s] || []).length};
+});
+if (GROUPS) document.querySelector('.facet[data-key=d] > summary').textContent = '🛠️ Workshop';
+function renderPapers(idx) {
+  const box = document.getElementById('papers');
+  if (!GROUPS) return box.replaceChildren(...idx.map(i => dets[i]));
+  const filtered = idx.length < rows.length;
+  for (const G of GROUPS) {
+    const list = idx.filter(i => meta[i].d[0] === G.s);  // ponytail: a paper in two workshops is listed under its first
+    G.body.replaceChildren(...list.map(i => dets[i]));
+    if (!G.total) G.body.textContent = 'No public papers on OpenReview for this workshop: see its website.';
+    G.n.textContent = filtered ? `📄 ${list.length} / ${G.total}` : `📄 ${G.total}`;
+    G.g.hidden = filtered && !list.length;
+  }
+  box.replaceChildren(...GROUPS.map(G => G.g));
+}
+
 function applyFilters() {
   if (!dets.length) return;  // first renderTable() runs before the papers view exists
   const minH = +document.getElementById('minH').value || 0, minC = +document.getElementById('minC').value || 0;
@@ -682,7 +747,7 @@ function applyFilters() {
   if (sort === 'az') idx.sort((a, b) => rows[a][titleIdx].localeCompare(rows[b][titleIdx], undefined, {sensitivity: 'base'}));
   else if (sort) idx.sort((a, b) => (meta[b][sort] || 0) - (meta[a][sort] || 0));
   table.querySelector('tbody').replaceChildren(...idx.map(i => trs[i]));
-  document.getElementById('papers').replaceChildren(...idx.map(i => dets[i]));
+  renderPapers(idx);
   shown = new Set(idx);
   if (document.getElementById('bytime').classList.contains('active')) renderByTime();
   document.querySelector('.count').textContent = idx.length === rows.length
@@ -958,10 +1023,10 @@ def build(here, title, columns, rows, add_box="", store="corl"):
                        "htmlv": {**{k: html_versions(k, here) for k in HTML_KINDS}, "claude2": condensed_versions(here)},
                        "movies": paper_movies(here), "here": here, "store": store,
                        "drive": load(here, "drive_movies.json", {"folder": "", "files": {}}),
-                       "arxiv": {k: v for k, v in load(here, "arxiv.json", {}).items() if v},
+                       "arxiv": {k: v for k, v in load(here, "arxiv.json", {}).items() if v}, "material": load(here, "material.json", {}),
                        "shortSum": {k: v["text"] for k, v in load(here, "slide_summaries.json", {}).items()},
-                       "schedule": {k: v for k, v in load(here, "schedule.json", {"sessions": [], "order": {}}).items()
-                                    if k in ("sessions", "order")}}, ensure_ascii=False).replace("</", "<\\/")
+                       "schedule": {k: v for k, v in load(here, "schedule.json", {"sessions": [], "order": {}, "links": {}}).items()
+                                    if k in ("sessions", "order", "links")}}, ensure_ascii=False).replace("</", "<\\/")
     out = os.path.join(here, "index.html")
     with open(out, "w") as f:
         f.write(HTML.replace("__TITLE__", title).replace("__ADD__", add_box).replace("__DATA__", data))
