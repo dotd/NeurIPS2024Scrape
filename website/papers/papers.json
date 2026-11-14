@@ -237,7 +237,7 @@
   "added": "2026-11-12 15:02"
  },
  "arxiv-2410-24164": {
-  "title": "$π_0$: A Vision-Language-Action Flow Model for General Robot Control",
+  "title": "π0: A Vision-Language-Action Flow Model for General Robot Control",
   "authors": "Kevin Black, Noah Brown, Danny Driess, Adnan Esmail, Michael Equi, Chelsea Finn, Niccolo Fusai, Lachy Groom, Karol Hausman, Brian Ichter, Szymon Jakubczak, Tim Jones, Liyiming Ke, Sergey Levine, Adrian Li-Bell, Mohith Mothukuri, Suraj Nair, Karl Pertsch, Lucy Xiaoyang Shi, James Tanner, Quan Vuong, Anna Walling, Haohuan Wang, Ury Zhilinsky",
   "abstract": "Robot learning holds tremendous promise to unlock the full potential of flexible, general, and dexterous robot systems, as well as to address some of the deepest questions in artificial intelligence. However, bringing robot learning to the level of generality required for effective real-world systems faces major obstacles in terms of data, generalization, and robustness. In this paper, we discuss how generalist robot policies (i.e., robot foundation models) can address these challenges, and how we can design effective generalist robot policies for complex and highly dexterous tasks. We propose a novel flow matching architecture built on top of a pre-trained vision-language model (VLM) to inherit Internet-scale semantic knowledge. We then discuss how this model can be trained on a large and diverse dataset from multiple dexterous robot platforms, including single-arm robots, dual-arm robots, and mobile manipulators. We evaluate our model in terms of its ability to perform tasks in zero shot after pre-training, follow language instructions from people and from a high-level VLM policy, and its ability to acquire new skills via fine-tuning. Our results cover a wide variety of tasks, such as laundry folding, table cleaning, and assembling boxes.",
   "keywords": [
@@ -252,5 +252,157 @@
   "pdf": "https://arxiv.org/pdf/2410.24164",
   "youtube": "https://www.youtube.com/watch?v=CnnkU-9MWT4",
   "added": "2026-11-12 15:14"
+ },
+ "arxiv-2501-09747": {
+  "title": "FAST: Efficient Action Tokenization for Vision-Language-Action Models",
+  "authors": "Karl Pertsch, Kyle Stachowicz, Brian Ichter, Danny Driess, Suraj Nair, Quan Vuong, Oier Mees, Chelsea Finn, Sergey Levine",
+  "abstract": "Autoregressive sequence models, such as Transformer-based vision-language action (VLA) policies, can be tremendously effective for capturing complex and generalizable robotic behaviors. However, such models require us to choose a tokenization of our continuous action signals, which determines how the discrete symbols predicted by the model map to continuous robot actions. We find that current approaches for robot action tokenization, based on simple per-dimension, per-timestep binning schemes, typically perform poorly when learning dexterous skills from high-frequency robot data. To address this challenge, we propose a new compression-based tokenization scheme for robot actions, based on the discrete cosine transform. Our tokenization approach, Frequency-space Action Sequence Tokenization (FAST), enables us to train autoregressive VLAs for highly dexterous and high-frequency tasks where standard discretization methods fail completely. Based on FAST, we release FAST+, a universal robot action tokenizer, trained on 1M real robot action trajectories. It can be used as a black-box tokenizer for a wide range of robot action sequences, with diverse action spaces and control frequencies. Finally, we show that, when combined with the pi0 VLA, our method can scale to training on 10k hours of robot data and match the performance of diffusion VLAs, while reducing training time by up to 5x.",
+  "keywords": [
+   "action tokenization",
+   "vision-language-action models",
+   "robot foundation models",
+   "robotic manipulation",
+   "scalable training",
+   "imitation learning"
+  ],
+  "source": "https://arxiv.org/abs/2501.09747",
+  "pdf": "https://arxiv.org/pdf/2501.09747",
+  "youtube": "https://www.youtube.com/watch?v=v7-RSX24CGM",
+  "added": "2026-11-12 15:15"
+ },
+ "arxiv-2502-19417": {
+  "title": "Hi Robot: Open-Ended Instruction Following with Hierarchical Vision-Language-Action Models",
+  "authors": "Lucy Xiaoyang Shi, Brian Ichter, Michael Equi, Liyiming Ke, Karl Pertsch, Quan Vuong, James Tanner, Anna Walling, Haohuan Wang, Niccolo Fusai, Adrian Li-Bell, Danny Driess, Lachy Groom, Sergey Levine, Chelsea Finn",
+  "abstract": "Generalist robots that can perform a range of different tasks in open-world settings must be able to not only reason about the steps needed to accomplish their goals, but also process complex instructions, prompts, and even feedback during task execution. Intricate instructions (e.g., \"Could you make me a vegetarian sandwich?\" or \"I don't like that one\") require not just the ability to physically perform the individual steps, but the ability to situate complex commands and feedback in the physical world. In this work, we describe a system that uses vision-language models in a hierarchical structure, first reasoning over complex prompts and user feedback to deduce the most appropriate next step to fulfill the task, and then performing that step with low-level actions. In contrast to direct instruction following methods that can fulfill simple commands (\"pick up the cup\"), our system can reason through complex prompts and incorporate situated feedback during task execution (\"that's not trash\"). We evaluate our system across three robotic platforms, including single-arm, dual-arm, and dual-arm mobile robots, demonstrating its ability to handle tasks such as cleaning messy tables, making sandwiches, and grocery shopping. Videos are available at https://www.pi.website/research/hirobot",
+  "keywords": [
+   "vision-language-action models",
+   "vision-language models",
+   "hierarchical policies",
+   "instruction following",
+   "robotic manipulation",
+   "long-horizon reasoning"
+  ],
+  "source": "https://arxiv.org/abs/2502.19417",
+  "pdf": "https://arxiv.org/pdf/2502.19417",
+  "youtube": "",
+  "added": "2026-11-12 15:16"
+ },
+ "arxiv-2504-16054": {
+  "title": "π0.5: a Vision-Language-Action Model with Open-World Generalization",
+  "authors": "Physical Intelligence, Kevin Black, Noah Brown, James Darpinian, Karan Dhabalia, Danny Driess, Adnan Esmail, Michael Equi, Chelsea Finn, Niccolo Fusai, Manuel Y. Galliker, Dibya Ghosh, Lachy Groom, Karol Hausman, Brian Ichter, Szymon Jakubczak, Tim Jones, Liyiming Ke, Devin LeBlanc, Sergey Levine, Adrian Li-Bell, Mohith Mothukuri, Suraj Nair, Karl Pertsch, Allen Z. Ren, Lucy Xiaoyang Shi, Laura Smith, Jost Tobias Springenberg, Kyle Stachowicz, James Tanner, Quan Vuong, Homer Walke, Anna Walling, Haohuan Wang, Lili Yu, Ury Zhilinsky",
+  "abstract": "In order for robots to be useful, they must perform practically relevant tasks in the real world, outside of the lab. While vision-language-action (VLA) models have demonstrated impressive results for end-to-end robot control, it remains an open question how far such models can generalize in the wild. We describe $π_{0.5}$, a new model based on $π_{0}$ that uses co-training on heterogeneous tasks to enable broad generalization. $π_{0.5}$\\ uses data from multiple robots, high-level semantic prediction, web data, and other sources to enable broadly generalizable real-world robotic manipulation. Our system uses a combination of co-training and hybrid multi-modal examples that combine image observations, language commands, object detections, semantic subtask prediction, and low-level actions. Our experiments show that this kind of knowledge transfer is essential for effective generalization, and we demonstrate for the first time that an end-to-end learning-enabled robotic system can perform long-horizon and dexterous manipulation skills, such as cleaning a kitchen or bedroom, in entirely new homes.",
+  "keywords": [
+   "vision-language-action models",
+   "co-training",
+   "generalization",
+   "mobile manipulation",
+   "hierarchical policies",
+   "long-horizon reasoning"
+  ],
+  "source": "https://arxiv.org/abs/2504.16054",
+  "pdf": "https://arxiv.org/pdf/2504.16054",
+  "youtube": "https://www.youtube.com/watch?v=kUu8wXcBDyY",
+  "added": "2026-11-12 15:17"
+ },
+ "arxiv-2505-23705": {
+  "title": "Knowledge Insulating Vision-Language-Action Models: Train Fast, Run Fast, Generalize Better",
+  "authors": "Danny Driess, Jost Tobias Springenberg, Brian Ichter, Lili Yu, Adrian Li-Bell, Karl Pertsch, Allen Z. Ren, Homer Walke, Quan Vuong, Lucy Xiaoyang Shi, Sergey Levine",
+  "abstract": "Vision-language-action (VLA) models provide a powerful approach to training control policies for physical systems, such as robots, by combining end-to-end learning with transfer of semantic knowledge from web-scale vision-language model (VLM) training. However, the constraints of real-time control are often at odds with the design of VLMs: the most powerful VLMs have tens or hundreds of billions of parameters, presenting an obstacle to real-time inference, and operate on discrete tokens rather than the continuous-valued outputs that are required for controlling robots. To address this challenge, recent VLA models have used specialized modules for efficient continuous control, such as action experts or continuous output heads, which typically require adding new untrained parameters to the pretrained VLM backbone. While these modules improve real-time and control capabilities, it remains an open question whether they preserve or degrade the semantic knowledge contained in the pretrained VLM, and what effect they have on the VLA training dynamics. In this paper, we study this question in the context of VLAs that include a continuous diffusion or flow matching action expert, showing that naively including such experts significantly harms both training speed and knowledge transfer. We provide an extensive analysis of various design choices, their impact on performance and knowledge transfer, and propose a technique for insulating the VLM backbone during VLA training that mitigates this issue. Videos are available at https://pi.website/research/knowledge_insulation.",
+  "keywords": [
+   "vision-language-action models",
+   "flow matching",
+   "action tokenization",
+   "co-training",
+   "efficient inference",
+   "generalization"
+  ],
+  "source": "https://arxiv.org/abs/2505.23705",
+  "pdf": "https://arxiv.org/pdf/2505.23705",
+  "youtube": "",
+  "added": "2026-11-12 15:17"
+ },
+ "arxiv-2506-07339": {
+  "title": "Real-Time Execution of Action Chunking Flow Policies",
+  "authors": "Kevin Black, Manuel Y. Galliker, Sergey Levine",
+  "abstract": "Modern AI systems, especially those interacting with the physical world, increasingly require real-time performance. However, the high latency of state-of-the-art generalist models, including recent vision-language action models (VLAs), poses a significant challenge. While action chunking has enabled temporal consistency in high-frequency control tasks, it does not fully address the latency problem, leading to pauses or out-of-distribution jerky movements at chunk boundaries. This paper presents a novel inference-time algorithm that enables smooth asynchronous execution of action chunking policies. Our method, real-time chunking (RTC), is applicable to any diffusion- or flow-based VLA out of the box with no re-training. It generates the next action chunk while executing the current one, \"freezing\" actions guaranteed to execute and \"inpainting\" the rest. To test RTC, we introduce a new benchmark of 12 highly dynamic tasks in the Kinetix simulator, as well as evaluate 6 challenging real-world bimanual manipulation tasks. Results demonstrate that RTC is fast, performant, and uniquely robust to inference delay, significantly improving task throughput and enabling high success rates in precise tasks $\\unicode{x2013}$ such as lighting a match $\\unicode{x2013}$ even in the presence of significant latency. See https://pi.website/research/real_time_chunking for videos.",
+  "keywords": [
+   "vision-language-action models",
+   "flow matching",
+   "efficient inference",
+   "action chunking",
+   "robotic manipulation",
+   "benchmark design"
+  ],
+  "source": "https://arxiv.org/abs/2506.07339",
+  "pdf": "https://arxiv.org/pdf/2506.07339",
+  "youtube": "",
+  "added": "2026-11-12 15:18"
+ },
+ "arxiv-2511-14759": {
+  "title": "π*0.6: a VLA That Learns From Experience",
+  "authors": "Physical Intelligence, Ali Amin, Raichelle Aniceto, Ashwin Balakrishna, Kevin Black, Ken Conley, Grace Connors, James Darpinian, Karan Dhabalia, Jared DiCarlo, Danny Driess, Michael Equi, Adnan Esmail, Yunhao Fang, Chelsea Finn, Catherine Glossop, Thomas Godden, Ivan Goryachev, Lachy Groom, Hunter Hancock, Karol Hausman, Gashon Hussein, Brian Ichter, Szymon Jakubczak, Rowan Jen, Tim Jones, Ben Katz, Liyiming Ke, Chandra Kuchi, Marinda Lamb, Devin LeBlanc, Sergey Levine, Adrian Li-Bell, Yao Lu, Vishnu Mano, Mohith Mothukuri, Suraj Nair, Karl Pertsch, Allen Z. Ren, Charvi Sharma, Lucy Xiaoyang Shi, Laura Smith, Jost Tobias Springenberg, Kyle Stachowicz, Will Stoeckle, Alex Swerdlow, James Tanner, Marcel Torne, Quan Vuong, Anna Walling, Haohuan Wang, Blake Williams, Sukwon Yoo, Lili Yu, Ury Zhilinsky, Zhiyuan Zhou",
+  "abstract": "We study how vision-language-action (VLA) models can improve through real-world deployments via reinforcement learning (RL). We present a general-purpose method, RL with Experience and Corrections via Advantage-conditioned Policies (RECAP), that provides for RL training of VLAs via advantage conditioning. Our method incorporates heterogeneous data into the self-improvement process, including demonstrations, data from on-policy collection, and expert teleoperated interventions provided during autonomous execution. RECAP starts by pre-training a generalist VLA with offline RL, which we call $π^{*}_{0.6}$, that can then be specialized to attain high performance on downstream tasks through on-robot data collection. We show that the $π^{*}_{0.6}$ model trained with the full RECAP method can fold laundry in real homes, reliably assemble boxes, and make espresso drinks using a professional espresso machine. On some of the hardest tasks, RECAP more than doubles task throughput and roughly halves the task failure rate.",
+  "keywords": [
+   "vision-language-action models",
+   "reinforcement learning",
+   "offline q-learning",
+   "robotic manipulation",
+   "teleoperation",
+   "robot foundation models"
+  ],
+  "source": "https://arxiv.org/abs/2511.14759",
+  "pdf": "https://arxiv.org/pdf/2511.14759",
+  "youtube": "",
+  "added": "2026-11-12 15:20"
+ },
+ "arxiv-2512-22414": {
+  "title": "Emergence of Human to Robot Transfer in Vision-Language-Action Models",
+  "authors": "Simar Kareer, Karl Pertsch, James Darpinian, Judy Hoffman, Danfei Xu, Sergey Levine, Chelsea Finn, Suraj Nair",
+  "abstract": "Vision-language-action (VLA) models can enable broad open world generalization, but require large and diverse datasets. It is appealing to consider whether some of this data can come from human videos, which cover diverse real-world situations and are easy to obtain. However, it is difficult to train VLAs with human videos alone, and establishing a mapping between humans and robots requires manual engineering and presents a major research challenge. Drawing inspiration from advances in large language models, where the ability to learn from diverse supervision emerges with scale, we ask whether a similar phenomenon holds for VLAs that incorporate human video data. We introduce a simple co-training recipe, and find that human-to-robot transfer emerges once the VLA is pre-trained on sufficient scenes, tasks, and embodiments. Our analysis suggests that this emergent capability arises because diverse pretraining produces embodiment-agnostic representations for human and robot data. We validate these findings through a series of experiments probing human to robot skill transfer and find that with sufficiently diverse robot pre-training our method can nearly double the performance on generalization settings seen only in human data.",
+  "keywords": [
+   "vision-language-action models",
+   "human video demonstration",
+   "co-training",
+   "generalization",
+   "robot foundation models",
+   "representation alignment"
+  ],
+  "source": "https://arxiv.org/abs/2512.22414",
+  "pdf": "https://arxiv.org/pdf/2512.22414",
+  "youtube": "",
+  "added": "2026-11-12 15:21"
+ },
+ "arxiv-2604-15483": {
+  "title": "π0.7: a Steerable Generalist Robotic Foundation Model with Emergent Capabilities",
+  "authors": "Physical Intelligence, Bo Ai, Ali Amin, Raichelle Aniceto, Ashwin Balakrishna, Greg Balke, Kevin Black, George Bokinsky, Shihao Cao, Thomas Charbonnier, Vedant Choudhary, Foster Collins, Ken Conley, Grace Connors, James Darpinian, Karan Dhabalia, Maitrayee Dhaka, Jared DiCarlo, Danny Driess, Michael Equi, Adnan Esmail, Yunhao Fang, Chelsea Finn, Catherine Glossop, Thomas Godden, Ivan Goryachev, Lachlan Groom, Haroun Habeeb, Hunter Hancock, Karol Hausman, Gashon Hussein, Victor Hwang, Brian Ichter, Connor Jacobsen, Szymon Jakubczak, Rowan Jen, Tim Jones, Gregg Kammerer, Ben Katz, Liyiming Ke, Mairbek Khadikov, Chandra Kuchi, Marinda Lamb, Devin LeBlanc, Brendon LeCount, Sergey Levine, Xinyu Li, Adrian Li-Bell, Vladislav Lialin, Zhonglin Liang, Wallace Lim, Yao Lu, Enyu Luo, Vishnu Mano, Nandan Marwaha, Aikys Mongush, Liam Murphy, Suraj Nair, Tyler Patterson, Karl Pertsch, Allen Z. Ren, Gavin Schelske, Charvi Sharma, Baifeng Shi, Lucy Xiaoyang Shi, Laura Smith, Jost Tobias Springenberg, Kyle Stachowicz, Will Stoeckle, Jiaming Tang, Jimmy Tanner, Shalom Tekeste, Marcel Torne, Kyle Vedder, Quan Vuong, Anna Walling, Haohuan Wang, Jason Wang, XuDong Wang, Chris Whalen, Samuel Whitmore, Blake Williams, Charles Xu, Sukwon Yoo, Lili Yu, Wuming Zhang, Zhuoyang Zhang, Ury Zhilinsky",
+  "abstract": "We present a new robotic foundation model, called $π_{0.7}$, that can enable strong out-of-the-box performance in a wide range of scenarios. $π_{0.7}$ can follow diverse language instructions in unseen environments, including multi-stage tasks with various kitchen appliances, provide zero-shot cross-embodiment generalization, for example enabling a robot to fold laundry without seeing the task before, and perform challenging tasks such as operating an espresso machine out of the box at a level of performance that matches much more specialized RL-finetuned models. The main idea behind $π_{0.7}$ is to use diverse context conditioning during training. This conditioning information, contained in the prompt, makes it possible to steer the model precisely to perform many tasks with different strategies. It is conditioned not just on a language command that describes what it should do, but on additional multimodal information that also describes the manner or strategy in which it should do it, including metadata about task performance and subgoal images. This enables $π_{0.7}$ to use very diverse data, including demonstrations, potentially suboptimal (autonomous) data including failures, and data from non-robot sources. Our experiments evaluate $π_{0.7}$ across numerous tasks with multiple robot platforms, on tasks that require speed and dexterity, language following, and compositional task generalization.",
+  "keywords": [
+   "robot foundation models",
+   "vision-language-action models",
+   "instruction following",
+   "zero-shot generalization",
+   "robotic manipulation",
+   "multimodal learning"
+  ],
+  "source": "https://arxiv.org/abs/2604.15483",
+  "pdf": "https://arxiv.org/pdf/2604.15483",
+  "youtube": "https://www.youtube.com/watch?v=w0W4ICCMWRI",
+  "added": "2026-11-12 15:23"
+ },
+ "arxiv-2604-23073": {
+  "title": "RL Token: Bootstrapping Online RL with Vision-Language-Action Models",
+  "authors": "Charles Xu, Jost Tobias Springenberg, Michael Equi, Ali Amin, Adnan Esmail, Sergey Levine, Liyiming Ke",
+  "abstract": "Vision-language-action (VLA) models can learn to perform diverse manipulation skills \"out of the box,\" but achieving the precision and speed that real-world tasks demand requires further fine-tuning -- for example, via reinforcement learning (RL). We introduce a lightweight method that enables sample-efficient online RL fine-tuning of pretrained VLAs using just a few hours of real-world practice. We (1) adapt the VLA to expose an \"RL token,\" a compact readout representation that preserves task-relevant pretrained knowledge while serving as an efficient interface for online RL, and (2) train a small actor-critic head on this RL token to refine the actions, while anchoring the learned policy to the VLA. Online RL with the RL token (RLT) makes it possible to fine-tune even large VLAs with RL quickly and efficiently. Across four real-robot tasks (screw installation, zip tie fastening, charger insertion, and Ethernet insertion), RLT improves the speed on the hardest part of the task by up to 3x and raises success rates significantly within minutes to a few hours of practice. It can even surpass the speed of human teleoperation on some of the tasks.",
+  "keywords": [
+   "vision-language-action models",
+   "reinforcement learning",
+   "robotic manipulation",
+   "robotic insertion",
+   "robot foundation models"
+  ],
+  "source": "https://arxiv.org/abs/2604.23073",
+  "pdf": "https://arxiv.org/pdf/2604.23073",
+  "youtube": "https://www.youtube.com/watch?v=ND_JtHCO5HI",
+  "added": "2026-11-12 15:24"
  }
 }

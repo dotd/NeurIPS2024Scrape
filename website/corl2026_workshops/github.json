@@ -1,5 +1,65 @@
 {
  "c22DjhXdnt": [
   "https://github.com/Hebbian-Robotics/beyond-dodge-rate"
+ ],
+ "VgOto5oF70": [
+  "https://github.com/Farama-Foundation/Gymnasium",
+  "https://github.com/ray-project/ray"
+ ],
+ "48Xgkolxoc": [
+  "https://github.com/isaac-sim/IsaacLab-Arena"
+ ],
+ "mxyWdjRJgS": [
+  "https://github.com/hrh6666/EqC"
+ ],
+ "1L6jOir8RW": [
+  "https://github.com/nesl/self-improving-robot-mem"
+ ],
+ "8GpAiSFPSv": [
+  "https://github.com/jackiectl2/grader-drift-self-improvement"
+ ],
+ "jdLfwzLgyG": [
+  "https://github.com/Nikash-B/vla-checkpoint-selection"
+ ],
+ "9PZhZHGqL3": [
+  "https://github.com/hrh6666/EqC"
+ ],
+ "OoI6kXUw6b": [
+  "https://github.com/sereact/lerobot_knn",
+  "https://github.com/huggingface/lerobot"
+ ],
+ "VcS0dE1Aoz": [
+  "https://github.com/aasivas/Parvulus"
+ ],
+ "eKIoWYRtrD": [
+  "https://github.com/arnavkj1995/WEAVER"
+ ],
+ "u3JzQTSt1e": [
+  "https://github.com/EmbodiedSWE/EmbodiedSWE"
+ ],
+ "x6WSoDx3im": [
+  "https://github.com/kevinghst/H-JEPA"
+ ],
+ "Z5aG3kttiF": [
+  "https://github.com/lamawmouk/tempo"
+ ],
+ "WioPsk5AUH": [
+  "https://github.com/intuitive-robots/SIR_Model",
+  "https://github.com/intuitive-robots/SIR_"
+ ],
+ "hmGPhNTkQu": [
+  "https://github.com/lamawmouk/tempo"
+ ],
+ "3c1CfvfHa7": [
+  "https://github.com/EmbodiedSWE/EmbodiedSWE"
+ ],
+ "wKgMn9vqUi": [
+  "https://github.com/DAGroup-PKU/PyRUA-Lean"
+ ],
+ "uMkXmX3mAy": [
+  "https://github.com/jackiectl2/impossible-twins"
+ ],
+ "ttNVX8zEcB": [
+  "https://github.com/declare-lab/MemBodied"
  ]
 }

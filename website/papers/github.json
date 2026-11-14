@@ -21,6 +21,22 @@
   "https://github.com/seohongpark/ocbench"
  ],
  "arxiv-2501-09747": [
-  "https://github.com/Stanford-ILIAD/openvla-mini"
+  "https://github.com/Stanford-ILIAD/openvla-mini",
+  "https://github.com/Physical-Intelligence/openpi"
+ ],
+ "arxiv-2410-24164": [
+  "https://github.com/Physical-Intelligence/openpi",
+  "https://github.com/allenzren/open-pi-zero"
+ ],
+ "arxiv-2504-16054": [
+  "https://github.com/Physical-Intelligence/openpi"
+ ],
+ "arxiv-2604-23073": [
+  "https://github.com/yknxh/rlt-openpi",
+  "https://github.com/Zhengsw03/RL-Token-Pi05-open",
+  "https://github.com/Insanitywoo/openpi-RLT",
+  "https://github.com/Ziyeeee/openpi_rlt",
+  "https://github.com/jingzhang00/RL_token",
+  "https://github.com/Jiabo-Wang/RLT_dual"
  ]
 }

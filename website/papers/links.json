@@ -3,5 +3,30 @@
   "url": "https://www.fda.gov/media/196129/download",
   "cost": 0.1008,
   "searches": 1
+ },
+ "arxiv-2410-24164": {
+  "url": "https://arxiv.org/abs/2410.24164",
+  "cost": 0.0287,
+  "searches": 0
+ },
+ "pdf-556e228a43": {
+  "url": "https://arxiv.org/abs/2411.05193",
+  "cost": 0.097,
+  "searches": 1
+ },
+ "arxiv-2504-16054": {
+  "url": "https://arxiv.org/abs/2504.16054",
+  "cost": 0.0998,
+  "searches": 1
+ },
+ "arxiv-2511-14759": {
+  "url": "https://arxiv.org/abs/2511.14759",
+  "cost": 0.1034,
+  "searches": 1
+ },
+ "arxiv-2501-09747": {
+  "url": "https://arxiv.org/abs/2501.09747",
+  "cost": 0.0986,
+  "searches": 1
  }
 }

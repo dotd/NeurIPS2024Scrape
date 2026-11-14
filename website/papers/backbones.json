@@ -72,5 +72,50 @@
   "OpenVLA / OpenVLA-OFT",
   "Octo",
   "RT-1 / RT-2 / RT-X"
+ ],
+ "arxiv-2502-19417": [
+  "PaliGemma",
+  "GPT-4 / GPT-4o / GPT-5",
+  "π0 / π0.5"
+ ],
+ "arxiv-2504-16054": [
+  "SigLIP",
+  "PaliGemma",
+  "Gemma",
+  "GPT-4 / GPT-4o / GPT-5",
+  "Gemini",
+  "π0 / π0.5",
+  "Octo",
+  "RT-1 / RT-2 / RT-X"
+ ],
+ "arxiv-2505-23705": [
+  "π0 / π0.5",
+  "OpenVLA / OpenVLA-OFT"
+ ],
+ "arxiv-2506-07339": [
+  "π0 / π0.5",
+  "OpenVLA / OpenVLA-OFT"
+ ],
+ "arxiv-2511-14759": [
+  "Gemma",
+  "π0 / π0.5"
+ ],
+ "arxiv-2512-22414": [
+  "Gemini",
+  "π0 / π0.5",
+  "Octo"
+ ],
+ "arxiv-2604-15483": [
+  "ViT",
+  "Gemma",
+  "Gemini",
+  "π0 / π0.5",
+  "Octo",
+  "RT-1 / RT-2 / RT-X"
+ ],
+ "arxiv-2604-23073": [
+  "ResNet",
+  "Gemini",
+  "π0 / π0.5"
  ]
 }

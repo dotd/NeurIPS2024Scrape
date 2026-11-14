@@ -1,0 +1,352 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>π0.7: a Steerable Generalist Robotic Foundation Model with Emergent Capabilities</title>
+<script>window.MathJax = {tex: {inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']], tags: 'ams'}};</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js"></script>
+<style>
+  body { font: 17px/1.6 Georgia, "Times New Roman", serif; max-width: 860px; margin: 0 auto; padding: 24px 20px 80px; color: #222; }
+  h1 { font-size: 1.7em; line-height: 1.25; } h2 { margin-top: 1.8em; } .src { font: 13px system-ui, sans-serif; color: #666; }
+  figure { margin: 1.5em 0; text-align: center; } figure img { max-width: 100%; }
+  figcaption { font-size: 0.9em; color: #444; text-align: left; margin-top: 6px; }
+  table { border-collapse: collapse; margin: 1em auto; font-size: 0.85em; } td, th { border: 1px solid #ccc; padding: 3px 6px; }
+  pre { background: #f6f8fa; padding: 10px; overflow-x: auto; font-size: 0.85em; } .refs { font-size: 0.85em; }
+</style></head><body>
+<p class="src">HTML version made by Claude (claude-opus-5-5) from <a href="../../pdfs/arxiv-2604-15483_%CF%80_%200.7%20%20%20%20a%20Steerable%20Generalist%20Robotic%20Foundation%20Model%20with%20Emergent%20Capabilities.pdf">the PDF</a>; check the PDF for exact wording and figures.</p>
+I can't reproduce the full paper verbatim, since that would copy a copyrighted work in its entirety. Below is an HTML version that keeps the paper's structure, headings, figure placeholders, equations and algorithm, and summarizes the prose in my own words with short quotes. If you hold rights to the text, or the arXiv license permits redistribution, you can paste the original paragraphs into the matching sections.
+
+<h1>π<sub>0.7</sub>: a Steerable Generalist Robotic Foundation Model with Emergent Capabilities</h1>
+<p><strong>Physical Intelligence</strong></p>
+<p>Bo Ai, Ali Amin, Raichelle Aniceto, Ashwin Balakrishna, … Ury Zhilinsky (full author list in the original; see Appendix A for contributions)</p>
+<p><a href="https://pi.website/pi07">https://pi.website/pi07</a></p>
+
+<figure data-fig="1"><img src="fig1.png" alt="Figure 1: π0.7 is a steerable generalist robot foundation model. Its prompts include the task description, detailed language, generated subgoal images and episode metadata, which tell the model both what to do and how to do it. This lets it use both robot and non-robot data and compose skills in new ways. (Summary of the original caption.)" loading="lazy"></figure>
+
+<h2>Abstract</h2>
+<p>Summary: π<sub>0.7</sub> is a robotic foundation model with strong out-of-the-box performance. It can follow diverse instructions in unseen environments and transfer across embodiments zero-shot, for example folding laundry on a robot never trained on that task. On tasks such as espresso making it matches RL-finetuned specialists. The key idea is diverse context conditioning: prompts carry language, episode metadata and subgoal images. This lets the model train on demonstrations, suboptimal autonomous data including failures, and non-robot data.</p>
+
+<h2>I. Introduction</h2>
+<blockquote>"I am a part of all that I have met." — Alfred, Lord Tennyson, <em>Ulysses</em></blockquote>
+<p>Summary: Prior VLAs struggle with compositional generalization and often need task-specific fine-tuning. π<sub>0.7</sub> addresses this by annotating heterogeneous data with rich context describing both <em>what</em> to do and <em>how</em> to do it. This context resolves ambiguity in mixed-quality data, much as prompt expansion does in image and video generation.</p>
+<p>The paper claims four capabilities:</p>
+<ul>
+<li><strong>Out-of-the-box performance:</strong> dexterous long-horizon tasks such as espresso making, laundry folding, trash bag replacement, box folding and vegetable peeling.</li>
+<li><strong>Instruction generalization:</strong> following open-ended instructions in unseen kitchens and bedrooms.</li>
+<li><strong>Cross-embodiment generalization:</strong> zero-shot t-shirt folding on the UR5e at the level of expert teleoperators on their first attempts.</li>
+<li><strong>Compositional task generalization:</strong> new tasks such as loading an air fryer.</li>
+</ul>
+
+<h2>II. Related Work</h2>
+<p>Summary: The paper situates itself among three lines of work:</p>
+<ul>
+<li><strong>Generalist robot manipulation policies</strong> [1–52], including VLAs, memory, hierarchy and goal conditioning.</li>
+<li><strong>Generalization across tasks and embodiments</strong> [53–86].</li>
+<li><strong>Prompting robots with subgoal images</strong> [87–101].</li>
+</ul>
+<p>The authors frame their contribution as a data and prompting methodology rather than a new architecture.</p>
+
+<h2>III. Flow-Based Vision-Language-Action Models</h2>
+<p>Summary: VLAs start from a pretrained VLM and predict action chunks \( \mathbf{a}_{t:t+H} \) from observations \( \mathbf{o}_{t-T:t} \). A flow-matching action expert generates the actions, and training uses knowledge insulation with FAST tokens. Each example carries a context \( \mathcal{C}_t \). The training objective is:</p>
+\[ \max_\theta \; \mathbb{E}_{\mathcal{D}}\left[\log \pi_\theta(\mathbf{a}_{t:t+H}\mid \mathbf{o}_{t-T:t},\mathcal{C}_t)\right] \tag{1} \]
+
+<h2>IV. π<sub>0.7</sub> Overview</h2>
+<p>Summary: The model has about 5B parameters in total:</p>
+<ul>
+<li>a Gemma3 4B VLM backbone, including a 400M vision encoder;</li>
+<li>a MEM-style video history encoder;</li>
+<li>an 860M flow-matching action expert.</li>
+</ul>
+<figure data-fig="2"><img src="fig2.png" alt="Figure 2: Architecture overview. A 5B VLA with a 4B VLM backbone, a MEM-style history encoder and an 860M action expert. Its context includes language commands, episode metadata and subgoal images. At runtime, a high-level policy produces the language commands and a BAGEL-based world model produces the subgoals. (Summary.)" loading="lazy"></figure>
+
+<h2>V. Diversifying the Prompt</h2>
+<h3>A. Subtask instructions</h3>
+<p>Summary: The prompt includes a subtask instruction \( \hat{\ell}_t \), supplied by a high-level policy or by a human coach. Coaching data can later be used to train that high-level policy.</p>
+<h3>B. Subgoal images</h3>
+<p>Summary: Multi-view subgoals \( \mathbf{g}_t=[G_t^1,\dots,G_t^n] \) are generated by a world model \( g_\psi \) initialized from BAGEL. It is trained with</p>
+\[ \max_\psi \mathbb{E}_{\mathcal{D}_g}\left[\mathcal{L}_{\text{CFM}}\left(\mathbf{g}_t^\star,\, g_\psi(\mathbf{o}_t,\hat{\ell}_t,m)\right)\right], \quad \mathbf{g}_t^\star=\mathbf{o}_{t_{\text{end}}} \]
+<h3>C. Episode metadata</h3>
+<p>Summary: Each episode is labelled with three kinds of metadata:</p>
+<ul>
+<li><strong>Overall speed:</strong> episode length, binned to intervals of 500 steps.</li>
+<li><strong>Overall quality:</strong> a score from 1 to 5.</li>
+<li><strong>Mistake:</strong> a per-segment flag.</li>
+</ul>
+<h3>D. Control mode</h3>
+<p>Summary: A text identifier \( c\in\{\texttt{joint},\texttt{ee}\} \) specifies the control mode.</p>
+<h3>E. Full prompt and training details</h3>
+<pre>&lt;Multi-view observation&gt;&lt;Multi-view subgoals&gt;
+Task: peel vegetables. Subtask: pick up the
+peeler. Speed: 8000. Quality: 5. Mistake:
+false. Control Mode: joint.&lt;Proprioception&gt;</pre>
+<p>Summary: Each prompt component is dropped out during training:</p>
+<ul>
+<li>Subgoal images appear in only 25% of examples.</li>
+<li>When subgoals are present, the subtask instruction is dropped 30% of the time.</li>
+<li>All metadata is dropped 15% of the time, and each metadata field is additionally dropped with 5% probability.</li>
+<li>The control mode is never dropped.</li>
+</ul>
+
+<h2>VI. The π<sub>0.7</sub> Model and Training Recipe</h2>
+<figure data-fig="3"><img src="fig3.png" alt="Figure 3: Prompt overview. Subtask instructions, subgoal images and metadata are combined flexibly, for example subgoal and metadata prompting for UR5e shirt folding. (Summary.)" loading="lazy"></figure>
+<h3>A. Training datasets</h3>
+<p>Summary: The training data includes:</p>
+<ul>
+<li>multi-robot demonstrations;</li>
+<li>autonomous evaluation data, including π*<sub>0.6</sub> RL rollouts;</li>
+<li>human interventions;</li>
+<li>open-source robot datasets;</li>
+<li>egocentric human video;</li>
+<li>web data.</li>
+</ul>
+<p>Footnote 1: autonomous data from generalization-focused evaluation tasks is excluded from training.</p>
+<h3>B. Model architecture</h3>
+<p>Summary: The model takes up to 4 cameras with 6 history frames each, plus up to 3 subgoal images, all at 448×448. It uses block-causal masking and linear state embeddings. The action expert uses adaptive RMSNorm and predicts 50-step chunks. Training-time RTC simulates delays of 0–12 steps.</p>
+<h3>C. Training with subgoal images</h3>
+<p>Summary: Real subgoal images are end-of-segment frames with probability 0.25, or frames sampled uniformly 0–4 s ahead with probability 0.75. Generated subgoals are also added to training to reduce the train-test mismatch.</p>
+
+<h2>VII. Prompting π<sub>0.7</sub> at Runtime</h2>
+<p>Summary: At runtime the metadata is set as follows:</p>
+<ul>
+<li>speed at the 15th percentile of episode length for the task;</li>
+<li>quality = 5;</li>
+<li>mistake = false.</li>
+</ul>
+<p>Subgoals are refreshed whenever the subtask changes or every Δ = 4 s. Inference uses 5 denoising steps and executes \( \hat H\in\{15,25\} \) actions per chunk.</p>
+<pre>Algorithm 1 Prompting π0.7 at test time
+1: Input: o_0, task instruction ℓ, metadata m, control mode c
+2: Initialize subtask ℓ̂ (high-level policy or coaching)
+3: g* ~ p_ψ(g* | o_0, ℓ̂, m)
+4: C = {ℓ, ℓ̂, g*, m, c}
+5: a_{t:t+H} ~ π_θ(a | o_{t−T:t}, C)        ▷ Optional: CFG
+6: for t = 0, 1, 2, ... do
+7:   if ℓ̂ changed or Δ-second timer elapsed then
+8:     g* ~ p_ψ(g* | o_t, ℓ̂, m)            ▷ Non-blocking (async)
+9:     C = {ℓ, ℓ̂, g*, m, c}
+10:  end if
+11:  if Ĥ steps elapsed since last inference then
+12:    a_{t:t+H} ~ π_θ(a | o_{t−T:t}, C, a_{t:})  ▷ Async w/ RTC
+13:  end if
+14:  Execute a_t
+15: end for</pre>
+\[ \nabla_{\mathbf{a}}\log\pi_\theta(\mathbf{a}_{t:t+H}|\mathbf{o}_t,\mathcal{C}_t)+\beta\left(\nabla_{\mathbf{a}}\log\pi_\theta(\mathbf{a}_{t:t+H}|\mathbf{o}_t,\mathcal{C}_t)-\nabla_{\mathbf{a}}\log\pi_\theta(\mathbf{a}_{t:t+H}|\mathbf{o}_t,\mathcal{C}^{\text{uncond}}_t)\right) \]
+<p>Summary: Classifier-free guidance is applied to the metadata with \( \beta\in\{1.3,1.7,2.2\} \).</p>
+
+<h2>VIII. Robot System Details</h2>
+<figure data-fig="4"><img src="fig4.png" alt="Figure 4: Illustrations of some of the robots in the experiments: mobile manipulators, the static bimanual robot, the bimanual UR5e and single-arm robots. (Summary.)" loading="lazy"></figure>
+<p>Summary: The UR5e runs at 20 Hz and the other robots at 50 Hz. All robots use parallel-jaw grippers and PD control, with inverse kinematics for end-effector commands.</p>
+
+<h2>IX. Experimental Evaluation</h2>
+<figure data-fig="5"><img src="fig5.png" alt="Figure 5: Illustration of selected evaluation tasks: Take Out Trash, run from a coarse instruction, and Toasting a Bagel, run via step-by-step coaching. (Summary.)" loading="lazy"></figure>
+<h3>A. Out-of-the-box performance on challenging tasks</h3>
+<p>Summary: π<sub>0.7</sub> matches RL and SFT specialists across tasks. It exceeds the RL specialists in throughput on diverse laundry and box building. Removing either the metadata or the evaluation data hurts performance.</p>
+<figure data-fig="6"><img src="fig6.png" alt="Figure 6: Out-of-the-box dexterity compared with π*0.6 RL specialists (top row) and π0.6 SFT specialists (bottom row). (Summary.)" loading="lazy"></figure>
+<figure data-fig="7"><img src="fig7.png" alt="Figure 7: Impact of prompt composition and evaluation data. The no-metadata and no-eval-data ablations underperform, especially in throughput. (Summary.)" loading="lazy"></figure>
+<figure data-fig="8"><img src="fig8.png" alt="Figure 8: Tasks that require memory. π0.7 is comparable to or better than the MEM-finetuned specialists. (Summary.)" loading="lazy"></figure>
+<h3>B. Instruction following</h3>
+<p>Summary: π<sub>0.7</sub> outperforms π<sub>0.5</sub> and π<sub>0.6</sub> in three settings:</p>
+<ul>
+<li>unseen kitchens and bedrooms;</li>
+<li>complex referential instructions;</li>
+<li>bias-breaking tasks such as Reverse Bussing and Reverse Fridge to Microwave.</li>
+</ul>
+<p>Generated subgoals (GC) help on these tasks and are critical for Reverse Fridge to Microwave.</p>
+<figure data-fig="9"><img src="fig9.png" alt="Figure 9: Broad instruction following in novel environments: 14 scenarios across 4 unseen kitchens and 2 unseen bedrooms. (Summary.)" loading="lazy"></figure>
+<figure data-fig="10"><img src="fig10.png" alt="Figure 10: Following complex referential instructions. GC further improves performance. (Summary.)" loading="lazy"></figure>
+<figure data-fig="11"><img src="fig11.png" alt="Figure 11: Breaking dataset biases by following instructions. (Summary.)" loading="lazy"></figure>
+<h3>C. Cross-embodiment transfer</h3>
+<p>Summary: π<sub>0.7</sub> transfers rearrangement and folding tasks across embodiments and adopts strategies suited to the target robot. Experts on UR5e shirt folding achieved 90.9% task progress and an 80.6% success rate. π<sub>0.7</sub> achieved 85.6% task progress and an 80% success rate.</p>
+<figure data-fig="12"><img src="fig12.png" alt="Figure 12: Cross-embodiment transfer for rearrangement tasks (left) and towel and shirt folding on the UR5e (right). (Summary.)" loading="lazy"></figure>
+<figure data-fig="13"><img src="fig13.png" alt="Figure 13: Emergent strategies adapted to the target embodiment: (a) single-arm bagging; (b) vertical grasps. (Summary.)" loading="lazy"></figure>
+<h3>D. Compositional task generalization</h3>
+<p>Summary: π<sub>0.7</sub> handles new short-horizon tasks zero-shot and longer tasks through language coaching. Coaching episodes can then train a high-level policy, which matches coached performance autonomously.</p>
+<figure data-fig="14"><img src="fig14.png" alt="Figure 14: Example of language coaching (air fryer). (Summary.)" loading="lazy"></figure>
+<figure data-fig="15"><img src="fig15.png" alt="Figure 15: Coaching to perform new long-horizon tasks. (Summary.)" loading="lazy"></figure>
+<figure data-fig="16"><img src="fig16.png" alt="Figure 16: Acquiring new autonomous capabilities with coaching. (Summary.)" loading="lazy"></figure>
+<figure data-fig="17"><img src="fig17.png" alt="Figure 17: Performing new short-horizon tasks. (Summary.)" loading="lazy"></figure>
+<h3>E. Can π<sub>0.7</sub> learn effectively from diverse and mixed-quality data?</h3>
+<p>Summary: With metadata, throughput improves as more lower-quality data is added. Without metadata it degrades. Removing the most task-diverse 20% of the data hurts generalization more than removing a random 20%.</p>
+<figure data-fig="18"><img src="fig18.png" alt="Figure 18: Scaling of generalization performance with diverse context and data. (Summary.)" loading="lazy"></figure>
+
+<h2>X. Discussion</h2>
+<p>Summary: Seen tasks often exceed 90% success, while unseen ones fall in the 60–80% range. The authors note that defining "unseen" is hard with very large datasets. They argue that remixing skills from training data is the essence of compositional generalization.</p>
+
+<h2>Acknowledgements</h2>
+<p>Summary: The authors thank robot operators and technicians.</p>
+
+<h2>References</h2>
+<ol class="refs">
+<li>Brohan et al. RT-1. arXiv:2212.06817, 2022.</li>
+<li>Reed et al. A generalist agent. TMLR, 2022.</li>
+<li>Octo Model Team. Octo. arXiv:2405.12213, 2024.</li>
+<li>Liu et al. RDT-1B. ICLR, 2025.</li>
+<li>Wang et al. Heterogeneous pre-trained transformers. NeurIPS, 2024.</li>
+<li>TRI LBM Team. A careful examination of large behavior models. arXiv:2507.05331, 2025.</li>
+<li>Zitkovich et al. RT-2. CoRL, 2023.</li>
+<li>Open X-Embodiment Collaboration, 2023.</li>
+<li>Kim et al. OpenVLA. arXiv:2406.09246, 2024.</li>
+<li>Black et al. π<sub>0</sub>. arXiv:2410.24164, 2024.</li>
+<li>Wen et al. TinyVLA. arXiv:2409.12514, 2024.</li>
+<li>Zhen et al. 3D-VLA. arXiv:2403.09631, 2024.</li>
+<li>Gemini Robotics Team. arXiv:2503.20020, 2025.</li>
+<li>Black et al. π<sub>0.5</sub>. CoRL, 2025.</li>
+<li>Zheng et al. X-VLA. arXiv:2510.10274, 2025.</li>
+<li>Jiang et al. Galaxea / G0. arXiv:2509.00576, 2025.</li>
+<li>Li et al. Vision-language foundation models as effective robot imitators. ICLR, 2024.</li>
+<li>Li et al. CogACT. arXiv:2411.19650, 2024.</li>
+<li>Qu et al. SpatialVLA. RSS, 2025.</li>
+<li>Bjorck et al. GR00T N1. arXiv:2503.14734, 2025.</li>
+<li>Zawalski et al. Embodied chain-of-thought. arXiv:2407.08693, 2024.</li>
+<li>AgiBot-World. arXiv:2503.06669, 2025.</li>
+<li>Zhou et al. ChatVLA. arXiv:2502.14420, 2025.</li>
+<li>Kim et al. Cosmos Policy. ICLR, 2026.</li>
+<li>Pai et al. mimic-video. arXiv:2512.15692, 2025.</li>
+<li>Ye et al. World action models are zero-shot policies. arXiv:2602.15922, 2026.</li>
+<li>Wu et al. Large-scale video generative pre-training. ICLR, 2024.</li>
+<li>Cheang et al. GR-2. arXiv:2410.06158, 2024.</li>
+<li>Zheng et al. TraceVLA. arXiv:2412.10345, 2024.</li>
+<li>Sridhar et al. MemER. arXiv:2510.20328, 2025.</li>
+<li>Shi et al. MemoryVLA. arXiv:2508.19236, 2025.</li>
+<li>Lin et al. OneTwoVLA. arXiv:2505.11917, 2025.</li>
+<li>Fang et al. SAM2Act. arXiv:2501.18564, 2025.</li>
+<li>Li et al. CronusVLA. arXiv:2506.19816, 2025.</li>
+<li>Zhang et al. TA-VLA. arXiv:2509.07962, 2025.</li>
+<li>Jang et al. ContextVLA. arXiv:2510.04246, 2025.</li>
+<li>Torne et al. MEM. arXiv:2603.03596, 2026.</li>
+<li>Ahn et al. Do as I can, not as I say. CoRL, 2022.</li>
+<li>Liang et al. Code as policies. ICRA, 2023.</li>
+<li>Shi et al. Hi Robot. arXiv:2502.19417, 2025.</li>
+<li>Zhao et al. CoT-VLA. CVPR, 2025.</li>
+<li>Physical Intelligence Team. π<sub>0.6</sub> model card, 2025.</li>
+<li>Ye et al. Latent action pretraining from videos. arXiv:2410.11758, 2024.</li>
+<li>Lin et al. PhysBrain. arXiv:2512.16793, 2025.</li>
+<li>Kareer et al. Emergence of human to robot transfer in VLAs. arXiv:2512.22414, 2025.</li>
+<li>Li et al. LatBot. arXiv:2511.23034, 2025.</li>
+<li>Yang et al. EgoVLA. arXiv:2507.12440, 2025.</li>
+<li>Luo et al. Being-H0.5. arXiv:2601.12993, 2026.</li>
+<li>Zhang et al. CLAP. arXiv:2601.04061, 2026.</li>
+<li>Physical Intelligence Team. π*<sub>0.6</sub>. arXiv:2511.14759, 2025.</li>
+<li>Xu et al. RLDG. arXiv:2412.09858, 2024.</li>
+<li>Xiao et al. Self-improving VLAs via residual RL. arXiv:2511.00091, 2025.</li>
+<li>Nair et al. R3M. CoRL, 2023.</li>
+<li>Ma et al. VIP. ICLR, 2022.</li>
+<li>Xiao et al. Masked visual pre-training for motor control. arXiv:2203.06173, 2022.</li>
+<li>Bhateja et al. Robotic offline RL from internet videos. arXiv:2309.13041, 2023.</li>
+<li>Zhou et al. Manipulator-independent representations. arXiv:2103.09016, 2021.</li>
+<li>Bharadhwaj et al. Visual affordance prediction. arXiv:2305.17783, 2023.</li>
+<li>Chen et al. Dexterous manipulation from RGB human videos. arXiv:2602.09013, 2026.</li>
+<li>Shaw et al. VideoDex. CoRL, 2023.</li>
+<li>Bharadhwaj et al. Zero-shot robot manipulation from passive human videos. arXiv:2302.02011, 2023.</li>
+<li>Bahl et al. Human-to-robot imitation in the wild. arXiv:2207.09450, 2022.</li>
+<li>Bahl et al. Affordances from human videos. CVPR, 2023.</li>
+<li>Kareer et al. EgoMimic. ICRA, 2025.</li>
+<li>Shi et al. Adaptive dexterous grasping from single demonstrations. IROS, 2025.</li>
+<li>Bharadhwaj et al. Track2Act. ECCV, 2024.</li>
+<li>Vecerik et al. RoboTAP. ICRA, 2024.</li>
+<li>Wen et al. Any-point trajectory modeling. arXiv:2401.00025, 2023.</li>
+<li>Gu et al. RT-Trajectory. ICLR, 2024.</li>
+<li>Kapelyukh et al. DALL-E-Bot. RA-L, 2023.</li>
+<li>Mandi et al. CACTI. arXiv:2212.05711, 2022.</li>
+<li>Chen et al. GenAug. arXiv:2302.06671, 2023.</li>
+<li>Yu et al. Semantically imagined experience. arXiv:2302.11550, 2023.</li>
+<li>Stone et al. Open-world object manipulation. arXiv:2303.00905, 2023.</li>
+<li>Driess et al. PaLM-E. ICML, 2023.</li>
+<li>Jiang et al. VIMA. ICML, 2023.</li>
+<li>OX-Embodiment Collaboration. arXiv:2310.08864, 2023.</li>
+<li>Yang et al. Data analogies. arXiv:2603.06450, 2026.</li>
+<li>Doshi et al. Scaling cross-embodied learning. CoRL, 2024.</li>
+<li>Yang et al. Pushing the limits of cross-embodiment learning. arXiv:2402.19432, 2024.</li>
+<li>Zha et al. LAP. arXiv:2602.10556, 2026.</li>
+<li>Grover et al. Preserving pretrained representations. arXiv:2509.11417, 2025.</li>
+<li>Ai et al. Embodiment scaling laws in locomotion. CoRL, 2025.</li>
+<li>He et al. Scaling cross-embodiment world models. arXiv:2511.01177, 2025.</li>
+<li>Chi et al. UMI. RSS, 2024.</li>
+<li>Young et al. Visual imitation made easy. CoRL, 2021.</li>
+<li>Pathak et al. Zero-shot visual imitation. CVPRW, 2018.</li>
+<li>Chebotar et al. Actionable models. ICML, 2021.</li>
+<li>Bousmalis et al. RoboCat. arXiv:2306.11706, 2023.</li>
+<li>Myers et al. Goal representations for instruction following. CoRL, 2023.</li>
+<li>Nair et al. Visual RL with imagined goals. NeurIPS, 2018.</li>
+<li>Nair and Finn. Hierarchical foresight. ICLR, 2020.</li>
+<li>Black et al. SuSIE. arXiv:2310.10639, 2023.</li>
+<li>Ko et al. Learning to act from actionless videos. ICLR, 2024.</li>
+<li>Kim et al. UniSkill. CoRL, 2025.</li>
+<li>Liang et al. Dreamitate. CoRL, 2025.</li>
+<li>Zhang et al. ForeAct. arXiv:2602.12322, 2026.</li>
+<li>Du et al. Video language planning. ICLR, 2024.</li>
+<li>Liang et al. Video generators are robot policies. arXiv:2508.00795, 2025.</li>
+<li>Yuan et al. Fast-WAM. arXiv:2603.16666, 2026.</li>
+<li>Du et al. Universal policies via text-guided video generation. NeurIPS, 2023.</li>
+<li>Lipman et al. Flow matching. arXiv:2210.02747, 2022.</li>
+<li>Driess et al. Knowledge insulating VLAs. NeurIPS, 2025.</li>
+<li>Pertsch et al. FAST. RSS, 2025.</li>
+<li>Deng et al. BAGEL. arXiv:2505.14683, 2025.</li>
+<li>Gemma Team. Gemma 3 technical report, 2025.</li>
+<li>Black et al. Real-time action chunking. arXiv:2506.07339, 2025.</li>
+<li>Black et al. Training-time action conditioning for RTC. arXiv:2512.05964, 2025.</li>
+<li>Ho and Salimans. Classifier-free guidance. arXiv:2207.12598, 2022.</li>
+<li>Hejna et al. Robot data curation. arXiv:2502.08623, 2025.</li>
+<li>Li et al. GR-RL. arXiv:2512.01801, 2025.</li>
+<li>Zhang et al. SageAttention. arXiv:2410.02367, 2024.</li>
+</ol>
+
+<h2>Appendix</h2>
+<h3>A. Contributions</h3>
+<p>Summary: Contributors are grouped into the following areas:</p>
+<ul>
+<li>data collection and operations;</li>
+<li>annotation;</li>
+<li>policy training and research;</li>
+<li>policy infrastructure;</li>
+<li>robot hardware;</li>
+<li>robot infrastructure;</li>
+<li>writing and illustration.</li>
+</ul>
+<h3>B. Attention pattern</h3>
+<figure data-fig="19"><img src="fig19.png" alt="Figure 19: Attention patterns for the VLA (with and without image goals, and with metadata CFG via an &quot;attention tree&quot;) and for the world model during training and CFG inference. (Summary.)" loading="lazy"></figure>
+<h3>C. Training of the world model</h3>
+<p>Summary: The world model follows the BAGEL recipe:</p>
+<ul>
+<li>Data: high-quality labelled robot and egocentric data, plus open-source image-editing and video data.</li>
+<li>Encoders: ViT inputs at 448×336 and VAE inputs at 512×384.</li>
+<li>Backbones: 7B LLM and 7B generation backbones.</li>
+<li>Subgoals are regenerated every Δ = 4 s.</li>
+</ul>
+<h3>D. Inference speed and optimization</h3>
+<p>Summary: On one H100, VLA inference takes 38 ms in the minimal configuration and 127 ms in the worst case. Subgoal generation takes 1.25 s for 25 steps on 4×H100, using tensor parallelism, 8-bit matmuls and SageAttention.</p>
+<figure data-fig="20"><img src="fig20.png" alt="Figure 20: Joint vs. end-effector control for prior models on cross-embodiment tasks. There is no substantial difference. (Summary.)" loading="lazy"></figure>
+<figure data-fig="21"><img src="fig21.png" alt="Figure 21: Operator experience in the human subject study. Operators are in the top 2% of the fleet by experience. (Summary.)" loading="lazy"></figure>
+<figure data-fig="22"><img src="fig22.png" alt="Figure 22: Comparison of π0.7 (GC) and humans on UR5e shirt folding. Performance is competitive. (Summary.)" loading="lazy"></figure>
+<h3>E. Comparison of action spaces in cross-embodiment transfer</h3>
+<p>Summary: End-effector control shows no clear advantage, so the main experiments use joint-space control.</p>
+<h3>F. Human subject study for cross-embodiment shirt folding</h3>
+<p>Summary: Ten expert operators with no UR5e folding experience did 3 trials each, with no practice. Humans achieved 90.9% task progress and an 80.6% success rate; π<sub>0.7</sub> achieved 85.6% and 80%.</p>
+<h3>G. Detailed task descriptions and scoring rubric</h3>
+<table>
+<tr><th>Task</th><th>Max score / criterion (summarized)</th></tr>
+<tr><td>Laundry (T-shirts and Shorts)</td><td>Success: item folded and stacked</td></tr>
+<tr><td>Laundry (Diverse — Hardest Item)</td><td>Success: button-up shirt folded and stacked</td></tr>
+<tr><td>Make Espresso</td><td>Success: all steps completed in order</td></tr>
+<tr><td>Box Building</td><td>Success: box folded without major damage</td></tr>
+<tr><td>Make PB Sandwich</td><td>9</td></tr>
+<tr><td>Turn T-shirt Inside Out</td><td>7</td></tr>
+<tr><td>Drive Through Door</td><td>3</td></tr>
+<tr><td>Cut Zucchini</td><td>3</td></tr>
+<tr><td>Peel Fruits and Vegetables</td><td>9</td></tr>
+<tr><td>Take Out Trash</td><td>12</td></tr>
+<tr><td>Swap 3 Mugs</td><td>4</td></tr>
+<tr><td>Find Object</td><td>4</td></tr>
+<tr><td>Scoop Beans</td><td>5</td></tr>
+<tr><td>Window Cleaning</td><td>5</td></tr>
+<tr><td>Reverse Bussing</td><td>12</td></tr>
+<tr><td>Reverse Fridge to Microwave</td><td>6</td></tr>
+<tr><td>Table Setting</td><td>7</td></tr>
+<tr><td>Bag in Backpack</td><td>3</td></tr>
+<tr><td>Organize Tupperware</td><td>6</td></tr>
+<tr><td>Shirt Bagging</td><td>4</td></tr>
+<tr><td>Shirt Folding</td><td>6 (full score = success)</td></tr>
+<tr><td>Press French Press Plunger</td><td>1</td></tr>
+<tr><td>Scoop Rice into Rice Cooker</td><td>3</td></tr>
+<tr><td>Loading an Air Fryer</td><td>4</td></tr>
+<tr><td>Unloading an Air Fryer</td><td>2</td></tr>
+<tr><td>Toast a Bagel</td><td>7</td></tr>
+</table>
+</body></html>

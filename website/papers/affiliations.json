@@ -158,6 +158,91 @@
     "Physical Intelligence",
     "UC Berkeley"
    ]
+  },
+  "arxiv-2502-19417": {
+   "companies": [
+    "Physical Intelligence"
+   ],
+   "universities": [
+    "Stanford University",
+    "University of California, Berkeley"
+   ],
+   "candidates": [
+    "Physical Intelligence",
+    "Stanford University",
+    "University of California, Berkeley"
+   ]
+  },
+  "arxiv-2504-16054": {
+   "companies": [
+    "Physical Intelligence"
+   ],
+   "universities": [],
+   "candidates": [
+    "Physical Intelligence",
+    "In-Lab Static Robot"
+   ]
+  },
+  "arxiv-2505-23705": {
+   "companies": [
+    "Physical Intelligence"
+   ],
+   "universities": [],
+   "candidates": [
+    "Physical Intelligence"
+   ]
+  },
+  "arxiv-2506-07339": {
+   "companies": [
+    "Physical Intelligence"
+   ],
+   "universities": [
+    "University of California, Berkeley"
+   ],
+   "candidates": [
+    "Physical Intelligence",
+    "UC Berkeley"
+   ]
+  },
+  "arxiv-2511-14759": {
+   "companies": [
+    "Physical Intelligence"
+   ],
+   "universities": [],
+   "candidates": [
+    "Physical Intelligence"
+   ]
+  },
+  "arxiv-2512-22414": {
+   "companies": [
+    "Physical Intelligence"
+   ],
+   "universities": [
+    "Georgia Institute of Technology"
+   ],
+   "candidates": [
+    "Physical Intelligence",
+    "Georgia Institute of Technology",
+    "Work conducted during internship at Physical Intelligence"
+   ]
+  },
+  "arxiv-2604-15483": {
+   "companies": [
+    "Physical Intelligence"
+   ],
+   "universities": [],
+   "candidates": [
+    "Physical Intelligence"
+   ]
+  },
+  "arxiv-2604-23073": {
+   "companies": [
+    "Physical Intelligence"
+   ],
+   "universities": [],
+   "candidates": [
+    "Physical Intelligence"
+   ]
   }
  },
  "ror": {
@@ -246,6 +331,15 @@
   },
   "Recently, some of the most impressive feats in AI have been performed through language models": null,
   "What Do Learning Dynamics Reveal About": null,
-  "Physical Intelligence": null
+  "Physical Intelligence": null,
+  "In-Lab Static Robot": null,
+  "Georgia Institute of Technology": {
+   "name": "Georgia Institute of Technology",
+   "types": [
+    "education",
+    "funder"
+   ]
+  },
+  "Work conducted during internship at Physical Intelligence": null
  }
 }

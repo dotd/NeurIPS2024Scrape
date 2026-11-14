@@ -32,5 +32,12 @@
   "ViperX",
   "ALOHA / Mobile ALOHA",
   "ARX arm"
+ ],
+ "arxiv-2512-22414": [
+  "UR5 / UR5e",
+  "ARX arm"
+ ],
+ "arxiv-2604-15483": [
+  "UR5 / UR5e"
  ]
 }

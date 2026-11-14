@@ -1392,5 +1392,762 @@
     "h": 661
    }
   ]
+ },
+ "arxiv-2502-19417": {
+  "title": "Hi Robot: Open-Ended Instruction Following with Hierarchical Vision-Language-Action Models",
+  "abstract": "inputs, corrections, and feedback. Achieving this kind of flexibility is essential for robots in open-ended, humancentric environments. For instance, consider a robot tasked with tidying up a table after a meal: instead of rigidly following a single predefined set of steps, the robot would need to interpret dynamic prompts like “only take away someone’s dishes if they are done eating,” respond to corrections like “leave it alone,” and adapt when faced with unfamiliar challenges, such as a delicate object that requires special handling. This paper aims to advance robotic intelligence by enabling robots to interpret and act on diverse natural language commands, feedback, and corrections – a step towards creating agents that reason through tasks, integrate human feedback seamlessly, and operate with humanlike adaptability. If we can enable a robot to process and engage with complex natural language interaction, we can unlock not only better instruction following, but also the ability for users to guide a robot through new tasks and correct the robot in real time. Generalist robots that can perform a range of different tasks in open-world settings must be able to not only reason about the steps needed to accomplish their goals, but also process complex instructions, prompts, and even feedback during task execution. Intricate instructions (e.g., “Could you make me a vegetarian sandwich?” or “I don’t like that one”) require not just the ability to physically perform the individual steps, but the ability to situate complex commands and feedback in the physical world. In this work, we describe a system that uses vision-language models in a hierarchical structure, first reasoning over complex prompts and user feedback to deduce the most appropriate next step to fulfill the task, and then performing that step with low-level actions. In contrast to direct instruction following methods that can fulfill simple commands (“pick up the cup”), our system can reason through complex prompts and incorporate situated feedback during task execution (“that’s not trash”). We evaluate our system across three robotic platforms, including single-arm, dual-arm, and dualarm mobile robots, demonstrating its ability to handle tasks such as cleaning messy tables, making sandwiches, and grocery shopping. Achieving this level of flexibility and steerability in robotic systems is challenging. While standard languageconditioned imitation learning can follow simple, atomic instructions such as “pick up the coke can” (Brohan et al., 2022), real-world tasks are rarely so straightforward. Imagine a more realistic prompt, such as: “Could you make me a vegetarian sandwich? I’d prefer it without tomatoes. Also, if you have ham or roast beef, could you make a separate sandwich with one of those for my friend?” This requires not only understanding the language, but also the ability to situate commands within the current context and compose existing skills (e.g., picking up the roast beef) to solve a new task. If the robot further receives corrections and feedback (“that’s not how you do it, you have to get lower, otherwise you’ll keep missing”), these must also be integrated dynamically into task execution. This challenge resembles the distinction between Kahneman’s “System 1” and “System 2” cognitive processes (Kahneman, 2011). The “automatic” System 1 corresponds to a policy capable of executing straightforward commands by triggering pre-learned skills, while the more deliberative 1. Introduction A defining feature of intelligence is its flexibility: people not only excel at complex tasks but also adapt to new situations, modify behaviors in real time, and respond to diverse 1Physical Intelligence 2Stanford University 3University of California, Berkeley. Correspondence to: Physical Intelligence <research@physicalintelligence.company>. Proceedings of the 42 nd International Conference on Machine Learning, Vancouver, Canada. PMLR 267, 2025. Copyright 2025 by the author(s). 1",
+  "figure": "figs/arxiv-2502-19417.png",
+  "figure_page": 2,
+  "figures": [
+   {
+    "n": 1,
+    "page": 2,
+    "src": "figs/arxiv-2502-19417/fig1.png",
+    "w": 1384,
+    "h": 599
+   },
+   {
+    "n": 2,
+    "page": 4,
+    "src": "figs/arxiv-2502-19417/fig2.png",
+    "w": 1368,
+    "h": 692
+   },
+   {
+    "n": 3,
+    "page": 5,
+    "src": "figs/arxiv-2502-19417/fig3.png",
+    "w": 1368,
+    "h": 881
+   },
+   {
+    "n": 4,
+    "page": 6,
+    "src": "figs/arxiv-2502-19417/fig4.png",
+    "w": 1384,
+    "h": 1564
+   },
+   {
+    "n": 5,
+    "page": 7,
+    "src": "figs/arxiv-2502-19417/fig5.png",
+    "w": 1384,
+    "h": 499
+   },
+   {
+    "n": 6,
+    "page": 8,
+    "src": "figs/arxiv-2502-19417/fig6.png",
+    "w": 1384,
+    "h": 602
+   },
+   {
+    "n": 7,
+    "page": 9,
+    "src": "figs/arxiv-2502-19417/fig7.png",
+    "w": 1368,
+    "h": 664
+   },
+   {
+    "n": 8,
+    "page": 9,
+    "src": "figs/arxiv-2502-19417/fig8.png",
+    "w": 674,
+    "h": 628
+   }
+  ]
+ },
+ "arxiv-2504-16054": {
+  "title": "π0.5: a Vision-Language-Action Model with",
+  "abstract": "—In order for robots to be useful, they must perform practically relevant tasks in the real world, outside of the lab. While vision-language-action (VLA) models have demonstrated impressive results for end-to-end robot control, it remains an open question how far such models can generalize in the wild. We describe π0.5, a new model based on π0 that uses co-training on heterogeneous tasks to enable broad generalization. π0.5 uses data from multiple robots, high-level semantic prediction, web data, and other sources to enable broadly generalizable realworld robotic manipulation. Our system uses a combination of co-training and hybrid multi-modal examples that combine image observations, language commands, object detections, semantic subtask prediction, and low-level actions. Our experiments show that this kind of knowledge transfer is essential for effective generalization, and we demonstrate for the first time that an end-to-end learning-enabled robotic system can perform long- horizon and dexterous manipulation skills, such as cleaning a kitchen or bedroom, in entirely new homes. I. INTRODUCTION Stuff your eyes with wonder... See the world. It’s more fantastic than any dream made or paid for in factories. Ray Bradbury, Fahrenheit 451 Open-world generalization represents one of the biggest open problems in physical intelligence: embodied systems such as robotic arms, humanoids, and autonomous vehicles only truly become useful when they can leave the lab and handle the diverse situations and unexpected events that occur in the real world. Learning-based systems offer a path to en-",
+  "figure": "figs/arxiv-2504-16054.png",
+  "figure_page": 1,
+  "figures": [
+   {
+    "n": 1,
+    "page": 1,
+    "src": "figs/arxiv-2504-16054/fig1.png",
+    "w": 1462,
+    "h": 980
+   },
+   {
+    "n": 2,
+    "page": 2,
+    "src": "figs/arxiv-2504-16054/fig2.png",
+    "w": 1462,
+    "h": 357
+   },
+   {
+    "n": 3,
+    "page": 4,
+    "src": "figs/arxiv-2504-16054/fig3.png",
+    "w": 1462,
+    "h": 769
+   },
+   {
+    "n": 4,
+    "page": 6,
+    "src": "figs/arxiv-2504-16054/fig4.png",
+    "w": 1462,
+    "h": 984
+   },
+   {
+    "n": 5,
+    "page": 7,
+    "src": "figs/arxiv-2504-16054/fig5.png",
+    "w": 721,
+    "h": 569
+   },
+   {
+    "n": 6,
+    "page": 8,
+    "src": "figs/arxiv-2504-16054/fig6.png",
+    "w": 1462,
+    "h": 486
+   },
+   {
+    "n": 7,
+    "page": 8,
+    "src": "figs/arxiv-2504-16054/fig7.png",
+    "w": 1462,
+    "h": 1066
+   },
+   {
+    "n": 8,
+    "page": 9,
+    "src": "figs/arxiv-2504-16054/fig8.png",
+    "w": 721,
+    "h": 603
+   },
+   {
+    "n": 9,
+    "page": 9,
+    "src": "figs/arxiv-2504-16054/fig9.png",
+    "w": 721,
+    "h": 485
+   },
+   {
+    "n": 10,
+    "page": 10,
+    "src": "figs/arxiv-2504-16054/fig10.png",
+    "w": 721,
+    "h": 591
+   },
+   {
+    "n": 11,
+    "page": 10,
+    "src": "figs/arxiv-2504-16054/fig11.png",
+    "w": 721,
+    "h": 1192
+   },
+   {
+    "n": 12,
+    "page": 10,
+    "src": "figs/arxiv-2504-16054/fig12.png",
+    "w": 721,
+    "h": 415
+   },
+   {
+    "n": 13,
+    "page": 11,
+    "src": "figs/arxiv-2504-16054/fig13.png",
+    "w": 721,
+    "h": 731
+   },
+   {
+    "n": 14,
+    "page": 18,
+    "src": "figs/arxiv-2504-16054/fig14.png",
+    "w": 709,
+    "h": 272
+   },
+   {
+    "n": 15,
+    "page": 18,
+    "src": "figs/arxiv-2504-16054/fig15.png",
+    "w": 721,
+    "h": 420
+   },
+   {
+    "n": 16,
+    "page": 18,
+    "src": "figs/arxiv-2504-16054/fig16.png",
+    "w": 721,
+    "h": 545
+   },
+   {
+    "n": 17,
+    "page": 19,
+    "src": "figs/arxiv-2504-16054/fig17.png",
+    "w": 1462,
+    "h": 510
+   },
+   {
+    "n": 18,
+    "page": 19,
+    "src": "figs/arxiv-2504-16054/fig18.png",
+    "w": 709,
+    "h": 751
+   }
+  ]
+ },
+ "arxiv-2505-23705": {
+  "title": "Knowledge Insulating Vision-Language-Action Models: Train Fast, Run Fast, Generalize Better",
+  "abstract": "Vision-language-action (VLA) models provide a powerful approach to training control policies for physical systems, such as robots, by combining end-to-end learning with transfer of semantic knowledge from web-scale vision-language model (VLM) training. However, the constraints of real-time control are often at odds with the design of VLMs: the most powerful VLMs have tens or hundreds of billions of parameters, presenting an obstacle to real-time inference, and operate on discrete tokens rather than the continuous-valued outputs that are required for controlling robots. To address this challenge, recent VLA models have used specialized modules for efficient continuous control, such as action experts or continuous output heads, which typically require adding new untrained parameters to the pretrained VLM backbone. While these modules improve real-time and control capabilities, it remains an open question whether they preserve or degrade the semantic knowledge contained in the pretrained VLM, and what effect they have on the VLA training dynamics. In this paper, we study this question in the context of VLAs that include a continuous diffusion or flow matching action expert, showing that naively including such experts significantly harms both training speed and knowledge transfer. We provide an extensive analysis of various design choices, their impact on performance and knowledge transfer, and propose a technique for insulating the VLM backbone during VLA training that mitigates this issue. Videos are available at https://pi.website/research/knowledge_insulation.",
+  "figure": "figs/arxiv-2505-23705.png",
+  "figure_page": 2,
+  "figures": [
+   {
+    "n": 1,
+    "page": 2,
+    "src": "figs/arxiv-2505-23705/fig1.png",
+    "w": 1140,
+    "h": 533
+   },
+   {
+    "n": 2,
+    "page": 5,
+    "src": "figs/arxiv-2505-23705/fig2.png",
+    "w": 688,
+    "h": 400
+   },
+   {
+    "n": 3,
+    "page": 6,
+    "src": "figs/arxiv-2505-23705/fig3.png",
+    "w": 1139,
+    "h": 240
+   },
+   {
+    "n": 5,
+    "page": 8,
+    "src": "figs/arxiv-2505-23705/fig5.png",
+    "w": 1140,
+    "h": 567
+   },
+   {
+    "n": 7,
+    "page": 9,
+    "src": "figs/arxiv-2505-23705/fig7.png",
+    "w": 1140,
+    "h": 359
+   },
+   {
+    "n": 8,
+    "page": 9,
+    "src": "figs/arxiv-2505-23705/fig8.png",
+    "w": 1140,
+    "h": 297
+   },
+   {
+    "n": 9,
+    "page": 10,
+    "src": "figs/arxiv-2505-23705/fig9.png",
+    "w": 464,
+    "h": 330
+   },
+   {
+    "n": 10,
+    "page": 16,
+    "src": "figs/arxiv-2505-23705/fig10.png",
+    "w": 1140,
+    "h": 506
+   }
+  ]
+ },
+ "arxiv-2506-07339": {
+  "title": "Real-Time Execution of Action Chunking Flow Policies",
+  "abstract": "Modern AI systems, especially those interacting with the physical world, increasingly require real-time performance. However, the high latency of state-of-the-art generalist models, including recent vision-language-action models (VLAs), poses a significant challenge. While action chunking has enabled temporal consistency in high-frequency control tasks, it does not fully address the latency problem, leading to pauses or out-of-distribution jerky movements at chunk boundaries. This paper presents a novel inference-time algorithm that enables smooth asynchronous execution of action chunking policies. Our method, real-time chunking (RTC), is applicable to any diffusion- or flow-based VLA out of the box with no re-training. It generates the next action chunk while executing the current one, “freezing” actions guaranteed to execute and “inpainting” the rest. To test RTC, we introduce a new benchmark of 12 highly dynamic tasks in the Kinetix simulator, as well as evaluate 6 challenging real-world bimanual manipulation tasks. Results demonstrate that RTC is fast, performant, and uniquely robust to inference delay, significantly improving task throughput and enabling high success rates in precise tasks—such as lighting a match—even in the presence of significant latency. See https://pi.website/research/real_time_chunking for videos.",
+  "figure": "figs/arxiv-2506-07339.png",
+  "figure_page": 1,
+  "figures": [
+   {
+    "n": 1,
+    "page": 1,
+    "src": "figs/arxiv-2506-07339/fig1.png",
+    "w": 1137,
+    "h": 683
+   },
+   {
+    "n": 2,
+    "page": 3,
+    "src": "figs/arxiv-2506-07339/fig2.png",
+    "w": 568,
+    "h": 539
+   },
+   {
+    "n": 3,
+    "page": 4,
+    "src": "figs/arxiv-2506-07339/fig3.png",
+    "w": 1143,
+    "h": 605
+   },
+   {
+    "n": 4,
+    "page": 5,
+    "src": "figs/arxiv-2506-07339/fig4.png",
+    "w": 391,
+    "h": 466
+   },
+   {
+    "n": 5,
+    "page": 7,
+    "src": "figs/arxiv-2506-07339/fig5.png",
+    "w": 1144,
+    "h": 742
+   },
+   {
+    "n": 6,
+    "page": 8,
+    "src": "figs/arxiv-2506-07339/fig6.png",
+    "w": 1139,
+    "h": 812
+   },
+   {
+    "n": 7,
+    "page": 23,
+    "src": "figs/arxiv-2506-07339/fig7.png",
+    "w": 1140,
+    "h": 1057
+   },
+   {
+    "n": 8,
+    "page": 25,
+    "src": "figs/arxiv-2506-07339/fig8.png",
+    "w": 1138,
+    "h": 614
+   }
+  ]
+ },
+ "arxiv-2511-14759": {
+  "title": "π∗",
+  "abstract": "—We study how vision-language-action (VLA) models can improve through real-world deployments via reinforcement learning (RL). We present a general-purpose method, RL with Experience and Corrections via Advantage-conditioned Policies (RECAP), that provides for RL training of VLAs via advantage conditioning. Our method incorporates heterogeneous data into the self-improvement process, including demonstrations, data from on-policy collection, and expert teleoperated interventions provided during autonomous execution. RECAP starts by pretraining a generalist VLA with offline RL, which we call π∗ 0.6, that can then be specialized to attain high performance on downstream tasks through on-robot data collection. We show that the π∗ 0.6 model trained with the full RECAP method can fold laundry in real homes, reliably assemble boxes, and make espresso drinks using a professional espresso machine. On some of the hardest tasks, RECAP more than doubles task throughput and roughly halves the task failure rate. I. INTRODUCTION In this paper, we present RECAP, a method that enables VLA models to incorporate reward feedback in all stages of the training pipeline, from pre-training all the way to training on data from autonomous execution. RECAP aims to address this problem with a general-purpose recipe that combines demonstrations, autonomous experience, and expert interventions. Starting from the training recipe for a general- It’s amazing what you can learn if you’re not afraid to try. Robert A. Heinlein, Have Space Suit–Will Travel Practice makes perfect: while people are remarkably flexible in acquiring new skills, mastery invariably requires learning from repeated attempts. With general-purpose robotic foundation models, such as vision-language-action (VLA) models,",
+  "figure": "figs/arxiv-2511-14759.png",
+  "figure_page": 1,
+  "figures": [
+   {
+    "n": 1,
+    "page": 1,
+    "src": "figs/arxiv-2511-14759/fig1.png",
+    "w": 1462,
+    "h": 856
+   },
+   {
+    "n": 2,
+    "page": 2,
+    "src": "figs/arxiv-2511-14759/fig2.png",
+    "w": 1462,
+    "h": 579
+   },
+   {
+    "n": 3,
+    "page": 4,
+    "src": "figs/arxiv-2511-14759/fig3.png",
+    "w": 721,
+    "h": 734
+   },
+   {
+    "n": 4,
+    "page": 5,
+    "src": "figs/arxiv-2511-14759/fig4.png",
+    "w": 1462,
+    "h": 480
+   },
+   {
+    "n": 5,
+    "page": 7,
+    "src": "figs/arxiv-2511-14759/fig5.png",
+    "w": 721,
+    "h": 597
+   },
+   {
+    "n": 6,
+    "page": 8,
+    "src": "figs/arxiv-2511-14759/fig6.png",
+    "w": 1462,
+    "h": 579
+   },
+   {
+    "n": 7,
+    "page": 9,
+    "src": "figs/arxiv-2511-14759/fig7.png",
+    "w": 1462,
+    "h": 474
+   },
+   {
+    "n": 8,
+    "page": 9,
+    "src": "figs/arxiv-2511-14759/fig8.png",
+    "w": 1462,
+    "h": 920
+   },
+   {
+    "n": 9,
+    "page": 10,
+    "src": "figs/arxiv-2511-14759/fig9.png",
+    "w": 1462,
+    "h": 479
+   },
+   {
+    "n": 10,
+    "page": 10,
+    "src": "figs/arxiv-2511-14759/fig10.png",
+    "w": 721,
+    "h": 909
+   },
+   {
+    "n": 11,
+    "page": 10,
+    "src": "figs/arxiv-2511-14759/fig11.png",
+    "w": 1462,
+    "h": 394
+   },
+   {
+    "n": 12,
+    "page": 10,
+    "src": "figs/arxiv-2511-14759/fig12.png",
+    "w": 721,
+    "h": 994
+   },
+   {
+    "n": 13,
+    "page": 17,
+    "src": "figs/arxiv-2511-14759/fig13.png",
+    "w": 767,
+    "h": 1435
+   }
+  ]
+ },
+ "arxiv-2512-22414": {
+  "title": "Emergence of Human to Robot Transfer in Vision-Language-Action Models",
+  "abstract": "—Vision-language-action (VLA) models can enable broad open world generalization, but require large and diverse datasets. It is appealing to consider whether some of this data can come from human videos, which cover diverse real-world situations and are easy to obtain. However, it is difficult to train VLAs with human videos alone, and establishing a mapping between humans and robots requires manual engineering and presents a major research challenge. Drawing inspiration from advances in large language models, where the ability to learn from diverse supervision emerges with scale, we ask whether a similar phenomenon holds for VLAs that incorporate human video data. We introduce a simple co-training recipe, and find that human-to-robot transfer emerges once the VLA is pretrained on sufficient scenes, tasks, and embodiments. Our analysis suggests that this emergent capability arises because diverse pretraining produces embodiment-agnostic representations for human and robot data. We validate these findings through a series of experiments probing human to robot skill transfer and find that with sufficiently diverse robot pre-training our method can nearly double the performance on generalization settings seen only in human data. Drawing inspiration from language models, recent work has found that the ability to leverage certain sources of data is intrinsically tied to model scale [47, 49, 48]. For instance, while smaller models fail to leverage diverse instruction tuning datasets, larger models become generalists that soak up diverse data and generalize to new tasks. This leads us to ask: does learning skills from human video data, with no explicit alignment, emerge with scale? To test this hypothesis, we introduce a simple co-training recipe, that treats human videos as an additional embodiment with the same objectives used for robot data. Specifically, we predict low level end effector trajectories using 3D hand tracks and high-level sub-tasks using dense language annotations, mirroring the objectives used during robot pretraining. We then co-finetune on a mix of this human data with the relevant robot data, and evaluate in a setting present only in the human data. For example one such setting involves sorting eggs, where the robot data covers placing eggs in cartons, while human data specifies how differently colored eggs should be sorted across multiple cartons. I. INTRODUCTION Human knowledge provides the foundation to instill physical intelligence in robots. This manifests in many forms, from bootstrapping robot policies with human generated text and images via vision-language models, to mimicking human generated actions via robot teleoperation. While such techniques indirectly imbue the model with human experience, the right recipe to directly learn from human experience, for instance With this recipe, we uncover our key finding: human to robot transfer is an emergent property of diverse VLA pretraining (Figure 1). As we expand the diversity of robot data – across tasks, scenes, and embodiments – the pretrained VLA",
+  "figure": "figs/arxiv-2512-22414.png",
+  "figure_page": 1,
+  "figures": [
+   {
+    "n": 1,
+    "page": 1,
+    "src": "figs/arxiv-2512-22414/fig1.png",
+    "w": 1462,
+    "h": 633
+   },
+   {
+    "n": 2,
+    "page": 2,
+    "src": "figs/arxiv-2512-22414/fig2.png",
+    "w": 1462,
+    "h": 781
+   },
+   {
+    "n": 3,
+    "page": 3,
+    "src": "figs/arxiv-2512-22414/fig3.png",
+    "w": 1462,
+    "h": 864
+   },
+   {
+    "n": 4,
+    "page": 4,
+    "src": "figs/arxiv-2512-22414/fig4.png",
+    "w": 721,
+    "h": 518
+   },
+   {
+    "n": 5,
+    "page": 5,
+    "src": "figs/arxiv-2512-22414/fig5.png",
+    "w": 1462,
+    "h": 561
+   },
+   {
+    "n": 6,
+    "page": 5,
+    "src": "figs/arxiv-2512-22414/fig6.png",
+    "w": 1446,
+    "h": 969
+   },
+   {
+    "n": 7,
+    "page": 6,
+    "src": "figs/arxiv-2512-22414/fig7.png",
+    "w": 721,
+    "h": 499
+   },
+   {
+    "n": 8,
+    "page": 6,
+    "src": "figs/arxiv-2512-22414/fig8.png",
+    "w": 721,
+    "h": 592
+   },
+   {
+    "n": 9,
+    "page": 7,
+    "src": "figs/arxiv-2512-22414/fig9.png",
+    "w": 1462,
+    "h": 499
+   },
+   {
+    "n": 10,
+    "page": 7,
+    "src": "figs/arxiv-2512-22414/fig10.png",
+    "w": 721,
+    "h": 649
+   },
+   {
+    "n": 11,
+    "page": 7,
+    "src": "figs/arxiv-2512-22414/fig11.png",
+    "w": 721,
+    "h": 1106
+   },
+   {
+    "n": 12,
+    "page": 8,
+    "src": "figs/arxiv-2512-22414/fig12.png",
+    "w": 721,
+    "h": 499
+   },
+   {
+    "n": 13,
+    "page": 13,
+    "src": "figs/arxiv-2512-22414/fig13.png",
+    "w": 1462,
+    "h": 483
+   }
+  ]
+ },
+ "arxiv-2604-15483": {
+  "title": "π0.7: a Steerable Generalist Robotic Foundation",
+  "abstract": "—We present a new robotic foundation model, called π0.7, that can enable strong out-of-the-box performance in a wide range of scenarios. π0.7 can follow diverse language instructions in unseen environments, including multi-stage tasks with various kitchen appliances, provide zero-shot cross-embodiment generalization, for example enabling a robot to fold laundry without seeing the task before, and perform challenging tasks such as operating an espresso machine out of the box at a level of performance that matches much more specialized",
+  "figure": "figs/arxiv-2604-15483.png",
+  "figure_page": 1,
+  "figures": [
+   {
+    "n": 1,
+    "page": 1,
+    "src": "figs/arxiv-2604-15483/fig1.png",
+    "w": 1462,
+    "h": 1248
+   },
+   {
+    "n": 2,
+    "page": 4,
+    "src": "figs/arxiv-2604-15483/fig2.png",
+    "w": 1462,
+    "h": 841
+   },
+   {
+    "n": 3,
+    "page": 6,
+    "src": "figs/arxiv-2604-15483/fig3.png",
+    "w": 1462,
+    "h": 915
+   },
+   {
+    "n": 4,
+    "page": 7,
+    "src": "figs/arxiv-2604-15483/fig4.png",
+    "w": 736,
+    "h": 627
+   },
+   {
+    "n": 5,
+    "page": 8,
+    "src": "figs/arxiv-2604-15483/fig5.png",
+    "w": 1462,
+    "h": 702
+   },
+   {
+    "n": 6,
+    "page": 9,
+    "src": "figs/arxiv-2604-15483/fig6.png",
+    "w": 1462,
+    "h": 1127
+   },
+   {
+    "n": 7,
+    "page": 9,
+    "src": "figs/arxiv-2604-15483/fig7.png",
+    "w": 1462,
+    "h": 1634
+   },
+   {
+    "n": 8,
+    "page": 10,
+    "src": "figs/arxiv-2604-15483/fig8.png",
+    "w": 721,
+    "h": 325
+   },
+   {
+    "n": 9,
+    "page": 11,
+    "src": "figs/arxiv-2604-15483/fig9.png",
+    "w": 1462,
+    "h": 571
+   },
+   {
+    "n": 10,
+    "page": 11,
+    "src": "figs/arxiv-2604-15483/fig10.png",
+    "w": 1451,
+    "h": 1158
+   },
+   {
+    "n": 11,
+    "page": 11,
+    "src": "figs/arxiv-2604-15483/fig11.png",
+    "w": 1451,
+    "h": 1639
+   },
+   {
+    "n": 12,
+    "page": 12,
+    "src": "figs/arxiv-2604-15483/fig12.png",
+    "w": 1462,
+    "h": 837
+   },
+   {
+    "n": 13,
+    "page": 12,
+    "src": "figs/arxiv-2604-15483/fig13.png",
+    "w": 1462,
+    "h": 1589
+   },
+   {
+    "n": 14,
+    "page": 13,
+    "src": "figs/arxiv-2604-15483/fig14.png",
+    "w": 1462,
+    "h": 325
+   },
+   {
+    "n": 15,
+    "page": 13,
+    "src": "figs/arxiv-2604-15483/fig15.png",
+    "w": 1451,
+    "h": 973
+   },
+   {
+    "n": 16,
+    "page": 13,
+    "src": "figs/arxiv-2604-15483/fig16.png",
+    "w": 1451,
+    "h": 1472
+   },
+   {
+    "n": 17,
+    "page": 13,
+    "src": "figs/arxiv-2604-15483/fig17.png",
+    "w": 1446,
+    "h": 862
+   },
+   {
+    "n": 18,
+    "page": 14,
+    "src": "figs/arxiv-2604-15483/fig18.png",
+    "w": 1462,
+    "h": 516
+   },
+   {
+    "n": 19,
+    "page": 22,
+    "src": "figs/arxiv-2604-15483/fig19.png",
+    "w": 721,
+    "h": 1083
+   },
+   {
+    "n": 20,
+    "page": 23,
+    "src": "figs/arxiv-2604-15483/fig20.png",
+    "w": 1462,
+    "h": 552
+   },
+   {
+    "n": 21,
+    "page": 23,
+    "src": "figs/arxiv-2604-15483/fig21.png",
+    "w": 1303,
+    "h": 1124
+   },
+   {
+    "n": 22,
+    "page": 23,
+    "src": "figs/arxiv-2604-15483/fig22.png",
+    "w": 1303,
+    "h": 1528
+   }
+  ]
+ },
+ "arxiv-2604-23073": {
+  "title": "RL Token: Bootstrapping Online RL with Vision-Language-Action Models",
+  "abstract": "—Vision-language-action (VLA) models can learn to perform diverse manipulation skills “out of the box,” but achieving the precision and speed that real-world tasks demand requires further fine-tuning – for example, via reinforcement learning (RL). We introduce a lightweight method that enables sampleefficient online RL fine-tuning of pretrained VLAs using just a few hours of real-world practice. We (1) adapt the VLA to expose an “RL token,” a compact readout representation that preserves task-relevant pretrained knowledge while serving as an efficient interface for online RL, and (2) train a small actor-critic head on this RL token to refine the actions, while anchoring the learned policy to the VLA. Online RL with the RL token (RLT) makes it possible to fine-tune even large VLAs with RL quickly and efficiently. Across four real-robot tasks (screw installation, zip tie fastening, charger insertion, and Ethernet insertion) RLT improves the speed on the hardest part of the task by up to 3× and raises success rates significantly within minutes to a few hours of practice. It can even surpass the speed of human teleoperation on some of the tasks. Sample-efficient fine-tuning of VLAs, however, presents major challenges. On one hand, conventional methods for RL training of foundation models [1–3] rely on large-scale data and can be inefficient for rapid online adaptation. On the other hand, data-efficient real-world RL methods [4, 5] typically train much smaller models, which can improve within hours but sacrifice the generalization capabilities of the VLA. The central question, then, is how to leverage the VLA’s generalization while achieving the speed and sample efficiency of lightweight online RL. We introduce a practical recipe that bootstraps fast online reinforcement learning with representations obtained from a pretrained VLA policy. Our key idea is to adapt the VLA so that it exposes a compact interface that can be used for sampleefficient online RL. We achieve this by training the VLA to expose an RL token, a compressed representation that makes task-relevant pretrained knowledge accessible to a lightweight online RL policy. Running RL with this RL token (RLT) creates a simple division of labor: the frozen VLA provides broad perceptual understanding and action recommendations, while the lightweight actor and critic adapt the policy to succeed at the hardest parts of a task online. To make this I. INTRODUCTION General-purpose vision-language-action (VLA) models can learn a wide range of diverse manipulation skills from data. Yet they often struggle in the last millimeter of execution: motions can be slow, successful completion may require pauses and retries, and small errors at critical stages of precise tasks can compound into failure. A natural way to address this challenge is to fine-tune VLAs with reinforcement learning (RL). By practicing on the target task, RL can improve precisely the stages of the task that are most critical for success, which are",
+  "figure": "figs/arxiv-2604-23073.png",
+  "figure_page": 1,
+  "figures": [
+   {
+    "n": 1,
+    "page": 1,
+    "src": "figs/arxiv-2604-23073/fig1.png",
+    "w": 1462,
+    "h": 507
+   },
+   {
+    "n": 2,
+    "page": 4,
+    "src": "figs/arxiv-2604-23073/fig2.png",
+    "w": 732,
+    "h": 795
+   },
+   {
+    "n": 3,
+    "page": 6,
+    "src": "figs/arxiv-2604-23073/fig3.png",
+    "w": 1462,
+    "h": 758
+   },
+   {
+    "n": 4,
+    "page": 8,
+    "src": "figs/arxiv-2604-23073/fig4.png",
+    "w": 1462,
+    "h": 403
+   },
+   {
+    "n": 5,
+    "page": 8,
+    "src": "figs/arxiv-2604-23073/fig5.png",
+    "w": 1462,
+    "h": 829
+   },
+   {
+    "n": 6,
+    "page": 8,
+    "src": "figs/arxiv-2604-23073/fig6.png",
+    "w": 721,
+    "h": 476
+   },
+   {
+    "n": 7,
+    "page": 9,
+    "src": "figs/arxiv-2604-23073/fig7.png",
+    "w": 721,
+    "h": 530
+   },
+   {
+    "n": 8,
+    "page": 9,
+    "src": "figs/arxiv-2604-23073/fig8.png",
+    "w": 721,
+    "h": 998
+   },
+   {
+    "n": 9,
+    "page": 9,
+    "src": "figs/arxiv-2604-23073/fig9.png",
+    "w": 721,
+    "h": 455
+   }
+  ]
  }
 }
