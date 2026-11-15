@@ -7,6 +7,7 @@ build() makes the same page for any folder laid out like this one (pdfs/, figs/,
 website/papers/papers.py uses it for the papers you add yourself.
 """
 
+import base64
 import collections
 import csv
 import glob
@@ -136,6 +137,7 @@ HTML = r"""<!doctype html>
 </head>
 <body>
 <nav>
+  __LOGO__
   <select id="site" title="Go to another paper browser" style="font-weight:bold;padding:5px 8px;border:1px solid #bbb;border-radius:6px">
     <option data-file="corl2026/index.html" value="/Corl2026/">CoRL 2026</option>
     <option data-file="corl2026/robots.html" value="/Corl2026/robots.html">CoRL 2026 robots</option>
@@ -1028,8 +1030,12 @@ def build(here, title, columns, rows, add_box="", store="corl"):
                        "schedule": {k: v for k, v in load(here, "schedule.json", {"sessions": [], "order": {}, "links": {}}).items()
                                     if k in ("sessions", "order", "links")}}, ensure_ascii=False).replace("</", "<\\/")
     out = os.path.join(here, "index.html")
+    logo = ""  # the CoRL 2026 logo (corl.org), inlined so it shows locally, as a file and on GitHub Pages
+    if title.startswith("CoRL"):
+        b64 = base64.b64encode(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "corl_logo.webp"), "rb").read())
+        logo = f'<img src="data:image/webp;base64,{b64.decode()}" alt="CoRL 2026" style="height:36px;vertical-align:middle">'
     with open(out, "w") as f:
-        f.write(HTML.replace("__TITLE__", title).replace("__ADD__", add_box).replace("__DATA__", data))
+        f.write(HTML.replace("__LOGO__", logo).replace("__TITLE__", title).replace("__ADD__", add_box).replace("__DATA__", data))
     print(f"wrote {out} ({len(rows)} papers, {len(columns)} columns)")
 
 

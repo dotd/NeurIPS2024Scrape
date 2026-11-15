@@ -1,0 +1,372 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SuperMimic: Scaling Humanoid Whole-Body Control with One Differentiable World Model</title>
+<script>window.MathJax = {tex: {inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']], tags: 'ams'}};</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js"></script>
+<style>
+  body { font: 17px/1.6 Georgia, "Times New Roman", serif; max-width: 860px; margin: 0 auto; padding: 24px 20px 80px; color: #222; }
+  h1 { font-size: 1.7em; line-height: 1.25; } h2 { margin-top: 1.8em; } .src { font: 13px system-ui, sans-serif; color: #666; }
+  figure { margin: 1.5em 0; text-align: center; } figure img { max-width: 100%; }
+  figcaption { font-size: 0.9em; color: #444; text-align: left; margin-top: 6px; }
+  table { border-collapse: collapse; margin: 1em auto; font-size: 0.85em; } td, th { border: 1px solid #ccc; padding: 3px 6px; }
+  pre { background: #f6f8fa; padding: 10px; overflow-x: auto; font-size: 0.85em; } .refs { font-size: 0.85em; }
+</style></head><body>
+<p class="src">HTML version made by Claude (claude-opus-5-5) from <a href="../../pdfs/psNqjklVOK_SuperMimic%20%20Scaling%20Humanoid%20Whole-Body%20Control%20with%20One%20Differentiable%20World%20Model.pdf">the PDF</a>; check the PDF for exact wording and figures.</p>
+<h1>SuperMimic: Scaling Humanoid Whole-Body Control with One Differentiable World Model</h1>
+<p>Qiayuan Liao, Yiyang Shao<sup>∗</sup>, Junfeng Long<sup>∗</sup>, Kevin Zakka, Roberto Horowitz, Pieter Abbeel<sup>†</sup>, Koushil Sreenath<sup>†</sup></p>
+<p>UC Berkeley</p>
+<p><a href="https://supermimic.github.io">https://supermimic.github.io</a></p>
+
+<figure data-fig="1"><img src="fig1.png" alt="Figure 1: A learned differentiable world model trains a humanoid whole-body controller and reduces GPU-hours by more than 1000× versus cluster-scale model-free reinforcement learning (§4.1). Left: the policy improves through imagined rollouts of the world model. Right: 128 L40 GPUs train for 168 h in SONIC [1], against one H100 for 3 h in this work." loading="lazy"></figure>
+
+<h2>Abstract</h2>
+<p>Tracking large human-motion datasets has become the dominant route to general, expressive humanoid whole-body control, but scaling across many motions is expensive. Current pipelines use model-free reinforcement learning, either merging per-motion specialists through lossy distillation, or brute-forcing a single policy with cluster-scale compute. SuperMimic amortizes learning across all motions with one differentiable world model of their shared dynamics, fit from logged transitions of a standard rigid-body simulator. The world model and the tracking policy train together in one loop, and backpropagation-through-time over short imagined rollouts gives the policy analytic gradients. Fast imagined rollouts and analytic gradients make policy learning efficient. In 3 hours on a single GPU, SuperMimic surpasses the return of a state-of-the-art motion tracker baseline trained for 7 days on 128 GPUs. It reduces GPU-hours by more than 1000× and fails on only 25 of 129,514 benchmark motions, versus 179 failures for the baseline. After 9.8 hours on two GPUs, SuperMimic achieves zero failures. From 1 to 264 hours of motion, the world model’s prediction error stays stable, and GPU-hours to a target return grow slowly. Our policy transfers to a physical Unitree G1 across diverse and acrobatic motions. SuperMimic removes compute as the bottleneck to scaling humanoid whole-body control, making it practical to measure motion-tracking scaling laws.</p>
+<p><strong>Keywords:</strong> Humanoid Robot, Whole-Body Control, Model-Based Reinforcement Learning</p>
+
+<h2>1 Introduction</h2>
+<p>Humanoid robots hold the promise of operating in environments designed for people, but doing so requires whole-body controllers that span diverse human motion, from locomotion and dance to crouching and balance recovery. Physics-based motion imitation addresses this by training RL policies to track reference motion clips [2] drawn from large motion-capture (mocap) datasets [1]. Existing systems scale this idea either by distilling many clip-specific experts into one controller [3] or by training a generalist policy over a large motion library [1]. In both cases, a more diverse motion library produces a more capable controller. But both also become computationally expensive as motion coverage grows: the state-of-the-art tracker SONIC [1], for example, trains for ∼168 h on 128 GPUs, totaling roughly 21,000 GPU-hours. Although reference motions differ, they share the same humanoid hybrid rigid-body dynamics. Model-free RL fails to explicitly model this shared structure, instead repeatedly estimating action consequences from noisy simulator rollouts. Scaling to more motions therefore amounts to scaling up compute.</p>
+<p>SuperMimic addresses this inefficiency with a single learned, differentiable world model fit from logged simulator transitions. Backpropagation-through-time (BPTT) through short imagined rollouts provides analytic policy gradients through the learned model, allowing one dynamics model to amortize learning across the entire mocap library. Because these gradients come from the learned model rather than from differentiating the simulator, SuperMimic remains compatible with rigid-body simulators, including those with non-smooth contacts and non-differentiable implementations.</p>
+<p>On one GPU, SuperMimic surpasses the normalized return of SONIC’s released checkpoint within 3 h and reduces GPU-hours by more than 1000× (§4.1). On a 129,514-motion benchmark, SuperMimic fails on 25 motions after 3 h on one GPU and on none after 9.8 h on two GPUs, against 179 for SONIC’s released checkpoint (Appendix F). Across a 264× increase in dataset length, the world model’s prediction error stays stable and SuperMimic’s compute to a fixed return grows slowly. The learned policy transfers to a physical Unitree G1. In a preliminary study of downstream interfaces, an RL-trained velocity encoder outperforms a distillation baseline.</p>
+<p><strong>Contributions.</strong></p>
+<ul>
+<li><strong>Model-based RL (MBRL) for deployable humanoid control.</strong> We demonstrate that BPTT through a learned, differentiable world model can train whole-body tracking policies in a setting long dominated by model-free proximal policy optimization (PPO) [4], and that the resulting controller transfers to a physical Unitree G1.</li>
+<li><strong>Compute is no longer the bottleneck to scaling.</strong> SuperMimic surpasses the return of SONIC, a cluster-scale PPO pipeline, on a single GPU and reduces GPU-hours by more than 1000× (§4.1). Its training cost grows slowly as the motion library expands, making scaling humanoid whole-body control practical without huge GPU infrastructure.</li>
+<li><strong>An analysis of the ingredients behind the gains.</strong> We identify three world-model properties behind the compute reduction: prediction error that stays stable over a 264× increase in dataset length, rollouts more than 10× faster than the simulator, and analytic gradients, with which the policy reaches the best return of PPO on the world model with about 64× fewer imagined steps.</li>
+<li><strong>RL-trained downstream control beyond distillation.</strong> As a preliminary study, the same learned world model trains a downstream goal encoder on the interface’s own task reward. On velocity commands, the policy tracks more accurately with this encoder than with a distillation baseline.</li>
+</ul>
+<p class="footnote"><sup>*</sup>Equal contribution. <sup>†</sup>Equal advising.</p>
+<p>10th Conference on Robot Learning (CoRL 2026), Austin TX, USA.</p>
+
+<h2>2 Related Work</h2>
+<p><strong>Large-scale physics-based motion tracking.</strong> Physics-based motion imitation learns controllers that reproduce reference motions under contact-rich rigid-body dynamics. DeepMimic [2] demonstrated expressive character skills through model-free reinforcement learning, and PHC [11] extended this paradigm to large motion sets with robust recovery. SONIC [1] further demonstrated that scaling motion data, policy capacity, and training compute produces generalist controllers that transfer to humanoid hardware. These results establish motion tracking as a practical route to broad whole-body behavior coverage. However, training these large-scale motion trackers requires extensive simulator rollouts and substantial computation. SuperMimic addresses this bottleneck by learning a differentiable dynamics model shared across all motions, so policy improvement can exploit analytic gradients rather than model-free rollout estimates.</p>
+
+<table>
+<thead><tr><th>Method</th><th>Mimic</th><th>Latent</th><th>Downstream</th><th>Task signal</th><th>Real robot</th></tr></thead>
+<tbody>
+<tr><td>NPMP [5]</td><td>SVG(0)</td><td>BC</td><td>SVG(0)</td><td>RL</td><td>✗</td></tr>
+<tr><td>ControlVAE [6]</td><td colspan="2">MBRL</td><td>MBRL</td><td>RL</td><td>✗</td></tr>
+<tr><td>PhysicsVAE [7]</td><td>PPO</td><td>BC<sup>1</sup></td><td>PPO</td><td>RL</td><td>✗</td></tr>
+<tr><td>PULSE [8]</td><td>PPO</td><td>DAgger</td><td>PPO</td><td>RL</td><td>✗</td></tr>
+<tr><td>MaskedMimic [9]</td><td>A2C</td><td colspan="2">DAgger</td><td>Distill</td><td>✗</td></tr>
+<tr><td>BeyondMimic [3]</td><td>PPO</td><td>DAgger</td><td>CGD</td><td>Distill</td><td>✓</td></tr>
+<tr><td>SONIC [1]</td><td colspan="3">PPO</td><td>Distill<sup>2</sup></td><td>✓</td></tr>
+<tr><td>LATENT [10]</td><td>PPO</td><td>DAgger</td><td>PPO</td><td>RL</td><td>✓</td></tr>
+<tr><td><strong>SuperMimic</strong></td><td colspan="3">MBRL</td><td>Distill / RL</td><td>✓</td></tr>
+</tbody>
+<caption>Table 1: Comparison of various methods and their training strategies across different stages. The Mimic, Latent, and Downstream columns indicate the training strategy used at each stage. Task signal is what trains the downstream interface: its own task reward (RL) or a reference-tracking signal (Distill). Merged cells denote jointly trained stages, while adjacent unmerged cells indicate sequential training, with each stage trained after freezing the previous one. SVG(0): stochastic value gradients; BC: offline behavior cloning on fixed expert rollouts, as opposed to DAgger’s student rollouts; CGD: classifier guidance diffusion; A2C: advantage actor–critic; DAgger: dataset aggregation. <sup>1</sup>Behavior cloning with a one-step next-state consistency term through a frozen, learned dynamics model. <sup>2</sup>Goal encoders train jointly with the tracker on the motion-tracking reward and latent-alignment losses; no task-specific reward.</caption>
+</table>
+
+<p><strong>Learned differentiable dynamics for motion control.</strong> SuperTrack [12] optimizes motion-control policies through a learned differentiable surrogate of the simulator. ControlVAE [6] jointly learns a dynamics model, latent skill representation, and generative controller, while MoConVQ [13] extends learned-model training to discrete motion representations over tens of hours of data. SuperDyno [14] scales differentiable neural dynamics to tens of thousands of motion clips. These methods establish the effectiveness of learned dynamics and analytic policy gradients for scalable simulated-character control. SuperMimic extends this direction to single-GPU training of a large-scale humanoid tracker and to its sim-to-real deployment: its world model conditions on simulator context, while the deployed actor uses noisy proprioceptive observations and a goal input (§3.2). We evaluate how model accuracy, rollout throughput, and differentiable policy updates contribute to training efficiency, and how prediction error behaves as motion coverage grows (§4.1–4.2), and demonstrate physical deployment of the resulting controller (§4.4).</p>
+<p><strong>Model-based policy optimization and robot deployment.</strong> Dreamer [15] and DreamerV3 [16] learn latent dynamics for imagination-based actor–critic learning, while TD-MPC [17] combines short-horizon planning with terminal-value prediction. DayDreamer [18] demonstrates world-model learning directly on physical robots. SHAC [19] uses differentiable simulation for short-horizon actor–critic updates, motivating SuperMimic’s critic-bootstrapped objective. Analytic-gradient robot control can also combine a simplified differentiable surrogate with a high-fidelity forward simulator, as demonstrated for quadruped locomotion [20]. SuperMimic learns its surrogate from simulator transitions and backpropagates through short imagined rollouts, retaining compatibility with standard rigid-body simulators.</p>
+<p>RWM [21] and RWM-U [22] demonstrate that policies trained in learned neural simulators can transfer to physical robots. Both optimize policies using PPO on imagined rollouts; RWM-U additionally uses uncertainty-penalized offline optimization. SuperMimic instead optimizes the policy by differentiating the return through its learned dynamics. RWM and RWM-U pretrain the world model on trajectories from other policies. In contrast, SuperMimic fits its world model during training on data its own policy collects.</p>
+<p><strong>Reusable motion representations and downstream control.</strong> Reusable controllers connect motion tracking to downstream goal interfaces (Table 1). NPMP [5] and PhysicsVAE [7] learn latent motor representations from expert behavior; PULSE [8] and LATENT [10] use learned motion representations for downstream reinforcement learning. MaskedMimic [9] supports partial-body and multimodal goals through motion inpainting, while BeyondMimic [3] uses guided diffusion for goal following. SONIC [1] jointly trains goal encoders with its tracker using tracking rewards and latent-alignment losses. ControlVAE [6] optimizes downstream task policies through its learned model while freezing the skill controller. SuperMimic jointly trains goal-specific encoders and a shared decoder through the same dynamics model (Appendix B). Goal interfaces can optimize either a reference-tracking reward or their own task reward. Our preliminary study trains a velocity interface concurrently with the motion-tracking interface, once on each objective (§4.5).</p>
+
+<figure data-fig="2"><img src="fig2.png" alt="Figure 2: SuperMimic training loop. (1) The current policy \(\pi_\theta\) collects transitions in simulation into a fixed-size replay buffer \(\mathcal{B}\), where new transitions replace the oldest. (2) The differentiable world model is fit to \(k\)-step windows sampled from \(\mathcal{B}\) (§3.2). (3) The policy is improved by backpropagation-through-time through the frozen world model over \(H\) imagined steps; a critic \(V_\psi\), trained in the same phase, bootstraps the return beyond \(H\) (§3.3). Dashed arrows are gradients; ❄ = frozen, 🔥 = trained. Symbols: goal \(\boldsymbol{g}_t\) (e.g., reference motion), action \(\boldsymbol{a}_t\), action noise \(\boldsymbol{\epsilon}_t\), observation \(\boldsymbol{o}_t\), state \(\boldsymbol{s}\) and predicted state \(\hat{\boldsymbol{s}}\), and sim context \(\boldsymbol{\xi}\) (domain-randomization parameters). \(\mathcal{L}_{\text{WM}}\) is the world-model loss, \(\hat{\bar{\boldsymbol{o}}}_t\) the predicted noise-free observation, \(\boldsymbol{\eta}_t\) the sensor noise, \(\hat{r}_{t+1}\) the predicted reward, and \(\hat{J}(\theta)\) the policy objective." loading="lazy"></figure>
+
+<h2>3 Method</h2>
+<h3>3.1 SuperMimic training loop</h3>
+<p>SuperMimic trains one goal-conditioned whole-body controller across a multi-skill motion library and supports multiple goal interfaces. It captures the shared humanoid dynamics in a differentiable world model and improves the policy through short imagined rollouts. Training alternates between three phases in one loop (Figure 2). First, the current policy collects simulator transitions into a replay buffer. Second, we fit the differentiable world model to short replay windows. Third, the policy is improved by backpropagating an imagined return through the frozen world model, with each rollout seeded from a replay-buffer state in the Dyna style [23, 24]. The buffer, model, and policy are updated throughout training, so dynamics learning and control improve together rather than in separate stages (Algorithm A.1, Appendix D). Transitions from earlier policies remain valid for fitting the world model, because the dynamics do not depend on the policy that collected them.</p>
+<p>We denote the goal-conditioned partially observable Markov decision process (POMDP) by \(\mathcal{M}\) and use compact notation with state \(\boldsymbol{s}_t\), goal \(\boldsymbol{g}_t\), and action \(\boldsymbol{a}_t\). State \(\boldsymbol{s}_t\) gives the proprioceptive observation \(\boldsymbol{o}_t\) and the termination \(d_t\), which is 1 if \(\boldsymbol{s}_t\) is terminal. Action \(\boldsymbol{a}_t\) in state \(\boldsymbol{s}_t\) yields the reward \(r_{t+1}\) and the next state \(\boldsymbol{s}_{t+1}\). The policy is deterministic, \(\boldsymbol{a}_t = \pi_\theta(\boldsymbol{o}_t, \boldsymbol{g}_t)\), and \(\boldsymbol{a}_t\) parameterizes a normalized joint setpoint; for motion tracking, \(\boldsymbol{g}_t\) is read from a reference motion. During data collection, the simulator executes the noisy action \(\boldsymbol{a}_t + \boldsymbol{\epsilon}_t\) with action noise \(\boldsymbol{\epsilon}_t \sim \rho_\epsilon\), and the replay buffer stores this executed noisy action. The noise widens the range of actions on which the world model is fit; it serves only the model fit and is optional. Returns use a soft survival weight, \(c_0 = 1\) and \(c_{t+1} = c_t(1-d_{t+1})\), giving \(J(\theta) = \mathbb{E}[\sum_{t\ge 0}\gamma^t c_t r_{t+1}]\) with discount \(\gamma \in [0,1)\). The simulator logs hard terminations, while the learned model predicts a termination probability \(\hat{d}_t \in [0,1]\), which keeps the survival weight differentiable in imagined rollouts. Throughout, a hat marks the world-model counterpart of a simulator quantity. We also factor the observation as \(\boldsymbol{o}_t = \bar{\boldsymbol{o}}_t + \boldsymbol{\eta}_t\), with \(\bar{\boldsymbol{o}}_t\) the noise-free observation and known observation noise \(\boldsymbol{\eta}_t \sim \rho_\eta\) sampled outside the world model. Appendix A gives the full spaces and reward.</p>
+<p>The default interface is full-reference motion tracking. Other goal interfaces, such as velocity, share the same learned dynamics and train jointly with motion tracking (Appendix B).</p>
+
+<h3>3.2 Learning a differentiable world model</h3>
+<p>The simulator’s articulated multi-rigid-body dynamics are known, but the simulator need not provide gradients, so SuperMimic learns a differentiable surrogate to obtain policy gradients: it supplies the predictions and Jacobians for the BPTT update in §3.3. The resulting analytic policy gradient is the gradient of a surrogate for the expected return in simulation. Since the simulator’s randomness has known sources, the world model stays deterministic: it conditions on the per-episode sim context \(\boldsymbol{\xi}\) (friction, calibration offsets, and torso center-of-mass) and predicts the noise-free observation \(\bar{\boldsymbol{o}}_t\).</p>
+<p>The world model contains a learned dynamics model and reward, observation, and termination heads; each head is either learned or computed analytically,</p>
+\[\hat{\boldsymbol{s}}_{t+1} = f_\omega(\hat{\boldsymbol{s}}_t, \boldsymbol{a}_t, \boldsymbol{\xi}),\qquad \hat{r}_{t+1} = r_\omega(\hat{\boldsymbol{s}}_t, \boldsymbol{a}_t, \boldsymbol{g}_t),\qquad \hat{\bar{\boldsymbol{o}}}_t = g_\omega(\hat{\boldsymbol{s}}_t, \boldsymbol{\xi}),\qquad \hat{d}_t = d_\omega(\hat{\boldsymbol{s}}_t, \boldsymbol{g}_t).\]
+<p>We fit the network weights \(\omega\) on \(k\)-step autoregressive replay windows (\(k\)=8), seeded at the logged state \(\hat{\boldsymbol{s}}_0 = \boldsymbol{s}_0\) and rolled forward on logged actions, by minimizing</p>
+\[\mathcal{L}_{\text{WM}}(\omega) = \mathbb{E}_{\mathcal{B}}\sum_{j=1}^{k}\Big[\|\hat{\boldsymbol{s}}_j - \boldsymbol{s}_j\|^2 + (\hat{r}_j - r_j)^2 + \|\hat{\bar{\boldsymbol{o}}}_j - \bar{\boldsymbol{o}}_j\|^2 + \mathrm{BCE}(\hat{d}_j, d_j)\Big], \tag{1}\]
+<p>where an analytic head has no loss term. Here \(r_j\) is the simulator reward, \(d_j \in \{0,1\}\) is the simulator termination label, and BCE is the binary cross-entropy.</p>
+
+<h3>3.3 Learning the policy through the world model</h3>
+<p>During each policy update, we hold the world-model weights \(\omega\) fixed and optimize \(\pi_\theta\) and \(V_\psi\) on imagined rollouts of \(H\)=32 steps. The critic \(V_\psi\) estimates the return beyond step \(H\), so the model must be accurate only within these \(H\) steps. This imagination horizon exceeds the \(k\)-step replay windows on which we fit the model (§3.2). In practice, the learned model remains stable over indefinitely long rollouts, because the \(k\)-step autoregressive fit trains it to correct its own prediction errors.</p>
+<p>Each imagined rollout starts from a replay-buffer state \(\boldsymbol{s}_0 \sim \rho_0\) with its recorded sim context \(\boldsymbol{\xi}\). At step \(t\), the model emits \(\hat{\bar{\boldsymbol{o}}}_t\), we re-add sensor noise, and the policy acts: \(\boldsymbol{a}_t = \pi_\theta(\hat{\bar{\boldsymbol{o}}}_t + \boldsymbol{\eta}_t, \boldsymbol{g}_t)\), \(\boldsymbol{\eta}_t \sim \rho_\eta\). The policy objective over imagined rollouts is</p>
+\[\hat{J}(\theta) = \mathbb{E}_{\boldsymbol{s}_0\sim\rho_0,\,\pi_\theta}\Big[\sum_{t=0}^{H-1}\gamma^t \hat{c}_t \hat{r}_{t+1} \;+\; \gamma^H \hat{c}_H V_\psi(\hat{\boldsymbol{s}}_H, \boldsymbol{g}_H, \boldsymbol{\xi})\Big]. \tag{2}\]
+<p>For motion tracking, the reward \(r_{t+1}\) is the BeyondMimic motion-tracking reward [3] without its self-collision penalty (Appendix A).</p>
+<p>The world model is differentiable, so BPTT computes a first-order gradient \(\nabla_\theta \hat{J}\) through the \(H\) imagined steps via the world model’s Jacobians with respect to \(\hat{\boldsymbol{s}}_t\) and \(\boldsymbol{a}_t\). In contrast, PPO treats the dynamics as a black box: it weights the score \(\nabla_\theta \log \pi_\theta\) of a stochastic policy by the advantages of sampled actions, a likelihood-ratio estimate. BPTT instead differentiates the return with respect to each action, so over short horizons its gradient has much lower variance.</p>
+<p>The critic \(V_\psi\) is fit to generalized advantage estimation returns [25] computed backward in time over the imagined transitions only,</p>
+\[\mathcal{L}_V(\psi) = \mathbb{E}\sum_{t=0}^{H-1}\big(V_t - \hat{R}_t\big)^2,\qquad \hat{R}_t = \hat{r}_{t+1} + \gamma(1-\hat{d}_{t+1})\big[(1-\lambda)V_{t+1} + \lambda \hat{R}_{t+1}\big], \tag{3}\]
+<p>with \(V_t = V_\psi(\hat{\boldsymbol{s}}_t, \boldsymbol{g}_t, \boldsymbol{\xi})\). The recursion starts from \(\hat{R}_H = V_H\), the critic’s estimate of the return beyond the horizon. The targets \(\hat{R}_t\) are computed once per rollout and remain fixed while \(\psi\) is fit.</p>
+<p>The policy and critic updates together form a short-horizon actor–critic in the spirit of SHAC [19], which backpropagates through a differentiable simulator. SuperMimic replaces SHAC’s hard episode termination with the survival weight \(\hat{c}_t\), and its critic has no exponential-moving-average target network. Prior motion-tracking controllers trained with analytic gradients often omit a critic and optimize only the \(H\)-step reward sum [12, 6]. Without a critic, training can reach a similar nominal tracking return, but this unbootstrapped objective is more myopic. The critic matters after perturbations, where recovery or balance rewards can lie beyond the imagination window (§4.3).</p>
+
+<h2>4 Experimental Results</h2>
+<p>We show that SuperMimic scales favorably relative to PPO pipelines, identify the world-model properties behind this scaling, demonstrate transfer on a real Unitree G1, and report a preliminary study of downstream goal interfaces. The simulator is MuJoCo Warp, a GPU implementation of MuJoCo [26]. All our reported costs are measured on NVIDIA H100 (80 GB SXM5) GPUs of Lambda on-demand instances. We ran several random seeds and found training very stable, which we attribute to the dense reward that motion tracking gives at every step. The figures therefore do not report seed variation. Normalized return, return for short, is the undiscounted sum of the per-step reward over the full episode, divided by the largest value this sum can take. A policy that terminates early therefore scores low.</p>
+
+<h3>4.1 SuperMimic reaches SONIC-level tracking with far fewer GPU-hours</h3>
+<p>We compare against SONIC, a published PPO pipeline trained on a 128-GPU cluster. Both methods build on the BeyondMimic motion-tracking formulation [3], making SONIC the closest available published comparison. Within 3 h on one GPU, SuperMimic surpasses the normalized return of the released SONIC checkpoint (Figure 3(a)). On a shared benchmark of 129,514 motions, it also fails on fewer motions than SONIC: 25 after 3 h on one GPU and 0 after 9.8 h on two GPUs, against 179 for SONIC’s released checkpoint (Appendix F). We state the 3 h conservatively: from then on, every checkpoint is ahead of SONIC by at least half of the gap between SONIC and SuperMimic’s best result, in both return and failed motions. SuperMimic thus uses more than 50× less wall-clock time and more than 1000× fewer GPU-hours than SONIC.</p>
+<p><strong>Compute accounting.</strong> The ratios compare SONIC’s reported 128 NVIDIA L40 GPUs for 7 days (about 21,000 GPU-hours) with 3 h on one NVIDIA H100, within which SuperMimic surpasses the return of SONIC’s released checkpoint. They are about 56× (&gt; 50×) in wall-clock time and about 7200× (&gt; 1000×) in GPU-hours. The 3 h cover the full training loop; checkpoint evaluations run after training and are not counted. SuperMimic trains on 264.56 h of motion from BONES-SEED [27], the public subset of SONIC’s data, about 2.3× less than SONIC’s 611 h. The GPU models also differ: in peak throughput, an H100 delivers 0.74× the fp32 and 5.5× the tensor-core performance of an L40; how much of that peak either run used is unknown. Nonetheless, 2.3× in data and at most 5.5× in peak GPU throughput cannot account for a 1000× gap in GPU-hours.</p>
+<p>Figure 4(a) gives a controlled comparison on LAFAN1 [28]. The baseline, PPO-Sim, is PPO trained in the simulator. PPO-Sim shares SuperMimic’s motions, observations, reward, termination, domain randomization, actor and critic network sizes, and evaluation protocol. It uses BeyondMimic’s PPO hyperparameters [3] and 8192 parallel environments per GPU, twice SuperMimic’s. PPO-Sim estimates its policy gradient from sampled simulator rollouts; SuperMimic backpropagates its imagined return through world-model rollouts. SuperMimic reaches a return of 0.82 in evaluation within 1.2 h on one GPU. Within the 18 h budget, PPO-Sim does not reach it. Its final return is 0.60 on one GPU, 0.70 on four, and 0.72 on eight, so going from four to eight GPUs barely helps.</p>
+<p>Figure 3(b, c) shows that, for SuperMimic, GPU-hours to the target return grow slowly as dataset length increases, while on the same sweep the world model’s prediction error stays stable; §4.2 traces both trends to one world model amortizing the dynamics shared across motions.</p>
+
+<figure data-fig="3"><img src="fig3.png" alt="Figure 3: SuperMimic surpasses SONIC’s tracking return with far fewer GPU-hours. (a) SuperMimic on one and two H100 GPUs surpasses the return of the released SONIC checkpoint (dashed), all three scored on the same benchmark of 129,514 motions (264 h). Two budget rows compare SuperMimic (dot) with SONIC (diamond): SuperMimic reduces wall-clock time by more than 50× and GPU-hours by more than 1000×. (b, c) On a shared dataset-length sweep, GPU-hours to target return (b) grow slowly while the world model’s 8-step prediction error (c) stays within 0.007–0.011 as the dataset grows from 1 to 264 h, consistent with one world model amortizing shared body and contact dynamics across motions. The prediction error counts the state only, is normalized by a predefined nominal error, and is measured online on policy rollouts." loading="lazy"></figure>
+
+<figure data-fig="4"><img src="fig4.png" alt="Figure 4: In controlled comparisons, SuperMimic reaches a higher return sooner than PPO-Sim, and the critic enables shorter imagination horizons. All runs use LAFAN1 (40 clips, 2.45 h). (a) SuperMimic backpropagates its imagined return through its world model on one GPU; PPO-Sim runs PPO in the simulator on 1, 4, or 8 GPUs (§4.1). Each point on a curve is a saved checkpoint scored on all 40 clips. (b, c) Final training return (b) and wall-clock hours until the training return reaches 0.82 (c) for each imagination horizon \(H\), with and without the critic. The dashed line in (a) and (b) marks this target return of 0.82. Training return is the return of training episodes. Their initial states follow return-based reset sampling (Appendix D.1) and shift during training, so training return differs from the checkpoint scores in (a). In (c), a cross marks a horizon at which return 0.82 is not reached: both variants at \(H\)=8, no critic at \(H\)=16. The shaded band marks the default \(H\)=32." loading="lazy"></figure>
+
+<h3>4.2 Properties of the learned world model</h3>
+<p>These results rest on three properties of the learned world model \(f_\omega\): its accuracy holds as the motion library grows, and its rollouts are fast and differentiable.</p>
+<p><strong>One model amortizes the motion library.</strong> In Figure 3(c), the world model’s 8-step prediction error stays between 0.007 and 0.011 as the dataset grows from 1 to 264 h. Every motion is executed by the same humanoid, so added clips supply more evidence about the shared body and contact dynamics rather than demanding new capacity. This is consistent with the slow growth of the compute needed to reach the target return (§4.1).</p>
+<p><strong>Imagination accelerates rollouts.</strong> During policy optimization, rollout speed sets the update cost. Figure 5(a) shows that the world model runs more than 10× faster than MuJoCo Warp at the batch sizes used in practice, and up to 62× at 64k parallel environments.</p>
+
+<figure data-fig="5"><img src="fig5.png" alt="Figure 5: Imagined rollouts are fast and differentiable. (a) On an H100, over the batch sizes used in practice (shaded, 2k–16k parallel environments), the world model runs more than 10× faster than MuJoCo Warp; the gap widens to 62× at 64k, where MuJoCo Warp has flattened. One step is one 50 Hz control step, which MuJoCo Warp computes as four 5 ms substeps; the world model runs at the TF32 precision used in SuperMimic’s training. (b) On walk/run/sprint motions from LAFAN1 [28], SuperMimic, trained with its actor–critic update, reaches the best training return of PPO trained on world-model rollouts (PPO-WM) with about 64× fewer imagined steps. PPO-WM runs at four batch sizes (parallel rollouts × steps per rollout); 16k×32 is the best. Each curve is a centered moving average over ±0.05 decade of imagined steps." loading="lazy"></figure>
+
+<p><strong>First-order gradients need fewer imagined steps.</strong> As a mechanism ablation, Figure 5(b) isolates the benefit of first-order policy updates: SuperMimic reaches the best PPO-WM return with about 64× fewer imagined steps, so the gain is not just rollout speed.</p>
+
+<h3>4.3 A critic enables shorter horizons and push recovery</h3>
+<p>Figure 4(b, c) sweeps \(H\) with and without the critic. Without the critic, training fails at \(H \le 16\). With it, \(H\)=16 matches the critic-free \(H\)=32, and \(H\)=32 reaches a return of 0.82 fastest. Raising \(H\) from 64 to 128 nearly triples the time to that return and lowers the final return; \(H\)=128 is the longest horizon that fits on an H100. At matched return, the critic still changes behavior. Under 0.5–4 m/s velocity pushes while holding a static T-pose in simulation, the critic policy settles within 0.5–2.4 s. The critic-free policy never settles: it keeps stumbling even at 0.5 m/s and falls at 4 m/s.</p>
+
+<h3>4.4 Real-robot transfer</h3>
+<p>One general motion tracker deploys on a real Unitree G1 without per-motion tuning (Figure 6). The four motions cover locomotion (a skipping jump), contact-rich whole-body motion with the torso and limbs on the floor (a side roll), and acrobatics (a 90° flip and an in-place 360° flip).</p>
+
+<h3>4.5 Downstream tasks: RL encoder vs. distillation baseline</h3>
+<p>SuperMimic trains downstream goal encoders jointly with the motion-tracking interface, sharing one decoder and world model (Appendix B). Our study of downstream interfaces is preliminary. We train one velocity encoder on a velocity-tracking reward through the world model. We compare it with a distillation baseline: a velocity encoder trained on the motion-tracking reward, with commands read from the reference motions. Figure 7 evaluates both on 672 step responses spanning the velocity space (Appendix G). The RL encoder has the lower steady-state error on 650 of them, and the distillation encoder on 15. Only the distillation encoder falls, on seven fast turns with almost no motion-library data.</p>
+
+<h2>5 Conclusion</h2>
+<p>SuperMimic removes compute as the bottleneck to scaling humanoid whole-body control. A single learned, differentiable world model captures the dynamics every motion shares, and backpropagation-through-time through it amortizes a whole dataset into one policy. The policy trains on a single GPU, surpasses the return of a policy trained on a 128-GPU cluster, and transfers to a real Unitree G1. Its training cost grows slowly over a controlled dataset-length sweep. The same model can train a downstream velocity interface directly on the interface’s own task reward. Measuring the scaling laws of motion tracking is now affordable, at one GPU per run.</p>
+
+<figure data-fig="6"><img src="fig6.png" alt="Figure 6: One general motion tracker, trained through the learned world model, transfers to a real Unitree G1. (a) Skipping jump, (b) side roll, (c) 90° flip, and (d) in-place 360° flip." loading="lazy"></figure>
+
+<figure data-fig="7"><img src="fig7.png" alt="Figure 7: The policy with the RL-trained velocity encoder tracks step commands more accurately than the distillation baseline. Each panel is a plane of the command space with the third component at zero, and each ring is one command. The outer disc’s area is proportional to the larger of the two policies’ relative steady-state errors in the step response to that command, and the hole’s area to the smaller one; the color marks the better policy. Details in Appendix G." loading="lazy"></figure>
+
+<h2>6 Limitations and Future Work</h2>
+<ul>
+<li><strong>Multi-interface training is understudied.</strong> We train the velocity encoder concurrently with the motion tracker, but the velocity-tracking reward updates only the velocity encoder and not the shared decoder (Appendix B). Concurrent training is therefore the same as training the velocity encoder after the motion tracker, and might not be necessary. Whether concurrent training helps once the velocity-tracking reward also updates the decoder is untested.</li>
+<li><strong>Simulator-only dynamics.</strong> The world model learns only from simulator transitions. Real-robot data could refine it, and its differentiability could support system identification.</li>
+<li><strong>No terrain or object interaction.</strong> SuperMimic trains only on flat ground. Extending it to terrain and object interaction is ongoing work.</li>
+</ul>
+
+<h2>Acknowledgments</h2>
+<p>We thank Bike Zhang, Sangli Teng, Nima Rahmanian, and Songbo Hu for helpful discussions and help with the experiments. This work was supported in part by Komatsu, the BAIR Center for Humanoid Intelligence, Apple, and the RAI Institute. We thank Lambda for sponsoring compute for this project. Motion Data by Bones Studio (<a href="https://bones.studio/">https://bones.studio/</a>). Pieter Abbeel and Koushil Sreenath hold concurrent appointments as Professors at UC Berkeley and as Amazon Scholars. This paper describes work performed at UC Berkeley and is not associated with Amazon.</p>
+
+<h2>References</h2>
+<ol class="refs">
+<li>Z. Luo, Y. Yuan, T. Wang, C. Li, F. Castañeda, S. Chen, Z.-A. Cao, J. Li, D. Minor, Q. Ben, J. Park, D. Sami, Z. Wang, X. Da, R. Ding, C. Hogg, L. Song, E. Lim, E. Jeong, T. He, H. Xue, W. Xiao, S. Yuen, J. Kautz, Y. Chang, U. Iqbal, L. Fan, and Y. Zhu. SONIC: Supersizing motion tracking for natural humanoid whole-body control. <em>Science Robotics</em>, 11(117):eaed4592, 2026. doi:10.1126/scirobotics.aed4592.</li>
+<li>X. B. Peng, P. Abbeel, S. Levine, and M. van de Panne. DeepMimic: Example-guided deep reinforcement learning of physics-based character skills. <em>ACM Transactions on Graphics</em>, 37(4):143:1–143:14, 2018. doi:10.1145/3197517.3201311.</li>
+<li>Q. Liao, T. E. Truong, X. Huang, Y. Gao, G. Tevet, K. Sreenath, and C. K. Liu. BeyondMimic: From motion tracking to versatile humanoid control via guided diffusion. <em>Science Robotics</em>, 11(117):eadx8924, 2026. doi:10.1126/scirobotics.adx8924.</li>
+<li>J. Schulman, F. Wolski, P. Dhariwal, A. Radford, and O. Klimov. Proximal policy optimization algorithms. <em>arXiv preprint arXiv:1707.06347</em>, 2017. URL https://arxiv.org/abs/1707.06347.</li>
+<li>J. Merel, L. Hasenclever, A. Galashov, A. Ahuja, V. Pham, G. Wayne, Y. W. Teh, and N. Heess. Neural probabilistic motor primitives for humanoid control. In <em>International Conference on Learning Representations</em>, 2019. URL https://openreview.net/forum?id=BJl6TjRcY7.</li>
+<li>H. Yao, Z. Song, B. Chen, and L. Liu. ControlVAE: Model-based learning of generative controllers for physics-based characters. <em>ACM Transactions on Graphics (TOG)</em>, 41(6):1–16, 2022. doi:10.1145/3550454.3555434.</li>
+<li>J. Won, D. Gopinath, and J. Hodgins. Physics-based character controllers using conditional VAEs. <em>ACM Transactions on Graphics (TOG)</em>, 41(4):1–12, 2022. doi:10.1145/3528223.3530067.</li>
+<li>Z. Luo, J. Cao, J. Merel, A. Winkler, J. Huang, K. Kitani, and W. Xu. Universal humanoid motion representations for physics-based control. In <em>International Conference on Learning Representations</em>, volume 2024, pages 56766–56782, 2024. URL https://proceedings.iclr.cc/paper_files/paper/2024/hash/fb19caf91f4966e426026685028cb73a-Abstract-Conference.html.</li>
+<li>C. Tessler, Y. Guo, O. Nabati, G. Chechik, and X. B. Peng. MaskedMimic: Unified physics-based character control through masked motion inpainting. <em>ACM Transactions On Graphics (TOG)</em>, 43(6):1–21, 2024. doi:10.1145/3687951.</li>
+<li>Z. Zhang, H. Lu, Y. Lian, Z. Chen, Y. Liu, C. Lin, H. Xue, Z. Zeng, Z. Qi, S. Zheng, Q. Luan, J. Wang, J. Xing, H. Wang, and L. Yi. Learning athletic humanoid tennis skills from imperfect human motion data. In <em>Proceedings of the IEEE/RSJ International Conference on Intelligent Robots and Systems (IROS)</em>, 2026. URL https://arxiv.org/abs/2603.12686.</li>
+<li>Z. Luo, J. Cao, A. Winkler, K. Kitani, and W. Xu. Perpetual humanoid control for real-time simulated avatars. In <em>Proceedings of the IEEE/CVF International Conference on Computer Vision</em>, pages 10895–10904, 2023. URL https://openaccess.thecvf.com/content/ICCV2023/html/Luo_Perpetual_Humanoid_Control_for_Real-time_Simulated_Avatars_ICCV_2023_paper.html.</li>
+<li>L. Fussell, K. Bergamin, and D. Holden. SuperTrack: Motion tracking for physically simulated characters using supervised learning. <em>ACM Transactions on Graphics (TOG)</em>, 40(6):1–13, 2021. doi:10.1145/3478513.3480527.</li>
+<li>H. Yao, Z. Song, Y. Zhou, T. Ao, B. Chen, and L. Liu. MoConVQ: Unified physics-based motion control via scalable discrete representations. <em>ACM Transactions on Graphics (TOG)</em>, 43(4):1–21, 2024. doi:10.1145/3658137.</li>
+<li>Y. Lei, Z. Luo, T. He, J. Cao, G. Shi, and K. Kitani. Scalable humanoid whole-body control via differentiable neural network dynamics. In <em>ICLR 2025 Workshop on World Models: Understanding, Modelling and Scaling</em>, 2025. URL https://openreview.net/pdf/b3031990328dd52267a571b265c15328bf6d6120.pdf.</li>
+<li>D. Hafner, T. Lillicrap, J. Ba, and M. Norouzi. Dream to control: Learning behaviors by latent imagination. In <em>International Conference on Learning Representations</em>, 2020. URL https://openreview.net/forum?id=S1lOTC4tDS.</li>
+<li>D. Hafner, J. Pasukonis, J. Ba, and T. Lillicrap. Mastering diverse control tasks through world models. <em>Nature</em>, 640(8059):647–653, 2025. doi:10.1038/s41586-025-08744-2.</li>
+<li>N. Hansen, X. Wang, and H. Su. Temporal difference learning for model predictive control. In K. Chaudhuri, S. Jegelka, L. Song, C. Szepesvari, G. Niu, and S. Sabato, editors, <em>Proceedings of the 39th International Conference on Machine Learning</em>, volume 162 of <em>Proceedings of Machine Learning Research</em>, pages 8387–8406. PMLR, 17–23 Jul 2022. URL https://proceedings.mlr.press/v162/hansen22a.html.</li>
+<li>P. Wu, A. Escontrela, D. Hafner, K. Goldberg, and P. Abbeel. DayDreamer: World models for physical robot learning. In <em>Proceedings of The 6th Conference on Robot Learning</em>, volume 205 of <em>Proceedings of Machine Learning Research</em>, pages 2226–2240. PMLR, 2023. URL https://proceedings.mlr.press/v205/wu23c.html.</li>
+<li>J. Xu, V. Makoviychuk, Y. Narang, F. Ramos, W. Matusik, A. Garg, and M. Macklin. Accelerated policy learning with parallel differentiable simulation. In <em>International Conference on Learning Representations</em>, 2022. URL https://openreview.net/forum?id=ZSKRQMvttc.</li>
+<li>Y. Song, S. Kim, and D. Scaramuzza. Learning quadruped locomotion using differentiable simulation. In <em>Proceedings of The 8th Conference on Robot Learning</em>, volume 270 of <em>Proceedings of Machine Learning Research</em>, pages 258–271. PMLR, 2025. URL https://proceedings.mlr.press/v270/song25a.html.</li>
+<li>C. Li, A. Krause, and M. Hutter. Robotic world model: A neural network simulator for robust policy optimization in robotics. <em>arXiv preprint arXiv:2501.10100</em>, 2025. URL https://arxiv.org/abs/2501.10100. Presented at the NeurIPS 2025 Workshop on Embodied World Models for Decision Making.</li>
+<li>C. Li, A. Krause, and M. Hutter. Uncertainty-aware robotic world model makes offline model-based reinforcement learning work on real robots. <em>arXiv preprint arXiv:2504.16680</em>, 2025. URL https://arxiv.org/abs/2504.16680. Presented at the 2nd Workshop on World Models at ICLR 2026.</li>
+<li>R. S. Sutton. Dyna, an integrated architecture for learning, planning, and reacting. <em>ACM SIGART Bulletin</em>, 2(4):160–163, 1991. doi:10.1145/122344.122377.</li>
+<li>M. Janner, J. Fu, M. Zhang, and S. Levine. When to trust your model: Model-based policy optimization. In <em>Advances in Neural Information Processing Systems</em>, volume 32, 2019. URL https://papers.nips.cc/paper_files/paper/2019/hash/5faf461eff3099671ad63c6f3f094f7f-Abstract.html.</li>
+<li>J. Schulman, P. Moritz, S. Levine, M. I. Jordan, and P. Abbeel. High-dimensional continuous control using generalized advantage estimation. In <em>International Conference on Learning Representations</em>, 2016. URL https://arxiv.org/abs/1506.02438.</li>
+<li>E. Todorov, T. Erez, and Y. Tassa. MuJoCo: A physics engine for model-based control. In <em>IEEE/RSJ International Conference on Intelligent Robots and Systems</em>, pages 5026–5033, 2012.</li>
+<li>Bones Studio. BONES-SEED: Skeletal everyday embodiment dataset, 2026. URL https://huggingface.co/datasets/bones-studio/seed.</li>
+<li>F. G. Harvey, M. Yurick, D. Nowrouzezahrai, and C. Pal. Robust motion in-betweening. <em>ACM Transactions on Graphics (Proceedings of ACM SIGGRAPH)</em>, 39(4):60:1–60:12, 2020. doi:10.1145/3386569.3392480.</li>
+</ol>
+
+<h2>A Instantiation: observation, action, reward, and sim context</h2>
+<p>This appendix instantiates the shared spaces of the POMDP of §3.1. The motion-tracking interface follows the BeyondMimic formulation [3]; the changes we make are noted inline.</p>
+<p><strong>Observation.</strong> The proprioceptive observation \(\boldsymbol{o}_t\) comprises the joint positions relative to the default pose \(\boldsymbol{q}-\boldsymbol{q}^0\), the joint velocities \(\dot{\boldsymbol{q}}\), the base angular velocity from the inertial measurement unit (IMU), the projected gravity in the base frame, and the previous action \(\boldsymbol{a}_{t-1}\) (Table A.1); the policy receives the last 10 observations.</p>
+<table>
+<thead><tr><th>Observation Term</th><th>Dim.</th><th>Noise \(\boldsymbol{\eta}_t\)</th><th>Unit</th></tr></thead>
+<tbody>
+<tr><td>Joint positions \(\boldsymbol{q}-\boldsymbol{q}^0\)</td><td>29</td><td>\(\mathcal{U}[-0.01, 0.01]\)</td><td>rad</td></tr>
+<tr><td>Joint velocities \(\dot{\boldsymbol{q}}\)</td><td>29</td><td>\(\mathcal{U}[-0.5, 0.5]\)</td><td>rad/s</td></tr>
+<tr><td>Base angular velocity (IMU)</td><td>3</td><td>\(\mathcal{U}[-0.2, 0.2]\)</td><td>rad/s</td></tr>
+<tr><td>Projected gravity</td><td>3</td><td>\(\mathcal{U}[-0.05, 0.05]\)</td><td>–</td></tr>
+<tr><td>Previous action \(\boldsymbol{a}_{t-1}\)</td><td>29</td><td>–</td><td>–</td></tr>
+</tbody>
+<caption>Table A.1: Proprioceptive observation \(\boldsymbol{o}_t\). The noise column gives the per-dimension sensor noise \(\boldsymbol{\eta}_t \sim \rho_\eta\).</caption>
+</table>
+<p><strong>Goal.</strong> For the motion-tracking interface, the goal \(\boldsymbol{g}_t\) is read from the reference motion. Compared with BeyondMimic [3], we condition the encoder on a \(K = 10\) future reference sequence rather than a single-frame target. Other goal interfaces replace \(\boldsymbol{g}_t\) with their corresponding command representation, such as target velocity commands (Appendix B).</p>
+<p><strong>Action.</strong> The action \(\boldsymbol{a}_t\) maps to a joint setpoint \(\boldsymbol{q}^{\text{sp}} = \boldsymbol{\alpha}\,\boldsymbol{a}_t + \boldsymbol{q}^0\) about the default pose \(\boldsymbol{q}^0\). Following BeyondMimic, the low PD gains make this setpoint a proxy for joint torque rather than a desired position.</p>
+<p><strong>Reward.</strong> We use BeyondMimic’s motion-tracking reward (Table A.2), removing its self-collision penalty. That penalty guards against reward hacking by a stochastic policy. When the reference brings two bodies close without contact, pressing them together suppresses the action noise and raises the velocity-tracking reward. Our policy is deterministic in imagined rollouts (§3.3), so the exploit has no payoff and the term is unnecessary. The joint-limit penalty is lowered from −10 to −2.</p>
+<p><strong>Termination.</strong> An episode terminates when the root body deviates from the reference beyond a height or tilt threshold (\(|e_{p,z}| &gt; 0.25\) m or \(e_{\text{tilt}} &gt; 0.8\)). The tilt error \(e_{\text{tilt}}\) is the absolute difference between the \(z\)-components of the gravity direction expressed in the reference and robot root (pelvis) frames. For an upright reference, \(e_{\text{tilt}}\) reaches 0.8 at about 78° of tilt. Unlike BeyondMimic, we do not terminate on end-effector deviation.</p>
+<p><strong>Sim context and domain randomization.</strong> The per-episode sim context \(\boldsymbol{\xi}\) collects the domain-randomization parameters fed to the world model (§3.2); Table A.3 lists them. We omit BeyondMimic’s root-velocity perturbations: such pushes inject state discontinuities that the deterministic world model cannot capture, and we find randomization over the physical parameters alone suffices for transfer to hardware.</p>
+
+<table>
+<thead><tr><th>Reward Term</th><th>Equation</th><th>Weight</th></tr></thead>
+<tbody>
+<tr><td colspan="3"><em>Task (tracking)</em></td></tr>
+<tr><td>Body Position</td><td>\(\exp\Big(-\big(\frac{1}{|\mathcal{T}|}\sum_{b\in\mathcal{T}}\|\mathbf{p}^{\text{des}}_b - \mathbf{p}_b\|^2\big)/0.3^2\Big)\)</td><td>1.0</td></tr>
+<tr><td>Body Orientation</td><td>\(\exp\Big(-\big(\frac{1}{|\mathcal{T}|}\sum_{b\in\mathcal{T}}\|\log(R^{\text{des}}_b R_b^\top)\|^2\big)/0.4^2\Big)\)</td><td>1.0</td></tr>
+<tr><td>Body Linear velocity</td><td>\(\exp\Big(-\big(\frac{1}{|\mathcal{T}|}\sum_{b\in\mathcal{T}}\|\mathbf{v}^{\text{des}}_b - \mathbf{v}_b\|^2\big)/1.0^2\Big)\)</td><td>1.0</td></tr>
+<tr><td>Body Angular velocity</td><td>\(\exp\Big(-\big(\frac{1}{|\mathcal{T}|}\sum_{b\in\mathcal{T}}\|\boldsymbol{\omega}^{\text{des}}_b - \boldsymbol{\omega}_b\|^2\big)/3.14^2\Big)\)</td><td>1.0</td></tr>
+<tr><td>Root Position</td><td>\(\exp\Big(-\|\mathbf{p}^{\text{des}}_{\text{root}} - \mathbf{p}_{\text{root}}\|^2/0.3^2\Big)\)</td><td>0.5</td></tr>
+<tr><td>Root Orientation</td><td>\(\exp\Big(-\|\log(R^{\text{des}}_{\text{root}} R_{\text{root}}^\top)\|^2/0.4^2\Big)\)</td><td>0.5</td></tr>
+<tr><td colspan="3"><em>Regularization</em></td></tr>
+<tr><td>Action smoothness</td><td>\(\|\mathbf{a}_t - \mathbf{a}_{t-1}\|^2\)</td><td>−0.1</td></tr>
+<tr><td>Joint limit</td><td>\(\sum_j\big[\max(0, q_j - q_j^{\max}) + \max(0, q_j^{\min} - q_j)\big]\)</td><td>−2</td></tr>
+</tbody>
+<caption>Table A.2: Motion-tracking interface reward, following BeyondMimic [3] with the self-collision penalty removed and the joint-limit weight lowered from −10 to −2 (§3.3). \(\mathcal{T}\) is the set of tracked bodies.</caption>
+</table>
+
+<table>
+<thead><tr><th>Domain Randomization</th><th>Sampling Distribution</th></tr></thead>
+<tbody>
+<tr><td>Friction coefficients</td><td>\(\mu \sim \mathcal{U}[0.3, 1.2]\)</td></tr>
+<tr><td>Joint calibration offsets [rad]</td><td>\(\Delta q^0_j \sim \mathcal{U}[-0.01, 0.01]\)</td></tr>
+<tr><td>Torso’s center-of-mass offset [m]</td><td>\(\Delta x\sim\mathcal{U}[-0.025, 0.025]\), \(\Delta y\sim\mathcal{U}[-0.05, 0.05]\), \(\Delta z\sim\mathcal{U}[-0.05, 0.05]\)</td></tr>
+</tbody>
+<caption>Table A.3: Domain-randomization parameters that make up the sim context \(\boldsymbol{\xi}\), following BeyondMimic [3] with the root-velocity perturbations removed. (\(\mathcal{U}[\cdot]\): uniform distribution.)</caption>
+</table>
+
+<h2>B Joint training across goal interfaces</h2>
+<p>In §3, the goal \(\boldsymbol{g}_t\) is read from a full reference motion. Downstream goal interfaces specify the motion only in part or in another form. The same dynamics model can train several goal interfaces because the body physics is shared. We instantiate one POMDP \(\mathcal{M}_i\) per goal interface (for example, a full-reference motion target, a velocity command, end-effector poses, or an SMPL body-pose target), each with its own goal space \(\mathcal{G}_i\), reward \(r_i\), and termination \(d_i\), and train each with its own critic \(V_{\psi_i}\). A single policy network uses per-interface goal encoders \(\mathrm{enc}_{\theta,i}\) and a shared decoder \(\mathrm{dec}_\theta\),</p>
+\[\boldsymbol{z} = \mathrm{enc}_{\theta,i}(\boldsymbol{g}) \in \mathcal{Z},\qquad \boldsymbol{a} = \mathrm{dec}_\theta(\boldsymbol{z}, \boldsymbol{o}),\qquad \boldsymbol{g} \in \mathcal{G}_i, \tag{A.1}\]
+<p>and training optimizes the lifted objective \(\max_\theta \mathbb{E}_{i\sim p(\mathcal{I})}[\hat{J}_i(\theta)]\), where \(p(\mathcal{I})\) is a distribution over the set \(\mathcal{I}\) of goal interfaces. Each interface \(i\) thus has its own policy \(\boldsymbol{a} = \pi_i(\boldsymbol{o}, \boldsymbol{g}) := \mathrm{dec}_\theta(\mathrm{enc}_{\theta,i}(\boldsymbol{g}), \boldsymbol{o})\); the velocity encoder also receives a feature of the observation history (Table A.4). Each \(\hat{J}_i\) is the objective of Eq. 2 with \(\pi_i\) in place of \(\pi_\theta\), the reward and termination of \(\mathcal{M}_i\), and the critic \(V_{\psi_i}\). Every interface trains through the same dynamics model \(f_\omega\), which is not retrained per interface.</p>
+<p>A downstream interface is trained by distillation or by RL, depending on its reward. Distillation uses the motion-tracking reward (§3.3), with the command read from the reference motion. The reward gradient then trains that interface to reproduce the reference motion from this command. RL optimizes the interface’s own task reward, such as velocity tracking, directly through the world model. On a downstream interface’s rollouts, the return gradient passes through the shared decoder to that interface’s encoder, with a stop-gradient on the decoder’s weights; the decoder is still trained by the motion-tracking objective. The RL-trained velocity encoder of §4.5 also has a latent-alignment loss toward the motion encoder’s latent on rollouts with reference commands (Appendix G).</p>
+
+<h2>C Network architectures</h2>
+<p>Table A.4 lists the world-model dynamics network of §3.2 and the policy and critic networks of Appendix B.</p>
+<table>
+<thead><tr><th>Network</th><th>Input</th><th>Output</th><th>Architecture</th></tr></thead>
+<tbody>
+<tr><td>Dynamics \(f_\omega\)</td><td>\(\hat{\boldsymbol{s}}_t, \boldsymbol{a}_t, \boldsymbol{\xi}\)</td><td>\(\hat{\boldsymbol{s}}_{t+1}\)</td><td>MLP (2048, 2048, 2048)</td></tr>
+<tr><td>Motion encoder \(\mathrm{enc}_{\theta,\text{motion}}\)</td><td>\(K\)=10 future reference frames</td><td>\(\boldsymbol{z}\)</td><td>MLP (2048, 1024, 512, 256)</td></tr>
+<tr><td>Velocity encoder \(\mathrm{enc}_{\theta,\text{vel}}\) (Appendix G)</td><td>normalized command \((v_x, v_y, \omega_z)\), feature of the last 10 frames of \(\boldsymbol{o}\)</td><td>\(\boldsymbol{z}\)</td><td>MLP (256, 256)</td></tr>
+<tr><td>Shared decoder \(\mathrm{dec}_\theta\)</td><td>\(\boldsymbol{z}\), last 10 frames of \(\boldsymbol{o}\)</td><td>\(\boldsymbol{a}_t\)</td><td>MLP (2048, 1024, 512, 256)</td></tr>
+<tr><td>Critic \(V_{\psi_i}\)</td><td>\(\hat{\boldsymbol{s}}_t, \boldsymbol{g}_t, \boldsymbol{\xi}\)</td><td>scalar</td><td>MLP (256, 128); one critic per interface</td></tr>
+</tbody>
+<caption>Table A.4: World-model, policy, and critic networks. MLP: multilayer perceptron, listed by hidden widths. The latent \(\boldsymbol{z}\) is 32-dimensional and bounded by tanh.</caption>
+</table>
+
+<p><strong>Algorithm A.1 SuperMimic training.</strong> Both \(\omega\) and \(\theta\) update every iteration; \(\omega\) is held fixed (stop-gradient) only inside the policy’s backward pass. For a downstream interface, \(\hat{J}_i\) updates only its encoder \(\mathrm{enc}_{\theta,i}\).</p>
+<pre>
+Require: world model f_ω; policy π_θ shared across interfaces {M_i}_{i∈I}; replay buffer B
+1: for each iteration do
+2:   ▷ Collect. Roll out π_θ with action noise in simulation; push transitions to B, replacing the oldest
+3:   Draw reset start points by return-based sampling                         ▷ Appendix D.1
+4:   ▷ Fit world model. Sample a logged k-step window from B, roll f_ω out autoregressively on the logged
+     actions, and step ω ← ω − α_ω ∇_ω L_WM                                    ▷ Eq. 1
+5:   ▷ Improve policy. Sample an interface i ∼ p(I) and a start state from B
+6:   Imagine H steps on-policy through the fixed f_ω: ŝ_{t+1} = f_ω(ŝ_t, π_i(ô̄_t + η_t, g_t), ξ)
+7:   Step θ ← θ + α_θ ∇_θ Ĵ_i                  ▷ Eq. 2; analytic gradients through f_ω; critic V_ψi
+8:   Fit the critic V_ψi to the GAE targets of the imagined rollout             ▷ Eq. 3
+9: end for
+</pre>
+
+<h2>D Training loop and hyperparameters</h2>
+<h3>D.1 Algorithm</h3>
+<p>Algorithm A.1 summarizes the SuperMimic training loop of §3.1; its three steps correspond one-to-one to the panels of Figure 2.</p>
+<p><strong>Return-based reset sampling.</strong> Simulator episodes reset to points of the motion library, favoring those where the policy currently earns low return. The motion timeline is divided into 1 s bins, and each bin \(b\) keeps a running estimate \(G_b\) of the discounted return from it, updated on the policy’s own rollouts. Resets mix three distributions: 50% uniform over bins, 40% from \(\mathrm{softmax}_b(-25\,G_b/G_{\max})\), where \(G_{\max}\) is the largest attainable discounted return, and 10% in proportion to each bin’s past softmax weight, so a hard motion keeps some practice after it is learned.</p>
+<h3>D.2 Hyperparameters</h3>
+<p>Table A.5 lists the hyperparameters. Where they differ, values are given for the one-GPU and the two-GPU run of Table A.8.</p>
+<table>
+<thead><tr><th>Hyperparameter</th><th>Symbol</th><th>Value</th></tr></thead>
+<tbody>
+<tr><td colspan="3"><em>World model</em></td></tr>
+<tr><td>Window length</td><td>\(k\)</td><td>8</td></tr>
+<tr><td>Optimizer</td><td></td><td>Adam</td></tr>
+<tr><td>Learning rate</td><td>\(\alpha_\omega\)</td><td>1 GPU: \(2\times10^{-4}\); 2 GPUs: \(\sqrt{2}\times 2\times10^{-4}\)</td></tr>
+<tr><td>Batch size</td><td></td><td>10 batches of 2048 windows per update</td></tr>
+<tr><td>Gradient clipping</td><td></td><td>global norm 1.0</td></tr>
+<tr><td colspan="3"><em>Imagination and policy</em></td></tr>
+<tr><td>Imagination horizon</td><td>\(H\)</td><td>32</td></tr>
+<tr><td>Optimizer</td><td></td><td>Adam, \(\beta = (0.9, 0.95)\)</td></tr>
+<tr><td>Learning rate</td><td>\(\alpha_\theta\)</td><td>same as \(\alpha_\omega\)</td></tr>
+<tr><td>Batch size</td><td></td><td>4096 imagined rollouts per update</td></tr>
+<tr><td>Gradient clipping</td><td></td><td>global norm 1.0, then element-wise 0.1</td></tr>
+<tr><td>Discount</td><td>\(\gamma\)</td><td>0.99</td></tr>
+<tr><td>Sensor noise</td><td>\(\boldsymbol{\eta}_t\sim\rho_\eta\)</td><td>Table A.1</td></tr>
+<tr><td colspan="3"><em>Critic</em></td></tr>
+<tr><td>GAE parameter</td><td>\(\lambda\)</td><td>0.95</td></tr>
+<tr><td>Optimizer</td><td></td><td>Adam</td></tr>
+<tr><td>Learning rate</td><td></td><td>same as \(\alpha_\omega\)</td></tr>
+<tr><td>Gradient clipping</td><td></td><td>global norm 1.0</td></tr>
+<tr><td>Critic epochs per update</td><td></td><td>5, each over 4 shuffled minibatches</td></tr>
+<tr><td colspan="3"><em>Data collection</em></td></tr>
+<tr><td>Simulator environments per GPU</td><td></td><td>4096</td></tr>
+<tr><td>Action noise</td><td>\(\boldsymbol{\epsilon}_t\sim\rho_\epsilon\)</td><td>\(\mathcal{N}(0, 0.1^2)\) per action dimension</td></tr>
+<tr><td>Replay-buffer size</td><td></td><td>1000 steps per environment</td></tr>
+<tr><td colspan="3"><em>Schedule</em></td></tr>
+<tr><td>Update-to-data ratio</td><td></td><td>0.4</td></tr>
+<tr><td>Policy updates per world-model update</td><td></td><td>1</td></tr>
+<tr><td>Learning-rate schedule</td><td></td><td>cosine decay to 0.03× over 250,000 iterations, then constant</td></tr>
+<tr><td>Training length</td><td></td><td>320,000 iterations</td></tr>
+<tr><td>Multi-GPU</td><td></td><td>data parallel; gradients averaged across GPUs</td></tr>
+</tbody>
+<caption>Table A.5: SuperMimic hyperparameters.</caption>
+</table>
+
+<table>
+<thead><tr><th>Reward Term</th><th>Equation</th><th>Weight</th></tr></thead>
+<tbody>
+<tr><td colspan="3"><em>Task (velocity tracking)</em></td></tr>
+<tr><td>Linear velocity</td><td>\(\exp\Big(-\|\mathbf{v}_{xy} - \mathbf{v}^{\text{cmd}}_{xy}\|^2/0.5^2\Big)\)</td><td>2.0</td></tr>
+<tr><td>Yaw rate</td><td>\(\exp\Big(-(\omega_z - \omega^{\text{cmd}}_z)^2/0.5\Big)\)</td><td>2.0</td></tr>
+<tr><td colspan="3"><em>Regularization</em></td></tr>
+<tr><td>Action smoothness</td><td>\(\|\mathbf{a}_t - \mathbf{a}_{t-1}\|^2\)</td><td>−0.3</td></tr>
+<tr><td>Joint limit</td><td>\(\sum_j\big[\max(0, q_j - q_j^{\max}) + \max(0, q_j^{\min} - q_j)\big]\)</td><td>−2</td></tr>
+<tr><td>Torso sideways lean</td><td>\(\sin^2\phi_{\text{torso}}\)</td><td>−4</td></tr>
+<tr><td>Torso roll and pitch rate</td><td>\(\omega^2_{\text{roll}} + \omega^2_{\text{pitch}}\)</td><td>−0.05</td></tr>
+<tr><td colspan="3"><em>Termination (fall)</em></td></tr>
+<tr><td colspan="3">\(h_{\text{root}} &lt; 0.35\) m or \(1 + u_z &gt; 0.7\)</td></tr>
+</tbody>
+<caption>Table A.6: Velocity-tracking reward and termination used to train the RL encoder. \(\mathbf{v}_{xy}\) is the planar root velocity in the heading frame, \(\omega_z\) the world yaw rate, and \((\mathbf{v}^{\text{cmd}}_{xy}, \omega^{\text{cmd}}_z)\) the command. \(\phi_{\text{torso}}\) is the sideways lean of the torso \(z\)-axis (forward lean is not penalized) and \(\omega_{\text{roll}}, \omega_{\text{pitch}}\) the torso roll and pitch rates, all in the heading frame. \(h_{\text{root}}\) is the root height and \(u_z\) the \(z\)-component of the unit gravity direction in the root frame, so \(1 + u_z\) is 0 upright and 2 upside down, and the tilt condition triggers at about 73°. Every term, here and in Table A.2, is multiplied by the control period \(\Delta t = 0.02\) s.</caption>
+</table>
+
+<h2>E Motion data filtering</h2>
+<p>We train on the publicly available G1-retargeted BONES-SEED motion set [27]. The raw release contains 142,220 clips, but many interact with terrain or objects the robot cannot use (stairs, boxes, ladders, chairs) or carry retargeting artifacts that make them infeasible for a free-standing humanoid on flat ground. We remove these in two passes and keep 129,514 clips (Table A.7).</p>
+<table>
+<thead><tr><th>Stage</th><th>Clips</th></tr></thead>
+<tbody>
+<tr><td>Raw BONES-SEED (G1 retarget)</td><td>142,220</td></tr>
+<tr><td>After name filter</td><td>129,667</td></tr>
+<tr><td>After feasibility filter</td><td>129,514</td></tr>
+</tbody>
+<caption>Table A.7: Number of BONES-SEED clips before filtering and after each filter.</caption>
+</table>
+<p><strong>Name filter.</strong> Each clip is named by its action. We drop any clip whose name contains a term denoting contact with terrain or an object the robot cannot use—e.g. <code>stair</code>, <code>ladder</code>, <code>box</code>, <code>chair</code>, <code>sit</code>, <code>climb</code>, <code>jump_off_50cm</code>, <code>look_over_fence</code>. This pass (adapted from the keyword list in SONIC’s released data-processing code [1], plus a few terms it misses) removes 12,553 clips.</p>
+<p><strong>Feasibility filter.</strong> The name filter misses clips whose names do not reveal the problem (e.g. a routine that walks onto a box). We run each motion through MuJoCo forward kinematics and flag it from the resulting body-link and foot-geometry trajectories, writing \(z_{\min}(t) = \min_b z_b(t)\) for the height of the lowest body link at time \(t\) with the floor at \(z = 0\):</p>
+<ul>
+<li><strong>Elevated support.</strong> \(z_{\min}\) holds above 0.20 m for at least 0.6 s (standing or climbing on a box).</li>
+<li><strong>Ground penetration.</strong> \(z_{\min}\) falls below −0.12 m, or below −0.08 m for over 80% of the clip (legs driven through the floor by a faulty retarget).</li>
+<li><strong>Floating feet.</strong> For at least 0.5 s <em>both</em> feet stay more than 0.02 m above the floor—measured as MuJoCo’s exact geom-to-plane distance (<code>mj_geomDistance</code>) from the foot collision geometry, not a link-origin proxy—while the pelvis is upright and at standing height and the body is nearly stationary. A free-standing humanoid cannot hold both feet off the floor while standing still, so this is infeasible on flat ground whatever the cause (a low platform, a retarget float, or a slow rise; a ballistic jump is excluded by the stationary gate). The clean ground stance sits at −0.004 ± 0.004 m, so the 0.02 m gate is several σ clear of the floor.</li>
+</ul>
+<p>This pass removes a further 153 clips. All thresholds are tuned for the G1 retarget at 50 Hz.</p>
+
+<h2>F Evaluation</h2>
+<h3>F.1 Benchmark metrics</h3>
+<p>We evaluate SONIC and SuperMimic on the same filtered BONES-SEED training-set benchmark, containing 129,514 evaluated motions. For SONIC we evaluate its released checkpoint and its v1.1 checkpoint [1]. Each motion plays once from its first frame, with the same simulation for every policy: foot friction 1.0, no domain randomization or observation noise, and deterministic physics. Each policy uses its own actuator gains and action scale, and receives its observations as its training environment builds them. A motion is marked as failed if the rollout triggers SuperMimic’s training termination (Appendix A). SONIC’s own success criterion fails a motion on root and end-effector height deviations above 0.25 m, without an orientation term [1].</p>
+<h3>F.2 Failed motions</h3>
+<p>Table A.8 counts failed motions per motion group. SONIC fails whole groups (all 44 flips, all 22 side rolls, and all 8 motions of one dance routine) and 15 of the 24 broad jumps. Its v1.1 checkpoint fails 239 motions, among them the same flips and dance motions and 19 of the 22 side rolls. After 3 h on one GPU, SuperMimic’s failures concentrate in a few small groups of hard motions: the first five groups of Table A.8, 195 motions, hold 14 of its 25 failures. In no group does it fail more motions than SONIC. After 9.8 h on two GPUs, SuperMimic fails on none. Figure A.1 shows the count over training. The benchmark motions are training motions for both methods, so the counts measure how fully each policy covers these training motions, not generalization to new motions.</p>
+<table>
+<thead>
+<tr><th rowspan="2">Motion group (motions)</th><th rowspan="2">SONIC</th><th colspan="2">SuperMimic</th></tr>
+<tr><th>1 GPU × 3 h</th><th>2 GPUs × 9.8 h</th></tr>
+</thead>
+<tbody>
+<tr><td>side rolls (22)</td><td><strong>22</strong></td><td>2</td><td>0</td></tr>
+<tr><td>flips: 360°, 180°, 90° (44)</td><td><strong>44</strong></td><td>1</td><td>0</td></tr>
+<tr><td>fire-in-the-hole turns (20)</td><td>3</td><td>3</td><td>0</td></tr>
+<tr><td>crossed legs (10)</td><td>9</td><td>0</td><td>0</td></tr>
+<tr><td>lying, resting and standing up (99)</td><td>28</td><td>8</td><td>0</td></tr>
+<tr><td>broad jumps (24)</td><td>15</td><td>0</td><td>0</td></tr>
+<tr><td>dance routine (8)</td><td><strong>8</strong></td><td>0</td><td>0</td></tr>
+<tr><td>all other motions (129,287)</td><td>50</td><td>11</td><td>0</td></tr>
+<tr><td>total (129,514)</td><td>179</td><td>25</td><td>0</td></tr>
+</tbody>
+<caption>Table A.8: Failed motions per motion group on the filtered BONES-SEED training-set benchmark. SONIC: released checkpoint. Bold: the policy fails every motion in the group.</caption>
+</table>
+
+<figure data-fig="A.1"><figcaption>Figure A.1: Failed motions during training on the filtered BONES-SEED training-set benchmark. Checkpoints are scored every 4000 iterations, for the runs of Figure 3(a). SONIC: released checkpoint.</figcaption></figure>
+
+<h3>F.3 Experiment protocols</h3>
+<p><strong>Figure 3.</strong> SuperMimic trains on the filtered BONES-SEED set (Appendix E). The dataset-length sweep in (b, c) uses subsets of 1, 7, 40, and 264 h.</p>
+
+<h2>G Velocity-command task</h2>
+<h3>G.1 Training setup</h3>
+<p>The velocity encoder of §4.5 maps the command \((v_x, v_y, \omega_z)\) and a feature of the last 10 frames of \(\boldsymbol{o}\) to the shared latent.</p>
+<p>Each encoder is trained from scratch in its own run, jointly with the motion-tracking interface, for 100,000 iterations. Both runs use a walking and running library filtered from LAFAN1 and BONES-SEED. Half of the 4096 simulator environments and half of each imagined batch use the velocity interface, so \(p(\mathcal{I})\) is uniform; unlike Algorithm A.1, which samples one interface per update, each imagined batch mixes both.</p>
+<p><strong>Commands.</strong> The command \(\boldsymbol{g}_t = (v_x, v_y, \omega_z)\) stacks the target planar root velocity in the heading (yaw-only) frame and the target world-frame yaw rate. A reference command is the centered 25-frame mean of the reference root velocity in the reference’s heading frame. For the RL encoder, each environment resamples its command source at every reset and every 250 control steps (5 s): with probability 0.5 it reads the command from the reference clip at every step, and otherwise it holds a command drawn uniformly from \(v_x \in [-1.5, 2]\) m/s, \(v_y \in [-1.32, 1.32]\) m/s and \(\omega_z \in [-3.35, 3.35]\) rad/s, zeroed (standing) with probability 0.1.</p>
+<p><strong>Encoder.</strong> On rollouts with reference commands, a mean-squared loss of weight 0.1 pulls the velocity latent toward the motion encoder’s latent at the same step, with a stop-gradient on the motion latent.</p>
+<p><strong>Rollouts, reward, and termination.</strong> Each interface’s imagined rollouts start from states logged by its own simulator environments. Velocity rollouts of the RL encoder use the velocity-tracking reward and a fall-only termination (Table A.6); those of the distillation baseline use the motion-tracking reward and termination of Appendix A.</p>
+<h3>G.2 Step test</h3>
+<p><strong>Protocol.</strong> From standing, the policy receives a fixed command for 5 s; each command is tested in four trials. The relative steady-state error is the norm of the mean velocity error over the last 2 s, divided by the norm of the command, with the root velocity measured in the heading frame. The per-command value is the median over the trials that did not fall. The 672 step responses form a 15×15 grid on each of three planes, spanning the uniform command range above, with the standing command left out. In Figure 7, errors above 0.9 are drawn at 0.9, and a policy that fell in all four trials is drawn at the cap.</p>
+<p><strong>Results.</strong> The RL encoder has the lower error on 650 of the 672 step responses, and the distillation encoder on 15. Their median relative errors are 0.16 and 0.49. Distillation falls in every trial on seven commands, all combining translation with a turn of at least 2.8 rad/s, where the motion library has almost no data. Each policy has one training seed.</p>
+</body></html>
