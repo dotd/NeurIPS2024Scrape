@@ -2149,5 +2149,132 @@
     "h": 455
    }
   ]
+ },
+ "arxiv-2301-04104": {
+  "title": "Mastering Diverse Domains through World Models",
+  "abstract": "Developing a general algorithm that learns to solve tasks across a wide range of applications has been a fundamental challenge in artificial intelligence. Although current reinforcement learning algorithms can be readily applied to tasks similar to what they have been developed for, configuring them for new application domains requires significant human expertise and experimentation. We present DreamerV3, a general algorithm that outperforms specialized methods across over 150 diverse tasks, with a single configuration. Dreamer learns a model of the environment and improves its behavior by imagining future scenarios. Robustness techniques based on normalization, balancing, and transformations enable stable learning across domains. Applied out of the box, Dreamer is the first algorithm to collect diamonds in Minecraft from scratch without human data or curricula. This achievement has been posed as a significant challenge in artificial intelligence that requires exploring farsighted strategies from pixels and sparse rewards in an open world. Our work allows solving challenging control problems without extensive experimentation, making reinforcement learning broadly applicable. a 57 tasks, 200M steps Atari 16 tasks, 50M steps ProcGen 30 tasks, 100M steps DMLab 1 task, 100M steps Minecraft b Minecraft Diamond",
+  "figure": "figs/arxiv-2301-04104.png",
+  "figure_page": 1,
+  "figures": [
+   {
+    "n": 1,
+    "page": 1,
+    "src": "figs/arxiv-2301-04104/fig1.png",
+    "w": 1346,
+    "h": 782
+   },
+   {
+    "n": 2,
+    "page": 2,
+    "src": "figs/arxiv-2301-04104/fig2.png",
+    "w": 1349,
+    "h": 485
+   },
+   {
+    "n": 3,
+    "page": 3,
+    "src": "figs/arxiv-2301-04104/fig3.png",
+    "w": 1348,
+    "h": 732
+   },
+   {
+    "n": 4,
+    "page": 4,
+    "src": "figs/arxiv-2301-04104/fig4.png",
+    "w": 1348,
+    "h": 780
+   },
+   {
+    "n": 5,
+    "page": 8,
+    "src": "figs/arxiv-2301-04104/fig5.png",
+    "w": 1348,
+    "h": 454
+   },
+   {
+    "n": 6,
+    "page": 9,
+    "src": "figs/arxiv-2301-04104/fig6.png",
+    "w": 1348,
+    "h": 1150
+   },
+   {
+    "n": 7,
+    "page": 23,
+    "src": "figs/arxiv-2301-04104/fig7.png",
+    "w": 1340,
+    "h": 1728
+   },
+   {
+    "n": 9,
+    "page": 24,
+    "src": "figs/arxiv-2301-04104/fig9.png",
+    "w": 1345,
+    "h": 1150
+   },
+   {
+    "n": 10,
+    "page": 25,
+    "src": "figs/arxiv-2301-04104/fig10.png",
+    "w": 911,
+    "h": 1769
+   },
+   {
+    "n": 11,
+    "page": 27,
+    "src": "figs/arxiv-2301-04104/fig11.png",
+    "w": 933,
+    "h": 1472
+   },
+   {
+    "n": 12,
+    "page": 29,
+    "src": "figs/arxiv-2301-04104/fig12.png",
+    "w": 928,
+    "h": 1759
+   },
+   {
+    "n": 13,
+    "page": 31,
+    "src": "figs/arxiv-2301-04104/fig13.png",
+    "w": 943,
+    "h": 1748
+   },
+   {
+    "n": 14,
+    "page": 33,
+    "src": "figs/arxiv-2301-04104/fig14.png",
+    "w": 1341,
+    "h": 1576
+   },
+   {
+    "n": 15,
+    "page": 35,
+    "src": "figs/arxiv-2301-04104/fig15.png",
+    "w": 1341,
+    "h": 1777
+   },
+   {
+    "n": 16,
+    "page": 37,
+    "src": "figs/arxiv-2301-04104/fig16.png",
+    "w": 1340,
+    "h": 732
+   },
+   {
+    "n": 17,
+    "page": 39,
+    "src": "figs/arxiv-2301-04104/fig17.png",
+    "w": 1340,
+    "h": 1508
+   },
+   {
+    "n": 18,
+    "page": 40,
+    "src": "figs/arxiv-2301-04104/fig18.png",
+    "w": 1340,
+    "h": 1518
+   }
+  ]
  }
 }

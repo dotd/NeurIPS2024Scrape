@@ -117,5 +117,8 @@
   "ResNet",
   "Gemini",
   "π0 / π0.5"
+ ],
+ "arxiv-2301-04104": [
+  "DreamerV3"
  ]
 }

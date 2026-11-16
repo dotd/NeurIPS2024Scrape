@@ -38,5 +38,8 @@
   "https://github.com/Ziyeeee/openpi_rlt",
   "https://github.com/jingzhang00/RL_token",
   "https://github.com/Jiabo-Wang/RLT_dual"
+ ],
+ "arxiv-2301-04104": [
+  "https://github.com/danijar/dreamerv3"
  ]
 }

@@ -5,6 +5,7 @@ and list who to ask for permission when a paper's video is only in its OpenRevie
     uv run python specific_scripts/corl2026_youtube.py check      # print paper title vs video title, to spot wrong matches
     uv run python specific_scripts/corl2026_youtube.py playlist   # add them to a public playlist (browser login once)
     uv run python specific_scripts/corl2026_youtube.py contacts   # movies/permission_contacts.csv + permission_email.txt
+    uv run python specific_scripts/corl2026_youtube.py upload <paper id>  # its movie as an unlisted video (1,600 units)
 
 Re-uploading the supplementary videos needs the authors' permission; a playlist of their own YouTube videos doesn't.
 playlist needs credentials/client_secret2.json (the Drive OAuth client) with "YouTube Data API v3" enabled in its
@@ -161,6 +162,31 @@ def playlist():
     print(f"{len(state['added'])} videos in https://www.youtube.com/playlist?list={state['playlist']}")
 
 
+def upload(pid):
+    """Upload one paper's movie as an unlisted video, credited to the authors; prints its link (saved in STATE)."""
+    from googleapiclient.http import MediaFileUpload
+    p = papers()[pid]
+    movie = sorted(glob.glob(os.path.join(glob.escape(os.path.join(MOVIES, "paper_movies")), glob.escape(pid) + "_*")))[0]
+    arxiv = json.load(open(os.path.join(HERE, "arxiv.json"))).get(pid, "")
+    desc = "\n".join(x for x in [
+        f"{p['title']} (CoRL 2026)", f"Authors: {p['authors']}", "",
+        "Video by the authors, from the paper's supplementary material.",
+        f"Paper (OpenReview): https://openreview.net/forum?id={pid}", f"arXiv: {arxiv}" if arxiv else ""] if x is not None)
+    body = {"snippet": {"title": f"{p['title']} | CoRL 2026"[:100], "description": desc.strip(), "categoryId": "28"},  # 28: Science & Technology
+            "status": {"privacyStatus": "unlisted", "selfDeclaredMadeForKids": False}}
+    req = youtube().videos().insert(part="snippet,status", body=body,
+                                    media_body=MediaFileUpload(movie, chunksize=8 << 20, resumable=True))
+    resp = None
+    while resp is None:
+        status, resp = req.next_chunk()
+        if status:
+            print(f"{int(status.progress() * 100)}%", flush=True)
+    state = load_state()
+    state.setdefault("uploaded", {})[pid] = resp["id"]
+    save_state(state)
+    print(f"uploaded (unlisted): https://www.youtube.com/watch?v={resp['id']}")
+
+
 def contacts():
     """Papers with a supplementary video but none on YouTube: who to ask, and the email to send."""
     state, info = load_state(), papers()
@@ -180,4 +206,7 @@ def contacts():
 
 
 if __name__ == "__main__":
-    {"find": find, "check": check, "playlist": playlist, "contacts": contacts}[sys.argv[1]]()
+    if sys.argv[1] == "upload":
+        upload(sys.argv[2])
+    else:
+        {"find": find, "check": check, "playlist": playlist, "contacts": contacts}[sys.argv[1]]()

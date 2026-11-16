@@ -28,5 +28,10 @@
   "url": "https://arxiv.org/abs/2501.09747",
   "cost": 0.0986,
   "searches": 1
+ },
+ "arxiv-2301-04104": {
+  "url": "https://arxiv.org/abs/2301.04104",
+  "cost": 0.0256,
+  "searches": 0
  }
 }

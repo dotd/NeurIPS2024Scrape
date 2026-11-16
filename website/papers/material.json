@@ -214,5 +214,31 @@
    "blog",
    "https://davidlxu.github.io/posts/2026/03/rlt-paper-notes/"
   ]
+ ],
+ "arxiv-2301-04104": [
+  [
+   "code",
+   "https://github.com/danijar/dreamerv3"
+  ],
+  [
+   "project",
+   "https://danijar.com/dreamerv3/"
+  ],
+  [
+   "video",
+   "https://www.youtube.com/watch?v=4zexRskVGk8"
+  ],
+  [
+   "talk",
+   "https://www.talkrl.com/episodes/danijar-hafner-2/transcript"
+  ],
+  [
+   "talk",
+   "https://podcasts.apple.com/us/podcast/danijar-hafner-2/id1478198107?i=1000608579021"
+  ],
+  [
+   "other",
+   "https://huggingface.co/papers/2301.04104"
+  ]
  ]
 }

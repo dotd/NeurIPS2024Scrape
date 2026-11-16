@@ -50,5 +50,9 @@
  "arxiv-2604-23073": {
   "text": "• Problem: VLAs generalize broadly but are slow and imprecise in the \"last millimeter\" of contact-rich tasks.\n• Key idea: VLA exposes a compact \"RL token\" via encoder-decoder bottleneck, enabling lightweight sample-efficient online RL.\n• Method: small off-policy actor-critic over action chunks (C=10), conditioned on and regularized toward VLA reference actions.\n• Tricks: reference-action dropout prevents copying; high update-to-data ratio; RL applied only to human-selected critical phases.\n• Setup: π0.6 VLA, four real tasks: screw installation, zip tie fastening, Ethernet and charger insertion, 50 Hz control.\n• Results: up to 3× faster critical phases; screw success 20%→65%; full-task gains +40% screw, +60% zip tie.\n• New: beats HIL-SERL, PLD, DSRL, DAgger; Ethernet median 66 steps versus 146 for expert teleoperation.",
   "cost": 0.1877
+ },
+ "arxiv-2301-04104": {
+  "text": "• Problem: RL algorithms need costly per-domain hyperparameter tuning; DreamerV3 seeks one fixed configuration for all domains.\n• Key idea: learn a world model (RSSM), then train actor and critic purely on imagined latent trajectories.\n• Robustness tricks: symlog transforms, symexp twohot loss, free bits KL, percentile return normalization, 1% unimix categoricals.\n• Setup: over 150 tasks across 8 domains, fixed hyperparameters, each agent trained on one A100 GPU.\n• Results: beats tuned experts, e.g. Proprio Control 871 vs 801, Visual Control 861 vs 770, Atari100k 125%.\n• Minecraft: first agent to collect diamonds from scratch without human data, in 100M steps over 9 GPU-days.\n• Scaling: larger models (12M to 400M) and higher replay ratios predictably raise performance and data-efficiency.",
+  "cost": 0.4025
  }
 }
