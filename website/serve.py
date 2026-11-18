@@ -22,6 +22,7 @@ import urllib.parse
 
 import anthropic
 import pymupdf
+import requests
 
 WEB = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(WEB)
@@ -103,6 +104,8 @@ import build  # noqa: E402  re-run after every change so index.html carries the 
 import papers  # noqa: E402
 sys.path.insert(0, os.path.join(WEB, "corl2026_workshops"))
 import workshops  # noqa: E402
+sys.path.insert(0, os.path.join(WEB, "neurips2026"))
+import neurips  # noqa: E402
 
 client = anthropic.Anthropic(api_key=open(KEY_FILE).read().strip())
 lock = threading.Lock()
@@ -121,7 +124,8 @@ class Site:
 
 SITES = [Site("/Corl2026", "CoRL 2026", build.HERE, build.main, build.paper_info),
          Site("/Papers", papers.TITLE, papers.HERE, papers.build_page, papers.paper_info, papers),
-         Site("/Workshops", workshops.TITLE, workshops.HERE, workshops.build_page, workshops.paper_info)]
+         Site("/Workshops", workshops.TITLE, workshops.HERE, workshops.build_page, workshops.paper_info),
+         Site("/Neurips2026", neurips.TITLE, neurips.HERE, neurips.build_page, neurips.paper_info)]
 INDEX = """<!doctype html><html><head><meta charset="utf-8"><title>Paper browsers</title></head>
 <body style="font:16px/1.6 system-ui,sans-serif;margin:40px"><h1>Paper browsers</h1><ul>{}</ul></body></html>"""
 
@@ -494,6 +498,12 @@ class Handler(http.server.SimpleHTTPRequestHandler):
                 return self.reply(200, made)
             except (anthropic.APIError, RuntimeError, subprocess.TimeoutExpired) as e:
                 return self.reply(502, {"error": str(e)})
+        d = re.fullmatch(r"/download/([A-Za-z0-9_-]+)", self.path)
+        if d and site.prefix == "/Neurips2026":  # a poster's PDF from arXiv, on demand
+            try:
+                return self.reply(200, {"path": neurips.download(d.group(1), lock)})
+            except (ValueError, OSError, RuntimeError, anthropic.APIError, requests.RequestException) as e:
+                return self.reply(404, {"error": str(e)})
         w = re.fullmatch(r"/whatsapp/([A-Za-z0-9_-]+)", self.path)
         if w and site.prefix != "/Corl2026":  # My papers / Workshops: the slide from the PDF + material links, cached
             return self.reply(*whatsapp(site, w.group(1)))

@@ -106,6 +106,7 @@
     <option data-file="corl2026/robots.html" value="/Corl2026/robots.html">CoRL 2026 robots</option>
     <option data-file="papers/index.html" value="/Papers/">My papers</option>
     <option data-dir="corl2026_workshops" value="/Workshops/">CoRL 2026 Workshops</option>
+    <option data-file="neurips2026/index.html" value="/Neurips2026/">NeurIPS 2026</option>
   </select>
   <script>  // ponytail: pages listed by hand, here and in specific_scripts/corl2026_robot_page.py
   { const sel = document.getElementById('site');
@@ -434,7 +435,7 @@ const KIND = {project: '🌐 Project', code: '💻 Code', video: '🎬 Video', d
 const gist = x => ((x && sumText(x) || '').match(/^Gist:\s*([\s\S]*?)(?:\n\n|$)/) || [])[1];  // from the full-PDF summary
 function waText(pid) {
   const r = rows[rowOf[pid]], col = c => r[columns.indexOf(c)] || '', lines = [`*${r[titleIdx].trim()}*`];
-  if (store !== 'papers') lines.push(store === 'workshops' ? 'CoRL 2026 Workshop' : 'CoRL 2026');
+  if (store !== 'papers') lines.push({workshops: 'CoRL 2026 Workshop', neurips: col('venue')}[store] || 'CoRL 2026');
   if (store === 'workshops') for (const x of meta[rowOf[pid]].d) {  // "Thu 11/12, 8:30 AM–12:30 PM · JW Marriott Room 202 · Title"
     const [when, where, ...t] = x.split(' · ');
     lines.push(`🛠️ Workshop: ${t.join(' · ')}`, `🕒 ${when} · 📍 ${where}`);
@@ -455,6 +456,23 @@ function waText(pid) {
   if (ghIdx >= 0 && r[ghIdx]) lines.push(...r[ghIdx].split(' ').map(u => `💻 GitHub: ${u}`));
   lines.push('', shortSum[pid] || gist(summaries[pid]) || col('abstract'));
   return lines.join('\n').trim();
+}
+// ---- NeurIPS 2026 posters: POST download/<id> fetches the arXiv PDF (+ figures) so the Claude / WhatsApp buttons work ----
+function downloadButton(pid) {
+  const b = document.createElement('button');
+  b.textContent = '⬇️ Download paper locally';
+  b.onclick = async () => {
+    if (!location.protocol.startsWith('http')) return b.textContent = '⬇️ Download paper locally (run: uv run python website/serve.py, then open this page through http://127.0.0.1:8026/)';
+    b.disabled = true; b.textContent = '⏳ Downloading from arXiv…';
+    try {
+      const res = await fetch('download/' + pid, {method: 'POST'}), j = await res.json();
+      if (!res.ok) throw new Error(j.error);
+      const a = document.createElement('a');
+      a.href = j.path.split('/').map(encodeURIComponent).join('/'); a.target = '_blank'; a.textContent = '📄 Local PDF';
+      b.replaceWith(a);
+    } catch (e) { b.disabled = false; b.textContent = '⚠️ ' + e.message + ' (retry)'; }
+  };
+  return b;
 }
 function waButton(pid) {
   const wrap = document.createElement('div'), b = document.createElement('button'),
@@ -536,6 +554,7 @@ function card(r, ri) {  // one paper's dropdown; the By time view builds its own
     dl.append(dt, dd);
   });
   d.append(s, summaryBox(r[idIdx].split('id=').pop(), sumFlag), htmlBoxes(r[idIdx].split('id=').pop()));
+  if (store === 'neurips' && !r[columns.indexOf('local_pdf')]) d.append(downloadButton(r[idIdx].split('id=').pop()));
   if (WA) d.append(waButton(r[idIdx].split('id=').pop()));
   d.append(dl);
   const fig = (firstPage[r[idIdx].split('id=').pop()] || {}).figure;

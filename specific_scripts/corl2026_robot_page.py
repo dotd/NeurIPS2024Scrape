@@ -188,6 +188,7 @@ PAGE = """<!doctype html>
     <option data-file="corl2026/index.html" value="/Corl2026/">CoRL 2026</option>
     <option data-file="corl2026/robots.html" value="/Corl2026/robots.html" selected>CoRL 2026 robots</option>
     <option data-file="papers/index.html" value="/Papers/">My papers</option>
+    <option data-file="neurips2026/index.html" value="/Neurips2026/">NeurIPS 2026</option>
   </select>
   <span style="color:#666">__N__ robots · specs, websites and prices found by Claude with web search: check before buying</span>
 </nav>

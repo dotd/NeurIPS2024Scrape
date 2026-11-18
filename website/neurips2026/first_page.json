@@ -1,0 +1,59 @@
+{
+ "h4NSSZLqct": {
+  "title": "HorizonComposer: Spatiotemporally Consistent Driving Video Editing with Enriched Traffic Semantics",
+  "abstract": "Instruction-guided video generative models offer a scalable solution for stresstesting autonomous driving systems by simulating diverse environmental conditions. However, driving scenes operate within a dense Operational Design Domain (ODD) governed by strict traffic semantics. When applied to global driving-condition edits, general-purpose instruction-guided video editors frequently corrupt these semantics, leading to structural hallucinations and “temporal shock.” This work distills and protects traffic semantics during video editing at three levels. First, we construct a hybrid dataset by combining temporally aligned real-world videos with synthetic edits, balancing foundational scene structure with unambiguous appearance signals. Second, during training, we adapt advantage conditioning from offline reinforcement learning to align the model using dense rewards. We extract dense, pixel-level rewards from the hybrid data to serve as a localized signal and actively steer generation toward structurally reliable pixels. Finally, our model mitigates temporal shock by introducing thinking frames, a transition mechanism that seamlessly reconciles static image conditioning with dynamic video context. Extensive experiments demonstrate that our method prevents the corruption of multi-actor dynamics, establishing state-of-the-art spatiotemporal consistency, yielding consistent user preference (39% relative improvement in content preservation and 12% in temporal consistency), and achieving a significant 5% gain in downstream road line segmentation and 7% gain in downstream multi-object detection.",
+  "figure": "figs/h4NSSZLqct.png",
+  "figure_page": 2,
+  "figures": [
+   {
+    "n": 1,
+    "page": 2,
+    "src": "figs/h4NSSZLqct/fig1.png",
+    "w": 1141,
+    "h": 681
+   },
+   {
+    "n": 2,
+    "page": 4,
+    "src": "figs/h4NSSZLqct/fig2.png",
+    "w": 1140,
+    "h": 550
+   },
+   {
+    "n": 3,
+    "page": 5,
+    "src": "figs/h4NSSZLqct/fig3.png",
+    "w": 685,
+    "h": 375
+   },
+   {
+    "n": 4,
+    "page": 8,
+    "src": "figs/h4NSSZLqct/fig4.png",
+    "w": 1140,
+    "h": 611
+   },
+   {
+    "n": 5,
+    "page": 9,
+    "src": "figs/h4NSSZLqct/fig5.png",
+    "w": 1140,
+    "h": 743
+   },
+   {
+    "n": 6,
+    "page": 16,
+    "src": "figs/h4NSSZLqct/fig6.png",
+    "w": 1140,
+    "h": 1811
+   },
+   {
+    "n": 8,
+    "page": 27,
+    "src": "figs/h4NSSZLqct/fig8.png",
+    "w": 1140,
+    "h": 544
+   }
+  ]
+ }
+}

@@ -1,0 +1,30 @@
+{
+ "papers": {
+  "h4NSSZLqct": {
+   "companies": [],
+   "universities": [
+    "Simon Fraser University"
+   ],
+   "candidates": [
+    "Simon Fraser University",
+    "Simon Fraser University",
+    "NEC Labs America",
+    "NEC Labs America",
+    "NEC Labs America",
+    "Simon Fraser University",
+    "NEC Labs America",
+    "NEC Labs America"
+   ]
+  }
+ },
+ "ror": {
+  "Simon Fraser University": {
+   "name": "Simon Fraser University",
+   "types": [
+    "education",
+    "funder"
+   ]
+  },
+  "NEC Labs America": null
+ }
+}

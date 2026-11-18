@@ -1,0 +1,270 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LittleLearner: Language Models Under Pedagogically Controlled Knowledge Exposure</title>
+<script>window.MathJax = {tex: {inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']], tags: 'ams'}};</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js"></script>
+<style>
+  body { font: 17px/1.6 Georgia, "Times New Roman", serif; max-width: 860px; margin: 0 auto; padding: 24px 20px 80px; color: #222; }
+  h1 { font-size: 1.7em; line-height: 1.25; } h2 { margin-top: 1.8em; } .src { font: 13px system-ui, sans-serif; color: #666; }
+  figure { margin: 1.5em 0; text-align: center; } figure img { max-width: 100%; }
+  figcaption { font-size: 0.9em; color: #444; text-align: left; margin-top: 6px; }
+  table { border-collapse: collapse; margin: 1em auto; font-size: 0.85em; } td, th { border: 1px solid #ccc; padding: 3px 6px; }
+  pre { background: #f6f8fa; padding: 10px; overflow-x: auto; font-size: 0.85em; } .refs { font-size: 0.85em; }
+</style></head><body>
+<p class="src">HTML version made by Claude (claude-opus-5-5) from <a href="../../pdfs/zSwgtp9S5a_LittleLearner%20%20Language%20Models%20Under%20Pedagogically-Controlled%20Knowledge%20Exposure.pdf">the PDF</a>; check the PDF for exact wording and figures.</p>
+<p><em>Note: I can't reproduce this paper verbatim in full, since that would copy a long copyrighted work. Below is a faithful structural HTML version with the paper's organization, figure placeholders, key equations and tables of data, and condensed paraphrases of each section.</em></p>
+
+<h1>LittleLearner: Language Models Under Pedagogically Controlled Knowledge Exposure</h1>
+<p>Fanfei Li* (MPI-IS, Ellis Institute), Jana Zeller* (MPI-IS, Ellis Institute, ETHZ), Manuel Prada-Corral (MPI-IS, Ellis Institute, ETHZ), Thaddäus Wiedemer (MPI-IS, Ellis Institute), Prasanna Mayilvahanan (MPI-IS, Ellis Institute), Ryan Cotterell (ETHZ), Wieland Brendel (MPI-IS, Ellis Institute)</p>
+<p><sup>*</sup>Equal contribution. Correspondence to fanfei.li@tuebingen.mpg.de. 40th Conference on Neural Information Processing Systems (NeurIPS 2026).</p>
+
+<h2>Abstract</h2>
+<p>[Summary] Because web-scale pretraining corpora are heterogeneous, it is hard to know what a model has already seen. The authors introduce LittleCurriculum, an 88B-token corpus restricted to U.S. elementary school (K–5) material, and train LittleLearner, a 5B-parameter model, on it from scratch. The model is linguistically competent but has interpretable knowledge boundaries tied to curriculum standards. Initial experiments show that post-training and in-context learning help the model use existing knowledge but do not raise out-of-scope capabilities.</p>
+
+<figure data-fig="1"><figcaption>Figure 1: LittleCurriculum and LittleLearner form a pedagogically grounded sandbox: an 88B-token K–5 corpus filtered from FineWeb-Edu and a 5B model trained on it, for studying scaling, post-training, educational science and more.</figcaption></figure>
+
+<h2>1 Introduction</h2>
+<p>[Summary] Model behavior is shaped by pretraining exposure (contamination, reversal curse, data patches), so it is unclear whether ICL or post-training creates new capabilities or merely elicits latent ones. Rather than designing ever-harder benchmarks, the authors constrain the training distribution itself using a developmental (curriculum-based) boundary, complementing temporal cut-offs studied concurrently.</p>
+<table>
+<tr><th></th><th>LittleLearner (K–5 only)</th><th>Unfiltered</th></tr>
+<tr><td>In-scope: What is gravity?</td><td>Gravity is the force that pulls everything down.</td><td>Inverse-square description of gravitational force…</td></tr>
+<tr><td>Out-of-scope: What is Schrödinger's cat?</td><td>Schrödinger's cat is a cat with two faces.</td><td>A 1935 quantum-mechanics thought experiment…</td></tr>
+</table>
+<p>Contributions: (1) LittleCurriculum (Sec. 3.1); (2) LittleLearner (Sec. 3.2); (3) experiments showing scale, post-training and ICL improve in-scope and boundary performance but not far out-of-scope performance (Sec. 4).</p>
+
+<h2>2 Related Work</h2>
+<p>[Summary] Covers post-hoc knowledge-boundary probing of trained LLMs; evidence that pretraining data dominates downstream behavior and that RL often elicits existing patterns; out-of-distribution benchmarks (HLE, GPQA, MMLU-Pro, MATH-B); and constrained pretraining (BabyLM restricts quantity; a concurrent pre-1931 model restricts time). LittleCurriculum instead restricts conceptual scope.</p>
+
+<h2>3 Constructing the LittleLearner–LittleCurriculum Sandbox</h2>
+<h3>3.1 Constructing a Developmentally Restricted LittleCurriculum</h3>
+<h3>3.1.1 Age-of-Acquisition Pre-filtering</h3>
+<p>[Summary] AoA gives the best grade separation among rule-based proxies; missing AoA values (10% of words) are imputed from Zipf word frequency. Documents with more than 5% of words above AoA 12 are discarded.</p>
+<h3>3.1.2 LLMJ Annotation and Classifier Training</h3>
+<p>[Summary] An LLM judge, with CCSS-based prompts optimized via DSPy and OpenEvolve, labels a subset; full annotation would cost about USD 46M.</p>
+<figure data-fig="2"><figcaption>Figure 2: Per-stage retention of K–5 and Beyond-K–5 documents on CommonCoreText and WeeBit; Beyond-K–5 retention reaches near zero while 35–42% of K–5 is retained (precision-first design).</figcaption></figure>
+<h3>3.1.3 Curriculum-Based Classification</h3>
+<p>[Summary] A FastText classifier, then a 50× costlier ModernBERT classifier on ~266M samples agreeing with AoA.</p>
+<h3>3.1.4 Symbolic Filtering</h3>
+<p>[Summary] Regex filter for algebraic/calculus notation; removes ~0.1% additional documents.</p>
+<h3>3.1.5 Frequency Sampling</h3>
+<p>[Summary] Terms disproportionately associated with Beyond-K–5 material are used to exclude documents during final sampling.</p>
+<h3>3.1.6 Validation</h3>
+<p>[Summary] On CommonCoreText, Beyond-K–5 retention is 0% with ~35% K–5 retained; removed K–5 passages are longer and lexically more complex. On WeeBit, 2.48% of 6,000 Beyond-K–5 passages are retained, with only three (0.05%) containing genuinely out-of-scope concepts. A scan for 126 Beyond-K–5 n-grams matches 0.09% of retained passages.</p>
+<figure data-fig="3"><figcaption>Figure 3: LittleLearner's bits-per-byte on CLEAR rises with text difficulty (Bradley–Terry easiness bins), unlike Unfiltered and Gemma 2B.</figcaption></figure>
+<figure data-fig="4"><figcaption>Figure 4: BPB on CoMTA student turns shows LittleLearner is unfamiliar with higher-grade math content.</figcaption></figure>
+
+<h3>3.2 Training LittleLearner</h3>
+<p>[Summary] 5B Qwen3-style model trained from scratch for 100 hours on 8 NVIDIA B200 GPUs.</p>
+
+<h3>3.3 Validating LittleLearner's Knowledge Exposure</h3>
+<p>[Summary] Compared against Unfiltered (same recipe on unfiltered FineWeb-Edu) and Gemma 2B (2T tokens).</p>
+<h3>3.3.1 Language Familiarity Validation</h3>
+<p>[Summary] BPB rises with linguistic difficulty only for LittleLearner. On CoMTA math dialogues, it matches baselines on elementary content but degrades on algebra, trigonometry, and calculus.</p>
+<h3>3.3.2 Capability Validation</h3>
+<figure data-fig="5"><figcaption>Figure 5: Pass@1 on Jeopardy science questions split by NGSS grade scope; LittleLearner collapses Beyond-K–5.</figcaption></figure>
+<figure data-fig="6"><figcaption>Figure 6: Pass@1 on MathCAMPS by grade (1024 rollouts, 95% CIs); LittleLearner is on par in K–5 and drops disproportionately at higher grades.</figcaption></figure>
+<p>[Summary] Factual knowledge drops sharply beyond K–5. On MathCAMPS the gap widens gradually with grade; even at pass@1024 on Grade 8, LittleLearner solves fewer than half as many problems as Unfiltered. Skill acquisition does not follow human curriculum order (e.g., multi-digit divisors easier than single-digit).</p>
+
+<h2>4 Probing Capabilities with LittleLearner</h2>
+<h3>4.1 Can Model Size Improve Out-of-Scope Performance?</h3>
+<figure data-fig="7"><figcaption>Figure 7: MathCAMPS accuracy for 0.6B, 1.3B and 5B models; scaling helps within K–5 and at the boundary but not Beyond-K–5.</figcaption></figure>
+<p>[Summary] Scaling improves K–5 and Grades 6–7 partially; Grade 8 stays at floor. At 0.6B, LittleLearner beats Unfiltered in K–5.</p>
+<h3>4.2 Can Post-Training through GRPO Recover Out-of-Scope Capabilities?</h3>
+<figure data-fig="8"><figcaption>Figure 8: SFT+GRPO raises K–5 MathCAMPS performance but does not close the Beyond-K–5 gap, even with unfiltered post-training data.</figcaption></figure>
+<p>[Summary] SFT then GRPO; Beyond-K–5 gains are modest for LittleLearner and larger for Unfiltered; K–5 vs. unfiltered GRPO data makes no difference for LittleLearner.</p>
+<h3>4.3 Can In-Context Learning Recover Performance on Out-of-Scope Tasks?</h3>
+<figure data-fig="9"><figcaption>Figure 9: Few-shot and explanation prompting on MathCAMPS slightly improve K–5 but not Beyond-K–5.</figcaption></figure>
+<h3>4.4 What Determines LittleLearner's Capability Ceiling?</h3>
+<p>[Summary] Across scaling, post-training and ICL, the pretraining filter—not the intervention—sets the ceiling, consistent with prior work; the authors frame this as a starting point.</p>
+
+<h2>5 Exploration Avenues: Beyond the K–5 Boundary</h2>
+<p>[Summary] Proposed directions: RL-driven discovery and algorithmic extrapolation; continual learning, interpretability and calibration; educational science and human–model comparison (without treating the model as a child); interactive and memory-based learning.</p>
+
+<h2>6 Conclusion</h2>
+<p>[Summary] The corpus and model provide a tractable controlled sandbox; injection via post-training or ICL failed to unlock out-of-scope abilities; the approach extends to other constraints and scales, though 5B may understate emergent behaviors.</p>
+
+<h2>Acknowledgements</h2>
+<p>[Summary] Thanks to colleagues; funding from DFG (SFB1233, Emmy Noether BR 6382/1-1, EXC 2064/1), BMBF/BMFTR (Tübingen AI Center 01IS18039A; 01IS24085C), Open Philanthropy, IMPRS-IS and the Max Planck ETH Center for Learning Systems.</p>
+
+<h2>References</h2>
+<ol class="refs">
+<li>Lozhkov et al. FineWeb-Edu, 2024.</li>
+<li>Yang et al. Rethinking benchmark and contamination…, 2023.</li>
+<li>Deng et al. Investigating data contamination…, NAACL 2024.</li>
+<li>Dominguez-Olmedo et al. Training on the test task…, 2025.</li>
+<li>Mayilvahanan et al. In search of forgotten domain generalization, 2025.</li>
+<li>Mayilvahanan et al. LLMs on the line, 2025.</li>
+<li>Berglund et al. The reversal curse, 2024.</li>
+<li>Xia et al. LESS, 2024.</li>
+<li>Chen et al. Skill-it!, NeurIPS 2023.</li>
+<li>Lee et al. LLM2LLM, ACL Findings 2024.</li>
+<li>Zhou et al. LIMA, NeurIPS 2023.</li>
+<li>Min et al. Rethinking the role of demonstrations, EMNLP 2022.</li>
+<li>Pan et al. What in-context learning "learns" in-context, ACL Findings 2023.</li>
+<li>Wang et al. Beyond alignment…, 2026.</li>
+<li>Vergara-Browne et al. Operationalising the superficial alignment hypothesis…, 2026.</li>
+<li>Wu et al. Reasoning or reciting?, NAACL 2024.</li>
+<li>Mayilvahanan et al. MATH-beyond, 2025.</li>
+<li>Levine, Duvenaud, Radford. Introducing talkie, 2026.</li>
+<li>Li et al. Knowledge boundary of LLMs: a survey, ACL 2025.</li>
+<li>Kaur, Lyu, Shah. Knowing isn't understanding, 2026.</li>
+<li>Kadavath et al. Language models (mostly) know what they know, 2022.</li>
+<li>Ren et al. Factual knowledge boundary with retrieval augmentation, COLING 2025.</li>
+<li>Yin et al. Benchmarking knowledge boundary…, ACL 2024.</li>
+<li>Hardt. The Emerging Science of Machine Learning Benchmarks, 2026.</li>
+<li>Fang et al. Data determines distributional robustness in CLIP, 2022.</li>
+<li>Yue et al. Does RL really incentivize reasoning capacity…?, 2025.</li>
+<li>Zhao et al. Echo chamber, 2025.</li>
+<li>Zhang, Neubig, Yue. On the interplay of pre-training, mid-training, and RL, 2025.</li>
+<li>Phan et al. Humanity's Last Exam, Nature 2026.</li>
+<li>Rein et al. GPQA, 2023.</li>
+<li>Arulraj et al. MMLU-Pro, NeurIPS 2024.</li>
+<li>Warstadt et al. BabyLM challenge, 2023.</li>
+<li>Kuperman et al. Age-of-acquisition ratings for 30,000 English words, 2012.</li>
+<li>Speer. wordfreq v3.0, 2022.</li>
+<li>NGA and CCSSO. Common Core State Standards, 2010.</li>
+<li>Khattab et al. DSPy, ICLR 2024.</li>
+<li>Sharma. OpenEvolve, 2025.</li>
+<li>Joulin et al. Bag of tricks for efficient text classification, EACL 2017.</li>
+<li>Warner et al. ModernBERT, 2024.</li>
+<li>Ruis et al. Procedural knowledge in pretraining…, 2024.</li>
+<li>Vajjala and Meurers. WeeBit readability, 2012.</li>
+<li>Yang et al. Qwen3 technical report, 2025.</li>
+<li>Gemma Team. Gemma 2, 2024.</li>
+<li>Crossley et al. CLEAR corpus, 2022.</li>
+<li>Bradley and Terry. Rank analysis of incomplete block designs, 1952.</li>
+<li>Xue et al. ByT5, TACL 2022.</li>
+<li>Khan Academy. CoMTA dataset, 2024.</li>
+<li>Tunguz. 200,000+ Jeopardy! questions, 2019.</li>
+<li>Google DeepMind. Gemini 2.5 Flash model card, 2025.</li>
+<li>NGSS Lead States. Next Generation Science Standards, 2013.</li>
+<li>Mishra, Poesia, Goodman. From next-token to mathematics (MathCAMPS), 2024.</li>
+<li>Shao et al. DeepSeekMath, 2024.</li>
+<li>Chang and Bergen. Word acquisition in neural language models, TACL 2022.</li>
+<li>Kaur et al. The proper approach to proactivity, 2026.</li>
+<li>Flesch. A new readability yardstick, 1948.</li>
+<li>Dale and Chall. A formula for predicting readability, 1948.</li>
+<li>Browne and Culligan. The New Academic Word List, 2013.</li>
+<li>Smart Data Analytics. Wikipedia TF-IDF dataset, 2020.</li>
+<li>Brysbaert and New. SUBTLEX-US, 2009.</li>
+<li>Shoeybi et al. Megatron-LM, 2019.</li>
+<li>Jordan et al. Muon optimizer, 2024.</li>
+<li>Wang et al. OctoThinker, 2025.</li>
+<li>Cobbe et al. Training verifiers to solve math word problems (GSM8K), 2021.</li>
+</ol>
+
+<h2>A Further Details on the Dataset Filtering Pipeline</h2>
+<h3>A.1 Rule-Based Pre-Filtering</h3>
+<p>[Summary] AoA (p95, \(\eta^2 = 0.413\)) outperforms Flesch–Kincaid, Dale–Chall, type-token ratio, sentence/word length, NAWL and Wikipedia IDF. Zipf frequency is chosen to fill missing AoA (SUBTLEX-US aligns better but leaves 2.5% OOV; Wikipedia covers more but aligns poorly).</p>
+<figure data-fig="10"><figcaption>Figure 10: Rule-based metrics on CommonCoreText across grade bands; AoA gives the clearest signal.</figcaption></figure>
+<figure data-fig="11"><figcaption>Figure 11: Correlation of AoA with Zipf (r = −0.453), Wikipedia IDF (r = +0.334) and SUBTLEX-US (r = −0.541); Zipf offers the best coverage/alignment trade-off.</figcaption></figure>
+<table>
+<tr><th>Token</th><th>Frequency (% of tokens)</th></tr>
+<tr><td>chatgpt</td><td>0.0031</td></tr><tr><td>mohill</td><td>0.0026</td></tr><tr><td>doacs</td><td>0.0017</td></tr><tr><td>sgas</td><td>0.0016</td></tr><tr><td>phenprocoumon</td><td>0.0016</td></tr><tr><td>shatavari</td><td>0.0016</td></tr><tr><td>calfresh</td><td>0.0014</td></tr><tr><td>necrozoospermia</td><td>0.0014</td></tr><tr><td>srpf</td><td>0.0013</td></tr><tr><td>fgas</td><td>0.0012</td></tr>
+</table>
+<p>Table 2: Most frequent OOV words for Zipf + AoA.</p>
+<h3>A.2 LLMJ</h3>
+<p>[Summary] Four grade bands; majority vote across seed, OpenEvolve and DSPy/GEPA prompts on Gemini 3 Flash, ties broken toward higher grade. ICL and confidence weighting gave no gains. Cost: $0.0066/sample, about $45.87M for 6.95B samples. Single-judge Gemini labeling beat cross-model agreement; a safety adjustment hurt accuracy and recall.</p>
+<figure data-fig="12"><figcaption>Figure 12: K–5 precision of LLMJ variants on Gemini 3 Flash; none vastly outperforms the others.</figcaption></figure>
+<figure data-fig="13"><figcaption>Figure 13: The single-judge Gemini setup outperforms cross-model agreement on accuracy and under-classification.</figcaption></figure>
+<figure data-fig="14"><figcaption>Figure 14: Safety adjustment reduces under-classification at a large accuracy cost and collapses K–5 and 6–8 recall.</figcaption></figure>
+<h3>A.3 Symbolic Filtering</h3>
+<table>
+<tr><th>Category</th><th>Examples</th><th>Pattern coverage</th></tr>
+<tr><td>Equations</td><td>\(2x+3=7,\ ax+by=c,\ x^2+2x\)</td><td>Single/multi-variable equations, polynomials</td></tr>
+<tr><td>Exponents</td><td>\(x^2, x^n, 5^3\)</td><td>Caret, LaTeX, unicode, programming-style</td></tr>
+<tr><td>Roots</td><td>\(\sqrt{x}, \sqrt[n]{x}, x^{1/3}\)</td><td>Square, cube, n-th roots</td></tr>
+<tr><td>Inequalities</td><td>\(a&lt;x&lt;b,\ a\le x\le b\)</td><td>Chained comparisons</td></tr>
+<tr><td>Calculus/operators</td><td>\(\sum, \int, \partial, \infty\)</td><td>Summation, integrals, derivatives</td></tr>
+<tr><td>Functions</td><td>\(f(x), g(y), h(z)\)</td><td>f/g/h with x/y/z</td></tr>
+</table>
+<p>Table 3: Symbolic notation families targeted by the rule-based filter. Removal rate ≈ 0.1%.</p>
+<h3>A.4 Frequency Sampling</h3>
+<p>[Summary] The ~100B-token retained pool exceeds the 80B target; terms are scored by</p>
+\[ \mathrm{score}(w) = \log_2 \frac{\mathrm{rate}_{\text{Beyond-K–5}}(w)}{\mathrm{rate}_{\text{K–5}}(w)}, \qquad \mathrm{rate}(w) = \frac{\mathrm{count}(w)}{\text{total tokens}} \]
+<p>and high-scoring frequent terms form a blocklist used to downsample documents.</p>
+<h3>A.5 CommonCoreText</h3>
+<p>[Summary] 460 held-out CCSS-aligned passages (science and literature).</p>
+<table>
+<tr><th></th><th>Retained</th><th>Removed</th></tr>
+<tr><td>Word count (median)</td><td>115</td><td>205</td></tr>
+<tr><td>Word count (mean)</td><td>150</td><td>228</td></tr>
+<tr><td>Avg. sentence length (words)</td><td>13.3</td><td>21.7</td></tr>
+<tr><td>Long words (≥7 chars)</td><td>12.3%</td><td>18.0%</td></tr>
+</table>
+<p>Table 4: Statistics for retained vs. removed K–5 passages.</p>
+<h3>A.6 Independent Leakage Checks</h3>
+<p>[Summary] WeeBit (Grades 2–4: 2,218; Grades 6–10: 6,000 passages): 2.48% Beyond-K–5 retained, mostly artifacts or simple prose; three out-of-scope passages (0.05%). N-gram audit: 0.09% of retained passages match.</p>
+<h3>A.7 Examples of Dropped Samples per Filtering Stage</h3>
+<p>[Summary] Examples dropped include neuroscience and cardiology texts (AoA), homebrewing and a counterfeit-coin algorithm page (FastText), medical articles (ModernBERT), physics homework with exponent notation (Symbolic), and miscellaneous web pages (Frequency sampling).</p>
+
+<h2>B Details on Model Training</h2>
+<p>[Summary] Qwen3-dense architecture, Megatron-Core 0.17.1, Muon optimizer, BF16/MXFP8. Cooloff mix: 91% K–5 pretraining, 5% K–5-rewritten math reasoning, 2% K–5-rewritten math instruction, 2% general instruction data. Custom tokenizer trained on K–5 data only. A 2B single-digit tokenization ablation raised Beyond-K–5 pass@1 (LittleLearner 1.1%→1.8%, Unfiltered 4.6%→10.3%) without closing the gap. The checkpoint with the lowest validation BPB is used.</p>
+
+<h2>C Further Evaluation Details</h2>
+<h3>C.1 Mathematical Reasoning with CoMTA</h3>
+<p>[Summary] Manual labeling: Elementary = K–5; Algebra, Trigonometry and Calculus = Beyond-K–5; Geometry excluded as mixed.</p>
+<h3>C.2 Mathematical Reasoning with MathCAMPS</h3>
+<h3>C.2.1 Filtering MathCAMPS Standards and Questions</h3>
+<p>[Summary] Three exclusions: standards with fewer than 30 unique answers; questions whose answer appears verbatim in the question text; and standard 6.EE.B.7, which duplicates grade-3 problems.</p>
+<table>
+<tr><th>Metric</th><th>K–5</th><th>Beyond-K–5</th></tr>
+<tr><td>Flesch–Kincaid grade</td><td>5.28</td><td>5.37</td></tr>
+<tr><td>Mean sentence length (words)</td><td>10.7</td><td>10.1</td></tr>
+<tr><td>Mean word length (characters)</td><td>4.29</td><td>4.20</td></tr>
+<tr><td>Mean question length (words)</td><td>28</td><td>23</td></tr>
+</table>
+<p>Table 5: Readability metrics for MathCAMPS partitions.</p>
+<h3>C.2.2 Performance Across Learning Paths</h3>
+<figure data-fig="15"><figcaption>Figure 15: Pass@1 along CCSS division (left) and multiplication/division (right) learning paths; LittleLearner diverges at higher grades, and neither model follows CCSS ordering.</figcaption></figure>
+<figure data-fig="16"><figcaption>Figure 16: Pass@k on MathCAMPS by grade; the Beyond-K–5 gap remains stable at higher sampling budgets.</figcaption></figure>
+<p>[Summary] The models diverge mainly at Grade 7, especially on pure-arithmetic decimal framing. Progress along prerequisite chains is non-monotonic, so the model should not be read as a "digital 12-year-old."</p>
+<h3>C.2.3 Pass@k Performance on MathCAMPS</h3>
+<p>[Summary] At pass@1024, LittleLearner retains most of Unfiltered's competence through Grade 6 but only about two-thirds at Grade 8. Per-problem success correlates with Unfiltered within K–5 (Spearman 0.80). Curves plateau by k≈100, indicating a capability ceiling rather than a sampling artifact.</p>
+<h3>C.3 Details on Scaling Experiments</h3>
+<figure data-fig="17"><figcaption>Figure 17: Per-grade scaling results for LittleLearner and Unfiltered on MathCAMPS (0.6B–5B), with 95% CIs.</figcaption></figure>
+<h3>C.4 Details on Post-Training Experiments</h3>
+<p>[Summary] SFT on 108k math CoT and 526k reading-comprehension examples (~46M tokens, one epoch). GRPO on synthetic MathCAMPS-style problems plus GSM8K (filtered for K–5), in 150–300-step segments with re-banding to problems solved 1–15 of 16 times.</p>
+<h3>C.5 Details on ICL Experiments</h3>
+<p>[Summary] Three questions per standard generated with Gemini 3 Flash, with grade-appropriate explanations generated using a constrained prompt (concrete numbers, no variables, K–5 vocabulary). Hand-authored natural-prose CoTs serve as shots for 43 K–5 standards. Compared styles: compact algebraic, natural prose, and Q/A only.</p>
+<table>
+<tr><th>Method</th><th>K–5</th><th>Beyond-K–5</th><th>Mean output (chars)</th></tr>
+<tr><td>Direct (zero-shot)</td><td>34.0%</td><td>6.0%</td><td>352</td></tr>
+<tr><td>Natural prose</td><td>36.8%</td><td>5.9%</td><td>374</td></tr>
+<tr><td>Compact algebraic</td><td>17.0%</td><td>1.6%</td><td>99</td></tr>
+<tr><td>Q/A only</td><td>9.2%</td><td>0.2%</td><td>41</td></tr>
+</table>
+<p>Table 6: ICL formats on SFT'd 5B LittleLearner. Only natural prose improves over zero-shot.</p>
+
+<h2>D More Qualitative Examples</h2>
+<table>
+<tr><th>Prompt</th><th>LittleLearner</th><th>Unfiltered</th></tr>
+<tr><td>What is a magnet? (K–5)</td><td>Metal that attracts other metal.</td><td>Material with magnetism.</td></tr>
+<tr><td>What is gravity? (K–5)</td><td>Force that pulls everything down.</td><td>Inverse-square force.</td></tr>
+<tr><td>What is DNA? (Beyond)</td><td>Instructions for how we look when old.</td><td>Deoxyribonucleic acid, two nucleotide strands…</td></tr>
+<tr><td>What is Schrödinger's cat? (Beyond)</td><td>A cat with two faces.</td><td>Quantum thought experiment (1935).</td></tr>
+<tr><td>What does \(E=mc^2\) mean? (Beyond)</td><td>A math constant / a Star Wars character.</td><td>Mass–energy equivalence.</td></tr>
+</table>
+<p>Table 7 (paraphrased responses). [Summary] In-scope answers are simple but correct; out-of-scope answers are confident, structured hallucinations that project unfamiliar concepts onto familiar ones.</p>
+
+<h2>E Existing Assets, Licenses, and Terms of Use</h2>
+<table>
+<tr><th>Asset</th><th>Use</th><th>License</th><th>Included?</th></tr>
+<tr><td>FineWeb-Edu</td><td>Source corpus</td><td>ODC-BY</td><td>Yes</td></tr>
+<tr><td>Common Core State Standards</td><td>Curriculum alignment</td><td>CCSS Public License</td><td>No</td></tr>
+<tr><td>NGSS</td><td>Curriculum alignment</td><td>NGSS Public License</td><td>No</td></tr>
+<tr><td>CLEAR</td><td>Readability validation</td><td>MIT</td><td>No</td></tr>
+<tr><td>CoMTA</td><td>Math familiarity evaluation</td><td>Khan Academy Evaluation Dataset License</td><td>No</td></tr>
+<tr><td>MathCAMPS</td><td>Math reasoning evaluation</td><td>MIT</td><td>No</td></tr>
+<tr><td>Qwen3</td><td>Training setup</td><td>Apache 2.0</td><td>No</td></tr>
+<tr><td>Gemma 2B</td><td>External baseline</td><td>Gemma Terms of Use</td><td>No</td></tr>
+<tr><td>Smoltalk</td><td>Post-training data</td><td>Apache-2.0</td><td>No</td></tr>
+<tr><td>MMLU</td><td>Post-training data</td><td>Apache-2.0</td><td>No</td></tr>
+<tr><td>GSM8K</td><td>Post-training data</td><td>MIT</td><td>No</td></tr>
+<tr><td>ARC</td><td>Post-training data</td><td>Apache-2.0</td><td>No</td></tr>
+</table>
+<p>Table 8: Existing assets used in the paper.</p>
+
+<h2>NeurIPS Paper Checklist</h2>
+<p>[Summary] Answers: Claims – Yes; Limitations – Yes; Theory – N/A; Reproducibility – Yes; Open access – Yes (code in supplement, checkpoints/data on publication); Experimental details – Yes; Statistical significance – Yes (95% CIs); Compute – Yes; Code of ethics – Yes; Broader impacts – Yes; Safeguards – Yes; Licenses – Yes; New assets – Yes; Crowdsourcing – N/A; IRB – N/A; LLM usage – Yes (Gemini 3 Flash for annotation, prompt optimization and labeling).</p>
+</body></html>

@@ -1,10 +1,10 @@
-"""Copy the CoRL 2026 browser into a checkout of the GitHub Pages repo (dotd.github.io), at <repo>/corl2026/.
+"""Copy a paper browser (default CoRL 2026) into a checkout of the GitHub Pages repo (dotd.github.io), at <repo>/<site>/.
 
 The page goes as is, minus your local folder path; figures go as WebP thumbnails (<=900 px wide, ~8x smaller than the
 PNGs) so they fit GitHub Pages' ~1 GB site limit. PDFs and movies stay local. Commit + push the repo afterwards.
 
     uv run python website/corl2026/build.py
-    uv run python specific_scripts/publish_corl2026_pages.py <path to dotd.github.io checkout>
+    uv run python specific_scripts/publish_corl2026_pages.py <path to dotd.github.io checkout> [site folder, e.g. neurips2026]
 """
 
 import concurrent.futures
@@ -15,7 +15,8 @@ import subprocess
 import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-HERE = os.path.join(ROOT, "website", "corl2026")
+SITE = sys.argv[2] if len(sys.argv) > 2 else "corl2026"
+HERE = os.path.join(ROOT, "website", SITE)
 MAX_W = 900
 
 
@@ -28,7 +29,7 @@ def to_webp(src, dst, w):
 
 
 def main(repo):
-    out = os.path.join(repo, "corl2026")
+    out = os.path.join(repo, SITE)
     first = json.load(open(os.path.join(HERE, "first_page.json")))
     jobs = {}  # relative png path -> width (0 = unknown, resize to be safe)
     for v in first.values():

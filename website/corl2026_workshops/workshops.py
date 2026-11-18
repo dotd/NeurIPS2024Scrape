@@ -37,12 +37,12 @@ sys.path[:0] = [os.path.join(ROOT, "website", "corl2026"), os.path.join(ROOT, "s
 import build  # noqa: E402
 
 
-def load(name, default):
-    return build.load(HERE, name, default)
+def load(name, default, here=HERE):
+    return build.load(here, name, default)
 
 
-def store(name, data):
-    json.dump(data, open(os.path.join(HERE, name), "w"), ensure_ascii=False, indent=1)
+def store(name, data, here=HERE):
+    json.dump(data, open(os.path.join(here, name), "w"), ensure_ascii=False, indent=1)
 
 
 def get(url):
@@ -126,8 +126,9 @@ def fetch():
     print(f"{len(papers)} papers in {sum(bool(w['group']) for w in workshops)} of {len(workshops)} workshops")
 
 
-def pdf_path(pid):
-    return next((os.path.join(HERE, "pdfs", f) for f in os.listdir(os.path.join(HERE, "pdfs")) if f.startswith(pid + "_")), None)
+def pdf_path(pid, here=HERE):
+    d = os.path.join(here, "pdfs")
+    return next((os.path.join(d, f) for f in os.listdir(d) if f.startswith(pid + "_")), None) if os.path.isdir(d) else None
 
 
 def pdfs():
@@ -171,21 +172,21 @@ def pdfs():
     print(f"{len(os.listdir(os.path.join(HERE, 'pdfs')))} PDFs")
 
 
-def extract():
-    """What CoRL 2026 got from its batch scripts, per PDF (same as website/papers/papers.py add_pdf())."""
+def extract(here=HERE, only=None):
+    """(only: these paper ids.) What CoRL 2026 got from its batch scripts, per PDF (same as website/papers/papers.py add_pdf())."""
     from corl2026_affiliations import COMPANY_RES, candidates, canonical_company, ror_match
     from corl2026_backbones import backbones
     from corl2026_github import repos
     from corl2026_robots import robots
     from extract_first_page import extract as first_page
-    os.makedirs(os.path.join(HERE, "figs"), exist_ok=True)
-    fp, rb, bb, gh = (load(n, {}) for n in ("first_page.json", "robots.json", "backbones.json", "github.json"))
-    aff = load("affiliations.json", {"papers": {}, "ror": {}})
-    todo = [pid for pid in load("papers.json", {}) if pid not in fp and pdf_path(pid)]
+    os.makedirs(os.path.join(here, "figs"), exist_ok=True)
+    fp, rb, bb, gh = (load(n, {}, here) for n in ("first_page.json", "robots.json", "backbones.json", "github.json"))
+    aff = load("affiliations.json", {"papers": {}, "ror": {}}, here)
+    todo = [pid for pid in only or load("papers.json", {}, here) if pid not in fp and pdf_path(pid, here)]
     for n, pid in enumerate(todo, 1):
-        pdf = pdf_path(pid)
+        pdf = pdf_path(pid, here)
         try:
-            fp[pid] = first_page(pdf, os.path.join(HERE, "figs", f"{pid}.png"), base=HERE)
+            fp[pid] = first_page(pdf, os.path.join(here, "figs", f"{pid}.png"), base=here)
             with pymupdf.open(pdf) as doc:
                 text = "\n".join(p.get_text() for p in doc)
                 cands, raw = candidates(doc[0])
@@ -208,7 +209,7 @@ def extract():
         aff["papers"][pid] = {"companies": sorted(companies), "universities": sorted(universities), "candidates": cands}
         if n % 25 == 0 or n == len(todo):  # save as it goes, so a stop loses little
             for name, d in [("first_page.json", fp), ("robots.json", rb), ("backbones.json", bb), ("github.json", gh), ("affiliations.json", aff)]:
-                store(name, d)
+                store(name, d, here)
             print(f"{n}/{len(todo)}", flush=True)
 
 

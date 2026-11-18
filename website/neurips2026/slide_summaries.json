@@ -1,0 +1,10 @@
+{
+ "Eidz3t6qmk": {
+  "text": "• Problem: feed-forward 3D reconstruction transformers scale past a billion parameters; depth may just buy implicit iterative refinement.\n• Key idea: make iteration explicit by looping one shared transformer block K times over per-view DINOv2 features.\n• Method: time-conditioned gated block with frame and global attention; depth, ray, and camera heads decode the final state.\n• Training samples K from Beta(2,1) on [8,16], so one checkpoint exposes steps as an inference compute knob.\n• Setup: 117M-parameter ViT-B model, 29 public datasets, evaluated on DTU, ETH3D, 7-Scenes, ScanNet++, and nuScenes.\n• Results: best average IR (80.3%) and AUC@30 (91.8%) versus VGGT, Pi3, and DA3-G, using 75.9 TFLOPs and 4.9 GiB.\n• New: shared weights beat untied per-step blocks (AUC@3 30.2 vs 23.0), but performance degrades well beyond 16 steps.",
+  "cost": 0.2541
+ },
+ "zSwgtp9S5a": {
+  "text": "• Problem: web-scale pretraining hides prior exposure, so we can't tell whether interventions create or elicit capabilities.\n• Key idea: constrain the training data itself to U.S. K–5 curriculum, creating an interpretable knowledge boundary.\n• Method: AoA prefilter, LLM-judge-trained FastText/ModernBERT classifiers, symbolic filtering, and frequency sampling on FineWeb-Edu yield an 88B-token corpus.\n• Validation: 0% Beyond-K–5 retained on CommonCoreText, 2.48% on WeeBit, 35–42% of K–5 retained.\n• Setup: 5B Qwen3-style LittleLearner trained 100h on 8 B200s, compared to an Unfiltered twin and Gemma 2B.\n• Results: matches Unfiltered on K–5 math; at Grade 8 pass@1024 it solves under half as many problems.\n• Scaling, SFT+GRPO, and few-shot ICL boost in-scope skills but don't lift out-of-scope performance; the corpus and model are released as a sandbox.",
+  "cost": 0.4496
+ }
+}

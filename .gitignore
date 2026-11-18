@@ -30,3 +30,9 @@ website/papers/htmls_python/
 website/corl2026_workshops/pdfs/
 website/corl2026_workshops/figs/
 website/corl2026_workshops/htmls_python/
+# NeurIPS 2026 (website/neurips2026): same large generated assets
+website/neurips2026/pdfs/
+website/neurips2026/figs/
+website/neurips2026/movies/
+website/neurips2026/htmls_python/
+website/neurips2026/virtual.json
