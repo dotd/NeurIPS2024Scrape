@@ -3,5 +3,175 @@
   "url": null,
   "cost": 0.2007,
   "searches": 4
+ },
+ "kH4SzHwprq": {
+  "url": null,
+  "cost": 0.2994,
+  "searches": 5
+ },
+ "bwvgAfue2A": {
+  "url": "https://arxiv.org/abs/2605.27594",
+  "cost": 0.1558,
+  "searches": 3
+ },
+ "QaYdB3AQtP": {
+  "url": null,
+  "cost": 0.2159,
+  "searches": 5
+ },
+ "7683TYQZFN": {
+  "url": "https://paperswithcode.co/paper/125633",
+  "cost": 0.19,
+  "searches": 3
+ },
+ "b8H5INq4J6": {
+  "url": null,
+  "cost": 0.2153,
+  "searches": 5
+ },
+ "weRx6oFuWD": {
+  "url": "https://paperswithcode.co/paper/130008",
+  "cost": 0.2094,
+  "searches": 4
+ },
+ "0BXKsjKlFJ": {
+  "url": "https://neurips.cc/virtual/2026/loc/sydney/poster/156128",
+  "cost": 0.2504,
+  "searches": 4
+ },
+ "E2j4hTCc0W": {
+  "url": "https://paperswithcode.co/paper/128527",
+  "cost": 0.2027,
+  "searches": 1
+ },
+ "w0wOa4UDHv": {
+  "url": "https://arxiv.org/abs/2512.18792",
+  "cost": 0.1281,
+  "searches": 1
+ },
+ "10lTNbAX7p": {
+  "url": null,
+  "cost": 0.2031,
+  "searches": 4
+ },
+ "1666VmXNqJ": {
+  "url": "https://paperswithcode.co/paper/125646",
+  "cost": 0.1989,
+  "searches": 3
+ },
+ "9e7CzWvHvW": {
+  "url": "https://nips.cc/virtual/2026/loc/paris/poster/154957",
+  "cost": 0.1958,
+  "searches": 3
+ },
+ "BuafzhL3jU": {
+  "url": "https://paperswithcode.co/paper/128634",
+  "cost": 0.197,
+  "searches": 3
+ },
+ "5tpJaR5P0v": {
+  "url": "https://mcml.ai/publications/hdl+26/",
+  "cost": 0.2004,
+  "searches": 3
+ },
+ "8gcHRPsjr5": {
+  "url": "https://paperswithcode.co/paper/126091",
+  "cost": 0.214,
+  "searches": 5
+ },
+ "C7T2iGG1Zy": {
+  "url": "https://arxiv.org/abs/2604.19741",
+  "cost": 0.1897,
+  "searches": 3
+ },
+ "YcEZoSqrxa": {
+  "url": null,
+  "cost": 0.1959,
+  "searches": 3
+ },
+ "dZItc1V1aV": {
+  "url": "https://paperswithcode.co/paper/126411",
+  "cost": 0.2084,
+  "searches": 4
+ },
+ "E7jxq4ttP2": {
+  "url": "https://arxiv.org/abs/2611.03756",
+  "cost": 0.2202,
+  "searches": 2
+ },
+ "miKyDlYKQ0": {
+  "url": "https://arxiv.org/abs/2605.24981",
+  "cost": 0.0966,
+  "searches": 1
+ },
+ "gBQls8hssQ": {
+  "url": "https://arxiv.org/abs/2611.07294",
+  "cost": 0.18,
+  "searches": 1
+ },
+ "mmoow6azRW": {
+  "url": "https://paperswithcode.co/paper/131264",
+  "cost": 0.1532,
+  "searches": 3
+ },
+ "azDcnhfVNx": {
+  "url": "https://github.com/chaojieji/IDEA",
+  "cost": 0.1793,
+  "searches": 2
+ },
+ "KKJDo7EkPM": {
+  "url": "https://github.com/final408/FedSOUL-Federated-Continual-Unlearning-via-Spectral-Orthogonality",
+  "cost": 0.1793,
+  "searches": 2
+ },
+ "dSbq1BWqRS": {
+  "url": "https://paperswithcode.co/paper/130551",
+  "cost": 0.2409,
+  "searches": 4
+ },
+ "FBdLg0pxh3": {
+  "url": "https://paperswithcode.co/paper/128545",
+  "cost": 0.1799,
+  "searches": 2
+ },
+ "VbhnntlbxG": {
+  "url": "https://paperswithcode.co/paper/129798",
+  "cost": 0.2483,
+  "searches": 4
+ },
+ "eCAxMcFzTe": {
+  "url": "https://arxiv.org/abs/2605.19338",
+  "cost": 0.1052,
+  "searches": 1
+ },
+ "fGUaeL5g1k": {
+  "url": null,
+  "cost": 0.2503,
+  "searches": 5
+ },
+ "VI6PExULcy": {
+  "url": null,
+  "cost": 0.2057,
+  "searches": 4
+ },
+ "U280pm3mcR": {
+  "url": "https://phuselab.github.io/nrm-project-page/",
+  "cost": 0.2483,
+  "searches": 5
+ },
+ "mshiN8rReo": {
+  "url": null,
+  "cost": 0.2649,
+  "searches": 3
+ },
+ "Sad9HLajgI": {
+  "url": null,
+  "cost": 0.2864,
+  "searches": 4
+ },
+ "puXNHGNUWY": {
+  "url": "https://paperswithcode.co/paper/130696",
+  "cost": 0.2229,
+  "searches": 2
  }
 }

@@ -3,5 +3,878 @@
   "CLIP",
   "Qwen (Qwen-VL / Qwen2.5-VL)",
   "Cosmos"
+ ],
+ "V0AFOUpwqi": [
+  "GPT-4 / GPT-4o / GPT-5"
+ ],
+ "utdVAXHnlv": [
+  "ViT",
+  "Qwen (Qwen-VL / Qwen2.5-VL)",
+  "GPT-4 / GPT-4o / GPT-5",
+  "Gemini"
+ ],
+ "M1eBc5lFuT": [
+  "Gemma",
+  "Llama",
+  "Qwen (Qwen-VL / Qwen2.5-VL)"
+ ],
+ "rbIH0DXMsW": [
+  "ViT",
+  "DINO / DINOv2 / DINOv3",
+  "Wan (video model)"
+ ],
+ "YySQ07LVAC": [
+  "LLaVA",
+  "Qwen (Qwen-VL / Qwen2.5-VL)"
+ ],
+ "kqCpiR360C": [
+  "LLaVA",
+  "Qwen (Qwen-VL / Qwen2.5-VL)"
+ ],
+ "iVvXeIwD1f": [
+  "Gemma",
+  "Llama",
+  "Qwen (Qwen-VL / Qwen2.5-VL)",
+  "GPT-4 / GPT-4o / GPT-5",
+  "Gemini",
+  "Claude"
+ ],
+ "b4HCV0e0V8": [
+  "LLaVA",
+  "Qwen (Qwen-VL / Qwen2.5-VL)"
+ ],
+ "Eidz3t6qmk": [
+  "ViT",
+  "DINO / DINOv2 / DINOv3"
+ ],
+ "U3GUy7xRmI": [
+  "Gemma",
+  "Qwen (Qwen-VL / Qwen2.5-VL)"
+ ],
+ "iFWR7mI8Q0": [
+  "ResNet",
+  "ViT"
+ ],
+ "h9jfL4NIg5": [
+  "U-Net"
+ ],
+ "zSwgtp9S5a": [
+  "Gemma",
+  "Gemini"
+ ],
+ "FCkkBolf4o": [
+  "ResNet",
+  "Diffusion Policy"
+ ],
+ "ShMNgympCf": [
+  "Qwen (Qwen-VL / Qwen2.5-VL)",
+  "GPT-4 / GPT-4o / GPT-5",
+  "Claude"
+ ],
+ "YmGCdpjNNh": [
+  "Llama",
+  "Qwen (Qwen-VL / Qwen2.5-VL)"
+ ],
+ "fwaVRSuVPd": [
+  "Qwen (Qwen-VL / Qwen2.5-VL)",
+  "Gemini"
+ ],
+ "wSSsA6iviw": [
+  "Qwen (Qwen-VL / Qwen2.5-VL)"
+ ],
+ "5aiycPi3Qu": [
+  "ViT",
+  "DINO / DINOv2 / DINOv3",
+  "U-Net"
+ ],
+ "q5P5hkR2n3": [
+  "ViT",
+  "DINO / DINOv2 / DINOv3",
+  "Depth Anything"
+ ],
+ "SAk0iIw26c": [
+  "CLIP",
+  "SAM / SAM 2"
+ ],
+ "xY4SuwZDLZ": [
+  "ResNet",
+  "ViT",
+  "CLIP",
+  "EfficientNet"
+ ],
+ "HbgNRwBlhi": [
+  "Mamba"
+ ],
+ "2MmzwEyeO2": [
+  "π0 / π0.5",
+  "GR00T"
+ ],
+ "rzZuYaw8zp": [
+  "Qwen (Qwen-VL / Qwen2.5-VL)",
+  "GPT-4 / GPT-4o / GPT-5"
+ ],
+ "i6ZEbxGeKu": [
+  "Mamba"
+ ],
+ "KyGX4aOkhc": [
+  "Qwen (Qwen-VL / Qwen2.5-VL)"
+ ],
+ "GOjRwLmiSD": [
+  "Mamba"
+ ],
+ "VaoJb3PtWQ": [
+  "Qwen (Qwen-VL / Qwen2.5-VL)",
+  "GPT-4 / GPT-4o / GPT-5",
+  "Gemini",
+  "Claude"
+ ],
+ "eXkSa0pAuf": [
+  "Gemma"
+ ],
+ "B1fQuBGYFx": [
+  "ResNet"
+ ],
+ "YulzlhXlgy": [
+  "Llama",
+  "Qwen (Qwen-VL / Qwen2.5-VL)"
+ ],
+ "DA12jH1hET": [
+  "Qwen (Qwen-VL / Qwen2.5-VL)"
+ ],
+ "mBYJRAFq7D": [
+  "π0 / π0.5",
+  "Wan (video model)"
+ ],
+ "q4iZrZtAjJ": [
+  "SAM / SAM 2",
+  "Llama",
+  "Qwen (Qwen-VL / Qwen2.5-VL)",
+  "Gemini"
+ ],
+ "QbYbgrobWj": [
+  "DINO / DINOv2 / DINOv3",
+  "CLIP",
+  "U-Net"
+ ],
+ "vCft9tPVmL": [
+  "ResNet",
+  "ViT"
+ ],
+ "nJ0AEgMZGZ": [
+  "GPT-4 / GPT-4o / GPT-5",
+  "Gemini",
+  "Claude"
+ ],
+ "ltg40TysQ2": [
+  "Qwen (Qwen-VL / Qwen2.5-VL)"
+ ],
+ "swVrjlNX4Q": [
+  "CLIP"
+ ],
+ "41V90qR5dA": [
+  "Llama",
+  "GPT-4 / GPT-4o / GPT-5",
+  "Claude"
+ ],
+ "HvYVosmFBa": [
+  "DINO / DINOv2 / DINOv3",
+  "SigLIP",
+  "Gemma",
+  "Qwen (Qwen-VL / Qwen2.5-VL)",
+  "GPT-4 / GPT-4o / GPT-5"
+ ],
+ "GtXyIhzAqI": [
+  "π0 / π0.5"
+ ],
+ "4WN4vV8RCR": [
+  "ResNet",
+  "ViT"
+ ],
+ "sDCGZbVL6d": [
+  "DreamerV3"
+ ],
+ "9url1EFMaU": [
+  "GPT-4 / GPT-4o / GPT-5",
+  "Gemini",
+  "Claude"
+ ],
+ "a30XWAYlaJ": [
+  "ResNet",
+  "ViT",
+  "EfficientNet"
+ ],
+ "USnGWfYVux": [
+  "Llama",
+  "Qwen (Qwen-VL / Qwen2.5-VL)"
+ ],
+ "NmbGjaLeN2": [
+  "ResNet"
+ ],
+ "60UfWy2Mx4": [
+  "Qwen (Qwen-VL / Qwen2.5-VL)"
+ ],
+ "NO4INpEpCi": [
+  "LLaVA",
+  "Qwen (Qwen-VL / Qwen2.5-VL)",
+  "GPT-4 / GPT-4o / GPT-5",
+  "Gemini"
+ ],
+ "SYResv1L06": [
+  "Wan (video model)"
+ ],
+ "YDISH8weQa": [
+  "Qwen (Qwen-VL / Qwen2.5-VL)",
+  "GPT-4 / GPT-4o / GPT-5",
+  "Gemini"
+ ],
+ "bNK3Svyy8O": [
+  "CLIP",
+  "Qwen (Qwen-VL / Qwen2.5-VL)",
+  "GPT-4 / GPT-4o / GPT-5",
+  "Gemini"
+ ],
+ "1GN874s1AI": [
+  "Gemma",
+  "Llama",
+  "GPT-4 / GPT-4o / GPT-5"
+ ],
+ "xc5RAI0YCe": [
+  "CLIP",
+  "LLaVA"
+ ],
+ "EXtXoqNLl3": [
+  "Qwen (Qwen-VL / Qwen2.5-VL)",
+  "Gemini"
+ ],
+ "0pWBLS7Kzj": [
+  "CLIP"
+ ],
+ "3pqVVK0kW3": [
+  "ViT",
+  "SAM / SAM 2",
+  "Qwen (Qwen-VL / Qwen2.5-VL)"
+ ],
+ "UreH0QGZXp": [
+  "ResNet"
+ ],
+ "TAt6jrbMb8": [
+  "Qwen (Qwen-VL / Qwen2.5-VL)"
+ ],
+ "nWHsSjFVA0": [
+  "ViT",
+  "DINO / DINOv2 / DINOv3"
+ ],
+ "ZqbnpmPYvV": [
+  "Gemma",
+  "Llama",
+  "Qwen (Qwen-VL / Qwen2.5-VL)",
+  "GPT-4 / GPT-4o / GPT-5",
+  "Gemini",
+  "Claude"
+ ],
+ "96v36aMNTx": [
+  "Llama",
+  "Qwen (Qwen-VL / Qwen2.5-VL)",
+  "GPT-4 / GPT-4o / GPT-5",
+  "Gemini"
+ ],
+ "mRzgdbaTNp": [
+  "Wan (video model)",
+  "Cosmos"
+ ],
+ "DOtvhTItcX": [
+  "CLIP",
+  "U-Net",
+  "Qwen (Qwen-VL / Qwen2.5-VL)"
+ ],
+ "Hse0SKGx7y": [
+  "CLIP",
+  "Wan (video model)"
+ ],
+ "SNNm5MJ9dg": [
+  "Gemma",
+  "Llama",
+  "Qwen (Qwen-VL / Qwen2.5-VL)",
+  "Claude"
+ ],
+ "VbWRUbpIUv": [
+  "Claude"
+ ],
+ "We2oXEmu4W": [
+  "Gemini",
+  "Claude"
+ ],
+ "a5qQCbrc2b": [
+  "Qwen (Qwen-VL / Qwen2.5-VL)",
+  "GPT-4 / GPT-4o / GPT-5"
+ ],
+ "aoP7r2nyxb": [
+  "CLIP"
+ ],
+ "dZhUeQa53U": [
+  "π0 / π0.5",
+  "OpenVLA / OpenVLA-OFT",
+  "RT-1 / RT-2 / RT-X"
+ ],
+ "i6Ojls5BRt": [
+  "Gemini",
+  "Claude"
+ ],
+ "hmvlyb1yQu": [
+  "Qwen (Qwen-VL / Qwen2.5-VL)"
+ ],
+ "iCXoa3VMy0": [
+  "Qwen (Qwen-VL / Qwen2.5-VL)",
+  "GPT-4 / GPT-4o / GPT-5",
+  "Gemini",
+  "Claude"
+ ],
+ "rVX7LF9vry": [
+  "ViT",
+  "CLIP",
+  "V-JEPA",
+  "Qwen (Qwen-VL / Qwen2.5-VL)"
+ ],
+ "riv0NRuHeq": [
+  "ViT",
+  "CLIP",
+  "LLaVA",
+  "Qwen (Qwen-VL / Qwen2.5-VL)"
+ ],
+ "u2TS1Rxun2": [
+  "Qwen (Qwen-VL / Qwen2.5-VL)"
+ ],
+ "yls0nG3VKg": [
+  "π0 / π0.5"
+ ],
+ "Iee7eL6QV0": [
+  "GPT-4 / GPT-4o / GPT-5",
+  "Gemini",
+  "Claude"
+ ],
+ "pnb7TQTzC2": [
+  "Qwen (Qwen-VL / Qwen2.5-VL)"
+ ],
+ "zLwGdQLBbW": [
+  "Gemma",
+  "Llama",
+  "Qwen (Qwen-VL / Qwen2.5-VL)"
+ ],
+ "tsoDWPkJOz": [
+  "Qwen (Qwen-VL / Qwen2.5-VL)",
+  "GPT-4 / GPT-4o / GPT-5",
+  "Gemini"
+ ],
+ "ehnuc3RcGX": [
+  "Llama",
+  "Qwen (Qwen-VL / Qwen2.5-VL)",
+  "GPT-4 / GPT-4o / GPT-5"
+ ],
+ "ibeDXGKMar": [
+  "ViT",
+  "CLIP"
+ ],
+ "LvhItGvox7": [
+  "ResNet"
+ ],
+ "c9GSAkKpkb": [
+  "Llama",
+  "Qwen (Qwen-VL / Qwen2.5-VL)",
+  "GPT-4 / GPT-4o / GPT-5",
+  "Gemini"
+ ],
+ "EaF7FneBfZ": [
+  "Qwen (Qwen-VL / Qwen2.5-VL)",
+  "GPT-4 / GPT-4o / GPT-5",
+  "Gemini",
+  "Claude"
+ ],
+ "XWrgnSu8qf": [
+  "Qwen (Qwen-VL / Qwen2.5-VL)",
+  "GPT-4 / GPT-4o / GPT-5",
+  "Claude"
+ ],
+ "taklyDq3WJ": [
+  "Qwen (Qwen-VL / Qwen2.5-VL)",
+  "Gemini"
+ ],
+ "1bGfOCtPWO": [
+  "GPT-4 / GPT-4o / GPT-5"
+ ],
+ "F6LR7aEwxS": [
+  "ViT",
+  "CLIP",
+  "SigLIP"
+ ],
+ "mTYG9xSbYv": [
+  "ViT",
+  "V-JEPA"
+ ],
+ "uyN7V3sdbW": [
+  "Llama",
+  "Qwen (Qwen-VL / Qwen2.5-VL)"
+ ],
+ "vlSaF75Gmd": [
+  "ViT",
+  "Mamba"
+ ],
+ "tin36Zr1Ue": [
+  "GPT-4 / GPT-4o / GPT-5",
+  "Claude"
+ ],
+ "C7T2iGG1Zy": [
+  "DINO / DINOv2 / DINOv3",
+  "Wan (video model)"
+ ],
+ "XEkhbF0f6x": [
+  "Qwen (Qwen-VL / Qwen2.5-VL)",
+  "Gemini"
+ ],
+ "3L4DUaI1nh": [
+  "ViT"
+ ],
+ "7UwsQGxwFQ": [
+  "LLaVA",
+  "Qwen (Qwen-VL / Qwen2.5-VL)"
+ ],
+ "WH8ZDT099q": [
+  "ViT",
+  "DINO / DINOv2 / DINOv3",
+  "CLIP",
+  "Llama",
+  "LLaVA",
+  "Qwen (Qwen-VL / Qwen2.5-VL)"
+ ],
+ "M4Xj5w0EcJ": [
+  "Llama",
+  "Qwen (Qwen-VL / Qwen2.5-VL)"
+ ],
+ "QrjZX92zUN": [
+  "Llama",
+  "Qwen (Qwen-VL / Qwen2.5-VL)"
+ ],
+ "wB1qrn1Paj": [
+  "CLIP",
+  "SAM / SAM 2"
+ ],
+ "1pPCCHeICG": [
+  "ViT",
+  "CLIP",
+  "Qwen (Qwen-VL / Qwen2.5-VL)"
+ ],
+ "LfcBS0p58e": [
+  "SigLIP"
+ ],
+ "LR1XtBSs7q": [
+  "Qwen (Qwen-VL / Qwen2.5-VL)",
+  "Gemini"
+ ],
+ "dXcdEoI6I5": [
+  "Llama"
+ ],
+ "0Hg7gv5gwK": [
+  "Qwen (Qwen-VL / Qwen2.5-VL)",
+  "π0 / π0.5",
+  "OpenVLA / OpenVLA-OFT",
+  "UniVLA"
+ ],
+ "h2uqXBSIOu": [
+  "PointNet / PointNet++"
+ ],
+ "e7zF0NYC0J": [
+  "Qwen (Qwen-VL / Qwen2.5-VL)",
+  "ACT (Action Chunking Transformer)"
+ ],
+ "KJ3CT9VwVV": [
+  "CLIP",
+  "U-Net",
+  "Qwen (Qwen-VL / Qwen2.5-VL)",
+  "Gemini"
+ ],
+ "ub2Ru5hNGA": [
+  "GPT-4 / GPT-4o / GPT-5"
+ ],
+ "Qj1kSEf9Rs": [
+  "ViT"
+ ],
+ "42dIxEhArH": [
+  "Qwen (Qwen-VL / Qwen2.5-VL)",
+  "GPT-4 / GPT-4o / GPT-5",
+  "Claude"
+ ],
+ "UqphiAp8hm": [
+  "LLaVA",
+  "Qwen (Qwen-VL / Qwen2.5-VL)"
+ ],
+ "tMbUp1FMia": [
+  "CLIP",
+  "LLaVA",
+  "Qwen (Qwen-VL / Qwen2.5-VL)",
+  "GPT-4 / GPT-4o / GPT-5",
+  "π0 / π0.5"
+ ],
+ "r2uyttQly8": [
+  "ResNet",
+  "ViT"
+ ],
+ "2OSsvaeOHi": [
+  "Llama",
+  "Qwen (Qwen-VL / Qwen2.5-VL)"
+ ],
+ "HssNfd9nbe": [
+  "Gemma",
+  "Llama",
+  "Qwen (Qwen-VL / Qwen2.5-VL)"
+ ],
+ "9OK87o8Wkf": [
+  "ViT",
+  "DINO / DINOv2 / DINOv3",
+  "CLIP",
+  "SigLIP",
+  "GPT-4 / GPT-4o / GPT-5"
+ ],
+ "uhe6KW6jyO": [
+  "Mamba"
+ ],
+ "H2kz1bJFuL": [
+  "Llama",
+  "Qwen (Qwen-VL / Qwen2.5-VL)"
+ ],
+ "9rkAbf5ICO": [
+  "Qwen (Qwen-VL / Qwen2.5-VL)"
+ ],
+ "gBQls8hssQ": [
+  "CLIP",
+  "U-Net"
+ ],
+ "VLjkAcK9fS": [
+  "Qwen (Qwen-VL / Qwen2.5-VL)"
+ ],
+ "tk5UFZich8": [
+  "Gemini"
+ ],
+ "MeL6BM40Ro": [
+  "Qwen (Qwen-VL / Qwen2.5-VL)",
+  "GPT-4 / GPT-4o / GPT-5"
+ ],
+ "w8VsusUqRS": [
+  "SigLIP"
+ ],
+ "d3KYxJNekT": [
+  "Qwen (Qwen-VL / Qwen2.5-VL)"
+ ],
+ "2zZdeKdoc6": [
+  "Llama",
+  "Qwen (Qwen-VL / Qwen2.5-VL)"
+ ],
+ "PGq5jFALJa": [
+  "Depth Anything",
+  "Qwen (Qwen-VL / Qwen2.5-VL)",
+  "π0 / π0.5",
+  "RDT",
+  "UniVLA",
+  "ACT (Action Chunking Transformer)"
+ ],
+ "nTTIRxpVbW": [
+  "PointNet / PointNet++"
+ ],
+ "drpFiVnG8v": [
+  "CLIP",
+  "π0 / π0.5"
+ ],
+ "pP7kJXjPeY": [
+  "ViT",
+  "DINO / DINOv2 / DINOv3"
+ ],
+ "j164YLIssM": [
+  "DINO / DINOv2 / DINOv3",
+  "CLIP"
+ ],
+ "eDvLM8DzS1": [
+  "GPT-4 / GPT-4o / GPT-5",
+  "Gemini",
+  "Claude"
+ ],
+ "z9GVQGjnKg": [
+  "Depth Anything",
+  "Qwen (Qwen-VL / Qwen2.5-VL)",
+  "GPT-4 / GPT-4o / GPT-5"
+ ],
+ "db0FP1G7V7": [
+  "ResNet",
+  "ViT",
+  "Qwen (Qwen-VL / Qwen2.5-VL)"
+ ],
+ "45xs8n0hj4": [
+  "ResNet",
+  "ViT",
+  "DINO / DINOv2 / DINOv3",
+  "SAM / SAM 2"
+ ],
+ "8gDb2bnWWf": [
+  "Claude"
+ ],
+ "PYYLCc0DHq": [
+  "GPT-4 / GPT-4o / GPT-5",
+  "Gemini",
+  "Claude"
+ ],
+ "47M69IISIM": [
+  "Qwen (Qwen-VL / Qwen2.5-VL)",
+  "GPT-4 / GPT-4o / GPT-5",
+  "Claude"
+ ],
+ "KQRZdjU6Q1": [
+  "ViT",
+  "DINO / DINOv2 / DINOv3"
+ ],
+ "YE3wLDLd1p": [
+  "ViT",
+  "DINO / DINOv2 / DINOv3",
+  "SAM / SAM 2",
+  "Qwen (Qwen-VL / Qwen2.5-VL)",
+  "Stable Diffusion"
+ ],
+ "oIxNRF9huQ": [
+  "Llama",
+  "Qwen (Qwen-VL / Qwen2.5-VL)"
+ ],
+ "BqLBsgGqSC": [
+  "Llama",
+  "GPT-4 / GPT-4o / GPT-5",
+  "Gemini",
+  "Claude"
+ ],
+ "Hg58xidgpB": [
+  "DINO / DINOv2 / DINOv3",
+  "SAM / SAM 2"
+ ],
+ "QHU7Lqvhfr": [
+  "DINO / DINOv2 / DINOv3",
+  "U-Net"
+ ],
+ "6SIPt7cfSm": [
+  "Llama",
+  "Qwen (Qwen-VL / Qwen2.5-VL)"
+ ],
+ "7C5CgIiHcA": [
+  "LLaVA",
+  "Qwen (Qwen-VL / Qwen2.5-VL)",
+  "Gemini"
+ ],
+ "fqsWkQnA9w": [
+  "Llama"
+ ],
+ "xp2oWSnMPf": [
+  "Qwen (Qwen-VL / Qwen2.5-VL)"
+ ],
+ "5VR2N1lVBd": [
+  "ViT",
+  "CLIP",
+  "Llama"
+ ],
+ "ppKtrQWhKN": [
+  "Gemma"
+ ],
+ "QadbBzDY4q": [
+  "ResNet",
+  "ViT",
+  "U-Net",
+  "Llama",
+  "Qwen (Qwen-VL / Qwen2.5-VL)"
+ ],
+ "TbWDPX0nam": [
+  "ViT",
+  "CLIP",
+  "Llama"
+ ],
+ "vzC2M3GkhW": [
+  "Llama",
+  "Qwen (Qwen-VL / Qwen2.5-VL)"
+ ],
+ "dVu1u4QgAp": [
+  "CLIP",
+  "Gemma",
+  "Qwen (Qwen-VL / Qwen2.5-VL)"
+ ],
+ "DP5UdHKCti": [
+  "CLIP"
+ ],
+ "Z3y6m9KFIU": [
+  "Qwen (Qwen-VL / Qwen2.5-VL)",
+  "GPT-4 / GPT-4o / GPT-5",
+  "Gemini",
+  "Claude"
+ ],
+ "5UIA41EzVg": [
+  "Gemma",
+  "Qwen (Qwen-VL / Qwen2.5-VL)",
+  "GPT-4 / GPT-4o / GPT-5",
+  "Gemini",
+  "Claude"
+ ],
+ "eCAxMcFzTe": [
+  "GPT-4 / GPT-4o / GPT-5",
+  "Gemini",
+  "Claude"
+ ],
+ "jp8UqwXlAw": [
+  "GPT-4 / GPT-4o / GPT-5",
+  "Claude"
+ ],
+ "muSIGk8gSE": [
+  "Gemini"
+ ],
+ "2TmlUKr7RZ": [
+  "DINO / DINOv2 / DINOv3",
+  "CLIP",
+  "Qwen (Qwen-VL / Qwen2.5-VL)",
+  "Wan (video model)"
+ ],
+ "FikEkhzT3F": [
+  "Claude",
+  "Stable Diffusion"
+ ],
+ "dPSEe9I3nw": [
+  "Qwen (Qwen-VL / Qwen2.5-VL)",
+  "Wan (video model)"
+ ],
+ "OZZyhPmeOO": [
+  "CLIP",
+  "U-Net"
+ ],
+ "B3wsHZckwI": [
+  "LLaVA"
+ ],
+ "Keys8KrDQl": [
+  "Llama"
+ ],
+ "XlVqVpPeMI": [
+  "Qwen (Qwen-VL / Qwen2.5-VL)"
+ ],
+ "bgUar0JP5t": [
+  "Qwen (Qwen-VL / Qwen2.5-VL)",
+  "Claude"
+ ],
+ "aHGX6FOsYg": [
+  "ViT"
+ ],
+ "Tsy4EJwae5": [
+  "ViT",
+  "CLIP",
+  "SigLIP",
+  "Qwen (Qwen-VL / Qwen2.5-VL)"
+ ],
+ "hvPxti2lt3": [
+  "CLIP"
+ ],
+ "BxdDYMEfcZ": [
+  "Llama",
+  "GPT-4 / GPT-4o / GPT-5",
+  "Claude"
+ ],
+ "A71gEbBJUL": [
+  "GPT-4 / GPT-4o / GPT-5"
+ ],
+ "sLpGI7l64r": [
+  "Mamba"
+ ],
+ "Y6gjRpnLxO": [
+  "ViT",
+  "DINO / DINOv2 / DINOv3",
+  "CLIP"
+ ],
+ "yOd4AxlEbb": [
+  "DINO / DINOv2 / DINOv3"
+ ],
+ "nqxqYuJBKK": [
+  "Qwen (Qwen-VL / Qwen2.5-VL)",
+  "GPT-4 / GPT-4o / GPT-5",
+  "Gemini",
+  "Claude"
+ ],
+ "RpadYP6yxY": [
+  "Qwen (Qwen-VL / Qwen2.5-VL)"
+ ],
+ "STxXui2w7z": [
+  "Llama"
+ ],
+ "dfLMID86Cd": [
+  "CLIP"
+ ],
+ "WHGRxkYCGV": [
+  "ViT"
+ ],
+ "gMYBb0YVMl": [
+  "DINO / DINOv2 / DINOv3",
+  "CLIP",
+  "LLaVA"
+ ],
+ "NBUCuy2uaq": [
+  "DINO / DINOv2 / DINOv3",
+  "Llama",
+  "Qwen (Qwen-VL / Qwen2.5-VL)"
+ ],
+ "n0LfI4MJNe": [
+  "ResNet",
+  "ViT"
+ ],
+ "Jz5BMGep1M": [
+  "Llama",
+  "Qwen (Qwen-VL / Qwen2.5-VL)"
+ ],
+ "NIlMvxosjw": [
+  "CLIP",
+  "Qwen (Qwen-VL / Qwen2.5-VL)"
+ ],
+ "Fy4JoneGmz": [
+  "U-Net"
+ ],
+ "ZS2MA5cnQ0": [
+  "ResNet",
+  "ViT",
+  "Grounding DINO"
+ ],
+ "FwWaPhPb2O": [
+  "ViT",
+  "U-Net"
+ ],
+ "aP6pc3wy1D": [
+  "Qwen (Qwen-VL / Qwen2.5-VL)",
+  "Gemini"
+ ],
+ "dRhBDs50Cm": [
+  "Llama",
+  "Qwen (Qwen-VL / Qwen2.5-VL)"
+ ],
+ "XBnPswY31B": [
+  "CLIP"
+ ],
+ "avjeUhPuC6": [
+  "Gemma",
+  "Llama",
+  "Qwen (Qwen-VL / Qwen2.5-VL)",
+  "GPT-4 / GPT-4o / GPT-5"
+ ],
+ "jI3LzITbpM": [
+  "Qwen (Qwen-VL / Qwen2.5-VL)",
+  "GPT-4 / GPT-4o / GPT-5",
+  "Claude"
+ ],
+ "jGvGY7wh7Q": [
+  "GPT-4 / GPT-4o / GPT-5"
+ ],
+ "JfJ4tqahba": [
+  "ViT",
+  "Qwen (Qwen-VL / Qwen2.5-VL)",
+  "GPT-4 / GPT-4o / GPT-5",
+  "Gemini"
+ ],
+ "FZWkMbtduF": [
+  "Gemma",
+  "Llama"
+ ],
+ "DwqwJHYbqV": [
+  "U-Net"
  ]
 }

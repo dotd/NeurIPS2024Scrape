@@ -66,5 +66,46 @@
    "dataset",
    "https://huggingface.co/datasets/Cdippel1026/LittleCurriculum"
   ]
+ ],
+ "69qwhyHQTB": [],
+ "2MmzwEyeO2": [
+  [
+   "dataset",
+   "https://huggingface.co/datasets/configinc/HABIT"
+  ],
+  [
+   "blog",
+   "https://config.inc/blog/260807_habit"
+  ]
+ ],
+ "VaoJb3PtWQ": [],
+ "lj7OHtUYX1": [
+  [
+   "project",
+   "https://umass-embodied-agi.github.io/SyncWorld/"
+  ],
+  [
+   "code",
+   "https://github.com/UMass-Embodied-AGI/SyncWorld"
+  ]
+ ],
+ "xMqv6BYsZv": [],
+ "mBYJRAFq7D": [
+  [
+   "project",
+   "https://yuantianyuan01.github.io/FastWAM/"
+  ],
+  [
+   "code",
+   "https://github.com/yuantianyuan01/FastWAM"
+  ],
+  [
+   "other",
+   "https://huggingface.co/yuanty/fastwam"
+  ],
+  [
+   "other",
+   "https://www.alphaxiv.org/audio/2603.16666v1"
+  ]
  ]
 }

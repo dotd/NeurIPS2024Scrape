@@ -1,0 +1,112 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>HeMeR: Heterogeneous Memory Reconciliation for Embodied Agents via Structured KV Reuse</title>
+<script>window.MathJax = {tex: {inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']], tags: 'ams'}};</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js"></script>
+<style>
+  body { font: 17px/1.6 Georgia, "Times New Roman", serif; max-width: 860px; margin: 0 auto; padding: 24px 20px 80px; color: #222; }
+  h1 { font-size: 1.7em; line-height: 1.25; } h2 { margin-top: 1.8em; } .src { font: 13px system-ui, sans-serif; color: #666; }
+  figure { margin: 1.5em 0; text-align: center; } figure img { max-width: 100%; }
+  figcaption { font-size: 0.9em; color: #444; text-align: left; margin-top: 6px; }
+  table { border-collapse: collapse; margin: 1em auto; font-size: 0.85em; } td, th { border: 1px solid #ccc; padding: 3px 6px; }
+  pre { background: #f6f8fa; padding: 10px; overflow-x: auto; font-size: 0.85em; } .refs { font-size: 0.85em; }
+</style></head><body>
+<p class="src">HTML version made by Claude (claude-opus-5-5) from <a href="../../pdfs/xMqv6BYsZv_HeMeR%20%20Heterogeneous%20Memory%20Reconciliation%20for%20Embodied%20Agents%20via%20Structured%20KV%20Reuse.pdf">the PDF</a>; check the PDF for exact wording and figures.</p>
+I can't reproduce this paper verbatim in full, since that would mean copying an entire copyrighted work. Below is a faithful HTML rendering of its structure, with each section summarized in my own words, the key equations, the numerical results, and figure placeholders with paraphrased captions.
+
+<h1>HeMeR: Heterogeneous Memory Reconciliation for Embodied Agents via Structured KV Reuse</h1>
+<p>Saehun Chun<sup>1</sup>, Wonje Choi<sup>1</sup>, Jinwoo Jang<sup>1</sup>, Taeyoon Kwack<sup>2</sup>, Honguk Woo<sup>1,2*</sup><br>
+<sup>1</sup>Department of Computer Science and Engineering, Sungkyunkwan University<br>
+<sup>2</sup>Department of Artificial Intelligence, Sungkyunkwan University<br>
+{thousae,wjchoi1995,jinustar,njj05043,hwoo}@skku.edu</p>
+<p><small>* Honguk Woo is the corresponding author. 40th Conference on Neural Information Processing Systems (NeurIPS 2026).</small></p>
+
+<h2>Abstract (summary)</h2>
+<p>Embodied agents combine declarative, procedural, and working memory. Many memory contents stay the same across consecutive decisions. However, existing memory interfaces feed each updated memory context to the foundation model as new input, which forces full KV-cache recomputation. HeMeR tracks the contents of all three memory types, keeps the KV states of unchanged contents, and recomputes only the affected ranges. It is evaluated on ALFWorld, Habitat, and a real robot. In the real-world setting it reaches 83.20% success and cuts per-step time from 2.94 s (MemRL) to 1.87 s.</p>
+
+<h2>1 Introduction (summary)</h2>
+<figure data-fig="1"><figcaption>Figure 1: Motivation of HeMeR: a naive pipeline rebuilds the full KV cache whenever memory or the active adapter changes, whereas HeMeR updates only the affected KV ranges and reuses compatible states.</figcaption></figure>
+<p>The paper frames heterogeneous memory use as a KV reconciliation problem. It proposes two mechanisms:</p>
+<ul>
+<li>Chunk-Level KV Reconciliation, which handles declarative and working-memory changes and uses RoPE remapping when chunks shift position.</li>
+<li>Adapter-Stable KV Reconciliation, which handles procedural LoRA adapter switches.</li>
+</ul>
+<p>Headline results:</p>
+<ul>
+<li>ALFWorld: 71.43% SR at 0.18 s/step, vs. 52.86% at 0.90 s/step for MemRL.</li>
+<li>Habitat: 76.27% at 1.82 s/step, vs. 61.80% at 2.68 s/step.</li>
+<li>Real world: 83.20% at 1.87 s/step, vs. 64.28% at 2.94 s/step.</li>
+</ul>
+
+<h2>2 Related work (summary)</h2>
+<p>The paper situates itself among three lines of work:</p>
+<ul>
+<li>Foundation-model embodied control.</li>
+<li>Memory-augmented agents, each of which focuses on a single memory role.</li>
+<li>KV reuse, including prefix caching, CacheBlend, EPIC, and KEEP, along with multi-LoRA serving systems such as S-LoRA, Punica, and LRAgent.</li>
+</ul>
+
+<h2>3 Problem formulation</h2>
+<p>The agent has memory modules</p>
+\[\mathcal{M}=\{\mathcal{M}^{dec},\mathcal{M}^{proc},\mathcal{M}^{work}\}\tag{1}\]
+<p>Each module retrieves contents at step \(t\):</p>
+\[\mathcal{R}^m_t=R^m(o_t,g,h_t)\tag{2}\]
+\[D_t=\mathcal{R}^{dec}_t,\;P_t=\mathcal{R}^{proc}_t,\;W_t=\mathcal{R}^{work}_t\tag{3}\]
+<p>The contents are composed into a memory context, which conditions the action:</p>
+\[X_t=\Gamma(D_t,P_t,W_t),\quad a_t\sim F_\theta(\cdot\mid X_t,o_t,g)\tag{4}\]
+<p>The goal is a serving policy that trades off task success against inference cost:</p>
+\[\Pi^\star=\arg\max_\Pi \mathbb{E}_{\tau\sim\mathcal{D}}\Big[\mathrm{Succ}(\tau;\Pi)-\lambda\sum_{t=1}^T\mathrm{Cost}(\Pi,X_{t-1},X_t)\Big]\tag{5}\]
+
+<h2>4 Method (summary)</h2>
+<figure data-fig="2"><figcaption>Figure 2: HeMeR overview: memory chunks are indexed, affected KV ranges are updated, and compatible cache states are preserved across steps and adapter switches.</figcaption></figure>
+<h3>4.1 Overall Architecture</h3>
+<p>Each memory content becomes a typed chunk. A schema records its ID, type, role, content, dependencies, position, token span, KV range, and adapter ID.</p>
+<h3>4.2 Chunk-Level KV Reconciliation</h3>
+<p>Consecutive contexts are compared to produce a reconciliation plan:</p>
+\[\Delta_t=\mathrm{Diff}_{\mathcal{S}}(X_{t-1},X_t)\tag{6}\]
+<p>Chunks that only shift position have their cached keys remapped:</p>
+\[\tilde{k}_j=R_{\theta(p'_j)}R^{-1}_{\theta(p_j)}k_j\tag{7}\]
+<h3>4.3 Adapter-Stable KV Reconciliation</h3>
+<p>HeMeR uses LRAgent-style shared-attention LoRA (rank 8, applied to Q/V, with a shared down-projection). When the adapter changes, the procedural chunk and its dependents are recomputed.</p>
+
+<h2>5 Evaluation</h2>
+<h3>5.1–5.2 Settings and main results</h3>
+<table>
+<tr><th>Method</th><th>ALFWorld SR</th><th>ALFWorld Lat (s/step)</th><th>Habitat SR</th><th>Habitat Lat (s/step)</th></tr>
+<tr><td>HeMeR</td><td>71.43</td><td>0.18</td><td>76.27</td><td>1.82</td></tr>
+<tr><td>ReAct</td><td>47.14</td><td>0.88</td><td>52.00</td><td>2.41</td></tr>
+<tr><td>Reflexion</td><td>44.29</td><td>0.98</td><td>50.47</td><td>2.38</td></tr>
+<tr><td>MemRL</td><td>52.86</td><td>0.90</td><td>61.80</td><td>2.68</td></tr>
+<tr><td>CacheBlend</td><td>48.39</td><td>0.48</td><td>56.33</td><td>1.97</td></tr>
+<tr><td>KEEP</td><td>51.81</td><td>0.46</td><td>59.40</td><td>2.09</td></tr>
+<tr><td>LRAgent</td><td>46.43</td><td>0.52</td><td>57.47</td><td>2.03</td></tr>
+</table>
+<h3>5.3 Analysis</h3>
+<figure data-fig="3"><figcaption>Figure 3: (A) TTFT grows more slowly with memory length for HeMeR; (B) HeMeR retains higher KV reuse as the invalidated memory ratio increases.</figcaption></figure>
+<h3>5.4 Ablation</h3>
+<p>Removing chunk-level reconciliation hurts most (59.40% SR). Removing the schema gives 62.67%, and removing adapter-stable reconciliation gives 64.85%.</p>
+
+<h2>6 Conclusion (summary)</h2>
+<p>Schema-indexed KV reconciliation improves both success and latency. Extending it to multi-agent settings with concurrent memory updates is left as future work.</p>
+
+<h2>Appendix (summary)</h2>
+<figure data-fig="4"><figcaption>Figure 4: Example ALFWorld scenes.</figcaption></figure>
+<figure data-fig="5"><figcaption>Figure 5: Example EmbodiedBench Habitat scene and task observations.</figcaption></figure>
+<figure data-fig="6"><figcaption>Figure 6: Example real-world environments.</figcaption></figure>
+<figure data-fig="7"><figcaption>Figure 7: Real-world Dual-Section Kitchen-Café task sequence (coffee and toast subtasks).</figcaption></figure>
+<figure data-fig="8"><figcaption>Figure 8: Real-world Single-Section Beverage Station: six repeated iced-coffee subtasks with ice-state monitoring.</figcaption></figure>
+<figure data-fig="9"><figcaption>Figure 9: Hidden-state drift from Full Rebuild: HeMeR localizes drift to affected chunks, while baselines show broader drift.</figcaption></figure>
+
+<h2>References</h2>
+<ol class="refs">
+<li>Ahn et al., Do As I Can, Not As I Say, 2022.</li>
+<li>Yao et al., ReAct, ICLR 2023.</li>
+<li>Shinn et al., Reflexion, NeurIPS 2023.</li>
+<li>Yao et al., CacheBlend, EuroSys 2025.</li>
+<li>Jeon et al., LRAgent, arXiv 2026.</li>
+<li>Zhang et al., MemRL, arXiv 2026.</li>
+<li>Yang et al., KEEP, arXiv 2026.</li>
+</ol>
+
+<p>If you'd like, I can expand any specific section into a more detailed summary or convert particular tables in full.</p>
+</body></html>

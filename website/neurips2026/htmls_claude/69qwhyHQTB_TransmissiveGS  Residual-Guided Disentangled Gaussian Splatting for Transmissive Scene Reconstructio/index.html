@@ -1,0 +1,272 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TransmissiveGS: Residual-Guided Disentangled Gaussian Splatting for Transmissive Scene Reconstruction and Rendering</title>
+<script>window.MathJax = {tex: {inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']], tags: 'ams'}};</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js"></script>
+<style>
+  body { font: 17px/1.6 Georgia, "Times New Roman", serif; max-width: 860px; margin: 0 auto; padding: 24px 20px 80px; color: #222; }
+  h1 { font-size: 1.7em; line-height: 1.25; } h2 { margin-top: 1.8em; } .src { font: 13px system-ui, sans-serif; color: #666; }
+  figure { margin: 1.5em 0; text-align: center; } figure img { max-width: 100%; }
+  figcaption { font-size: 0.9em; color: #444; text-align: left; margin-top: 6px; }
+  table { border-collapse: collapse; margin: 1em auto; font-size: 0.85em; } td, th { border: 1px solid #ccc; padding: 3px 6px; }
+  pre { background: #f6f8fa; padding: 10px; overflow-x: auto; font-size: 0.85em; } .refs { font-size: 0.85em; }
+</style></head><body>
+<p class="src">HTML version made by Claude (claude-opus-5-5) from <a href="../../pdfs/69qwhyHQTB_TransmissiveGS%20%20Residual-Guided%20Disentangled%20Gaussian%20Splatting%20for%20Transmissive%20Scene%20Reconstructio.pdf">the PDF</a>; check the PDF for exact wording and figures.</p>
+<p><em>Note: I can't reproduce this paper's full text verbatim, since that would mean copying a long copyrighted work. Below is a faithful HTML rendering of its structure. Prose is summarized in my own words, while titles, authors, equations, tables and figure numbering are preserved. For the exact wording, please refer to the original arXiv preprint (arXiv:2605.10705).</em></p>
+
+<h1>TransmissiveGS: Residual-Guided Disentangled Gaussian Splatting for Transmissive Scene Reconstruction and Rendering</h1>
+<p>Zhenyu Liang (HKUST), Xiao Zhang (HKUST), Tianchao Li (HKUST), Jack C.P. Cheng (HKUST), Chi-Keung Tang (HKUST)</p>
+
+<figure data-fig="1"><figcaption>Figure 1: Comparison on a challenging hemispherical, refractive, reflective, and transmissive dome. TransmissiveGS achieves both accurate transmissive surface reconstruction (MAE° ↓) and photorealistic inverse rendering (PSNR ↑) without any geometry prior. (Caption summarized.)</figcaption></figure>
+
+<h2>Abstract</h2>
+<p>[Summary] Transmissive scenes entangle near-field reflections on the transmissive surface with transmitted content behind it. This produces dual geometries and dual radiance components. TransmissiveGS addresses this with several components:</p>
+<ul>
+<li>a dual-Gaussian representation with a deferred shading function;</li>
+<li>residuals from reconstructing multi-view-consistent content, used as cues to separate reflection from transmission;</li>
+<li>a reflection light field for near-field reflections;</li>
+<li>a high-frequency regularization.</li>
+</ul>
+<p>The authors also contribute a new synthetic dataset. The method outperforms prior GS-based methods on both synthetic and real scenes.</p>
+
+<h2>1 Introduction</h2>
+<p>[Summary] GS extensions for reflective surfaces exist, but transmissive surfaces remain underexplored. Observed color mixes surface reflection with transmitted radiance. Single-Gaussian-set methods therefore tend to fit the multi-view-consistent transmitted content and poorly reconstruct the glass.</p>
+<p>Existing ways of modeling reflections also fall short:</p>
+<ul>
+<li>Spherical harmonics capture only low-frequency effects.</li>
+<li>Environment maps assume distant light and suffer parallax errors.</li>
+<li>EnvGS lacks supervision when reflections are weak.</li>
+<li>Ref-GS has limited high-frequency capacity.</li>
+</ul>
+<p>TransmissiveGS introduces reflection and scattering Gaussians, a deferred shading composite, residual-guided disentangling, and a reflection light field.</p>
+<figure data-fig="2"><figcaption>Figure 2: Disentanglement and composite appearance (car and pyramid cases). (Caption summarized.)</figcaption></figure>
+<p>Contributions:</p>
+<ul>
+<li>a dual-Gaussian representation with deferred shading;</li>
+<li>a residual-guided reconstruction strategy;</li>
+<li>a reflection light field conditioned on surface position and reflection direction;</li>
+<li>a new synthetic benchmark dataset.</li>
+</ul>
+
+<h2>2 Related Work</h2>
+<p><strong>Inverse Rendering.</strong> [Summary] This line of work spans several families:</p>
+<ul>
+<li>NeRF-based methods (NeRFactor, PhySG, NeRO, NeILF++, Ref-NeRF);</li>
+<li>GS-based forward shading, deferred shading, near-field ray tracing, and implicit MLP approaches;</li>
+<li>refraction methods for fully transparent objects;</li>
+<li>TR-Gaussians and RT-GS, which are limited to planar or semi-transparent surfaces;</li>
+<li>TSGS, which handles transparent objects without reflections.</li>
+</ul>
+<p><strong>Disentanglement of Reflection and Transmission.</strong> [Summary] Prior work includes 2D reflection-removal methods, NeRFReN, MS-NeRF, NeuS-HSR, RA-NeRF, Flash-Splat, DC-Gaussian, GlassGaussian and TR-Gaussians. These methods either assume planar surfaces or do not reconstruct the transmissive geometry.</p>
+
+<h2>3 Preliminary</h2>
+<p>[Summary] The method builds on 2DGS. Each disk is parameterized by its center \(\mathbf{p}_k\), tangents \(\mathbf{t}_u,\mathbf{t}_v\), scales \(s_u,s_v\), opacity \(\alpha\), and SH coefficients \(\mathbf{c}\).</p>
+\[ P(u,v)=\mathbf{p}_k+s_u\mathbf{t}_u u+s_v\mathbf{t}_v v=H(u,v,1,1)^\top \tag{1} \]
+\[ \mathcal{G}(\mathbf{u})=\exp\left(-\frac{u^2+v^2}{2}\right) \tag{2} \]
+\[ \mathbf{x}=(xz,yz,z,1)^\top=WH(u,v,1,1)^\top \tag{3} \]
+\[ \mathbf{c}(\mathbf{x})=\sum_{i=1}^{N}\mathbf{c}_i\alpha_i\hat{\mathcal{G}}_i(\mathbf{u}(\mathbf{x}))\prod_{j=1}^{i-1}\left(1-\alpha_j\hat{\mathcal{G}}_j(\mathbf{u}(\mathbf{x}))\right) \tag{4} \]
+
+<h2>4 TransmissiveGS</h2>
+<figure data-fig="3"><figcaption>Figure 3: Pipeline of TransmissiveGS, with three stages: (I) scattering Gaussian reconstruction, (II) residual-guided reflection Gaussian reconstruction, and (III) reflection light field training with deferred shading. (Caption summarized.)</figcaption></figure>
+<h3>4.1 Dual-GS Representation and Deferred Shading Function</h3>
+<p>[Summary] The scene uses two Gaussian sets:</p>
+<ul>
+<li>Reflection Gaussians \(\mathcal{G}_\text{refl}\) model the reflective and transmissive surfaces. They add a Fresnel vector \(\mathbf{f}_0\in\mathbb{R}^3\) and a reflectivity \(r\).</li>
+<li>Scattering Gaussians \(\mathcal{G}_\text{scat}\) model the rest of the scene.</li>
+</ul>
+<p>The two sets are composited as follows:</p>
+\[ I=(1-R)I_\text{scat}+RI_\text{refl} \tag{5} \]
+\[ I_\text{refl}=F\,\Phi_\text{refl}(\mathbf{x}^\text{refl},\omega_r) \tag{6} \]
+\[ \omega_r=\omega_o-2(\omega_o^\top\mathbf{n}_\text{refl})\mathbf{n}_\text{refl} \tag{7} \]
+\[ F=F_0+(1-F_0)\left(1-\mathbf{n}_\text{refl}^\top(-\omega_o)\right)^5 \tag{8} \]
+<h3>4.2 Residual-Guided Disentangling Reconstruction</h3>
+<p>[Summary] The reconstruction proceeds in two steps:</p>
+<ol>
+<li><strong>Stage I</strong> fits only \(\mathcal{G}_\text{scat}\). Reflective regions are left unexplained, which produces the residual below.</li>
+<li><strong>Stage II</strong> initializes \(\mathcal{G}_\text{refl}\) from \(\mathcal{G}_\text{scat}\), freezes \(\mathcal{G}_\text{scat}\), and colors each reflection Gaussian through a learnable environment map.</li>
+</ol>
+\[ \mathbf{r}=I_\text{GT}-I_\text{scat} \tag{9} \]
+\[ \mathbf{c}_i^\text{refl}=\mathbf{f}_{0,i}\cdot E(\omega_{r,i}) \tag{10} \]
+\[ R(I_\text{refl}-I_\text{scat})=\mathbf{r} \tag{11} \]
+<p>[Summary] Because only correct normals retrieve the correct radiance from \(E\), the residuals act as implicit geometric supervision.</p>
+<h3>4.3 Reflection Light Field</h3>
+<p>[Summary] The reflection light field is an MLP with 8 layers of width 256, ReLU activations, and a sigmoid output.</p>
+<ul>
+<li><strong>Inputs:</strong> Fourier-encoded position and reflection direction, with \(L=12\). Positions are normalized to \([-1,1]\).</li>
+<li><strong>Staged fusion:</strong> the first four layers process position only. Direction is concatenated at layer five, where position is also re-injected via a skip connection.</li>
+<li><strong>Training:</strong> reflection Gaussian geometry is frozen, while the scattering Gaussians remain learnable.</li>
+</ul>
+\[ \gamma(p)=\left(\sin(2^0\pi p),\cos(2^0\pi p),\ldots,\sin(2^{L-1}\pi p),\cos(2^{L-1}\pi p)\right) \tag{12} \]
+<h3>4.4 Training</h3>
+\[ \mathcal{L}_c=(1-\lambda)\|I-I_\text{GT}\|_1+\lambda\mathcal{L}_\text{D-SSIM}(I,I_\text{GT}) \tag{13} \]
+<p>Here \(\lambda=0.2\).</p>
+\[ \mathcal{L}_n^{(\cdot)}=\sum\left(1-\mathbf{n}_{(\cdot)}\cdot\hat{\mathbf{n}}_{(\cdot)}\right) \tag{14} \]
+<figure data-fig="4"><figcaption>Figure 4: Qualitative comparison of photorealistic rendering quality.</figcaption></figure>
+<p>[Summary] The high-frequency loss averages the error over pixels whose error is above the \(p\)-th percentile \(\tau_p\).</p>
+\[ \mathcal{L}_{hf}=\sum_{\mathbf{x}\in\Omega}\mathbb{I}(e(\mathbf{x})>\tau_p)e(\mathbf{x})\Big/\left(\sum_{\mathbf{x}\in\Omega}\mathbb{I}(e(\mathbf{x})>\tau_p)+\epsilon\right) \tag{15} \]
+\[ \mathcal{L}=\mathcal{L}_c+\lambda_n^\text{refl}\mathcal{L}_n^\text{refl}+\lambda_n^\text{scat}\mathcal{L}_n^\text{scat}+\lambda_{hf}\mathcal{L}_{hf} \tag{16} \]
+
+<h2>5 Experiments</h2>
+<h3>5.1 Datasets, Evaluation Metrics and Implementation Details</h3>
+<p>[Summary] The evaluation data consists of:</p>
+<ul>
+<li><strong>Synthetic (7 Blender scenes):</strong> bookshelf, car, computer and house are lit by an HDRI. Garage, pyramid and sphere/dome include near-field illumination from surrounding geometry.</li>
+<li><strong>Real (4 scenes):</strong> compact and hatchback from NeRF-Casting, plus newly captured facade and glazing.</li>
+</ul>
+<p>Rendering quality is measured with PSNR, SSIM and LPIPS, and geometry with MAE° on the synthetic scenes. All experiments run on a single RTX 4090 with Adam optimization.</p>
+
+<table>
+<caption>Table 1: Quantitative comparison of photorealistic rendering quality.</caption>
+<tr><th>Method</th><th>bookshelf</th><th>car</th><th>computer</th><th>house</th><th>garage</th><th>pyramid</th><th>dome</th><th>compact</th><th>facade</th><th>glazing</th><th>hatchback</th></tr>
+<tr><th colspan="12">PSNR↑</th></tr>
+<tr><td>3DGS</td><td>36.21</td><td>32.84</td><td>35.48</td><td>33.55</td><td>23.56</td><td>32.81</td><td>20.80</td><td>29.52</td><td>23.88</td><td>27.70</td><td>26.50</td></tr>
+<tr><td>2DGS</td><td>35.76</td><td>32.56</td><td>35.25</td><td>33.08</td><td>23.23</td><td>31.95</td><td>20.28</td><td>29.43</td><td>24.44</td><td>26.60</td><td>26.43</td></tr>
+<tr><td>GaussianShader</td><td>28.51</td><td>16.88</td><td>22.88</td><td>17.12</td><td>17.09</td><td>19.72</td><td>13.60</td><td>28.37</td><td>22.60</td><td>27.68</td><td>25.72</td></tr>
+<tr><td>Ref-Gaussian</td><td>35.64</td><td>34.68</td><td>35.55</td><td>31.73</td><td>23.58</td><td>33.09</td><td>20.94</td><td>28.83</td><td>22.76</td><td>27.73</td><td>26.24</td></tr>
+<tr><td>Ref-GS</td><td>27.51</td><td>17.60</td><td>22.33</td><td>16.84</td><td>17.79</td><td>24.08</td><td>14.73</td><td>29.42</td><td>24.51</td><td>27.26</td><td>26.54</td></tr>
+<tr><td>EnvGS</td><td>34.79</td><td>32.92</td><td>35.83</td><td>33.62</td><td>23.64</td><td>31.82</td><td>20.44</td><td>27.64</td><td>24.22</td><td>28.92</td><td>23.74</td></tr>
+<tr><td>TransmissiveGS</td><td>37.19</td><td>34.74</td><td>36.93</td><td>34.31</td><td>24.35</td><td>33.49</td><td>21.22</td><td>29.65</td><td>24.69</td><td>29.16</td><td>26.79</td></tr>
+<tr><th colspan="12">SSIM↑</th></tr>
+<tr><td>3DGS</td><td>0.983</td><td>0.963</td><td>0.976</td><td>0.958</td><td>0.730</td><td>0.940</td><td>0.721</td><td>0.889</td><td>0.896</td><td>0.910</td><td>0.845</td></tr>
+<tr><td>2DGS</td><td>0.981</td><td>0.966</td><td>0.980</td><td>0.961</td><td>0.729</td><td>0.932</td><td>0.678</td><td>0.887</td><td>0.901</td><td>0.902</td><td>0.843</td></tr>
+<tr><td>GaussianShader</td><td>0.946</td><td>0.854</td><td>0.917</td><td>0.767</td><td>0.517</td><td>0.531</td><td>0.214</td><td>0.882</td><td>0.841</td><td>0.909</td><td>0.837</td></tr>
+<tr><td>Ref-Gaussian</td><td>0.980</td><td>0.961</td><td>0.978</td><td>0.966</td><td>0.735</td><td>0.943</td><td>0.720</td><td>0.869</td><td>0.863</td><td>0.913</td><td>0.827</td></tr>
+<tr><td>Ref-GS</td><td>0.944</td><td>0.865</td><td>0.916</td><td>0.787</td><td>0.562</td><td>0.588</td><td>0.245</td><td>0.887</td><td>0.899</td><td>0.916</td><td>0.845</td></tr>
+<tr><td>EnvGS</td><td>0.982</td><td>0.958</td><td>0.981</td><td>0.953</td><td>0.739</td><td>0.937</td><td>0.697</td><td>0.825</td><td>0.878</td><td>0.919</td><td>0.764</td></tr>
+<tr><td>TransmissiveGS</td><td>0.985</td><td>0.970</td><td>0.983</td><td>0.971</td><td>0.746</td><td>0.946</td><td>0.731</td><td>0.891</td><td>0.904</td><td>0.917</td><td>0.852</td></tr>
+<tr><th colspan="12">LPIPS↓</th></tr>
+<tr><td>3DGS</td><td>0.031</td><td>0.035</td><td>0.025</td><td>0.035</td><td>0.439</td><td>0.076</td><td>0.244</td><td>0.164</td><td>0.089</td><td>0.089</td><td>0.201</td></tr>
+<tr><td>2DGS</td><td>0.033</td><td>0.041</td><td>0.022</td><td>0.039</td><td>0.447</td><td>0.092</td><td>0.281</td><td>0.179</td><td>0.087</td><td>0.108</td><td>0.210</td></tr>
+<tr><td>GaussianShader</td><td>0.092</td><td>0.182</td><td>0.113</td><td>0.257</td><td>0.687</td><td>0.584</td><td>0.700</td><td>0.168</td><td>0.131</td><td>0.099</td><td>0.197</td></tr>
+<tr><td>Ref-Gaussian</td><td>0.036</td><td>0.038</td><td>0.027</td><td>0.043</td><td>0.431</td><td>0.082</td><td>0.246</td><td>0.206</td><td>0.111</td><td>0.098</td><td>0.231</td></tr>
+<tr><td>Ref-GS</td><td>0.094</td><td>0.182</td><td>0.123</td><td>0.256</td><td>0.602</td><td>0.551</td><td>0.707</td><td>0.169</td><td>0.088</td><td>0.091</td><td>0.196</td></tr>
+<tr><td>EnvGS</td><td>0.048</td><td>0.051</td><td>0.031</td><td>0.053</td><td>0.449</td><td>0.078</td><td>0.263</td><td>0.240</td><td>0.088</td><td>0.084</td><td>0.289</td></tr>
+<tr><td>TransmissiveGS</td><td>0.029</td><td>0.033</td><td>0.022</td><td>0.033</td><td>0.418</td><td>0.072</td><td>0.218</td><td>0.158</td><td>0.085</td><td>0.081</td><td>0.197</td></tr>
+</table>
+
+<figure data-fig="5"><figcaption>Figure 5: Qualitative comparison of transmissive surface reconstruction.</figcaption></figure>
+
+<h3>5.2 Baseline Comparisons</h3>
+<p>[Summary] The baselines are 3DGS, 2DGS, GaussianShader, Ref-Gaussian, Ref-GS and EnvGS, each run with its official code and configurations.</p>
+<ul>
+<li><strong>Rendering:</strong> TransmissiveGS performs best overall, capturing sharp near-field reflections while preserving the transmitted interiors.</li>
+<li><strong>Geometry:</strong> EnvGS is excluded from the MAE comparison because it uses a StableNormal prior. Even with that prior, it fails on computer, dome and facade.</li>
+</ul>
+
+<table>
+<caption>Table 2: Quantitative comparison of transmissive surface reconstruction (MAE°).</caption>
+<tr><th>Method</th><th>bookshelf</th><th>car</th><th>computer</th><th>house</th><th>garage</th><th>pyramid</th><th>dome</th><th>Average</th></tr>
+<tr><td>3DGS</td><td>56.41</td><td>41.45</td><td>48.80</td><td>46.46</td><td>42.15</td><td>47.35</td><td>51.64</td><td>47.75</td></tr>
+<tr><td>2DGS</td><td>37.59</td><td>19.98</td><td>43.89</td><td>59.61</td><td>33.93</td><td>33.41</td><td>56.94</td><td>40.76</td></tr>
+<tr><td>GaussianShader</td><td>44.43</td><td>30.96</td><td>42.51</td><td>55.08</td><td>45.29</td><td>45.03</td><td>47.61</td><td>44.41</td></tr>
+<tr><td>Ref-Gaussian</td><td>13.39</td><td>5.91</td><td>42.09</td><td>44.05</td><td>28.76</td><td>17.57</td><td>39.89</td><td>27.24</td></tr>
+<tr><td>Ref-GS</td><td>8.10</td><td>23.95</td><td>22.83</td><td>20.52</td><td>49.63</td><td>42.42</td><td>30.59</td><td>28.29</td></tr>
+<tr><td>TransmissiveGS</td><td>7.38</td><td>5.50</td><td>4.57</td><td>12.72</td><td>7.01</td><td>6.53</td><td>8.50</td><td>7.46</td></tr>
+</table>
+
+<table>
+<caption>Table 3: Quantitative results of ablation studies.</caption>
+<tr><th></th><th>PSNR↑</th><th>SSIM↑</th><th>LPIPS↓</th></tr>
+<tr><td>w/o Dual-Gaussian</td><td>22.98</td><td>0.827</td><td>0.152</td></tr>
+<tr><td>w/o Reflection MLP</td><td>24.20</td><td>0.858</td><td>0.124</td></tr>
+<tr><td>w/o Decoupling</td><td>23.23</td><td>0.878</td><td>0.100</td></tr>
+<tr><td>w/o High-frequency Loss</td><td>24.52</td><td>0.891</td><td>0.089</td></tr>
+<tr><td>Ours</td><td>24.69</td><td>0.904</td><td>0.085</td></tr>
+</table>
+<figure data-fig="6"><figcaption>Figure 6: Qualitative results of ablation studies.</figcaption></figure>
+
+<h3>5.3 Ablation Studies</h3>
+<p>[Summary] Ablations are run on the facade scene:</p>
+<ul>
+<li><strong>w/o Dual-Gaussian:</strong> using reflection Gaussians alone fails to reconstruct the glass geometry.</li>
+<li><strong>w/o Reflection MLP:</strong> replacing the light field with an environment map blurs reflections and introduces parallax errors.</li>
+<li><strong>w/o Decoupling:</strong> without the stage-wise freezing, the two Gaussian sets compete and degrade results.</li>
+<li><strong>w/o High-frequency Loss:</strong> fine reflection details become blurred.</li>
+</ul>
+
+<h2>6 Conclusion</h2>
+<p>[Summary] TransmissiveGS combines a dual-Gaussian representation, residual-guided disentanglement and a reflection light field. It outperforms existing methods in both inverse rendering and transmissive surface reconstruction. Its main limitation is the assumption of static content; dynamic scenes are left for future work.</p>
+
+<h2>A Architecture of Reflection Light Field.</h2>
+<figure data-fig="7"><figcaption>Figure 7: Architecture of the reflection light field (inputs, 256-wide hidden layers, sigmoid output). (Caption summarized.)</figcaption></figure>
+
+<h2>B Additional Ablation Studies on Reflection Light Field.</h2>
+<p>[Summary] Architecture ablations on the garage scene show the following:</p>
+<ul>
+<li>Removing staged fusion hurts most.</li>
+<li>The skip connection helps.</li>
+<li>Reducing depth or width degrades results.</li>
+<li>\(L\) must be large enough, but overly large values add noise.</li>
+</ul>
+<table>
+<caption>Table 4: Ablation study on the reflection light field.</caption>
+<tr><th>Configuration</th><th>PSNR↑</th><th>SSIM↑</th><th>LPIPS↓</th></tr>
+<tr><td>hidden dim 128, depth 8, L 12, w/ skip connection, w/ staged fusion</td><td>24.26</td><td>0.744</td><td>0.424</td></tr>
+<tr><td>hidden dim 256, depth 8, L 10, w/ skip connection, w/ staged fusion</td><td>24.24</td><td>0.742</td><td>0.425</td></tr>
+<tr><td>hidden dim 256, depth 8, L 14, w/ skip connection, w/ staged fusion</td><td>24.26</td><td>0.743</td><td>0.423</td></tr>
+<tr><td>hidden dim 256, depth 6, L 12, w/ skip connection, w/ staged fusion</td><td>24.05</td><td>0.741</td><td>0.420</td></tr>
+<tr><td>hidden dim 256, depth 8, L 12, w/o skip connection, w/ staged fusion</td><td>24.17</td><td>0.742</td><td>0.421</td></tr>
+<tr><td>hidden dim 256, depth 8, L 12, w/ skip connection, w/o staged fusion</td><td>23.96</td><td>0.739</td><td>0.424</td></tr>
+<tr><td>(Ours) hidden dim 256, depth 8, L 12, w/ skip connection, w/ staged fusion</td><td>24.35</td><td>0.746</td><td>0.418</td></tr>
+</table>
+
+<h2>C Additional Qualitative Comparisons.</h2>
+<figure data-fig="8"><figcaption>Figure 8: Additional qualitative comparison of photorealistic rendering quality.</figcaption></figure>
+<figure data-fig="9"><figcaption>Figure 9: Additional qualitative comparison of transmissive surface reconstruction.</figcaption></figure>
+
+<h2>D Failure Mode</h2>
+<p>[Summary] When transmission dominates and reflections are faint at some viewpoints, the reflection component in those regions can degenerate.</p>
+<figure data-fig="10"><figcaption>Figure 10: Failure mode of our method.</figcaption></figure>
+
+<h2>References</h2>
+<ol class="refs">
+<li>Boss et al. NeRD: Neural reflectance decomposition from image collections. ICCV 2021.</li>
+<li>Cao, Cui, Schwertfeger. GlassGaussian. IEEE Access 2025.</li>
+<li>Fan et al. A generic deep architecture for single image reflection removal and image smoothing. ICCV 2017.</li>
+<li>Fouhey, Gupta, Hebert. Data-driven 3D primitives for single image understanding. ICCV 2013.</li>
+<li>Gao et al. Planar reflection-aware neural radiance fields. SIGGRAPH Asia 2024.</li>
+<li>Gu et al. IRGS: Inter-reflective Gaussian splatting with 2D Gaussian ray tracing. CVPR 2025.</li>
+<li>Guo, Cao, Ma. Robust separation of reflection from multiple images. CVPR 2014.</li>
+<li>Guo et al. NeRFReN: Neural radiance fields with reflections. CVPR 2022.</li>
+<li>Huang et al. 2D Gaussian splatting for geometrically accurate radiance fields. SIGGRAPH 2024.</li>
+<li>Huang et al. TransparentGS. ACM TOG 44(4), 2025.</li>
+<li>Jiang et al. GaussianShader. CVPR 2024.</li>
+<li>Kerbl et al. 3D Gaussian splatting for real-time radiance field rendering. ACM TOG 42(4), 2023.</li>
+<li>Lei et al. Polarized reflection removal with perfect alignment in the wild. CVPR 2020.</li>
+<li>Levin, Weiss. User assisted separation of reflections from a single image using a sparsity prior. TPAMI 2007.</li>
+<li>Li et al. Single image reflection removal through cascaded refinement. CVPR 2020.</li>
+<li>Li et al. TSGS. ACM MM 2025.</li>
+<li>Li, Brown. Single image layer separation using relative smoothness. CVPR 2014.</li>
+<li>Liang et al. GS-IR. CVPR 2024.</li>
+<li>Liu et al. TR-Gaussians. IEEE TVCG 2026.</li>
+<li>Liu et al. NeRO. ACM TOG 42(4), 2023.</li>
+<li>Mildenhall et al. NeRF. ECCV 2020.</li>
+<li>Park et al. DeepSDF. CVPR 2019.</li>
+<li>Qiu et al. Looking through the glass. CVPR 2023.</li>
+<li>Rahaman et al. On the spectral bias of neural networks. ICML 2019.</li>
+<li>Shih et al. Reflection removal using ghosting cues. CVPR 2015.</li>
+<li>Tancik et al. Fourier features let networks learn high frequency functions in low dimensional domains. NeurIPS 2020.</li>
+<li>Tang et al. Spectre-GS. CVPR 2025.</li>
+<li>Tang, Cham. 3iGS. ECCV 2024.</li>
+<li>Verbin et al. Ref-NeRF. TPAMI 2024.</li>
+<li>Verbin et al. NeRF-Casting. SIGGRAPH Asia 2024.</li>
+<li>Wang et al. DC-Gaussian. NeurIPS 2024.</li>
+<li>Wang et al. Image quality assessment: from error visibility to structural similarity. TIP 2004.</li>
+<li>Wei et al. Single image reflection removal exploiting misaligned training data and network enhancements. CVPR 2019.</li>
+<li>Xie et al. Flash-Splat. ECCV 2024.</li>
+<li>Xie et al. EnvGS. CVPR 2025.</li>
+<li>Xue et al. A computational approach for obstruction-free photography. ACM TOG 2015.</li>
+<li>Yao et al. Reflective Gaussian splatting. ICLR 2025.</li>
+<li>Ye et al. StableNormal. ACM TOG 43(6), 2024.</li>
+<li>Ye, Hou, Zhou. 3D Gaussian splatting with deferred reflection. SIGGRAPH 2024.</li>
+<li>Yin et al. Multi-space neural radiance fields. CVPR 2023.</li>
+<li>Zeng et al. RT-GS. arXiv:2604.00509, 2026.</li>
+<li>Zhang et al. NeILF++. ICCV 2023.</li>
+<li>Zhang et al. PhySG. CVPR 2021.</li>
+<li>Zhang et al. The unreasonable effectiveness of deep features as a perceptual metric. CVPR 2018.</li>
+<li>Zhang et al. MaterialRefGS. NeurIPS.</li>
+<li>Zhang et al. NeRFactor. ACM TOG 40(6), 2021.</li>
+<li>Zhang et al. Ref-GS: Directional factorization for 2D Gaussian splatting. CVPR 2025.</li>
+<li>Zhou et al. RTR-GS. ACM MM 2025.</li>
+</ol>
+</body></html>

@@ -1,0 +1,320 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SyncWorld: Visual Calibration Enables World Models as Zero-Shot Simulators</title>
+<script>window.MathJax = {tex: {inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']], tags: 'ams'}};</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js"></script>
+<style>
+  body { font: 17px/1.6 Georgia, "Times New Roman", serif; max-width: 860px; margin: 0 auto; padding: 24px 20px 80px; color: #222; }
+  h1 { font-size: 1.7em; line-height: 1.25; } h2 { margin-top: 1.8em; } .src { font: 13px system-ui, sans-serif; color: #666; }
+  figure { margin: 1.5em 0; text-align: center; } figure img { max-width: 100%; }
+  figcaption { font-size: 0.9em; color: #444; text-align: left; margin-top: 6px; }
+  table { border-collapse: collapse; margin: 1em auto; font-size: 0.85em; } td, th { border: 1px solid #ccc; padding: 3px 6px; }
+  pre { background: #f6f8fa; padding: 10px; overflow-x: auto; font-size: 0.85em; } .refs { font-size: 0.85em; }
+</style></head><body>
+<p class="src">HTML version made by Claude (claude-opus-5-5) from <a href="../../pdfs/lj7OHtUYX1_SyncWorld%20%20Visual%20Calibration%20Enables%20World%20Models%20as%20Zero-Shot%20Simulators.pdf">the PDF</a>; check the PDF for exact wording and figures.</p>
+I can't reproduce this paper verbatim in full, since that would mean copying a long copyrighted work. Below is a faithful HTML version that keeps the full structure (title, authors, all sections and subsections, figure placeholders, equations, and complete data tables) but gives the prose as condensed summaries rather than the original wording.
+
+<h1>SyncWorld: Visual Calibration Enables World Models as Zero-Shot Simulators</h1>
+<p>Yuncong Yang<sup>1*</sup>, Zhengtao Han<sup>2*</sup>, Furkan Ozyurt<sup>3*</sup>, Zeyuan Yang<sup>1</sup>, Han Yang<sup>1</sup>, Junyi Cao<sup>1</sup>, Haoyu Zhen<sup>1</sup>, Yilun Du<sup>4</sup>, Chuang Gan<sup>1</sup></p>
+<p><sup>1</sup>UMass Amherst, <sup>2</sup>UC Berkeley, <sup>3</sup>NYU, <sup>4</sup>Harvard — yuncongyang@umass.edu — https://umass-embodied-agi.github.io/SyncWorld/</p>
+<p><small>* Equal Contribution. Preprint.</small></p>
+
+<h2>Abstract</h2>
+<p>[Summary] Action-conditioned world models used as policy-in-the-loop simulators need fine-grained action controllability. However, the same numerical action looks different in pixel space across environments, cameras, robot placements, and embodiments. This causes conflicting supervision during training and brittle deployment. SyncWorld addresses this by conditioning on a visual calibration episode, which specifies the setup's Action–Visual Mapping in context. Training with calibration also teaches the model to use interaction history when calibration is absent. As a result, SyncWorld simulates unseen setups zero-shot and enables training-free test-time policy improvement.</p>
+
+<h2>1 Introduction</h2>
+<p>[Summary] World models are increasingly used as "imagination environments" for rollouts and policy evaluation, which requires frame-level action control. Scaling them across heterogeneous robot data is hard because actions are not a universal pixel-space language. The Action–Visual Mapping depends on camera extrinsics, base placement, and embodiment. This causes (1) conflicting supervision and (2) non-adaptive test-time mapping. SyncWorld treats the mapping as a latent relation calibrated in context from a short episode covering all six motion DoFs. It is trained so that interaction history alone can approximate the mapping.</p>
+<figure data-fig="1"><figcaption>Figure 1: SyncWorld enables zero-shot simulation across unseen camera angles and embodiments via in-context visual calibration over all six motion DoFs.</figcaption></figure>
+<p>Contributions:</p>
+<ul>
+<li>SyncWorld and visual calibration for scalable controllable world modeling.</li>
+<li>History-based in-context adaptation via calibration distillation.</li>
+<li>Zero-shot policy improvement through test-time scaling.</li>
+</ul>
+
+<h2>2 Related Work</h2>
+<h3>2.1 Controllable Action-Conditioned World Models</h3>
+<p>[Summary] Video models are used to synthesize trajectories, infer actions, or jointly predict actions and video. Controllable world models support planning and evaluation, and some add explicit visual action representations such as ray maps, prompts, or masks. SyncWorld instead handles setup-dependent action semantics via in-context calibration.</p>
+<h3>2.2 Latent Action World Modeling</h3>
+<p>[Summary] Latent-action methods learn from unlabeled video, but their proxy actions need grounding and are not consistent under camera or controller shifts. SyncWorld models true low-level actions directly.</p>
+<h3>2.3 In-Context Adaptation of World Models</h3>
+<p>[Summary] Prior adaptation relies on explicit calibration or geometry, privileged supervision, test-time finetuning, or closed-loop refinement. SyncWorld adapts per setup purely in context.</p>
+
+<h2>3 Method</h2>
+<figure data-fig="2"><figcaption>Figure 2: SyncWorld Architecture — a DiT backbone conditioned on calibration episode and interaction history, encoded as pose embeddings and video latents.</figcaption></figure>
+<h3>3.1 Calibration-based World Modeling</h3>
+<p>The interaction history is defined as:</p>
+\[H_t \triangleq \{(I_{t-L+1}, a_{t-L+2}), \dots, (I_{t-1}, a_t), I_t\} \tag{1}\]
+<p>A standard action-conditioned model predicts future frames from the history and an action chunk:</p>
+\[I_{t+1:t+H} \sim W_\theta(\cdot \mid H_t, A_t) \tag{2}\]
+<p>SyncWorld additionally conditions on a setup-specific calibration context:</p>
+\[I_{t+1:t+H} \sim W_\theta(\cdot \mid \mathcal{C}^s, H_t, A_t) \tag{3}\]
+<p>[Summary] For each setup, a calibration episode \(\mathcal{E}^s\) executes one random-sign motion per DoF and then returns to a nominal pose. From this episode, 12 signed segments are extracted.</p>
+<figure data-fig="3"><figcaption>Figure 3: Calibration Episode — directional motions per DoF (gripper excluded) revealing pixel-space effects of each action dimension.</figcaption></figure>
+<h3>3.2 Learning World Model with Visual Calibration</h3>
+<p>The calibration segments are arranged in a canonical order:</p>
+\[\mathcal{C}^s = [\mathcal{C}^s_{+x}, \mathcal{C}^s_{-x}, \mathcal{C}^s_{+y}, \mathcal{C}^s_{-y}, \dots, \mathcal{C}^s_{+\text{roll}}, \mathcal{C}^s_{-\text{roll}}] \tag{4}\]
+<p>[Summary] Two training designs support this:</p>
+<ul>
+<li><b>Action-coordinate augmentations.</b> Sign flips, axis permutations, and translation scaling are applied consistently to the calibration, history, and future actions. This forces the model to read action semantics from calibration.</li>
+<li><b>Calibration distillation.</b> A calibration-free student is trained to match the teacher that has calibration.</li>
+</ul>
+<h3>3.3 Zero-shot Policy Improvement via World-Model Ranking</h3>
+<p>Following GPC-Rank, \(K\) candidate action chunks are sampled from the policy:</p>
+\[A_t^{(k)} \sim \pi(\cdot \mid O_t, l),\quad k=1,\dots,K \tag{5}\]
+<figure data-fig="4"><figcaption>Figure 4: Zero-shot Policy Improvement via SyncWorld — VLA candidates are imagined by SyncWorld from multiple views, scored by a VLM, and the best is executed.</figcaption></figure>
+<p>Each candidate is rolled out in the world model:</p>
+\[\hat I^{(k)}_{t+1:t+H} \sim W_\theta(\cdot \mid \mathcal{C}^s, H_t, A_t^{(k)}) \tag{6}\]
+<p>Each rollout receives a score \(s^{(k)}=\text{VLMScore}(\hat I^{(k)}_{t+1:t+H}, l)\), and the selected candidate is \(k^\star=\arg\max_k s^{(k)}\).</p>
+<h3>3.4 Training Data</h3>
+<p>[Summary] Training data comes mainly from RLBench, RoboCasa, and RoboMimic, replayed under randomized cameras with calibration episodes. It also includes perturbed non-success rollouts and real-world DROID data, which has no calibration episodes.</p>
+
+<h2>4 Experiments</h2>
+<h3>4.1 Experiment Setups</h3>
+<p>[Summary] Evaluation uses unseen ManiSkill and LIBERO (both Franka) and real xArm rollouts. There are 50/50/25 trajectories, each recorded from two views, giving 100/100/50 videos. The model generates at 512×512 with 16-step action chunks. It is trained on 32 H100s with batch size 64 for 2–3 days.</p>
+<h3>4.2 World Model Quality Analysis</h3>
+<p>[Summary] Baselines are IRASim, WorldGym, and Ctrl-World. Metrics are PSNR, SSIM, LPIPS, and FID.</p>
+<table>
+<caption>Table 1: Comparison of video quality across simulation and real-world domains.</caption>
+<tr><th>Method</th><th colspan="4">LIBERO (PSNR↑ SSIM↑ LPIPS↓ FID↓)</th><th colspan="4">ManiSkill</th><th colspan="4">Real</th></tr>
+<tr><td>IRASim</td><td>23.5</td><td>0.876</td><td>0.149</td><td>19.9</td><td>21.8</td><td>0.755</td><td>0.188</td><td>29.4</td><td>24.2</td><td>0.826</td><td>0.165</td><td>31.2</td></tr>
+<tr><td>WorldGym</td><td>24.1</td><td>0.882</td><td>0.142</td><td>17.4</td><td>22.2</td><td>0.764</td><td>0.183</td><td>27.6</td><td>24.6</td><td>0.845</td><td>0.154</td><td>24.4</td></tr>
+<tr><td>Ctrl-World</td><td>24.8</td><td>0.892</td><td>0.137</td><td>16.5</td><td>22.6</td><td>0.770</td><td>0.178</td><td>26.5</td><td>25.2</td><td>0.856</td><td>0.142</td><td>22.8</td></tr>
+<tr><td>SyncWorld w/o Calib</td><td>27.9</td><td>0.933</td><td>0.049</td><td>8.7</td><td>26.0</td><td>0.845</td><td>0.071</td><td>14.0</td><td>28.8</td><td>0.934</td><td>0.042</td><td>5.9</td></tr>
+<tr><td>SyncWorld w/ Calib</td><td>28.3</td><td>0.935</td><td>0.035</td><td>7.0</td><td>27.0</td><td>0.870</td><td>0.049</td><td>9.7</td><td>29.2</td><td>0.936</td><td>0.039</td><td>5.5</td></tr>
+</table>
+<figure data-fig="5"><figcaption>Figure 5: Qualitative Results on a real-world setup with unseen embodiment and viewpoints; SyncWorld matches ground truth while Ctrl-World fails.</figcaption></figure>
+<h3>4.3 Multi-view Spatial Consistency Analysis</h3>
+<p>[Summary] Cross-view consistency is measured with Met3r (lower is better). The score between the two ground-truth views serves as the Oracle reference.</p>
+<table>
+<caption>Table 2: Met3r scores.</caption>
+<tr><th></th><th>LIBERO</th><th>ManiSkill</th><th>Real</th><th>Avg</th></tr>
+<tr><td>IRASim</td><td>0.579</td><td>0.633</td><td>0.468</td><td>0.560</td></tr>
+<tr><td>WorldGym</td><td>0.583</td><td>0.632</td><td>0.515</td><td>0.577</td></tr>
+<tr><td>Ctrl-World</td><td>0.559</td><td>0.642</td><td>0.494</td><td>0.565</td></tr>
+<tr><td>SyncWorld w/o Calib.</td><td>0.545</td><td>0.607</td><td>0.474</td><td>0.542</td></tr>
+<tr><td>SyncWorld w/ Calib.</td><td>0.540</td><td>0.602</td><td>0.473</td><td>0.538</td></tr>
+<tr><td>Oracle</td><td>0.515</td><td>0.594</td><td>0.459</td><td>0.523</td></tr>
+</table>
+<h3>4.4 Zero-shot Policy Improvement with SyncWorld</h3>
+<p>[Summary] GPC-Rank is run with GPT-5 as judge, using 50 episodes per task and front plus side views. Tasks were chosen where oracle simulator ranking has headroom over the direct policy.</p>
+<table>
+<caption>Table 3: Success rate on LIBERO sub-tasks with oracle headroom.</caption>
+<tr><th></th><th>BBQ Sauce</th><th>Orange Juice</th><th>Black Bowl</th></tr>
+<tr><td>Baseline</td><td>0.52</td><td>0.56</td><td>0.48</td></tr>
+<tr><td>SyncWorld w/o Calib</td><td>0.54</td><td>0.68</td><td>0.58</td></tr>
+<tr><td>SyncWorld w/ Calib</td><td>0.58</td><td>0.72</td><td>0.60</td></tr>
+<tr><td>Oracle</td><td>0.60</td><td>0.80</td><td>0.66</td></tr>
+</table>
+<h3>4.5 Analysis</h3>
+<table>
+<caption>Table 4: Ablation study of key designs.</caption>
+<tr><th>Method</th><th colspan="4">LIBERO</th><th colspan="4">ManiSkill</th><th colspan="4">Real</th></tr>
+<tr><td>SyncWorld</td><td>27.9</td><td>0.933</td><td>0.049</td><td>8.7</td><td>26.0</td><td>0.845</td><td>0.071</td><td>14.0</td><td>28.8</td><td>0.934</td><td>0.042</td><td>5.9</td></tr>
+<tr><td>(-) Calib.</td><td>25.0</td><td>0.895</td><td>0.134</td><td>15.6</td><td>23.2</td><td>0.777</td><td>0.174</td><td>25.7</td><td>26.7</td><td>0.872</td><td>0.128</td><td>18.2</td></tr>
+<tr><td>(-) Distill.</td><td>24.2</td><td>0.885</td><td>0.148</td><td>17.8</td><td>22.5</td><td>0.758</td><td>0.192</td><td>27.3</td><td>26.0</td><td>0.859</td><td>0.142</td><td>20.1</td></tr>
+</table>
+<table>
+<caption>Table 5: Met3r ablation.</caption>
+<tr><th></th><th>LIBERO</th><th>ManiSkill</th><th>Real</th><th>Avg</th></tr>
+<tr><td>SyncWorld</td><td>0.545</td><td>0.607</td><td>0.474</td><td>0.542</td></tr>
+<tr><td>(-) Calib.</td><td>0.560</td><td>0.643</td><td>0.496</td><td>0.566</td></tr>
+<tr><td>(-) Distill.</td><td>0.569</td><td>0.649</td><td>0.504</td><td>0.574</td></tr>
+<tr><td>Oracle</td><td>0.515</td><td>0.594</td><td>0.459</td><td>0.523</td></tr>
+</table>
+<p>[Summary] Removing calibration hurts cross-domain generalization, and removing distillation hurts history-only inference. Without test-time calibration, the model stays close to the calibrated variant.</p>
+
+<h2>5 Conclusion</h2>
+<p>[Summary] Visual calibration in context lets one world model scale across heterogeneous data. It yields strong video quality, 3D consistency, and training-free policy improvement in unseen setups.</p>
+
+<h2>References</h2>
+<ol class="refs">
+<li>Alles et al. Latent action world models for control with unlabeled trajectories, 2025.</li>
+<li>Asim et al. Met3r. CVPR 2025.</li>
+<li>Baker et al. Video pretraining (VPT). NeurIPS 2022.</li>
+<li>Bharadhwaj et al. Gen2act, 2024.</li>
+<li>Bian et al. Video-as-prompt, 2025.</li>
+<li>Black et al. Zero-shot robotic manipulation with pretrained image-editing diffusion models, 2023.</li>
+<li>Blattmann et al. Stable video diffusion, 2023.</li>
+<li>Bousmalis et al. RoboCat, 2023.</li>
+<li>Bruce et al. Genie, 2024.</li>
+<li>Cadene et al. LeRobot, 2026.</li>
+<li>Caron et al. Emerging properties in self-supervised vision transformers. ICCV 2021.</li>
+<li>Chen et al. BridgeV2W, 2026.</li>
+<li>Du et al. Learning universal policies via text-guided video generation, 2023.</li>
+<li>Ebert et al. Visual foresight, 2018.</li>
+<li>Fang and Zhao. USP, 2024.</li>
+<li>Feng et al. Vidar, 2025.</li>
+<li>Fu et al. FeatUp, 2024.</li>
+<li>Gao et al. DreamDojo, 2026.</li>
+<li>Gao et al. AdaWorld, 2025.</li>
+<li>Garrido et al. Learning latent action world models in the wild, 2026.</li>
+<li>Guo et al. Prediction with action, 2024.</li>
+<li>Guo et al. VLAW, 2026.</li>
+<li>Guo et al. Ctrl-World, 2025.</li>
+<li>Hafner et al. Dream to control, 2020.</li>
+<li>Hafner et al. Mastering Atari with discrete world models, 2022.</li>
+<li>He et al. Scaling cross-embodiment world models for dexterous manipulation, 2025.</li>
+<li>Heusel et al. GANs trained by a two time-scale update rule. NeurIPS 2017.</li>
+<li>Hu et al. GAIA-1, 2023.</li>
+<li>Hu et al. Video prediction policy, 2025.</li>
+<li>James et al. RLBench. RA-L 2020.</li>
+<li>Jang et al. DreamGen, 2025.</li>
+<li>Jiang et al. EnerVerse-AC, 2025.</li>
+<li>Jiang et al. OLAF-World, 2026.</li>
+<li>Jiang et al. OLAF-World, arXiv:2602.10104, 2026.</li>
+<li>Jiang et al. WoVR, 2026.</li>
+<li>Khazatsky et al. DROID, 2025.</li>
+<li>Kim et al. Cosmos policy, 2026.</li>
+<li>Li et al. Unified video action model, 2025.</li>
+<li>Li and Torralba. Multimodal action conditioned video simulation. ICCV 2025.</li>
+<li>Liang et al. Dreamitate, 2024.</li>
+<li>Liu et al. LIBERO, 2023.</li>
+<li>Liu et al. World-VLA-Loop, 2026.</li>
+<li>Mandlekar et al. What matters in learning from offline human demonstrations, 2021.</li>
+<li>Nasiriany et al. RoboCasa, 2024.</li>
+<li>O'Neill et al. Open X-Embodiment. ICRA 2024.</li>
+<li>Qi et al. Strengthening generative robot policies through predictive world modeling, 2025.</li>
+<li>Quevedo et al. WorldGym, 2025.</li>
+<li>Ren et al. GEN3C. CVPR 2025.</li>
+<li>Seedance et al. Seedance 1.5 pro, 2025.</li>
+<li>Sharma et al. World-Gymnast, 2026.</li>
+<li>Shridhar et al. Perceiver-Actor. CoRL 2023.</li>
+<li>Tan et al. AnyPos, 2025.</li>
+<li>Tao et al. ManiSkill3. RSS 2025.</li>
+<li>Tharwat et al. Latent action pretraining through world modeling, 2025.</li>
+<li>Wan et al. Wan, 2025.</li>
+<li>Wang et al. Context and diversity matter, 2026.</li>
+<li>Wang et al. VGGT, 2025.</li>
+<li>Wang et al. MVISTA-4D, 2026.</li>
+<li>Wang et al. DUSt3R. CVPR 2024.</li>
+<li>Wang et al. Precise action-to-video generation through visual action prompts. ICCV 2025.</li>
+<li>Wang et al. Precise action-to-video generation through visual action prompts, 2025.</li>
+<li>Wang et al. Image quality assessment (SSIM). IEEE TIP 2004.</li>
+<li>Wu et al. DayDreamer, 2022.</li>
+<li>Yang et al. Learning interactive real-world simulators, 2024.</li>
+<li>Yang et al. StableWorld, 2026.</li>
+<li>Ye et al. World action models are zero-shot policies, 2026.</li>
+<li>Ye et al. Latent action pretraining from videos, 2025.</li>
+<li>Yuan et al. AdaWorldPolicy, 2026.</li>
+<li>Ze et al. 3D diffusion policy. RSS 2024.</li>
+<li>Zhang et al. UP-VLA, 2025.</li>
+<li>Zhang et al. LPIPS. CVPR 2018.</li>
+<li>Zheng et al. FLARE, 2025.</li>
+<li>Zhi et al. 3DFlowAction, 2025.</li>
+<li>Zhou et al. Stable virtual camera. ICCV 2025.</li>
+<li>Zhu et al. Unified world models, 2025.</li>
+<li>Zhu et al. IRASim, 2025.</li>
+</ol>
+
+<h2>A Appendix Overview</h2>
+<p>[Summary] The appendix covers training details (B), evaluation (C), ablations (D), failure cases (E), and qualitative results (F). A local index.html accompanies the supplementary material.</p>
+
+<h2>B Training Details</h2>
+<h3>B.1 Setting Details</h3>
+<h3>B.1.1 Model and Training Configuration</h3>
+<p>[Summary] The model is built on Wan2.2-TI2V-5B with its 4×16×16 VAE. Pose encoders and identity-initialized projectors are added per DiT block, plus a zero-initialized calibration metadata embedding. Each sample has 60 calibration frames (12 segments of 5 frames), 25 history frames, and 16 future frames at 512×512. Robot conditioning is 8-dimensional per frame, packed four frames per 32-dimensional token. Training uses bf16, a learning rate of 5×10<sup>−5</sup>, and per-device batch size 2.</p>
+<h3>B.1.2 Augmentation</h3>
+<p>With probability \(p_{\text{axis}}\), the same transform is applied to all pose streams: \(R'_t = R_t S,\ p'_t = s\,p_t\). Here \(S\) is a right-handed signed permutation matrix (\(\det S=+1\)) and \(s\sim\mathcal{U}(0.7,1.5)\). Identical photometric jitter is applied across all video streams.</p>
+<h3>B.1.3 Distillation</h3>
+<p>[Summary] The student input uses a null calibration: a black video, zero/identity poses, and flag −2.0. The distillation loss is:</p>
+\[\mathcal{L}_{\text{distill}} = \mathbb{E}_\tau\big[\|\hat\epsilon_\theta(\text{history},\text{null-calib}) - \text{sg}(\hat\epsilon_\theta(\text{history},\text{calib}))\|_2^2\big]\]
+<p>The total loss is \(\mathcal{L}=\mathcal{L}_{\text{base}}+\lambda_{\text{distill}}\mathcal{L}_{\text{distill}}\).</p>
+<h3>B.1.4 Curriculum</h3>
+<p>[Summary] Training has two phases:</p>
+<ul>
+<li><b>Phase 1:</b> every sample is calibrated, with \(p_{\text{axis}}=0.3\).</li>
+<li><b>Phase 2:</b> mixed data including samples without calibration, with \(p_{\text{axis}}=0.6\) and distillation most active.</li>
+</ul>
+<h3>B.2 Dataset Generation</h3>
+<p>[Summary] The pipeline samples camera setups, records a calibration episode, replays the expert, optionally adds counterfactuals, and stores the results hierarchically.</p>
+<h3>B.2.1 Random Camera View Details</h3>
+<p>[Summary] Cameras are perturbed around the default pose, with optional orbital arcs. A view is accepted only if the gripper is visible, with up to 150 attempts. Backgrounds are also varied.</p>
+<h3>B.2.2 Calibration Episode Details</h3>
+<p>[Summary] Translation and rotation DoFs are shuffled independently, giving the order \((\pi_{\text{trans}}(1),\pi_{\text{trans}}(2),\pi_{\text{trans}}(3),\pi_{\text{rot}}(1),\pi_{\text{rot}}(2),\pi_{\text{rot}}(3))\). Each DoF is executed with a random sign in a forward–pause–reverse pattern: \(n_d\) steps of \(v^{(d)}\), then \(n_p\) zeros, then \(n_d\) steps of \(-v^{(d)}\).</p>
+<h3>B.2.3 Calibration segment extraction</h3>
+<p>[Summary] Steps are kept if they match the sign and exceed 1 mm or 0.2°. The contiguous run with the largest cumulative motion is selected, and N=5 frames are taken from its onset and re-anchored. The segments are then reordered canonically.</p>
+<h3>B.2.4 Generating Counterfactual Episodes</h3>
+<p>[Summary] Two modes are used. Scripted divergence keeps the expert actions for \(\tau\le p\) and replaces the remainder with one or two synthetic constant-motion segments. Noisy replay uses \(a^{cf}_{t+\tau}=a^\star_{t+\tau}+\varepsilon_{t+\tau}\) with sparse control points (4%, interval 24) and \(\sigma=0.2\).</p>
+<h3>B.2.5 Dataset Statistics</h3>
+<p>[Summary] The dataset totals about 166 h (~29,880 videos, ~8,300 unique trajectories, ~3.6 views each). About 54 h of this is real-world data.</p>
+
+<h2>C Evaluation Details</h2>
+<h3>C.1 Inference Configuration</h3>
+<p>[Summary] Inference uses a stride of 16 frames, 512×512 resolution, and FlowMatchScheduler (shift 5, 20 steps). Tiled VAE and bf16 are used. Action classifier-free guidance is applied as:</p>
+\[\hat\epsilon = \hat\epsilon_\varnothing + \lambda_{\text{action}}(\hat\epsilon_{\text{cond}} - \hat\epsilon_\varnothing) \tag{7}\]
+<p>with \(\lambda_{\text{action}}=5.0\).</p>
+<h3>C.2 Inference Efficiency</h3>
+<table>
+<caption>Table 6: Inference efficiency.</caption>
+<tr><th>Models</th><th>GPU</th><th>Denoising Steps</th><th>Inference Time (s)</th></tr>
+<tr><td>WorldGym</td><td>1 A100</td><td>50</td><td>37.2</td></tr>
+<tr><td>Ctrl-World</td><td>1 H100</td><td>50</td><td>4.0</td></tr>
+<tr><td>Ours</td><td>1 H100</td><td>50</td><td>39.4</td></tr>
+<tr><td></td><td>1 H100</td><td>20</td><td>15.6</td></tr>
+<tr><td></td><td>4 H100</td><td>20</td><td>3.2</td></tr>
+</table>
+<h3>C.3 Met3R Score Settings</h3>
+<p>[Summary] Met3R combines DINO features upsampled with FeatUp, DUSt3R pointmaps, rendering into a common frame, and cosine similarity. The scores used are:</p>
+\[\text{Cross}=\tfrac12\text{MEt3R}(\hat v_1,v_2)+\tfrac12\text{MEt3R}(\hat v_2,v_1),\qquad \text{Cross}_{GT}=\text{MEt3R}(v_1,v_2)\]
+<h3>C.4 Policy Improvement Settings</h3>
+<h3>C.4.1 Policy Introduction</h3>
+<p>[Summary] The base policy is a non-official LeRobot π0 checkpoint for LIBERO. It outputs 16-action chunks that are executed open-loop.</p>
+<h3>C.4.2 Hyperparameters</h3>
+<table>
+<caption>Table 7: MPC inference hyperparameters.</caption>
+<tr><th>Hyperparameter</th><th>Value</th></tr>
+<tr><td>Action chunk size</td><td>16</td></tr>
+<tr><td>Rollout horizon H</td><td>16</td></tr>
+<tr><td>Number of candidates N</td><td>8</td></tr>
+<tr><td>Frames per candidate (VLM input)</td><td>3</td></tr>
+<tr><td>Policy</td><td>π0-based</td></tr>
+<tr><td>Reward model</td><td>GPT-5</td></tr>
+</table>
+<h3>C.4.3 Task Set and Oracle-Headroom Analysis</h3>
+<p>[Summary] Tasks were chosen by oracle headroom, not by SyncWorld performance: Orange Juice, BBQ Sauce, and Black Bowl. The additional tasks below show the ranking procedure as the bottleneck.</p>
+<table>
+<caption>Table 8: Additional LIBERO sub-tasks without consistent oracle headroom.</caption>
+<tr><th></th><th>Alphabet Soup</th><th>Ketchup</th><th>Put Cream Cheese</th></tr>
+<tr><td>Baseline</td><td>0.58</td><td>0.8</td><td>0.34</td></tr>
+<tr><td>SyncWorld</td><td>0.58</td><td>0.72</td><td>0.34</td></tr>
+<tr><td>Oracle</td><td>0.62</td><td>0.74</td><td>0.3</td></tr>
+</table>
+
+<h2>D More Ablation Studies</h2>
+<table>
+<caption>Table 9: Ablation study for augmentation.</caption>
+<tr><th>Method</th><th colspan="4">LIBERO</th><th colspan="4">ManiSkill</th><th colspan="4">Real</th></tr>
+<tr><td>SyncWorld</td><td>28.3</td><td>0.935</td><td>0.035</td><td>7.0</td><td>27.0</td><td>0.870</td><td>0.049</td><td>9.7</td><td>29.2</td><td>0.936</td><td>0.039</td><td>5.5</td></tr>
+<tr><td>Aug. 0.0</td><td>26.6</td><td>0.920</td><td>0.055</td><td>8.2</td><td>24.1</td><td>0.848</td><td>0.088</td><td>10.9</td><td>27.4</td><td>0.920</td><td>0.050</td><td>6.2</td></tr>
+<tr><td>Aug. 0.3</td><td>27.5</td><td>0.927</td><td>0.041</td><td>8.0</td><td>26.0</td><td>0.861</td><td>0.059</td><td>11.1</td><td>28.3</td><td>0.929</td><td>0.040</td><td>5.7</td></tr>
+<tr><td>Aug. 0.9</td><td>26.7</td><td>0.917</td><td>0.053</td><td>8.6</td><td>26.0</td><td>0.860</td><td>0.060</td><td>10.9</td><td>28.0</td><td>0.922</td><td>0.045</td><td>6.4</td></tr>
+</table>
+<p>[Summary] Both too little (0.0) and too much (0.9) augmentation hurt performance; the default 0.6 is best.</p>
+<figure data-fig="6"><figcaption>Figure 6: Extreme camera view</figcaption></figure>
+<figure data-fig="7"><figcaption>Figure 7: Unseen Object Interaction</figcaption></figure>
+
+<h2>E Failure Mode Visualization</h2>
+<h3>E.1 Extreme camera view</h3>
+<p>[Summary] With a close, steep camera, the coarse rotation trend is captured, but the gripper trajectory is unstable.</p>
+<h3>E.2 Unseen Object Interaction</h3>
+<p>[Summary] The end-effector is accurate, but the unseen peg is blurry and misplaced.</p>
+<figure data-fig="8"><figcaption>Figure 8: Interacting with multiple objects</figcaption></figure>
+<figure data-fig="9"><figcaption>Figure 9: New Embodiment in real world</figcaption></figure>
+<h3>E.3 Hallucination when interacting with multiple objects</h3>
+<p>[Summary] In a multi-cube stacking task, the prediction is mostly accurate, with a slight hallucination on the red cube.</p>
+<h3>E.4 Fine-grained action under new Embodiment</h3>
+<p>[Summary] On the unseen xArm, the z-rotation is correct, but the gripper blurs in intermediate frames.</p>
+
+<h2>F More Qualitative Results</h2>
+<h3>F.1 Additional Examples of World Model Quality</h3>
+<p>[Summary] Additional segment and full-episode comparisons across environments, views, and embodiments.</p>
+<h3>F.2 Cross-View 3D Consistency</h3>
+<p>[Summary] VGGT reconstructions from two generated views are consistent with each other and with ground truth.</p>
+<h3>F.3 Policy Improvement with GPC-Rank</h3>
+<p>[Summary] On the BBQ sauce example, the concatenated imagined rollout, the improved execution, and the baseline are compared; the improved policy picks up more reliably.</p>
+<h3>F.4 Examples of Visual Calibration Episodes</h3>
+<p>[Summary] Calibration episodes vary in DoF order, sign, and magnitude, and the model is robust to this variation.</p>
+<h3>F.5 Controllability</h3>
+<p>[Summary] Primitives \([+x,+y,+z,+\text{yaw},+\text{pitch},+\text{roll}]\) are followed on seen and unseen arms. Without calibration, qualitative controllability degrades, especially on unseen embodiments.</p>
+</body></html>

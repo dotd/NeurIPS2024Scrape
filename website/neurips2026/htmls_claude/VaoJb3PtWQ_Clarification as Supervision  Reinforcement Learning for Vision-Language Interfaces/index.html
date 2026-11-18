@@ -1,0 +1,285 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Clarification as Supervision: Reinforcement Learning for Vision-Language Interfaces</title>
+<script>window.MathJax = {tex: {inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']], tags: 'ams'}};</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js"></script>
+<style>
+  body { font: 17px/1.6 Georgia, "Times New Roman", serif; max-width: 860px; margin: 0 auto; padding: 24px 20px 80px; color: #222; }
+  h1 { font-size: 1.7em; line-height: 1.25; } h2 { margin-top: 1.8em; } .src { font: 13px system-ui, sans-serif; color: #666; }
+  figure { margin: 1.5em 0; text-align: center; } figure img { max-width: 100%; }
+  figcaption { font-size: 0.9em; color: #444; text-align: left; margin-top: 6px; }
+  table { border-collapse: collapse; margin: 1em auto; font-size: 0.85em; } td, th { border: 1px solid #ccc; padding: 3px 6px; }
+  pre { background: #f6f8fa; padding: 10px; overflow-x: auto; font-size: 0.85em; } .refs { font-size: 0.85em; }
+</style></head><body>
+<p class="src">HTML version made by Claude (claude-opus-5-5) from <a href="../../pdfs/VaoJb3PtWQ_Clarification%20as%20Supervision%20%20Reinforcement%20Learning%20for%20Vision-Language%20Interfaces.pdf">the PDF</a>; check the PDF for exact wording and figures.</p>
+I can't reproduce the full paper verbatim, since that would mean copying a long copyrighted work in its entirety. Below is a faithful HTML rendering of its structure. It paraphrases the prose, keeps short quotes, and includes the equations, tables, algorithm and figure placeholders, so it can serve as a structured companion to the original (arXiv:2509.26594).
+
+<h1>Clarification as Supervision: Reinforcement Learning for Vision-Language Interfaces</h1>
+<p>John Gkountouras, ILLC, University of Amsterdam (i.gkountouras@uva.nl)<br>Ivan Titov, ILLC, University of Amsterdam; ILCC, University of Edinburgh (ititov@inf.ed.ac.uk)</p>
+
+<h2>Abstract</h2>
+<p>[Summary] Text-only reasoners are strong at math, but visual reasoning through a captioning interface fails when captions written for humans omit details reasoners need. The authors propose Adaptive-Clarification Reinforcement Learning (AC-RL). During training, the reasoner may request clarification, and success that requires clarification is penalized. This pushes the captioner toward comprehensive initial captions. AC-RL improves average accuracy by 4.4 points over pretrained baselines across seven visual math benchmarks. Analysis shows it would cut clarification requests by up to 39% if they were allowed. The paper frames clarification as implicit supervision that requires no explicit annotations.</p>
+
+<h2>1 Introduction</h2>
+<p>[Summary] Decoupled architectures (e.g., COLA, ViCor, VCTP, VisProg) route visual information through a linguistic bottleneck. This lets existing text reasoners be reused, but it creates an alignment problem: captioners must learn what a specific reasoner needs. Annotating "ideal captions" per reasoner is infeasible.</p>
+<figure data-fig="1"><figcaption>Figure 1: Adaptive-Clarification Reinforcement Learning (AC-RL) training framework. [Caption summarized] A trainable captioner produces an initial description. A frozen reasoner either answers directly (R = 1 if correct, 0 otherwise) or requests clarification, which is answered by a frozen reference captioner (R = 0.7 if correct, 0 otherwise). Gradients flow only through the initial caption. At inference, only the direct path is used.</figcaption></figure>
+<p>[Summary] Binary task rewards are sparse, language action spaces are large, and the feedback is indirect. AC-RL addresses this with a tiered reward: full reward for direct success, partial reward \(\alpha = 0.7\) for success after clarification, and zero for failure. This densifies the signal, while the penalty \(1-\alpha\) pushes toward self-sufficient captions.</p>
+<p>Contributions:</p>
+<ul>
+<li>An exploration-based framework for discovering, via RL, what visual information a reasoner requires.</li>
+<li>A clarification-aware reward structure that uses interaction patterns as learning signals.</li>
+<li>Empirical gains on seven mathematical VQA benchmarks, plus reduced clarification dependency.</li>
+</ul>
+
+<h2>2 Related Work</h2>
+<p><strong>Reinforcement learning for reasoning in language models.</strong> [Summary] DeepSeek-R1 and visual extensions (Skywork-R1V2, Vision-R1, VL-Rethinker, OpenVLThinker, R1-OneVision, Mulberry) extend reasoning chains. AC-RL instead shapes the perception–reasoning interface.</p>
+<p><strong>Decoupled perception–reasoning and interface design.</strong> [Summary] COLA, VCTP and VisProg use fixed protocols. AC-RL learns caption features from interaction.</p>
+<p><strong>Learning alignment through interaction.</strong> [Summary] RACRO aligns a captioner using binary rewards. AC-RL densifies this signal. Related approaches include LAMOC, VLRM, OmniCaptioner, Critic-V, and multi-agent frameworks such as AutoGen.</p>
+
+<h2>3 Methodology</h2>
+<h3>3.1 The Vision-Reasoner Interface Problem</h3>
+<p>[Summary] A trainable captioner \(\mathcal{V}_\theta\) maps an image \(I\) and question \(Q\) to text. A frozen reasoner \(\mathcal{R}\) produces the answer \(A\). Clarification requests serve as implicit supervision.</p>
+<h3>3.2 Training and Inference Protocols</h3>
+<p>[Summary] Training proceeds as follows. The captioner produces \(c_0 \sim \pi_\theta(\cdot \mid I, Q)\). The reasoner either answers or asks a question \(q_1\). If it asks, a frozen model replies with \(c_1 \sim \pi_{\text{ref}}(\cdot \mid I, Q, q_1)\). Because the clarifier is frozen, the captioner must learn to front-load information. Inference is single-pass and uses only \(c_0\).</p>
+<h3>3.3 Clarification-Aware Reward Design</h3>
+\[R(\tau)=\begin{cases}1 & \text{if correct answer without clarification}\\ \alpha & \text{if correct answer with clarification}\\ 0 & \text{if incorrect answer}\end{cases}\tag{1}\]
+<p>[Summary] Here \(\alpha \in (0,1)\), and the paper sets \(\alpha = 0.7\). The partial reward gives credit when a caption is nearly sufficient. The penalty favors self-sufficient captions.</p>
+<h3>3.4 Policy Optimization</h3>
+\[J(\theta)=\mathbb{E}_{(I,Q)\sim\mathcal{D}}\left[\mathbb{E}_{\tau\sim\pi_\theta}[R(\tau)]\right]-\beta\cdot D_{\mathrm{KL}}(\pi_\theta\|\pi_{\text{ref}})\tag{2}\]
+<p>[Summary] Advantages are estimated with BNPO. Gradients flow only through \(c_0\).</p>
+
+<h2>4 Experiments</h2>
+<p>[Summary] The experiments test three hypotheses:</p>
+<ol>
+<li>AC-RL beats pretrained and binary-reward baselines.</li>
+<li>The clarification scaffold matters.</li>
+<li>The gains come from front-loading information into the initial caption.</li>
+</ol>
+<p><strong>System architecture.</strong> The captioners are InternVL3-2B and Qwen2.5-VL-3B. The reasoner is DeepSeek-R1-Qwen-32B.</p>
+<p><strong>Configurations.</strong> Standalone VLM; Pretrained + Reasoner; Binary-Reward RL (RACRO-like); AC-RL. All RL methods are trained on ViRL-39K.</p>
+<p><strong>Evaluation.</strong> All results use single-pass evaluation. Clarification-enabled runs are used only for the behavioral analyses. The benchmarks are MathVista (testmini), MathVision, MathVerse, MMMU (val), WeMath (strict), DynaMath (worst-case) and LogicVista, evaluated with EvalScope and VLMEvalKit.</p>
+
+<h3>4.1 Overall Performance</h3>
+<p>[Summary] With Qwen-3B, AC-RL raises the average from 39.0 to 43.4 (+4.4), with large gains on DynaMath (+10.6) and MathVerse (+5.2). InternVL-2B gains +3.3. There are minor regressions on WeMath.</p>
+<p>Table 1: Main results on multi-modal reasoning benchmarks.</p>
+<table>
+<tr><th>Model</th><th>MVista</th><th>MVision</th><th>MVerse</th><th>MMMU</th><th>WeM</th><th>DynaM</th><th>LVista</th><th>AVG</th></tr>
+<tr><td colspan="9"><strong>Proprietary Models</strong></td></tr>
+<tr><td>GPT-4o-20241120</td><td>60.0</td><td>31.2</td><td>40.6</td><td>70.7</td><td>45.8</td><td>34.5</td><td>52.8</td><td>47.9</td></tr>
+<tr><td>Gemini-2.0-Flash</td><td>70.4</td><td>43.6</td><td>47.7</td><td>72.6</td><td>47.4</td><td>42.1</td><td>52.3</td><td>53.7</td></tr>
+<tr><td>Claude-3.7-Sonnet</td><td>66.8</td><td>41.9</td><td>46.7</td><td>75.0</td><td>49.3</td><td>39.7</td><td>58.2</td><td>53.9</td></tr>
+<tr><td>o1</td><td>73.9</td><td>42.2</td><td>—</td><td>78.2</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+<tr><td>Gemini 2.5 Pro</td><td>80.9</td><td>69.1</td><td>76.9</td><td>74.7</td><td>78.0</td><td>56.3</td><td>73.8</td><td>72.8</td></tr>
+<tr><td>Seed1.5-VL (Thinking)</td><td>79.5†</td><td>68.7</td><td>—</td><td>77.9</td><td>77.5</td><td>—</td><td>—</td><td>75.9*</td></tr>
+<tr><td colspan="9"><strong>Open-Weights Models</strong></td></tr>
+<tr><td>InternVL3-2B-MPO</td><td>57.0</td><td>21.7</td><td>25.3</td><td>48.6</td><td>22.4</td><td>14.6</td><td>36.9</td><td>32.4</td></tr>
+<tr><td>InternVL3-8B-MPO</td><td>71.6</td><td>29.3</td><td>39.8</td><td>62.7</td><td>37.1</td><td>25.5</td><td>44.1</td><td>44.3</td></tr>
+<tr><td>Ovis2-8B</td><td>71.8†</td><td>25.9</td><td>42.3</td><td>59.0</td><td>—</td><td>—</td><td>39.4</td><td>47.7</td></tr>
+<tr><td>InternVL3-14B-MPO</td><td>75.1</td><td>37.2</td><td>44.4</td><td>67.1</td><td>43.0</td><td>31.3</td><td>51.2</td><td>49.9</td></tr>
+<tr><td>QVQ-72B-Preview</td><td>70.3</td><td>34.9</td><td>48.2</td><td>70.3</td><td>39.0</td><td>30.7</td><td>58.2</td><td>50.2</td></tr>
+<tr><td>MMR1-Math-v0-7B</td><td>71.0†</td><td>30.2</td><td>49.2</td><td>—</td><td>—</td><td>—</td><td>50.8</td><td>50.3</td></tr>
+<tr><td>InternVL3-38B-MPO</td><td>75.1</td><td>34.2</td><td>48.2</td><td>70.1</td><td>48.6</td><td>35.3</td><td>58.4</td><td>52.8</td></tr>
+<tr><td>VL-Rethinker-72B</td><td>80.3</td><td>43.9</td><td>—</td><td>68.8</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+<tr><td>InternVL3-78B-MPO</td><td>79.0</td><td>43.1</td><td>51.0</td><td>72.2</td><td>46.0</td><td>35.1</td><td>55.9</td><td>54.6</td></tr>
+<tr><td colspan="9"><strong>InternVL-2B</strong></td></tr>
+<tr><td>Standalone VLM</td><td>57.0</td><td>21.9</td><td>25.3</td><td>48.6</td><td>22.4</td><td>14.6</td><td>36.9</td><td>32.4</td></tr>
+<tr><td>Pretrained + Reasoner</td><td>61.0</td><td>34.7</td><td>28.9</td><td>57.4</td><td>32.8</td><td>12.0</td><td>48.3</td><td>39.3</td></tr>
+<tr><td>AC-RL (ours)</td><td>65.3 (+4.3)</td><td>36.7 (+2.0)</td><td>36.8 (+7.9)</td><td>58.4 (+1.0)</td><td>32.1 (-0.7)</td><td>20.0 (+8.0)</td><td>49.0 (+0.7)</td><td>42.6 (+3.3)</td></tr>
+<tr><td colspan="9"><strong>Qwen-3B</strong></td></tr>
+<tr><td>Standalone VLM</td><td>64.5</td><td>21.9</td><td>28.8</td><td>50.1</td><td>24.2</td><td>13.4</td><td>39.6</td><td>34.6</td></tr>
+<tr><td>Pretrained + Reasoner</td><td>59.7</td><td>32.8</td><td>29.2</td><td>55.2</td><td>34.7</td><td>14.2</td><td>47.2</td><td>39.0</td></tr>
+<tr><td>AC-RL (ours)</td><td>63.8 (+4.1)</td><td>36.8 (+4.0)</td><td>34.4 (+5.2)</td><td>57.7 (+2.5)</td><td>33.2 (-1.5)</td><td>24.8 (+10.6)</td><td>53.0 (+5.8)</td><td>43.4 (+4.4)</td></tr>
+</table>
+<p>† Result on testmini/mini subset.</p>
+
+<h3>4.2 Ablations</h3>
+<p>Table 2: Decomposition of performance gains on Qwen2.5-VL-3B (single-pass).</p>
+<table>
+<tr><th>Training Method</th><th>MVista</th><th>MVision</th><th>MVerse</th><th>MMMU</th><th>WeM</th><th>DynaM</th><th>LVista</th><th>AVG</th></tr>
+<tr><td>VLM-only (No Reasoner)</td><td>64.50</td><td>21.90</td><td>28.80</td><td>50.10</td><td>24.20</td><td>13.40</td><td>39.60</td><td>34.64</td></tr>
+<tr><td>Decoupled (No RL)</td><td>59.69</td><td>32.80</td><td>29.18</td><td>55.22</td><td>34.71</td><td>14.17</td><td>47.20</td><td>39.00</td></tr>
+<tr><td>Binary-Reward RL</td><td>62.60</td><td>34.30</td><td>31.09</td><td>55.44</td><td>33.45</td><td>17.56</td><td>47.42</td><td>40.27</td></tr>
+<tr><td>AC-RL (Ours)</td><td>63.80</td><td>36.84</td><td>34.39</td><td>57.70</td><td>33.22</td><td>24.75</td><td>53.02</td><td>43.39</td></tr>
+</table>
+<p>[Summary] Decoupling helps, and binary RL helps further. AC-RL adds the most over Binary-Reward RL: +7.2 on DynaMath, +5.6 on LogicVista and +3.3 on MathVerse.</p>
+
+<h3>4.3 Analysis of Interface Behavior</h3>
+<p>Table 3: Clarification attempt rate during clarification-enabled evaluation.</p>
+<table>
+<tr><th>Dataset</th><th>Binary-Reward</th><th>AC-RL Model</th><th>Reduction</th></tr>
+<tr><td>MathVision</td><td>40.69%</td><td>28.95%</td><td>29%</td></tr>
+<tr><td>MathVerse_MINI</td><td>49.57%</td><td>30.28%</td><td>39%</td></tr>
+</table>
+<p>Table 4: Performance gap between clarification-enabled and single-pass evaluation.</p>
+<table>
+<tr><th>Dataset</th><th>Model</th><th>Clarification-Enabled</th><th>Single-Pass</th><th>Gap (Abs / Rel)</th></tr>
+<tr><td rowspan="2">MathVision</td><td>AC-RL</td><td>37.66%</td><td>36.71%</td><td>+0.95 / 0.015</td></tr>
+<tr><td>Binary-Reward</td><td>37.20%</td><td>34.31%</td><td>+2.89 / 0.044</td></tr>
+<tr><td rowspan="2">MathVerse_MINI</td><td>AC-RL</td><td>34.26%</td><td>36.80%</td><td>-2.54 / -0.040</td></tr>
+<tr><td>Binary-Reward</td><td>35.15%</td><td>31.09%</td><td>+4.06 / 0.059</td></tr>
+</table>
+<p>[Summary] The denied-clarification drop is defined as \(\Delta_{\text{deny}} = \text{Acc}_{\text{clarification-enabled}} - \text{Acc}_{\text{denied}}\). AC-RL makes fewer clarification requests, but the requests it does make are more critical.</p>
+<p>Table 5: Accuracy impact of denying clarification.</p>
+<table>
+<tr><th>Dataset</th><th>Model</th><th># Requests</th><th>Acc<sub>single-pass</sub></th><th>Acc<sub>deny</sub> / \(\Delta_{\text{deny}}\)</th></tr>
+<tr><td rowspan="2">MathVision</td><td>AC-RL</td><td>880</td><td>36.71%</td><td>22.50% / 14.21</td></tr>
+<tr><td>Binary-Reward</td><td>1237</td><td>34.31%</td><td>22.88% / 11.43</td></tr>
+<tr><td rowspan="2">MathVerse_MINI</td><td>AC-RL</td><td>276</td><td>36.80%</td><td>33.33% / 3.47</td></tr>
+<tr><td>Binary-Reward</td><td>496</td><td>31.09%</td><td>28.43% / 2.66</td></tr>
+</table>
+
+<h3>4.4 Subject-Level Performance Analysis</h3>
+<p>[Summary] The largest gains are on quantitative and structural subjects. On MathVision: angles +10.4, transformation geometry +8.3, algebra +7.5. On DynaMath: solid geometry +18.7, algebra +15.1, puzzle tests +13.5. Gains across DynaMath education levels are +6.5, +6.3 and +4.3.</p>
+<figure data-fig="2"><figcaption>Figure 2: Subject-level performance comparing AC-RL to the pretrained baseline using Qwen-3B + Reasoner on MathVision (left) and DynaMath (right).</figcaption></figure>
+<figure data-fig="3"><figcaption>Figure 3: DynaMath average accuracy across education levels; AC-RL outperforms the baseline at every level.</figcaption></figure>
+
+<h2>5 Conclusion</h2>
+<p>[Summary] Interface alignment between modules can be learned through interaction, using clarification as implicit feedback. Future work includes multi-turn clarification with decaying rewards, bidirectional co-adaptation of both modules, and other language-producing tools.</p>
+
+<h2>Acknowledgments</h2>
+<p>[Summary] The authors acknowledge NWO (VICI grant VI.C.212.053) and SURF (grant EINF-15485).</p>
+
+<h2>References</h2>
+<ol class="refs">
+<li>Achiam et al. GPT-4 technical report. arXiv:2303.08774, 2023.</li>
+<li>Bai et al. Qwen2.5-VL technical report, 2025.</li>
+<li>Chen et al. Large language models are visual reasoning coordinators. NeurIPS 2023.</li>
+<li>Chen et al. Visual chain-of-thought prompting for knowledge-based visual reasoning. AAAI 2024.</li>
+<li>Comanici et al. Gemini 2.5. arXiv:2507.06261, 2025.</li>
+<li>Deng et al. OpenVLThinker. arXiv:2503.17352, 2025.</li>
+<li>Du et al. Zero-shot VQA with language model feedback. arXiv:2305.17006, 2023.</li>
+<li>Duan et al. VLMEvalKit. ACM MM 2024.</li>
+<li>Dzabraev et al. VLRM. arXiv:2404.01911, 2024.</li>
+<li>Gou et al. Perceptual decoupling for scalable multi-modal reasoning via reward-optimized captioning. arXiv:2506.04559, 2025.</li>
+<li>Guo et al. DeepSeek-R1. Nature 645:633–638, 2025a.</li>
+<li>Guo et al. Seed1.5-VL technical report. arXiv:2505.07062, 2025b.</li>
+<li>Guo et al. Integrating visual interpretation and linguistic reasoning for math problem solving. arXiv:2505.17609, 2025c.</li>
+<li>Gupta &amp; Kembhavi. Visual programming. CVPR 2023.</li>
+<li>Hu et al. LoRA. ICLR.</li>
+<li>Huang et al. Vision-R1. arXiv:2503.06749, 2025.</li>
+<li>Jaech et al. OpenAI o1 system card. arXiv:2412.16720, 2024.</li>
+<li>Leng et al. MMR1. arXiv:2509.21268, 2025.</li>
+<li>Lu et al. MathVista. ICLR 2024a.</li>
+<li>Lu et al. Ovis. arXiv:2405.20797, 2024b.</li>
+<li>Lu et al. OmniCaptioner. arXiv:2504.07089, 2025.</li>
+<li>Qiao et al. We-Math. arXiv:2407.01284, 2024.</li>
+<li>Shao et al. DeepSeekMath. arXiv:2402.03300, 2024.</li>
+<li>Singh et al. Beyond captioning. arXiv:2410.05928, 2024.</li>
+<li>Gemini Team. Gemini. arXiv:2312.11805, 2023.</li>
+<li>ModelScope Team. EvalScope, 2024a.</li>
+<li>Qwen Team. QVQ, 2024b.</li>
+<li>von Werra et al. TRL, 2020.</li>
+<li>Wang et al. VL-Rethinker. arXiv:2504.08837, 2025a.</li>
+<li>Wang et al. MATH-Vision. NeurIPS D&amp;B 2024.</li>
+<li>Wang et al. Skywork R1V2. arXiv:2504.16656, 2025b.</li>
+<li>Wu et al. AutoGen. COLM 2024.</li>
+<li>Xiao et al. BNPO. arXiv:2506.02864, 2025.</li>
+<li>Xiao et al. LogicVista. arXiv:2407.04973, 2024.</li>
+<li>Yang et al. R1-OneVision. arXiv:2503.10615, 2025.</li>
+<li>Yao et al. Mulberry. arXiv:2412.18319, 2024.</li>
+<li>Yue et al. MMMU. CVPR 2024.</li>
+<li>Zhang et al. Critic-V. CVPR 2025.</li>
+<li>Zhang et al. MathVerse. ECCV 2024.</li>
+<li>Zhou et al. ViCor. Findings of ACL 2024a.</li>
+<li>Zhou et al. Paraphrase and solve. NAACL 2024b.</li>
+<li>Zhu et al. InternVL3. arXiv:2504.10479, 2025.</li>
+<li>Zou et al. DynaMath. ICLR 2025.</li>
+</ol>
+
+<h2>A AC-RL Algorithm</h2>
+<h3>A.1 Formal Problem Setup</h3>
+<p>[Summary] The MDP is \(\mathcal{M}=(\mathcal{S},\mathcal{A},P,R,\gamma)\), with \(\mathcal{S}=\mathcal{I}\times\mathcal{Q}\times\mathcal{H}\), \(\mathcal{A}=\mathcal{C}\), \(R:\mathcal{T}\to[0,1]\) and \(\gamma=1\). An episode runs as follows:</p>
+<ul>
+<li>The policy emits \(c_0\sim\pi_\theta(\cdot\mid s_0)\).</li>
+<li>The reasoner samples \(q_1\sim p(\cdot\mid s_0,c_0)\).</li>
+<li>If a question is asked, the frozen model replies with \(c_1\sim\pi_{\text{ref}}(\cdot\mid s_1)\), where \(s_1=(I,Q,\{c_0,q_1\})\).</li>
+<li>The reasoner then answers.</li>
+</ul>
+<p>All post-action mechanisms are \(\theta\)-independent.</p>
+<h3>A.2 Policy Update</h3>
+\[\mathcal{L}_{\text{clip}}(\theta)=-\mathbb{E}_{(s_t,a_t)}\left[\min\left(r_t(\theta)A_t,\operatorname{clip}(r_t(\theta),1-\epsilon,1+\epsilon)A_t\right)\right]+\beta D_{KL}(\pi_\theta\,\|\,\pi_{\text{ref-KL}})\tag{3}\]
+<h3>A.3 Training Algorithm</h3>
+<pre>Algorithm 1 AC-RL (structure)
+Require: D, V_θ, R, α, group size M, gradient steps K
+Initialize π_θ ← V_θ; frozen clarifier π_ref; KL reference π_ref ← π_θ
+for t = 1..T:
+  sample batch B ~ D
+  for each (I_j, Q_j) in B:
+    for i = 1..M:
+      c0 ~ π_θ(·|I_j,Q_j)
+      q1 ~ R_clarify(·|Q_j,c0)              (no gradients)
+      if q1 ≠ ∅: c1 ~ π_ref(...); A ~ R(·|Q_j,c0,(q1,c1)); C=1
+      else: A ~ R(·|Q_j,c0); C=0
+      R^(i,j) = 1.0 if correct ∧ C=0; α if correct ∧ C=1; 0 otherwise
+    fit Beta params to {R^(i,j)}; compute BNPO advantages
+  for k = 1..K: θ ← θ − η∇θ L_clip(θ; π_ref-KL)
+return π_θ</pre>
+
+<h2>B Unbiasedness of the Three-Tier Reward</h2>
+<p>[Summary] Theorem 1 states that if the post-action randomness \(\xi\) satisfies \(p_\theta(\tilde\tau)=p_\theta(\tau)\,p(\xi\mid\tau)\) with \(p(\xi\mid\tau)\) independent of \(\theta\), then the REINFORCE estimator with the tiered reward and an action-independent baseline is unbiased.</p>
+\[p_\theta(\tilde\tau)=p_\theta(\tau)\cdot p(\xi\mid\tau)\tag{4}\]
+\[R_{\text{tier}}(\tilde\tau)=\begin{cases}1&\text{if correct}(A(\tilde\tau))\wedge C(\tilde\tau)=0\\\alpha&\text{if correct}(A(\tilde\tau))\wedge C(\tilde\tau)>0\\0&\text{otherwise}\end{cases}\tag{5}\]
+\[J(\theta)=\mathbb{E}_{\tilde\tau\sim p_\theta}[R_{\text{tier}}(\tilde\tau)]\tag{6}\]
+\[\hat g(\tilde\tau)=\sum_{t=0}^{T-1}\nabla_\theta\log\pi_\theta(a_t\mid s_t)\cdot(R_{\text{tier}}(\tilde\tau)-b_t(s_t))\tag{7}\]
+<p>The proof proceeds in three steps.</p>
+<p><strong>Step 1: Setup.</strong> The extended trajectory density factorizes as</p>
+\[p_\theta(\tilde\tau)=p(s_0)\prod_{t=0}^{T-1}\pi_\theta(a_t\mid s_t)P(s_{t+1}\mid s_t,a_t)\cdot p(\xi\mid\tau)\tag{8}\]
+<p><strong>Step 2: Policy gradient.</strong></p>
+\[\nabla_\theta J(\theta)=\nabla_\theta\int p_\theta(\tau)p(\xi\mid\tau)R_{\text{tier}}(\tilde\tau)\,d\xi\,d\tau\tag{9}\]
+\[=\int p_\theta(\tau)p(\xi\mid\tau)R_{\text{tier}}(\tilde\tau)\nabla_\theta\log p_\theta(\tau)\,d\xi\,d\tau\tag{10}\]
+\[=\int p_\theta(\tilde\tau)R_{\text{tier}}(\tilde\tau)\nabla_\theta\log p_\theta(\tau)\,d\tilde\tau\tag{11}\]
+\[\nabla_\theta\log p_\theta(\tau)=\sum_{t=0}^{T-1}\nabla_\theta\log\pi_\theta(a_t\mid s_t)\tag{12}\]
+\[\nabla_\theta J(\theta)=\mathbb{E}_{\tilde\tau\sim p_\theta}\left[\sum_{t=0}^{T-1}\nabla_\theta\log\pi_\theta(a_t\mid s_t)\cdot R_{\text{tier}}(\tilde\tau)\right]\tag{13}\]
+<p><strong>Step 3: Baseline subtraction.</strong> The baseline term has zero expectation, so the estimator remains unbiased:</p>
+\[\mathbb{E}_{\tilde\tau\sim p_\theta}\left[\sum_{t=0}^{T-1}\nabla_\theta\log\pi_\theta(a_t\mid s_t)\cdot b_t(s_t)\right]\tag{14}\]
+\[=\sum_{t=0}^{T-1}\mathbb{E}_{s_t}\left[b_t(s_t)\cdot\mathbb{E}_{a_t\sim\pi_\theta(\cdot\mid s_t)}[\nabla_\theta\log\pi_\theta(a_t\mid s_t)]\right]=0\tag{15}\]
+\[\mathbb{E}_{\tilde\tau\sim p_\theta}\left[\sum_{t=0}^{T-1}\nabla_\theta\log\pi_\theta(a_t\mid s_t)(R_{\text{tier}}(\tilde\tau)-b_t(s_t))\right]=\nabla_\theta J(\theta)\tag{16}\]
+<p>[Summary] The paper then adds three further results:</p>
+<ul>
+<li>Remark 2 and Proposition 3: if the reasoner depends on \(\theta\), the estimator must include the extra score term \(\nabla_\theta\log p_\theta(\xi\mid\tau)\).</li>
+<li>Corollary 4: PPO, GRPO and BNPO remain applicable with this reward, although they optimize surrogate objectives.</li>
+</ul>
+
+<h2>C Generation Diversity During Training</h2>
+<p>[Summary] AC-RL keeps a lower fraction of zero-variance (uniform-reward) batches than binary-reward RL, about 0.31 versus 0.42 at convergence.</p>
+<figure data-fig="4"><figcaption>Figure 4: Fraction of uniform-reward batches during training; AC-RL (red) stays below standard RL (blue), indicating more diverse caption generation.</figcaption></figure>
+
+<h2>D Prompt Templates</h2>
+<h3>D.1 Vision-Language Model Prompts</h3>
+<p>[Summary] There are two captioner prompts:</p>
+<ul>
+<li><em>vlm_initial_description_prompt</em>: asks for a comprehensive description relevant to the question, without answering it. It covers objects, spatial relations, exact text, and visual attributes.</li>
+<li><em>vlm_focused_description_prompt</em>: given the original question, the previous description and a focus request, the model describes only the requested visual details, without solving or calculating.</li>
+</ul>
+<h3>D.2 Reasoner Prompts</h3>
+<p>[Summary] There are two reasoner prompts:</p>
+<ul>
+<li><em>reasoner_adaptive_decision_prompt</em>: the reasoner decides between SOLVED and NEED_MORE_INFO. It is instructed to be conservative and to make at most one specific request. The output fields are Reasoning, Status, Answer (boxed) and Request.</li>
+<li><em>reasoner_final_prompt</em>: the reasoner solves step by step, using &lt;think&gt; and &lt;answer&gt; tags and \boxed{} answers.</li>
+</ul>
+
+<h2>E Training Hyperparameters</h2>
+<p>Table 6: Hyperparameter settings for AC-RL training across different model sizes.</p>
+<table>
+<tr><th>Hyperparameter</th><th>2B Models</th><th>3B Models</th></tr>
+<tr><td>Learning rate</td><td>\(3\times10^{-6}\)</td><td>\(2\times10^{-6}\)</td></tr>
+<tr><td>Effective batch size</td><td>256</td><td>256</td></tr>
+<tr><td>KL divergence weight (\(\beta\))</td><td>0.001</td><td>0.001</td></tr>
+<tr><td>LoRA rank (\(r\))</td><td>128</td><td>256</td></tr>
+<tr><td>LoRA alpha (\(\alpha\))</td><td>256</td><td>512</td></tr>
+<tr><td>LoRA dropout</td><td>0.05</td><td>0.05</td></tr>
+<tr><td>Group size (\(M\))</td><td>8</td><td>8</td></tr>
+<tr><td>Number of iterations</td><td>6</td><td>6</td></tr>
+<tr><td>Remaining parameters</td><td colspan="2">TRL library defaults</td></tr>
+<tr><td>Captioner temperature</td><td colspan="2">1.0</td></tr>
+<tr><td>Captioner max tokens</td><td colspan="2">800</td></tr>
+<tr><td>Reasoner temperature</td><td colspan="2">0.6</td></tr>
+<tr><td>Reasoner top-\(p\)</td><td colspan="2">0.95</td></tr>
+<tr><td>Reasoner max tokens</td><td colspan="2">100,000</td></tr>
+<tr><td>Clarification penalty (\(1-\alpha\))</td><td colspan="2">0.3</td></tr>
+</table>
+<p>[Summary] Implementation: TRL with BNPO, LoRA on all linear layers, fp16, convergence within about 1,000 steps. Compute: about 50 hours (3B) and 40 hours (2B) on 8× A6000-Ada GPUs, with the reasoner hosted on 4× AMD MI250X.</p>
+
+<h2>F LLM Usage Statement</h2>
+<p>[Summary] LLMs were used only for grammar and rewording.</p>
+</body></html>

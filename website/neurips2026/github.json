@@ -1,5 +1,491 @@
 {
  "Eidz3t6qmk": [
   "https://github.com/nv-tlabs/dvlt"
+ ],
+ "lj7OHtUYX1": [
+  "https://github.com/UMass-Embodied-AGI/SyncWorld"
+ ],
+ "mBYJRAFq7D": [
+  "https://github.com/yuantianyuan01/FastWAM"
+ ],
+ "a5IbpMVeS0": [
+  "https://github.com/sumbre-lab/OpenWhistle"
+ ],
+ "ztJ2dmj0k5": [
+  "https://github.com/VanessB/pytorch-fmmi"
+ ],
+ "YySQ07LVAC": [
+  "https://github.com/zrrraa/Braco"
+ ],
+ "b4HCV0e0V8": [
+  "https://github.com/astudentuser/Codes_of_SKR-ID"
+ ],
+ "qmFNLvxGRp": [
+  "https://github.com/DUAL-Xiao/GeoWind2Plan"
+ ],
+ "F8uu9a7S7t": [
+  "https://github.com/lll6924/cila",
+  "https://github.com/lll6924/cila.git"
+ ],
+ "U3GUy7xRmI": [
+  "https://github.com/rishabbala/Steering-Vector-Transfer"
+ ],
+ "uVMZotQcJ7": [
+  "https://github.com/JChemseddine/SFCD"
+ ],
+ "DTfQiEFRDM": [
+  "https://github.com/rodrigomaulen/Attention_based_PCA"
+ ],
+ "bURAYAEF84": [
+  "https://github.com/lokali/CausalBind"
+ ],
+ "ShMNgympCf": [
+  "https://github.com/jmu27/FisherR1"
+ ],
+ "fwaVRSuVPd": [
+  "https://github.com/chiennv2000/orthrus"
+ ],
+ "wSSsA6iviw": [
+  "https://github.com/pittisl/vlm-latent-shaping"
+ ],
+ "5aiycPi3Qu": [
+  "https://github.com/JN-Yun/UDT"
+ ],
+ "q5P5hkR2n3": [
+  "https://github.com/haoz19/world-tracing"
+ ],
+ "LuWYNMlMDq": [
+  "https://github.com/xaosina/event-sequence-forecasting"
+ ],
+ "xY4SuwZDLZ": [
+  "https://github.com/ToastyDom/ImageNet-OOC1k"
+ ],
+ "HbgNRwBlhi": [
+  "https://github.com/Sequel-Institute/prospective-rqf"
+ ],
+ "LMJ8tizxt5": [
+  "https://github.com/darkflash03/GOLD"
+ ],
+ "i6ZEbxGeKu": [
+  "https://github.com/anasiri/frac-ssm"
+ ],
+ "GOjRwLmiSD": [
+  "https://github.com/declare-lab/EFLA"
+ ],
+ "iBvm5lCnAJ": [
+  "https://github.com/kschwethelm/looped-lm-scaling"
+ ],
+ "eXkSa0pAuf": [
+  "https://github.com/riedlc/emergence"
+ ],
+ "gIGw6hwmJz": [
+  "https://github.com/shikaiqiu/requential-coding"
+ ],
+ "dWyJcgVqqQ": [
+  "https://github.com/genesistherapeutics/decaf"
+ ],
+ "DA12jH1hET": [
+  "https://github.com/sankaranv/mech-interp-mediation-analysis"
+ ],
+ "ULhusDnCQy": [
+  "https://github.com/hartigel/leela-logit-lens"
+ ],
+ "5ZEdikiayy": [
+  "https://github.com/timmh/acorn"
+ ],
+ "q4iZrZtAjJ": [
+  "https://github.com/nmndeep/JensUn-Unlearning"
+ ],
+ "vCft9tPVmL": [
+  "https://github.com/DaeZZang/MT-CC"
+ ],
+ "ltg40TysQ2": [
+  "https://github.com/zhcz328/CRAFT"
+ ],
+ "swVrjlNX4Q": [
+  "https://github.com/xl-tang3/barybind"
+ ],
+ "HvYVosmFBa": [
+  "https://github.com/klarajanouskova/ImageNet"
+ ],
+ "TX42ZoaFHi": [
+  "https://github.com/NailKhelifa/Recursively_Trained_Diffusion_Models"
+ ],
+ "UB2Xsj6ZZA": [
+  "https://github.com/yoavger/learning_reveals_invisible_structure_lr_rnns"
+ ],
+ "GtXyIhzAqI": [
+  "https://github.com/jingwei-sjtu/DIAGNO"
+ ],
+ "wBeG0ytI2l": [
+  "https://github.com/yijingz02/breakeven_complexity"
+ ],
+ "USnGWfYVux": [
+  "https://github.com/Chengsong-Huang/G-Zero"
+ ],
+ "SyETrnFXYh": [
+  "https://github.com/anyafries/FLUXtrapolation"
+ ],
+ "NO4INpEpCi": [
+  "https://github.com/Tomie56/GeoSym127K"
+ ],
+ "bNK3Svyy8O": [
+  "https://github.com/banyuanhao/Arena-T2I-Hard"
+ ],
+ "oYQugWRcsi": [
+  "https://github.com/GSK-AI/viroGym"
+ ],
+ "umx56IGgGL": [
+  "https://github.com/BariscanBozkurt/Predictive-Entropy-Maximization"
+ ],
+ "TT3ACb02l4": [
+  "https://github.com/vishakhpk/offloading-score"
+ ],
+ "MdvTIPEaIr": [
+  "https://github.com/clabat9/hilbnet"
+ ],
+ "hY4qGi3waD": [
+  "https://github.com/NicolasZucchet/Curse-of-ambiguity"
+ ],
+ "UreH0QGZXp": [
+  "https://github.com/NUS-HPC-AI-Lab/DD-Ranking"
+ ],
+ "ZqbnpmPYvV": [
+  "https://github.com/Aliiiranmanesh/hearsay"
+ ],
+ "U9dDSCabjP": [
+  "https://github.com/frankmcsherry/blog"
+ ],
+ "3DiNfT64V7": [
+  "https://github.com/joehuang618/TALK"
+ ],
+ "b0AOZbejEk": [
+  "https://github.com/thisisisi/ExtremeEventSensor"
+ ],
+ "mRzgdbaTNp": [
+  "https://github.com/allenai/molmo-motion"
+ ],
+ "DOtvhTItcX": [
+  "https://github.com/UWMILab/LCVN"
+ ],
+ "VbWRUbpIUv": [
+  "https://github.com/lmarena/arena-rank"
+ ],
+ "a5qQCbrc2b": [
+  "https://github.com/EmanueleLM/AnchoredBipolicySelf-Play"
+ ],
+ "aoP7r2nyxb": [
+  "https://github.com/SJTU-DENG-Lab/LatentUM"
+ ],
+ "dZhUeQa53U": [
+  "https://github.com/Grinffin/PhaseLoRA"
+ ],
+ "hmvlyb1yQu": [
+  "https://github.com/krafton-ai/moe-to-dense"
+ ],
+ "iCXoa3VMy0": [
+  "https://github.com/AlienZhang1996/LITMUS"
+ ],
+ "riv0NRuHeq": [
+  "https://github.com/anon-eeg/eeg_image_decoding"
+ ],
+ "u2TS1Rxun2": [
+  "https://github.com/6954717a/Resilience-Eval-eas"
+ ],
+ "yls0nG3VKg": [
+  "https://github.com/konstantinabrk/scdl"
+ ],
+ "1PQ7pf3kVm": [
+  "https://github.com/PKU-OV3-LAB/3R-Adapter"
+ ],
+ "5rS8m8pxgo": [
+  "https://github.com/REDMAO4869/BrainWorld"
+ ],
+ "LUVtYIYhWE": [
+  "https://github.com/Chromeilion/rsbi_supplementary"
+ ],
+ "tsoDWPkJOz": [
+  "https://github.com/SKYLENAGE-AI/Benchmark_Health_Index"
+ ],
+ "xP408u4Mho": [
+  "https://github.com/solaris-wm/solaris-engine",
+  "https://github.com/solaris-wm/solaris"
+ ],
+ "ehnuc3RcGX": [
+  "https://github.com/pacifiic/local-proxy-diagnostics"
+ ],
+ "ibeDXGKMar": [
+  "https://github.com/JinhaoLee/Permute-then-Adapt"
+ ],
+ "XWrgnSu8qf": [
+  "https://github.com/FrontierCS/FrontierSmith"
+ ],
+ "kB29xkjNQK": [
+  "https://github.com/EarthyScience/geosae"
+ ],
+ "1bGfOCtPWO": [
+  "https://github.com/chrismohrii/bitter-lesson-data-filtering"
+ ],
+ "F6LR7aEwxS": [
+  "https://github.com/Optimization-AI/TuneCLIP"
+ ],
+ "mTYG9xSbYv": [
+  "https://github.com/ParsaEsmati/videodiffusionphysics"
+ ],
+ "uyN7V3sdbW": [
+  "https://github.com/nguyentuc/INNSteer"
+ ],
+ "gLfGap1Y0U": [
+  "https://github.com/plau666/NAIL"
+ ],
+ "vSHTrySbQc": [
+  "https://github.com/swswss/EAM"
+ ],
+ "7UwsQGxwFQ": [
+  "https://github.com/sunlitsong/ROSE"
+ ],
+ "IZBCEtLXFZ": [
+  "https://github.com/chutongyang98/Optimal-Recalibration-of-an-Online-Predictor"
+ ],
+ "WH8ZDT099q": [
+  "https://github.com/VisionXLab/ProCLIP"
+ ],
+ "M4Xj5w0EcJ": [
+  "https://github.com/IST-DASLab/GridGames"
+ ],
+ "QrjZX92zUN": [
+  "https://github.com/Lucas-TY/D-PACE"
+ ],
+ "1pPCCHeICG": [
+  "https://github.com/cvlab-stonybrook/omnigf"
+ ],
+ "dXcdEoI6I5": [
+  "https://github.com/MisakiTaro0414/mux"
+ ],
+ "SEBAsCmCg3": [
+  "https://github.com/griesbchr/EBMol"
+ ],
+ "h2uqXBSIOu": [
+  "https://github.com/eric0708/MICE"
+ ],
+ "e7zF0NYC0J": [
+  "https://github.com/narutatsuri/lrm_safety_deliberation"
+ ],
+ "ub2Ru5hNGA": [
+  "https://github.com/leonorv/slaying-dataset",
+  "https://github.com/suyashb95/WiktionaryParser"
+ ],
+ "Qj1kSEf9Rs": [
+  "https://github.com/3dv-casia/PGGT-Loc"
+ ],
+ "UuyALisAVj": [
+  "https://github.com/Googolxx/NoiseRegu-LIC"
+ ],
+ "42dIxEhArH": [
+  "https://github.com/DCI-Agent/DCI-Agent-Lite"
+ ],
+ "tUtERl6Jq6": [
+  "https://github.com/alexgarciaduran/flynet-robustness",
+  "https://github.com/lappalainenj/flyvis"
+ ],
+ "HssNfd9nbe": [
+  "https://github.com/min-seong-kim/WSR-Tune"
+ ],
+ "dcFIgr2nN2": [
+  "https://github.com/mattyshen/EmBER"
+ ],
+ "9OK87o8Wkf": [
+  "https://github.com/Jiawei-Yang/FD-loss"
+ ],
+ "uhe6KW6jyO": [
+  "https://github.com/DurstewitzLab/Parallel-In-Time-Training-DSR"
+ ],
+ "H2kz1bJFuL": [
+  "https://github.com/jiwonsong-dev/CompactAttention"
+ ],
+ "iZSMEnlggu": [
+  "https://github.com/Machine-learning-and-complex-systems/S-Hop"
+ ],
+ "EgwTOkzegp": [
+  "https://github.com/ecipp/ECI-PP"
+ ],
+ "VLjkAcK9fS": [
+  "https://github.com/YuchuanTian/NBDiff"
+ ],
+ "w8VsusUqRS": [
+  "https://github.com/BangachevKiril/TopK"
+ ],
+ "CNnIIFw6WS": [
+  "https://github.com/Chengqian-Zhang/CrystalREPA"
+ ],
+ "2zZdeKdoc6": [
+  "https://github.com/hurunyi/SIA"
+ ],
+ "3yMkqerEOt": [
+  "https://github.com/TimSchneider42/active-perception-gym",
+  "https://github.com/TimSchneider42/tactile-mnist"
+ ],
+ "drpFiVnG8v": [
+  "https://github.com/Tencent-Hunyuan/UniRL"
+ ],
+ "eDvLM8DzS1": [
+  "https://github.com/wengshihao/policy-invariance-judge"
+ ],
+ "z9GVQGjnKg": [
+  "https://github.com/baranowskibrt/onecanvas"
+ ],
+ "db0FP1G7V7": [
+  "https://github.com/model-specific/non-transferable-examples",
+  "https://github.com/model-specific/non-"
+ ],
+ "45xs8n0hj4": [
+  "https://github.com/venus-guangjian/PAL"
+ ],
+ "AJ8IWO0noE": [
+  "https://github.com/HPC-AI-Team/SO3-Pruning"
+ ],
+ "47M69IISIM": [
+  "https://github.com/lukejoconnor/spell"
+ ],
+ "ppj0Eq4Y6y": [
+  "https://github.com/sammccallum/ssfm"
+ ],
+ "KQRZdjU6Q1": [
+  "https://github.com/chinglamchoi/shaping-useful-noise"
+ ],
+ "4Mid5GMDGS": [
+  "https://github.com/fhueb/ht-schatten-experiments"
+ ],
+ "8R0BMd5zmJ": [
+  "https://github.com/ruiz-lab/Graph-Cascades"
+ ],
+ "BqLBsgGqSC": [
+  "https://github.com/HumanCompatibleAI/PARETO"
+ ],
+ "hdnKXEGZYs": [
+  "https://github.com/CAB-Lab-Princeton/Riemannian-Hodge-Message-Passing"
+ ],
+ "YauynQOvHf": [
+  "https://github.com/ni-shu/paper_post-adc-inference"
+ ],
+ "rheTYmImAU": [
+  "https://github.com/ylincen/AtomSD"
+ ],
+ "6SIPt7cfSm": [
+  "https://github.com/yenshan0530/Expected-Harm"
+ ],
+ "5VR2N1lVBd": [
+  "https://github.com/xianchaoguan/SWIFT"
+ ],
+ "ppKtrQWhKN": [
+  "https://github.com/Bilkent-CYBORG/RSE"
+ ],
+ "QadbBzDY4q": [
+  "https://github.com/kjeiun/amuse"
+ ],
+ "ZpGlbpubQi": [
+  "https://github.com/AlanNawzadAmin/DeepPhylo"
+ ],
+ "TbWDPX0nam": [
+  "https://github.com/egangu/featcal"
+ ],
+ "DP5UdHKCti": [
+  "https://github.com/mikumafu/CAIA"
+ ],
+ "Z3y6m9KFIU": [
+  "https://github.com/HydroSophy/BEAKER"
+ ],
+ "5UIA41EzVg": [
+  "https://github.com/Junjue-Wang/DORA"
+ ],
+ "nd95WRs4xs": [
+  "https://github.com/mahmoodlab/LIMIT"
+ ],
+ "eCAxMcFzTe": [
+  "https://github.com/Julius-Woo/STAR-PolyaMath"
+ ],
+ "jp8UqwXlAw": [
+  "https://github.com/skydiscover-ai/skydiscover"
+ ],
+ "MQaqQTPeHp": [
+  "https://github.com/M-Korniak/when-does-replay-matter"
+ ],
+ "B3wsHZckwI": [
+  "https://github.com/lixiangqi707/SceneScaffold"
+ ],
+ "A1sw6FviPQ": [
+  "https://github.com/princetonvisualai/ReFINE"
+ ],
+ "aHGX6FOsYg": [
+  "https://github.com/DTU-PAS/parabolic-position-encoding"
+ ],
+ "hvPxti2lt3": [
+  "https://github.com/wasserstein-tilted-flow-maps/WTF"
+ ],
+ "BxdDYMEfcZ": [
+  "https://github.com/openai/tiktoken"
+ ],
+ "Y6gjRpnLxO": [
+  "https://github.com/kwkimonline/BROT"
+ ],
+ "GJqifj1exB": [
+  "https://github.com/TSTS13/Paloma"
+ ],
+ "yOd4AxlEbb": [
+  "https://github.com/alanarazi7/MulTaBench"
+ ],
+ "gMYBb0YVMl": [
+  "https://github.com/wzhu121/SMFSR"
+ ],
+ "3YW4ug0yQX": [
+  "https://github.com/SakanaAI/DreamCubed"
+ ],
+ "Jz5BMGep1M": [
+  "https://github.com/MiracleworkerD/CHORD"
+ ],
+ "NIlMvxosjw": [
+  "https://github.com/ssu53/crosspairs-rm"
+ ],
+ "ZS2MA5cnQ0": [
+  "https://github.com/JonathanKlees/Uncertainty-aware-Object-Detection"
+ ],
+ "FwWaPhPb2O": [
+  "https://github.com/THUMAI-Lab/RiT"
+ ],
+ "6UCckKeyef": [
+  "https://github.com/EleneLomi/TAFigures",
+  "https://github.com/EleneLomi/TAFigures.git"
+ ],
+ "aP6pc3wy1D": [
+  "https://github.com/Food-Intelligence-Lab/tastebench",
+  "https://github.com/fart-lab/fart"
+ ],
+ "dRhBDs50Cm": [
+  "https://github.com/fjm9933/TreeGraft"
+ ],
+ "avjeUhPuC6": [
+  "https://github.com/r-three/moto",
+  "https://github.com/r-three/lingua"
+ ],
+ "jI3LzITbpM": [
+  "https://github.com/clsr1008/TSQAgent"
+ ],
+ "JfJ4tqahba": [
+  "https://github.com/opendatalab/MinerU"
+ ],
+ "xukoeVXJJ9": [
+  "https://github.com/kaistmm/FiTS"
+ ],
+ "UboyGh5Iah": [
+  "https://github.com/keris-yang/Spectral-Reversal"
+ ],
+ "DwqwJHYbqV": [
+  "https://github.com/ZixunWang/RankSEG-DEP"
+ ],
+ "clkBSNjrrR": [
+  "https://github.com/lzhornyak/Euler-Lagrange-Minimization"
+ ],
+ "PHVIRBgte1": [
+  "https://github.com/azizanlab/PS2-RL"
  ]
 }

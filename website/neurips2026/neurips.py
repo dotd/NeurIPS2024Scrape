@@ -18,6 +18,7 @@ import json
 import os
 import re
 import sys
+import threading
 import time
 import xml.etree.ElementTree as ET
 
@@ -31,6 +32,7 @@ COLUMNS = ["id", "title", "authors", "abstract", "venue", "primary_keyword", "ðŸ
 UA = {"User-Agent": "Mozilla/5.0 (paper browser)"}
 ATOM = "{http://www.w3.org/2005/Atom}"
 TOP = ("Oral", "Spotlight")
+LOCK = threading.Lock()
 VIDEO_RE = re.compile(r"https?://[^\s\"'<>]+?\.(?:mp4|webm|mov)\b", re.I)
 
 sys.path[:0] = [os.path.join(ROOT, "website", "corl2026"), os.path.join(ROOT, "website", "corl2026_workshops"),
@@ -144,11 +146,12 @@ def site():
 def web_copy(pid, papers, arx):
     """Not on arXiv by title: Claude + web search (~$0.10) for another copy; its PDF if it's arXiv or a PDF link."""
     serve, s = site()
-    links = load("links.json", {})
-    if pid not in links:
-        links[pid] = serve.find_link(s, pid)
+    link = load("links.json", {}).get(pid) or serve.find_link(s, pid)
+    with LOCK:  # the batch runs 4 at a time: re-read, so no one's result is lost
+        links = load("links.json", {})
+        links[pid] = link
         store("links.json", links)
-    url = (links[pid] or {}).get("url") or ""
+    url = (link or {}).get("url") or ""
     if url and get_pdf(pid, papers[pid], url):
         if "arxiv.org/abs/" in url:
             arx[pid] = re.sub(r"v\d+$", "", url)

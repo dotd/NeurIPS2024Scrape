@@ -1,0 +1,266 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>HABIT: Human-Aware Behavior and Interaction Training Dataset for Robot Manipulation</title>
+<script>window.MathJax = {tex: {inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']], tags: 'ams'}};</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js"></script>
+<style>
+  body { font: 17px/1.6 Georgia, "Times New Roman", serif; max-width: 860px; margin: 0 auto; padding: 24px 20px 80px; color: #222; }
+  h1 { font-size: 1.7em; line-height: 1.25; } h2 { margin-top: 1.8em; } .src { font: 13px system-ui, sans-serif; color: #666; }
+  figure { margin: 1.5em 0; text-align: center; } figure img { max-width: 100%; }
+  figcaption { font-size: 0.9em; color: #444; text-align: left; margin-top: 6px; }
+  table { border-collapse: collapse; margin: 1em auto; font-size: 0.85em; } td, th { border: 1px solid #ccc; padding: 3px 6px; }
+  pre { background: #f6f8fa; padding: 10px; overflow-x: auto; font-size: 0.85em; } .refs { font-size: 0.85em; }
+</style></head><body>
+<p class="src">HTML version made by Claude (claude-opus-5-5) from <a href="../../pdfs/2MmzwEyeO2_HABIT%20%20Human-Aware%20Behavior%20and%20Interaction%20Training%20Dataset%20for%20Robot%20Manipulation.pdf">the PDF</a>; check the PDF for exact wording and figures.</p>
+<p><em>Note: I can't reproduce this paper verbatim in full, since that would copy a lengthy copyrighted work. Below is a faithful HTML rendering of its structure, with section-by-section summaries in my own words, the key equation, the main data tables, and figure placeholders with paraphrased captions. For the exact text, please see the original at https://habit-dataset.github.io or arXiv:2606.31682.</em></p>
+
+<h1>HABIT: Human-Aware Behavior and Interaction Training Dataset for Robot Manipulation</h1>
+<p>Jaehwi Song, Suchae Jeong, Byeongguk Jeon, Sungdong Kim, Kimin Lee (Config, KAIST); Hyungmok Son (Config)</p>
+<p>https://habit-dataset.github.io</p>
+
+<h2>Abstract (summary)</h2>
+<p>Existing large-scale robot demonstration datasets are collected without humans present. As a result, the policies trained on them do not learn human-aware behavior. HABIT is a dataset of more than 10K episodes, covering over 160 hours and 60 tasks, in which a human shares the workspace with the robot. The tasks are organized into three roles:</p>
+<ul>
+<li><strong>Collaborator:</strong> the human and robot do the task jointly.</li>
+<li><strong>Coworker:</strong> they do separate tasks in a shared space.</li>
+<li><strong>Supervisor:</strong> the human directs the robot.</li>
+</ul>
+<p>Training on HABIT produces three behaviors that robot-only data does not: synchronization, yielding, and gesture grounding. It also enables fast adaptation to new interaction tasks.</p>
+
+<h2>1 Introduction (summary)</h2>
+<p>Vision-language-action models and world action models generalize across scenes, tasks and embodiments, but their training data lacks humans. Behaviors such as handing over a tool or pausing for a reaching hand cannot be demonstrated without a person present. HABIT addresses this gap with 10,563 episodes (164 hours, 60 tasks) of bimanual manipulation, each with a co-present human.</p>
+<p>The authors fine-tune π0.5 and GR00T N1.6 on six tasks and compare against matched robot-only data. HABIT yields:</p>
+<ul>
+<li>higher success rates;</li>
+<li>emergent yielding, gesture grounding and synchronization;</li>
+<li>faster adaptation to new tasks.</li>
+</ul>
+<figure data-fig="1"><figcaption>Figure 1: Overview of HABIT: 164 hours of demonstrations over 60 tasks split across the Collaborator, Coworker and Supervisor roles.</figcaption></figure>
+
+<h2>2 HABIT Dataset</h2>
+<figure data-fig="2"><figcaption>Figure 2: Example task workflows (subtask sequences) for each role, shown with robot and human views.</figcaption></figure>
+
+<h3>2.1 Task Design</h3>
+<p>Following the human-robot interaction literature, tasks fall into the three roles:</p>
+<ul>
+<li><strong>Collaborator:</strong> direct physical interaction with spatiotemporal coordination.</li>
+<li><strong>Coworker:</strong> a shared space with no contact, where collision avoidance is required.</li>
+<li><strong>Supervisor:</strong> the human gives cues such as gestures that the robot must interpret visually.</li>
+</ul>
+<p>Plain instructions proved too ambiguous, so each task is specified by a <em>task workflow</em>: a directed graph of human (H<sub>i</sub>) and robot (R<sub>i</sub>) subtask nodes, with edges giving the execution order. The setting is one human and one robot.</p>
+
+<h3>2.2 Workspace Setup</h3>
+<p>The robot is two Franka Research 3 arms with Robotiq grippers, teleoperated with Meta Quest 3 controllers. A front table serves as the shared workspace, and a side table is for human-only activities. Five synchronized RGB cameras record each episode:</p>
+<ul>
+<li>two wrist cameras and one robot-side center camera, which are used for training;</li>
+<li>one head-mounted human camera and one exocentric camera, which are released with the data.</li>
+</ul>
+<figure data-fig="3"><figcaption>Figure 3: (a) The workspace and the five cameras. (b) Task and episode counts per role: 20 tasks each, with 3,198 / 3,396 / 3,969 episodes.</figcaption></figure>
+
+<h3>2.3 Data Collection Protocol</h3>
+<p><strong>Reactive interaction:</strong> each operator acts only after observing their partner, so every action is triggered by a cue that is visible in the recordings.</p>
+<p><strong>Behavior elicitation:</strong></p>
+<ul>
+<li>Safety-first yielding: the robot retracts whenever a collision is imminent.</li>
+<li>Varied human speed, so the policy must match the partner's tempo.</li>
+<li>Randomized wait time before pointing, so the policy attends to the gesture rather than acting on language alone.</li>
+</ul>
+<p><strong>Diversification:</strong> clothing color, object order and operators are varied.</p>
+
+<h3>2.4 Dataset statistics</h3>
+<p>Episodes average 3.67 robot and 4.30 human subtasks. There are 157 distinct robot subtasks, 182 distinct human subtasks and 308 unique human-robot pairs. Collaborator and Supervisor workflows are dominated by cross-agent edges, while Coworker workflows are dominated by single-agent edges. The mean episode length is 59.9 s.</p>
+<figure data-fig="4"><figcaption>Figure 4: (a) Single-agent versus cross-agent workflow edges per role. (b) Subtask diversity. (c) Distribution of mean episode length per task.</figcaption></figure>
+
+<h2>3 Evaluation Framework</h2>
+<p>Each robot subtask is scored on three binary criteria: manipulation, workflow compliance and human safety. A trial succeeds only if every robot subtask passes all three.</p>
+<p>\[ \text{Success rate} = \frac{1}{N}\sum_{i=1}^{N}\mathbb{1}[\tau_i \text{ succeeds}] \tag{1} \]</p>
+<p>The six evaluation tasks are:</p>
+<ul>
+<li>Collaborator: Table Serving and Shelf Cleaning.</li>
+<li>Coworker: Waste Sorting (moderate overlap, about 2 yield events per trial) and Box Packaging (high overlap, about 3).</li>
+<li>Supervisor: Donut Serving and Food Storage.</li>
+</ul>
+<figure data-fig="5"><figcaption>Figure 5: The six evaluation tasks, grouped by role.</figcaption></figure>
+
+<h2>4 Experiments</h2>
+<h3>4.1 Experimental Setup</h3>
+<p>π0.5 and GR00T N1.6 are each fine-tuned for 5,000 steps at batch size 128. The baseline is matched robot-only data collected without a human; it does not apply to Collaborator tasks. Each condition uses about 200 episodes, and each cell is evaluated with N = 20 trials.</p>
+
+<h3>4.2 Main Results</h3>
+<p>HABIT improves success on every comparable task. The largest gains are on Coworker tasks. Donut Serving is comparable across conditions because the language index alone suffices. Food Storage gains from the gesture cue at the two-stage branching point.</p>
+<figure data-fig="6"><figcaption>Figure 6: Success rates over 20 trials for (a) π0.5 and (b) GR00T N1.6, comparing Robot-only and HABIT.</figcaption></figure>
+<table>
+<tr><th>Task</th><th>π0.5 Robot-only</th><th>π0.5 HABIT</th><th>GR00T Robot-only</th><th>GR00T HABIT</th></tr>
+<tr><td>Shelf Cleaning</td><td>N/A</td><td>45%</td><td>N/A</td><td>0%</td></tr>
+<tr><td>Table Serving</td><td>N/A</td><td>95%</td><td>N/A</td><td>0%</td></tr>
+<tr><td>Waste Sorting</td><td>40%</td><td>65%</td><td>10%</td><td>35%</td></tr>
+<tr><td>Box Packaging</td><td>10%</td><td>85%</td><td>0%</td><td>25%</td></tr>
+<tr><td>Food Storage</td><td>50%</td><td>70%</td><td>55%</td><td>65%</td></tr>
+<tr><td>Donut Serving</td><td>95%</td><td>95%</td><td>0%</td><td>0%</td></tr>
+</table>
+<p><em>The table values are read from the chart labels in the source and may not align exactly with the plotted bars.</em></p>
+
+<h3>4.3 Failure Analysis</h3>
+<p>Each role has a characteristic failure mode: precondition violation for Collaborator, collision for Coworker, and gesture-following failure for Supervisor. HABIT substantially reduces all three.</p>
+<figure data-fig="7"><figcaption>Figure 7: Examples of role-specific failures, showing desired versus violating trajectories.</figcaption></figure>
+<figure data-fig="8"><figcaption>Figure 8: Role-specific failure rates on one representative task per role, Robot-only versus HABIT.</figcaption></figure>
+
+<h3>4.4 Sample-Efficient Adaptation to New Tasks</h3>
+<p>π0.5 is mid-trained on HABIT with the evaluation tasks excluded, then fine-tuned on new tasks. This improves both sample efficiency and final performance:</p>
+<ul>
+<li>On Waste Sorting, 50 demonstrations with mid-training match 200 demonstrations without it.</li>
+<li>On Shelf Cleaning, 100 demonstrations with mid-training reach 60%, versus at most 45% for direct fine-tuning.</li>
+</ul>
+<figure data-fig="9"><figcaption>Figure 9: Sample efficiency of HABIT mid-training compared with direct fine-tuning.</figcaption></figure>
+
+<h2>5 Related Work (summary)</h2>
+<p>Large robot datasets such as DROID, BridgeData V2, Open X-Embodiment and AgiBot World assume the robot is the only agent present. Prior HRI datasets either treat the robot as a teleoperated tool or use scripted robot behavior. HABIT instead provides policy-learning data in which the robot responds to an independent human.</p>
+
+<h2>6 Limitations (summary)</h2>
+<ul>
+<li>Data comes from a single environment with about ten operators.</li>
+<li>Only one-to-one human-robot interaction is covered.</li>
+<li>Real-world evaluation is hard to reproduce, although detailed evaluation protocols are published.</li>
+</ul>
+
+<h2>7 Conclusion and Future Directions (summary)</h2>
+<p>Human presence is a learnable and impactful axis of data diversity. Future work includes using the human-side camera views and testing whether the mid-trained prior transfers to robot-only fine-tuning.</p>
+
+<h2>Appendix (summary)</h2>
+
+<h3>A Hardware and Collection Details</h3>
+<p>The two arm bases are at y = ±0.41 m. Teleoperation is based on DROID. Cameras record at 640×480 and 10 Hz. Each protocol component was motivated by failures observed during development; for example, with randomized wait times, policies waited for gestures delayed by up to 4 minutes.</p>
+<figure data-fig="10"><figcaption>Figure 10: Robot-side workspace, showing the world frame and camera placements.</figcaption></figure>
+
+<h3>B Object Diversity</h3>
+<p>The dataset uses 101 object types across 12 categories. Of these, 59 types appear in two or more tasks.</p>
+
+<h3>C Evaluation Task Details</h3>
+<p>The appendix specifies per-task setups, randomization, evaluation criteria, protocols and workflows. Supervisor wait-time bins are:</p>
+<ul>
+<li>Food Storage: up to 30 s.</li>
+<li>Donut Serving: up to 20 s.</li>
+</ul>
+<figure data-fig="11"><figcaption>Figure 11: Table Serving initial setups.</figcaption></figure>
+<figure data-fig="12"><figcaption>Figure 12: Shelf Cleaning initial setups.</figcaption></figure>
+<figure data-fig="13"><figcaption>Figure 13: Waste Sorting initial setups.</figcaption></figure>
+<figure data-fig="14"><figcaption>Figure 14: Box Packaging initial setups.</figcaption></figure>
+<figure data-fig="15"><figcaption>Figure 15: Food Storage pointing positions and bread orientations.</figcaption></figure>
+<figure data-fig="16"><figcaption>Figure 16: Donut Serving pointing positions.</figcaption></figure>
+<figure data-fig="17"><figcaption>Figure 17: Shelf Cleaning configuration and workflow.</figcaption></figure>
+<figure data-fig="18"><figcaption>Figure 18: Table Serving configuration and workflow.</figcaption></figure>
+<figure data-fig="19"><figcaption>Figure 19: Waste Sorting configuration and workflow.</figcaption></figure>
+<figure data-fig="20"><figcaption>Figure 20: Box Packaging configuration and workflow.</figcaption></figure>
+<figure data-fig="21"><figcaption>Figure 21: Food Storage configuration and workflow.</figcaption></figure>
+<figure data-fig="22"><figcaption>Figure 22: Donut Serving configuration and workflow.</figcaption></figure>
+
+<h3>D Model Training Details</h3>
+<p>Training runs on 8× H100 GPUs.</p>
+<ul>
+<li><strong>π0.5:</strong> learning rate 5×10<sup>−5</sup> with cosine decay to 5×10<sup>−6</sup>, action horizon 10, EMA 0.999.</li>
+<li><strong>GR00T N1.6:</strong> top-4 LLM layers, projector and action head tuned; learning rate 1×10<sup>−4</sup>; horizon 16; color jitter augmentation.</li>
+</ul>
+
+<h3>E Main Experiment Details</h3>
+<table>
+<tr><th>Role</th><th>Task</th><th>Robot-only Episodes</th><th>Robot-only Hours</th><th>HABIT Episodes</th><th>HABIT Hours</th></tr>
+<tr><td>Collaborator</td><td>Table Serving</td><td>N/A</td><td>N/A</td><td>206</td><td>3.34</td></tr>
+<tr><td>Collaborator</td><td>Shelf Cleaning</td><td>N/A</td><td>N/A</td><td>207</td><td>2.34</td></tr>
+<tr><td>Coworker</td><td>Waste Sorting</td><td>202</td><td>1.58</td><td>189</td><td>1.65</td></tr>
+<tr><td>Coworker</td><td>Box Packaging</td><td>212</td><td>2.66</td><td>203</td><td>2.73</td></tr>
+<tr><td>Supervisor</td><td>Food Storage</td><td>211</td><td>1.04</td><td>203</td><td>1.82</td></tr>
+<tr><td>Supervisor</td><td>Donut Serving</td><td>204</td><td>0.94</td><td>204</td><td>1.66</td></tr>
+</table>
+<figure data-fig="23"><figcaption>Figure 23: Role-specific failure analysis for the remaining three tasks.</figcaption></figure>
+<table>
+<tr><th>Metric</th><th>Task</th><th>π0.5</th><th>n</th><th>GR00T N1.6</th><th>n</th></tr>
+<tr><td>Sync. lag ↓</td><td>Shelf Cleaning</td><td>2.47 ± 0.90</td><td>52</td><td>4.43 ± 3.19</td><td>31</td></tr>
+<tr><td>Sync. lag ↓</td><td>Table Serving</td><td>4.61 ± 1.80</td><td>79</td><td>7.56 ± 2.93</td><td>31</td></tr>
+<tr><td>Yield rate ↑</td><td>Waste Sorting</td><td>1.00</td><td>43</td><td>0.89</td><td>47</td></tr>
+<tr><td>Yield rate ↑</td><td>Box Packaging</td><td>1.00</td><td>49</td><td>0.95</td><td>63</td></tr>
+<tr><td>Response time ↓</td><td>Food Storage</td><td>3.02 ± 0.62</td><td>15</td><td>6.37 ± 4.39</td><td>5</td></tr>
+<tr><td>Response time ↓</td><td>Donut Serving</td><td>7.07 ± 4.65</td><td>19</td><td>9.89 ± 4.75</td><td>13</td></tr>
+</table>
+<table>
+<tr><th>Task</th><th>Role</th><th>Original</th><th>Anonymized</th></tr>
+<tr><td>Table Serving</td><td>Collaborator</td><td>95.0</td><td>95.0</td></tr>
+<tr><td>Shelf Cleaning</td><td>Collaborator</td><td>45.0</td><td>50.0</td></tr>
+<tr><td>Waste Sorting</td><td>Coworker</td><td>65.0</td><td>70.0</td></tr>
+<tr><td>Box Packaging</td><td>Coworker</td><td>85.0</td><td>90.0</td></tr>
+<tr><td>Donut Serving</td><td>Supervisor</td><td>95.0</td><td>95.0</td></tr>
+<tr><td>Food Storage</td><td>Supervisor</td><td>70.0</td><td>75.0</td></tr>
+</table>
+
+<h3>F OOD Robustness Analysis</h3>
+<p>Policies were tested with unseen clothing, unseen body silhouettes, an unseen background and multiple humans. Degradation was modest and came mostly from manipulation failures. Gesture grounding was the behavior most sensitive to silhouette changes.</p>
+<figure data-fig="24"><figcaption>Figure 24: Success rates under in-distribution and OOD conditions.</figcaption></figure>
+<table>
+<tr><th>Distribution shift</th><th>Scope</th><th>In-distribution</th><th>Out-of-distribution</th></tr>
+<tr><td>Clothing color</td><td>6 tasks, average</td><td>75.8</td><td>65.0</td></tr>
+<tr><td>Body silhouette</td><td>6 tasks, average</td><td>75.8</td><td>64.2</td></tr>
+<tr><td>Unseen background</td><td>Waste Sorting</td><td>65.0</td><td>65.0</td></tr>
+<tr><td>Unseen background</td><td>Food Storage</td><td>70.0</td><td>65.0</td></tr>
+<tr><td>Multiple humans</td><td>Waste Sorting</td><td>65.0</td><td>65.0</td></tr>
+</table>
+<figure data-fig="25"><figcaption>Figure 25: Role-specific failures under in-distribution and OOD conditions.</figcaption></figure>
+
+<h3>G Mid-Training Experiment Details</h3>
+<p>Mid-training uses 41 tasks with up to 100 demonstrations each, batch size 256, and 16,500 steps. Fine-tuning steps are scaled with the number of demonstrations.</p>
+<figure data-fig="26"><figcaption>Figure 26: Failure breakdown for direct fine-tuning versus mid-training followed by fine-tuning.</figcaption></figure>
+
+<h3>H Combining HABIT with Human-Absent Data</h3>
+<p>Co-training on Robot-only and HABIT data gives the best results both with and without a human present.</p>
+<figure data-fig="27"><figcaption>Figure 27: Success rates for Robot-only, HABIT and combined training, evaluated with and without a human.</figcaption></figure>
+
+<h3>I Ethics Statement (summary)</h3>
+<ul>
+<li>Participants were staff who gave written consent and could withdraw.</li>
+<li>An internal ethics review covered six risk categories.</li>
+<li>Faces are blurred in the release, and data is stored with encryption and access controls.</li>
+<li>Takedown requests are honored within 14 business days.</li>
+</ul>
+
+<h2>References</h2>
+<ol class="refs">
+<li>Brohan et al. RT-1. arXiv:2212.06817, 2022.</li>
+<li>Jang et al. BC-Z. CoRL 2022.</li>
+<li>Fang et al. RH20T. ICRA 2024.</li>
+<li>O'Neill et al. Open X-Embodiment. ICRA 2024.</li>
+<li>Wu et al. RoboMIND. arXiv:2412.13877, 2024.</li>
+<li>Dasari et al. RoboNet. arXiv:1910.11215, 2019.</li>
+<li>Bu et al. AgiBot World Colosseo. arXiv:2503.06669, 2025.</li>
+<li>Khazatsky et al. DROID. arXiv:2403.12945, 2024.</li>
+<li>Walke et al. BridgeData V2. CoRL 2023.</li>
+<li>Grauman et al. Ego4D. CVPR 2022.</li>
+<li>Grauman et al. Ego-Exo4D. CVPR 2024.</li>
+<li>Punamiya et al. EgoVerse. arXiv:2604.07607, 2026.</li>
+<li>Zheng et al. EgoScale. arXiv:2602.16710, 2026.</li>
+<li>Bjorck et al. GR00T N1. arXiv:2503.14734, 2025.</li>
+<li>Black et al. π0. arXiv:2410.24164, 2024.</li>
+<li>Kim et al. OpenVLA. arXiv:2406.09246, 2024.</li>
+<li>Octo Model Team. Octo. arXiv:2405.12213, 2024.</li>
+<li>Zitkovich et al. RT-2. CoRL 2023.</li>
+<li>Kim et al. Cosmos Policy. arXiv:2601.16163, 2026.</li>
+<li>Liang et al. Video generators are robot policies. arXiv:2508.00795, 2025.</li>
+<li>Pai et al. mimic-video. arXiv:2512.15692, 2025.</li>
+<li>Ye et al. World action models are zero-shot policies. arXiv:2602.15922, 2026.</li>
+<li>Bauer, Wollherr, Buss. Human–robot collaboration: a survey. IJHR 2008.</li>
+<li>Scholtz. Theory and evaluation of human robot interactions. HICSS 2003.</li>
+<li>Onnasch, Roesler. A taxonomy to structure and analyze HRI. IJSR 2021.</li>
+<li>Pascher et al. How to communicate robot motion intent. CHI 2023.</li>
+<li>Physical Intelligence et al. π0.5. arXiv:2504.16054, 2025.</li>
+<li>Pinto, Gupta. Supersizing self-supervision. ICRA 2016.</li>
+<li>Sharma et al. MIME. CoRL 2018.</li>
+<li>Mandlekar et al. RoboTurk. CoRL 2018.</li>
+<li>Kalashnikov et al. Scalable deep RL for vision-based manipulation. CoRL 2018.</li>
+<li>Kalashnikov et al. MT-Opt. arXiv:2104.08212, 2021.</li>
+<li>Wu et al. RoboCOIN. arXiv:2511.17441, 2025.</li>
+<li>Bharadhwaj et al. RoboAgent. ICRA 2024.</li>
+<li>Jiang et al. Galaxea open-world dataset and G0. arXiv:2509.00576, 2025.</li>
+<li>Newman et al. HARMONIC. IJRR 2022.</li>
+<li>Plahl et al. LiHRA. IROS 2025.</li>
+<li>Lee et al. EDITH. arXiv:2606.10276, 2026.</li>
+<li>Xu et al. Learning to assist. arXiv:2606.12475, 2026.</li>
+<li>De Haan, Jayaraman, Levine. Causal confusion in imitation learning. NeurIPS 2019.</li>
+</ol>
+</body></html>
