@@ -248,6 +248,15 @@
    "companies": [],
    "universities": [],
    "candidates": []
+  },
+  "arxiv-2611-14834": {
+   "companies": [],
+   "universities": [
+    "University of California, Berkeley"
+   ],
+   "candidates": [
+    "University of California, Berkeley"
+   ]
   }
  },
  "ror": {

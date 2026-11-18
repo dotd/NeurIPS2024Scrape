@@ -240,5 +240,19 @@
    "other",
    "https://huggingface.co/papers/2301.04104"
   ]
+ ],
+ "arxiv-2611-14834": [
+  [
+   "project",
+   "https://github.com/Wen-HanHsieh/hdh"
+  ],
+  [
+   "code",
+   "https://github.com/Wen-HanHsieh/hdh_sim"
+  ],
+  [
+   "code",
+   "https://github.com/Wen-HanHsieh/hdh_real"
+  ]
  ]
 }

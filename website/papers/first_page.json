@@ -2276,5 +2276,55 @@
     "h": 1518
    }
   ]
+ },
+ "arxiv-2611-14834": {
+  "title": "Learning Low-Latency Action Verification for Frozen Vision-Language-Action Models",
+  "abstract": "—Vision-language-action (VLA) models have made significant progress in general-purpose robotic manipulation. However, sampled action sequences can be ineffective, while evaluating alternatives with computationally expensive verifiers adds latency at each policy query. In this work, we propose HDH, a lightweight framework that uses hindsight from a frozen VLA’s own deployments to improve action verification. The framework has three stages. First, we deploy the policy and collect its autonomous rollouts. We then train a compact action verifier to assign each action chunk a predicted task-success score. Finally, the frozen VLA generates action candidates, and the verifier selects the candidate with the highest score for execution. Across four LIBERO-10 tasks, HDH achieves an average success rate of 82.3% and on three real-world manipulation tasks, HDH improves average success over the baseline policy by 22.6%. The question of how to select that action is, however, an open problem. Existing work has considered several heuristic selection strategies, including random selection and candidate evaluation using large vision-language models [5]– [8]. However, we believe that instead of relying on very large external models, the policy’s own deployment experience can provide explicit supervision for this choice. We therefore investigate whether terminal success and failure provide sufficient supervision for candidate ranking and whether a compact verifier can achieve selection performance comparable to that of substantially larger verifiers. To address these questions, we introduce Hindsight Decision Model with History (HDH), a lightweight verifier trained on terminal outcomes from autonomous policy rollouts, without expert comparisons, synthetic preferences, or predicted futures. Each training example consists of the current observation, the executed action prefix, and the episode’s terminal outcome. To provide context about task progress, the verifier additionally receives recent observations and executed actions. At deployment, HDH assigns a predicted eventual task-success score to each candidate sampled from the frozen VLA, and the robot executes the highest-scoring prefix. I. INTRODUCTION Vision-language-action (VLA) models have achieved state-of-the-art performance on general-purpose manipulation, mapping visual observations and language instructions into robot actions [1]–[4]. In deployment, however, the common practice is to sample a single action from the VLA, and execute it on the robot. Existing deployments, thus, do not exploit a fundamental property of generative policies, where the same observation and instruction can yield a full distribution of candidates with substantial variation in execution quality. To exploit this distributional generation capability, a simple test-time solution is to sample multiple We evaluate HDH in simulation and in the real-world in four dimensions. First, does a verifier trained only from terminal outcomes improve the closed-loop success of a frozen VLA? Second, does it produce candidate rankings that improve selection performance, beyond randomly selecting",
+  "figure": "figs/arxiv-2611-14834.png",
+  "figure_page": 1,
+  "figures": [
+   {
+    "n": 1,
+    "page": 1,
+    "src": "figs/arxiv-2611-14834/fig1.png",
+    "w": 1434,
+    "h": 580
+   },
+   {
+    "n": 2,
+    "page": 3,
+    "src": "figs/arxiv-2611-14834/fig2.png",
+    "w": 1434,
+    "h": 533
+   },
+   {
+    "n": 3,
+    "page": 5,
+    "src": "figs/arxiv-2611-14834/fig3.png",
+    "w": 1434,
+    "h": 498
+   },
+   {
+    "n": 4,
+    "page": 5,
+    "src": "figs/arxiv-2611-14834/fig4.png",
+    "w": 704,
+    "h": 688
+   },
+   {
+    "n": 5,
+    "page": 6,
+    "src": "figs/arxiv-2611-14834/fig5.png",
+    "w": 1434,
+    "h": 443
+   },
+   {
+    "n": 6,
+    "page": 6,
+    "src": "figs/arxiv-2611-14834/fig6.png",
+    "w": 1423,
+    "h": 1516
+   }
+  ]
  }
 }

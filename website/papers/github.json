@@ -41,5 +41,10 @@
  ],
  "arxiv-2301-04104": [
   "https://github.com/danijar/dreamerv3"
+ ],
+ "arxiv-2611-14834": [
+  "https://github.com/Wen-HanHsieh/hdh",
+  "https://github.com/Wen-HanHsieh/hdh_sim",
+  "https://github.com/Wen-HanHsieh/hdh_real"
  ]
 }

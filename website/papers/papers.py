@@ -84,22 +84,35 @@ async function addPaper(opts, what) {
       if (i >= 0 && dets[i].isConnected) dets[i].scrollIntoView();
       return;
     }
-    location.hash = 'claude:' + j.id; location.reload();  // show it now; Claude runs after the reload (below)
+    location.hash = (autoAll() ? 'claude:' : '') + j.id; location.reload();  // show it now; Claude runs after the reload (below)
   } catch (e) { msg.textContent = '⚠️ ' + e.message; }
 }
-// after an add the page reloads with #claude:<id>[,<id>…]: show the first paper, then press 📝 Summarize and the
-// Claude HTML button for each, one paper at a time; the server finishes a paper even if the tab closes.
+// "Auto All" switch in the top bar, between the page dropdown and the Papers button; remembered in this browser
+const AUTO = ['summarize/', 'html_claude/', 'whatsapp/', 'html_python/'];
+{
+  const l = document.createElement('label'), cb = document.createElement('input');
+  l.title = 'After adding a paper: Claude summary, Claude HTML, WhatsApp message and Python HTML, all at once';
+  l.style.cssText = 'display:flex;gap:4px;align-items:center;cursor:pointer;white-space:nowrap';
+  cb.type = 'checkbox'; cb.id = 'autoAll';
+  try { cb.checked = localStorage.getItem('papersAutoAll') === '1'; } catch (e) {}
+  cb.onchange = () => { try { localStorage.setItem('papersAutoAll', cb.checked ? '1' : '0'); } catch (e) {} };
+  l.append(cb, 'Auto All');
+  document.querySelector('nav button[data-view="papers"]').before(l);
+}
+const autoAll = () => document.getElementById('autoAll').checked;
+// with Auto All on, an add reloads the page with #claude:<id>[,<id>…]: show the first paper, then press all four
+// buttons for each, one paper at a time; the server finishes a paper even if the tab closes.
 // Runs before the page script reads the #.
 if (location.hash.startsWith('#claude:')) (async () => {
   const ids = decodeURIComponent(location.hash.slice(8)).split(','), msg = document.getElementById('addMsg'), errs = [];
   history.replaceState(null, '', '#' + encodeURIComponent(ids[0]));  // the page script scrolls to it, then clears it
   for (const [n, pid] of ids.entries()) {
-    msg.textContent = `⏳ Added. Claude is summarizing and making the HTML version${ids.length > 1 ? ` of ${n + 1}/${ids.length}` : ''}… (a few minutes each)`;
-    errs.push(...(await Promise.all(['summarize/', 'html_claude/'].map(p => fetch(p + pid, {method: 'POST'})
+    msg.textContent = `⏳ Added. Auto All: summary, Claude HTML, WhatsApp and Python HTML${ids.length > 1 ? ` of ${n + 1}/${ids.length}` : ''}… (a few minutes each)`;
+    errs.push(...(await Promise.all(AUTO.map(p => fetch(p + pid, {method: 'POST'})
       .then(async x => x.ok ? '' : `${pid}: ${(await x.json()).error}`).catch(e => e.message)))).filter(Boolean));
   }
   if (errs.length) alert('Added, but: ' + errs.join('; '));
-  location.hash = ids[0]; location.reload();  // rebuilt with the summaries and HTML links
+  location.hash = ids[0]; location.reload();  // rebuilt with the summaries, HTML links and WhatsApp messages
 })();
 document.getElementById('addGo').onclick = () => {
   const u = document.getElementById('addUrl').value.trim();
@@ -126,7 +139,7 @@ document.getElementById('addFile').onchange = async e => {
   e.target.value = '';  // picking the same files again fires onchange again
   if (errs.length) alert(`Added ${added.length} of ${files.length}. Failed: ` + errs.join('; '));
   if (!added.length) return msg.textContent = 'ℹ️ Nothing new added (already in the list or failed)';
-  location.hash = 'claude:' + added.join(','); location.reload();
+  location.hash = autoAll() ? 'claude:' + added.join(',') : added[0]; location.reload();
 };
 </script>"""
 

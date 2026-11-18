@@ -120,5 +120,14 @@
  ],
  "arxiv-2301-04104": [
   "DreamerV3"
+ ],
+ "arxiv-2611-14834": [
+  "SigLIP",
+  "Gemma",
+  "GPT-4 / GPT-4o / GPT-5",
+  "π0 / π0.5",
+  "Octo",
+  "RT-1 / RT-2 / RT-X",
+  "Diffusion Policy"
  ]
 }

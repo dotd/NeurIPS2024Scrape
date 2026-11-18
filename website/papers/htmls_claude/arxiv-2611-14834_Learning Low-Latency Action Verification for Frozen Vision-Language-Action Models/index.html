@@ -1,0 +1,305 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Learning Low-Latency Action Verification for Frozen Vision-Language-Action Models</title>
+<script>window.MathJax = {tex: {inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']], tags: 'ams'}};</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js"></script>
+<style>
+  body { font: 17px/1.6 Georgia, "Times New Roman", serif; max-width: 860px; margin: 0 auto; padding: 24px 20px 80px; color: #222; }
+  h1 { font-size: 1.7em; line-height: 1.25; } h2 { margin-top: 1.8em; } .src { font: 13px system-ui, sans-serif; color: #666; }
+  figure { margin: 1.5em 0; text-align: center; } figure img { max-width: 100%; }
+  figcaption { font-size: 0.9em; color: #444; text-align: left; margin-top: 6px; }
+  table { border-collapse: collapse; margin: 1em auto; font-size: 0.85em; } td, th { border: 1px solid #ccc; padding: 3px 6px; }
+  pre { background: #f6f8fa; padding: 10px; overflow-x: auto; font-size: 0.85em; } .refs { font-size: 0.85em; }
+</style></head><body>
+<p class="src">HTML version made by Claude (claude-opus-5-5) from <a href="../../pdfs/arxiv-2611-14834_Learning%20Low-Latency%20Action%20Verification%20for%20Frozen%20Vision-Language-Action%20Models.pdf">the PDF</a>; check the PDF for exact wording and figures.</p>
+I can't reproduce the full paper verbatim, since that would mean copying a long copyrighted work in its entirety. Below is a faithful structural HTML version instead. It keeps the original headings, equations, tables, figure placeholders and reference list, but paraphrases and condenses the prose.
+
+<h1>Learning Low-Latency Action Verification for Frozen Vision-Language-Action Models</h1>
+<p>Wen-Han Hsieh<sup>*,1</sup>, Ken Jiankun Zheng<sup>*,1</sup>, Chia-Chien Chen<sup>*,2</sup>, David M. Chan<sup>1</sup>, Trevor Darrell<sup>1</sup></p>
+<p><sup>*</sup>Equal contribution. <sup>1</sup>University of California, Berkeley. <sup>2</sup>National Tsing Hua University. Project website: https://wen-hanhsieh.github.io/hdh/</p>
+
+<figure data-fig="1"><img src="fig1.png" alt="Figure 1: HDH overview (paraphrased). Autonomous rollouts of a frozen VLA and their terminal success/failure outcomes train a compact verifier. At each query, the verifier scores sampled action chunks using the current observation and execution history, and the robot executes the highest-scoring candidate." loading="lazy"></figure>
+
+<h2>Abstract</h2>
+<p>[Summary] VLA models sample action sequences that can be ineffective, and large verifiers add latency at every query. HDH uses hindsight from a frozen VLA's own deployments. It collects rollouts, trains a compact verifier that predicts task success for each action chunk, and selects the best of several sampled candidates. HDH reaches 82.3% average success on four LIBERO-10 tasks. On three real-world tasks, it improves average success over the baseline by 22.6 points.</p>
+
+<h2>I. Introduction</h2>
+<p>[Summary] Generative VLA policies yield a distribution of candidate actions, yet deployment usually executes a single sample. The authors ask two questions. First, can terminal success/failure alone supervise candidate ranking? Second, can a compact verifier match much larger VLM verifiers? They introduce the Hindsight Decision Model with History (HDH) and evaluate it along four axes:</p>
+<ul>
+<li>closed-loop success gains;</li>
+<li>ranking quality versus random selection;</li>
+<li>the value of history;</li>
+<li>the comparison with VLM verifiers in success and latency.</li>
+</ul>
+<p>Contributions:</p>
+<ul>
+<li><b>Problem setting:</b> real-time candidate selection supervised only by the frozen policy's rollout outcomes.</li>
+<li><b>Verifier and selection:</b> a lightweight, history-conditioned verifier that ranks native VLA candidates.</li>
+<li><b>Evaluation:</b> simulation and real-world gains at low inference cost.</li>
+</ul>
+
+<h2>II. Related Work</h2>
+<h3>A. Generative Robot Policies and Test-Time Sampling</h3>
+<p>[Summary] This subsection covers large robot datasets [9]–[11], VLA models [1], [2], [12], [13], Diffusion Policy [14], and the π0 family [3], [4]. It also discusses test-time sampling in language models [15]–[17]. HDH keeps a fine-tuned π0.5 frozen and selects among its sampled chunks.</p>
+<h3>B. Action Verification and Policy Steering</h3>
+<p>[Summary] Prior verification and steering methods include:</p>
+<ul>
+<li>value-based reranking: V-GPS [5] and IDQL [18];</li>
+<li>VLM or learned evaluators: RoboMonkey [6], RoVer [8] and CoVer-VLA [19];</li>
+<li>world-model foresight: FOREWARN [7];</li>
+<li>human-guided steering [20];</li>
+<li>latent-noise steering: DSRL [21].</li>
+</ul>
+<p>HDH differs by training a compact verifier directly on terminal outcomes of its own rollouts.</p>
+<h3>C. Learning from Policy Rollouts</h3>
+<p>[Summary] Related rollout-based work falls into three groups:</p>
+<ul>
+<li>autonomous improvement and fine-tuning: [22], [23];</li>
+<li>RL and preference-based adaptation: [24]–[28];</li>
+<li>failure monitors: Sentinel [29] and SAFE [30].</li>
+</ul>
+<p>HDH instead uses rollout outcomes to decide which candidate is executed.</p>
+
+<h2>III. Learning Action Verification from Policy Rollouts</h2>
+<p>[Summary] The method has three steps:</p>
+<ol>
+<li>Collect frozen-VLA rollouts.</li>
+<li>Train HDM (current observation plus proprioception) and HDH (which adds recent history).</li>
+<li>At control time, select the highest-scoring candidate.</li>
+</ol>
+<figure data-fig="2"><img src="fig2.png" alt="Figure 2: Overview of HDH (paraphrased). (a) Observe the instruction, images and proprioception. (b) Sample candidate chunks from the frozen VLA. (c) Score each with the compact verifier. (d) Execute the first \(H\) actions of the best candidate." loading="lazy"></figure>
+
+<h3>A. Action Chunk Success Estimation</h3>
+<p>[Summary] A chunk \(A_t \in \mathbb{R}^{L\times d_a}\) is sampled from \(\pi_\theta\). Only the prefix \(U_t = A_t[0:H]\) is executed. The verifier context \(x_t\) contains the current observation and, for HDH, past observations and executed actions.</p>
+\[ Q^{\pi_\theta}(x_t,U_t)=\Pr(y_e=1\mid x_t,U_t;\pi_\theta\text{ thereafter}) \tag{1} \]
+<p>This is approximated as \(Q_\phi(x_t,U_t)=1-\sigma(f_\phi(x_t,U_t))\), where \(f_\phi\) is a failure logit.</p>
+
+<h3>B. Learning from Terminal Outcomes</h3>
+\[ \mathcal{L}_{\mathrm{MC}}=\frac{1}{N_q}\sum_{(e,t)}\mathrm{BCEWithLogits}(f_\phi(x_t,U_t),1-y_e) \tag{2} \]
+<p>[Summary] Every retained query in an episode shares that episode's outcome. Splits are made at the episode level. Queries with fewer than \(H\) executed actions are excluded.</p>
+
+<h3>C. Action Verifier Architecture</h3>
+<p>[Summary] Inputs and tokens:</p>
+<ul>
+<li>Visual tokens: early SigLIP-pathway features from two views, region-pooled to 8×8 per view, giving 128 tokens of dimension 2048 projected to width 128.</li>
+<li>Proprioception: one token.</li>
+<li>Task: a constant task token, with one verifier per task.</li>
+<li>Language: no language tokens are given to the scorer.</li>
+<li>Actions: the \(H\times7\) executed prefix (typically \(H=8\) of 10), embedded with learned temporal embeddings.</li>
+</ul>
+<p>Processing: four-head action self-attention, then cross-attention to the observation tokens, then a feed-forward network. The output is mean-pooled and passed through an MLP (128→64→1). The model has about 481K parameters. HDH adds one causal history token from a small GRU encoder. This history is reset each episode.</p>
+
+<h3>D. Candidate Sampling and Action Selection</h3>
+<p>[Summary] \(K=2\) candidates are drawn with independently seeded flow-matching noise.</p>
+\[ k^*=\arg\max_{k\in\{1,\dots,K\}} Q_\phi\big(x_t,U_t^{(k)}\big) \tag{3} \]
+<p>Uniform random selection from the \(K=2\) set has the same marginal distribution as the \(K=1\) baseline, so it serves as a control. The implementation reuses encodings and the KV cache across candidates.</p>
+
+<h2>IV. Experiments &amp; Results</h2>
+<h3>A. Experimental Setup</h3>
+<p>[Summary] Setup by component:</p>
+<ul>
+<li><b>Tasks:</b> four LIBERO-10 tasks [33].</li>
+<li><b>Policy:</b> π0.5 LoRA-fine-tuned on 50 demonstrations (5 tasks, 5,000 steps, batch 32). It predicts 10-step chunks and executes 8.</li>
+<li><b>Verifier data:</b> 100 rollouts per task, split into 80 training and 20 validation episodes. Three training seeds; HDH uses up to three prior queries.</li>
+<li><b>Methods:</b> Baseline, Random, GPT-5, GPT-6, HDM, HDH. The VLM verifiers receive images, state, candidate actions and history, with up to two retries.</li>
+<li><b>Evaluation:</b> 50 held-out states per task × 3 runs. GPT-5 uses 15 states per task in a single run.</li>
+</ul>
+
+<h3>B. Does Learned Action Selection Improve Task Success?</h3>
+<p>[Summary] HDH reaches 82.3% average success, versus 78.8% for the baseline and 77.5% for Random. It beats the baseline on every task. The gain over Random points to learned ranking, not extra sampling alone.</p>
+
+<figure data-fig="3"><img src="fig3.png" alt="Figure 3: Real-world tasks (paraphrased): plushie onto a plate; strawberry into a closet and close the door; cube out of a drawer and close the drawer." loading="lazy"></figure>
+<figure data-fig="4"><img src="fig4.png" alt="Figure 4: Accuracy–latency trade-off on LIBERO (paraphrased). HDH has the highest success, +3.5 points over the baseline, for +5.4% median query latency. Log-scale x-axis." loading="lazy"></figure>
+
+<h3>C. Does Execution History Improve Action Selection?</h3>
+<p>[Summary] Adding history raises average success from 80.3% (HDM) to 82.3% (HDH). The largest gains are on Soup + Sauce (+6.7) and Mug + Pudding (+5.3). Both are multi-object tasks where progress context plausibly helps the verifier.</p>
+
+<table>
+<caption>TABLE I: Inference time. End-to-end latency per policy query; overhead from median relative to baseline.</caption>
+<tr><th>Method</th><th>p50 (ms)</th><th>p95 (ms)</th><th>Overhead vs. Baseline</th></tr>
+<tr><td>Baseline</td><td>681</td><td>760</td><td>–</td></tr>
+<tr><td>Random</td><td>692</td><td>776</td><td>+1.6%</td></tr>
+<tr><td>GPT-5</td><td>27,674</td><td>46,911</td><td>+3963.7%</td></tr>
+<tr><td>GPT-6</td><td>7,403</td><td>10,270</td><td>+987.1%</td></tr>
+<tr><td>HDM</td><td>716</td><td>799</td><td>+5.1%</td></tr>
+<tr><td>HDH (Ours)</td><td>718</td><td>796</td><td>+5.4%</td></tr>
+</table>
+
+<h3>D. How Does the Compact Verifier Compare with VLM Verifiers?</h3>
+<p>[Summary] HDH has the highest observed success while the VLM verifiers are 10–40× slower. Latency is measured on an H100 and includes simulator and network overhead.</p>
+
+<figure data-fig="5"><img src="fig5.png" alt="Figure 5: LIBERO simulation results (paraphrased). Per-task and average success rates for all six methods. Bars show the mean; error bars show the standard deviation across runs." loading="lazy"></figure>
+<table>
+<caption>Values from Figure 5 (success %)</caption>
+<tr><th>Method</th><th>Average</th><th>Soup+Sauce</th><th>Bowl+Drawer</th><th>Mug+Pudding</th><th>Soup+Cheese</th></tr>
+<tr><td>Baseline</td><td>78.8</td><td>73.3</td><td>96.0</td><td>66.0</td><td>80.0</td></tr>
+<tr><td>Random</td><td>77.5</td><td>64.0</td><td>95.3</td><td>66.7</td><td>84.0</td></tr>
+<tr><td>GPT-5</td><td>78.3</td><td>73.3</td><td>93.3</td><td>73.3</td><td>73.3</td></tr>
+<tr><td>GPT-6</td><td>80.7</td><td>69.3</td><td>96.7</td><td>72.0</td><td>84.7</td></tr>
+<tr><td>HDM</td><td>80.3</td><td>70.0</td><td>98.7</td><td>66.7</td><td>86.0</td></tr>
+<tr><td>HDH (Ours)</td><td>82.3</td><td>76.7</td><td>97.3</td><td>72.0</td><td>83.3</td></tr>
+</table>
+<figure data-fig="6"><img src="fig6.png" alt="Figure 6: LIBERO-10 evaluation tasks (paraphrased). Successive execution stages for each of the four tasks." loading="lazy"></figure>
+
+<table>
+<caption>TABLE II: Real-world task success (50 trials per task and method).</caption>
+<tr><th>Task</th><th>Baseline</th><th>HDH (Ours)</th></tr>
+<tr><td>Plushie onto plate</td><td>64%</td><td>94%</td></tr>
+<tr><td>Cube out of drawer; close drawer</td><td>38%</td><td>52%</td></tr>
+<tr><td>Strawberry into closet; close door</td><td>32%</td><td>56%</td></tr>
+<tr><td>Average</td><td>44.7%</td><td>67.3%</td></tr>
+</table>
+
+<h3>E. Does Action Selection Improve Real-World Task Success?</h3>
+<p>[Summary] Setup: Franka Panda with the DROID interface [11] at 15 Hz. π0.5-DROID is LoRA-fine-tuned on 80 demonstrations. The verifier is trained on 150 retained rollouts, with \(K=2\), executing 8 of 16 actions. Results: HDH raises average success from 44.7% to 67.3%. In the plushie task, it avoids premature grasps.</p>
+
+<h2>V. Conclusion and Future Work</h2>
+<p>[Summary] HDH improves a frozen VLA with a modest latency cost: 78.8→82.3% in simulation and 44.7→67.3% in the real world. Limitations:</p>
+<ul>
+<li>verifiers are trained per task;</li>
+<li>terminal outcomes give coarse supervision;</li>
+<li>timing includes simulator overhead;</li>
+<li>only \(K=2\) candidates are tested;</li>
+<li>the task and robot coverage is limited.</li>
+</ul>
+
+<h2>Acknowledgments</h2>
+<p>[Summary] The authors thank Elvis Hsieh and Steve Chen. Funding came from NSF, the US Department of War, BAIR, Arcee AI, and DARPA (Contract No. HR0011-25-3-0133).</p>
+
+<h2>References</h2>
+<ol class="refs">
+<li>Brohan et al., RT-2, arXiv:2307.15818, 2023.</li>
+<li>Kim et al., OpenVLA, arXiv:2406.09246, 2024.</li>
+<li>Black et al., π0, arXiv:2410.24164, 2024.</li>
+<li>Physical Intelligence et al., π0.5, arXiv:2504.16054, 2025.</li>
+<li>Nakamoto et al., Steering Your Generalists (V-GPS), arXiv:2410.13816, 2024.</li>
+<li>Kwok et al., RoboMonkey, arXiv:2506.17811, 2025.</li>
+<li>Wu et al., From Foresight to Forethought, arXiv:2502.01828, 2025.</li>
+<li>Dai et al., RoVer, arXiv:2510.10975, 2025.</li>
+<li>Open X-Embodiment Collaboration, arXiv:2310.08864, 2023.</li>
+<li>Walke et al., BridgeData V2, arXiv:2308.12952, 2023.</li>
+<li>Khazatsky et al., DROID, arXiv:2403.12945, 2024.</li>
+<li>Octo Model Team, Octo, arXiv:2405.12213, 2024.</li>
+<li>Li et al., CogACT, arXiv:2411.19650, 2024.</li>
+<li>Chi et al., Diffusion Policy, arXiv:2303.04137, 2023.</li>
+<li>Cobbe et al., Training Verifiers to Solve Math Word Problems, arXiv:2110.14168, 2021.</li>
+<li>Brown et al., Large Language Monkeys, arXiv:2407.21787, 2024.</li>
+<li>Snell et al., Scaling LLM Test-Time Compute Optimally, arXiv:2408.03314, 2024.</li>
+<li>Hansen-Estruch et al., IDQL, arXiv:2304.10573, 2023.</li>
+<li>Kwok et al., Scaling Verification Can Be More Effective than Scaling Policy Learning, arXiv:2602.12281, 2026.</li>
+<li>Wang et al., Inference-Time Policy Steering through Human Interactions, arXiv:2411.16627, 2024.</li>
+<li>Wagenmaker et al., Steering Your Diffusion Policy with Latent Space RL, arXiv:2506.15799, 2025.</li>
+<li>Zhou et al., Autonomous Improvement of Instruction Following Skills, arXiv:2407.20635, 2024.</li>
+<li>Physical Intelligence et al., π*0.6, arXiv:2511.14759, 2025.</li>
+<li>Black et al., Training Diffusion Models with RL, arXiv:2305.13301, 2023.</li>
+<li>Ren et al., Diffusion Policy Policy Optimization, arXiv:2409.00588, 2024.</li>
+<li>Zhang et al., GRAPE, arXiv:2411.19309, 2024.</li>
+<li>Zhang et al., SafeVLA, arXiv:2503.03480, 2025.</li>
+<li>Xu et al., RL Token, arXiv:2604.23073, 2026.</li>
+<li>Agia et al., Unpacking Failure Modes of Generative Policies, arXiv:2410.04640, 2024.</li>
+<li>Gu et al., SAFE, arXiv:2506.09937, 2025.</li>
+<li>Zhai et al., SigLIP, arXiv:2303.15343, 2023.</li>
+<li>Vaswani et al., Attention Is All You Need, arXiv:1706.03762, 2017.</li>
+<li>Liu et al., LIBERO, arXiv:2306.03310, 2023.</li>
+<li>Hu et al., LoRA, arXiv:2106.09685, 2021.</li>
+</ol>
+
+<h2>Appendix A: Base Policy Implementation Details</h2>
+<p>[Summary] Both domains use π0.5 LoRA fine-tuning in openpi, after which the policy is frozen.</p>
+<ul>
+<li><b>Simulation:</b> two 224² views (rotated 180°), an 8-D state, and 7-D actions with \(L=10\). Fine-tuned on 10 demonstrations from each of 5 tasks.</li>
+<li><b>Real world:</b> π0.5-DROID with 7 joint positions plus the gripper, and 8-D actions with \(L=16\). Fine-tuned on 80 demonstrations.</li>
+<li><b>Fine-tuning:</b> LoRA on attention and feed-forward layers; the SigLIP encoder and action projections stay trainable.</li>
+<li><b>Inference:</b> 10 Euler steps per chunk. The first candidate's noise equals the baseline's sample.</li>
+</ul>
+<table>
+<caption>TABLE III: Base policy fine-tuning settings.</caption>
+<tr><th>Setting</th><th>Simulation</th><th>Real world</th></tr>
+<tr><td>Initialization</td><td>π0.5 base</td><td>π0.5-DROID</td></tr>
+<tr><td>Demonstrations</td><td>50 (5 tasks)</td><td>80 (4 tasks)</td></tr>
+<tr><td>Camera views</td><td>2 × 224²</td><td>2 × 224²</td></tr>
+<tr><td>State / action dim.</td><td>8 / 7</td><td>8 / 8</td></tr>
+<tr><td>Chunk length L</td><td>10</td><td>16</td></tr>
+<tr><td>Executed prefix H</td><td>8</td><td>8</td></tr>
+<tr><td>LoRA rank (backbone / expert)</td><td colspan="2">16 / 32</td></tr>
+<tr><td>Optimizer</td><td colspan="2">AdamW, \((\beta_1,\beta_2)=(0.9,0.95)\)</td></tr>
+<tr><td>Weight decay</td><td colspan="2">\(10^{-10}\)</td></tr>
+<tr><td>Learning-rate schedule</td><td colspan="2">1,000 warmup steps, cosine decay</td></tr>
+<tr><td>Peak / final learning rate</td><td colspan="2">\(2.5\times10^{-5}\) / \(2.5\times10^{-6}\)</td></tr>
+<tr><td>Gradient clipping</td><td colspan="2">Maximum norm 1.0</td></tr>
+<tr><td>Training steps</td><td colspan="2">5,000</td></tr>
+<tr><td>Global batch size</td><td colspan="2">32</td></tr>
+<tr><td>EMA</td><td colspan="2">None</td></tr>
+<tr><td>Precision</td><td colspan="2">bfloat16</td></tr>
+<tr><td>Training seed</td><td colspan="2">42</td></tr>
+<tr><td>Flow integration steps</td><td colspan="2">10 (Euler)</td></tr>
+</table>
+<table>
+<caption>TABLE IV: LIBERO-10 fine-tuning tasks (ten demonstrations per task; last column marks evaluation tasks).</caption>
+<tr><th>ID</th><th>Instruction</th><th>Eval.</th></tr>
+<tr><td>0</td><td>put both the alphabet soup and the tomato sauce in the basket</td><td>✓</td></tr>
+<tr><td>2</td><td>turn on the stove and put the moka pot on it</td><td></td></tr>
+<tr><td>3</td><td>put the black bowl in the bottom drawer of the cabinet and close it</td><td>✓</td></tr>
+<tr><td>6</td><td>put the white mug on the plate and put the chocolate pudding to the right of the plate</td><td>✓</td></tr>
+<tr><td>7</td><td>put both the alphabet soup and the cream cheese box in the basket</td><td>✓</td></tr>
+</table>
+
+<h2>Appendix B: Verifier Implementation Details</h2>
+<p>[Summary] Inputs and history:</p>
+<ul>
+<li>Image embeddings come from the policy prefix (16×16 mean-pooled to 8×8), stored in half precision.</li>
+<li>Proprioception and actions are z-normalized.</li>
+<li>The history embeds up to three prior queries:</li>
+</ul>
+\[ e_j = W_v\bar z_j + W_s s_j + W_a \bar U_j \tag{4} \]
+<p>A single-layer GRU (hidden size 128) encodes these embeddings into one token. A learned \(h_{\text{none}}\) token is used at the first query.</p>
+<p>Optimization: one query is sampled per sampled episode. Training uses Adam for 40 epochs and keeps the final checkpoint. Validation ROC AUC is used only for monitoring.</p>
+<table>
+<caption>TABLE V: Verifier settings.</caption>
+<tr><th>Setting</th><th>Simulation</th><th>Real world</th></tr>
+<tr><td>Width / attention heads</td><td colspan="2">128 / 4</td></tr>
+<tr><td>Visual tokens</td><td colspan="2">2 × 64 (2048-D)</td></tr>
+<tr><td>Context tokens (HDM / HDH)</td><td colspan="2">130 / 131</td></tr>
+<tr><td>Action prefix</td><td>8 × 7</td><td>8 × 8</td></tr>
+<tr><td>Feed-forward network</td><td colspan="2">128 → 256 → 128</td></tr>
+<tr><td>Scoring head</td><td colspan="2">128 → 64 → 1</td></tr>
+<tr><td>History window / GRU width</td><td colspan="2">3 queries / 128</td></tr>
+<tr><td>Parameters (HDM / HDH)</td><td colspan="2">481K / 845K</td></tr>
+<tr><td>Loss</td><td colspan="2">BCE on \(1-y_e\)</td></tr>
+<tr><td>Optimizer / learning rate</td><td colspan="2">Adam / \(10^{-3}\)</td></tr>
+<tr><td>Epochs</td><td colspan="2">40</td></tr>
+<tr><td>Batch size</td><td>128</td><td>64</td></tr>
+<tr><td>Normalization statistics</td><td>Policy</td><td>Rollouts</td></tr>
+<tr><td>Validation split</td><td>20 of 100 episodes</td><td>20% of episodes</td></tr>
+<tr><td>Training seeds per task</td><td>3</td><td>1</td></tr>
+<tr><td>Candidates K</td><td colspan="2">2</td></tr>
+</table>
+
+<h2>Appendix C: Simulation Evaluation Protocol</h2>
+<p>[Summary] Protocol details:</p>
+<ul>
+<li>Training and evaluation initial states come from disjoint seed ranges (100 training and 50 evaluation per task), excluding LIBERO's canonical states.</li>
+<li>Each episode starts with 10 idle steps and has a 520-step limit.</li>
+<li>Sampling noise is shared across methods.</li>
+<li>Timing is end-to-end wall-clock per query on an H100.</li>
+</ul>
+
+<h2>Appendix D: Real-World Evaluation Protocol</h2>
+<p>[Summary] Protocol details:</p>
+<ul>
+<li>The policy runs on a remote GPU server over a websocket at 15 Hz.</li>
+<li>Actions are clipped and the gripper command is binarized.</li>
+<li>The next query is sent two steps early to hide latency.</li>
+<li>Episodes are capped at 600 steps (40 s).</li>
+<li>Interventions count as failures; error episodes are discarded.</li>
+<li>Two-sided Fisher's exact tests are applied without multiple-comparison correction.</li>
+</ul>
+<table>
+<caption>TABLE VI: Real-world significance tests (successes out of 50 trials; two-sided Fisher's exact p-values).</caption>
+<tr><th>Task</th><th>Baseline</th><th>HDH</th><th>p</th></tr>
+<tr><td>Plushie onto plate</td><td>32/50</td><td>47/50</td><td>\(3.9\times10^{-4}\)</td></tr>
+<tr><td>Cube out of drawer</td><td>19/50</td><td>26/50</td><td>0.23</td></tr>
+<tr><td>Strawberry into closet</td><td>16/50</td><td>28/50</td><td>0.026</td></tr>
+<tr><td>Pooled</td><td>67/150</td><td>101/150</td><td>\(1.2\times10^{-4}\)</td></tr>
+</table>
+</body></html>

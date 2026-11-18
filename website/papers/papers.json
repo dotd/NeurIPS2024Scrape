@@ -420,5 +420,22 @@
   "pdf": "https://arxiv.org/pdf/2301.04104",
   "youtube": "https://www.youtube.com/watch?v=vfpZu0R1s1Y",
   "added": "2026-11-15 10:08"
+ },
+ "arxiv-2611-14834": {
+  "title": "Learning Low-Latency Action Verification for Frozen Vision-Language-Action Models",
+  "authors": "Wen-Han Hsieh, Ken Jiankun Zheng, Chia-Chien Chen, David M. Chan, Trevor Darrell",
+  "abstract": "Vision-language-action (VLA) models have made significant progress in general-purpose robotic manipulation. However, sampled action sequences can be ineffective, while evaluating alternatives with computationally expensive verifiers adds latency at each policy query. In this work, we propose HDH, a lightweight framework that uses hindsight from a frozen VLA's own deployments to improve action verification. The framework has three stages. First, we deploy the policy and collect its autonomous rollouts. We then train a compact action verifier to assign each action chunk a predicted task-success score. Finally, the frozen VLA generates action candidates, and the verifier selects the candidate with the highest score for execution. Across four LIBERO-10 tasks, HDH achieves an average success rate of 82.3\\% and on three real-world manipulation tasks, HDH improves average success over the baseline policy by 22.6\\%.",
+  "keywords": [
+   "vision-language-action models",
+   "action chunking",
+   "efficient inference",
+   "robotic manipulation",
+   "data collection",
+   "action verification"
+  ],
+  "source": "https://arxiv.org/pdf/2611.14834",
+  "pdf": "https://arxiv.org/pdf/2611.14834",
+  "youtube": "",
+  "added": "2026-11-17 12:37"
  }
 }

@@ -33,5 +33,10 @@
   "url": "https://arxiv.org/abs/2301.04104",
   "cost": 0.0256,
   "searches": 0
+ },
+ "arxiv-2611-14834": {
+  "url": "https://arxiv.org/abs/2611.14834",
+  "cost": 0.1018,
+  "searches": 1
  }
 }
